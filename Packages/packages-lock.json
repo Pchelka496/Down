@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": {
+      "version": "file:Y:/Projects/KnightTournament/Assets/Plugins/UniTask",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.2d.animation": {
       "version": "10.1.2",
       "depth": 1,

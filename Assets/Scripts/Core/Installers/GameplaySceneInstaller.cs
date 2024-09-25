@@ -9,7 +9,7 @@ public class GameplaySceneInstaller : MonoInstaller
     {
         InitializeOrCleanInstaller();
 
-        //Container.Bind<Controls>().FromNew().AsSingle().NonLazy();
+        Container.Bind<Controls>().FromNew().AsSingle().NonLazy();
 
         //Container.Bind<NetworkManager>().FromInstance(NetworkManager.singleton).AsSingle().NonLazy();
         //Container.Bind<BaseRoundManager>().FromInstance(_roundManager).AsSingle().NonLazy();
