@@ -19,8 +19,10 @@ public class CharacterController : MonoBehaviour
 
     Controls _controls;
 
-    float _leftInputValue;
-    float _rightInputValue;
+    float _oldLeftInputValue;
+    float _oldRightInputValue;
+
+    float _oldLinearDrag;
 
     [Inject]
     private void Construct(Controls controls)
@@ -46,19 +48,19 @@ public class CharacterController : MonoBehaviour
             intraplateValue = MAX_INTROPALITES_INPUT_VALUE;
         }
 
-        _leftInputValue = Mathf.Lerp(_leftInputValue, newLeftInputValue, intraplateValue);
-        _rightInputValue = Mathf.Lerp(_rightInputValue, newRightInputValue, intraplateValue);
+        _oldLeftInputValue = Mathf.Lerp(_oldLeftInputValue, newLeftInputValue, intraplateValue);
+        _oldRightInputValue = Mathf.Lerp(_oldRightInputValue, newRightInputValue, intraplateValue);
 
-        if (_leftInputValue != 1f || _rightInputValue != 1f)
+        if (_oldLeftInputValue != 1f || _oldRightInputValue != 1f)
         {
-            XAxisManipulation(_leftInputValue, _rightInputValue);
+            XAxisManipulation(_oldLeftInputValue, _oldRightInputValue);
         }
         else
         {
             _currentMoveSpeed = 0f;
         }
 
-        YAxisManipulation(_leftInputValue, _rightInputValue);
+        YAxisManipulation(_oldLeftInputValue, _oldRightInputValue);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -100,8 +102,13 @@ public class CharacterController : MonoBehaviour
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void ApplyGravityAndDrag(float inputValue, Vector2 direction)
     {
-        _rb.gravityScale = _defaultGravityScale * 0.5f;
-        _rb.drag = Mathf.Max(_maxLinearDrag * inputValue, _minLinearDrag);
+        _rb.gravityScale = _defaultGravityScale * 0.8f;
+
+        var linearDrag = Mathf.Max(_maxLinearDrag * inputValue, _minLinearDrag);
+        var currentDrag = Mathf.Clamp(_oldLinearDrag, linearDrag, 0.5f);
+
+        _rb.drag = currentDrag;
+        _oldLinearDrag = linearDrag;
     }
 
     private void Reset()

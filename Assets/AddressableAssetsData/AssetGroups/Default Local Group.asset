@@ -15,8 +15,18 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 98b98c1dd52d6cf48ad39d2de5cff32f
   m_SerializeEntries:
+  - m_GUID: 038f37724154b3141841b684c1b1e0e9
+    m_Address: Prefab/Map/Checkpoint/CheckpointPlatform
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8da0d59512cebd74e8db647504418b60
     m_Address: Material_Shaders/Material/StandartSpriteUnlitMaterial
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7e4ef8c3efb28d4bb87929d907bc95f
+    m_Address: Prefab/Map/Checkpoint/PlatformPiece
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

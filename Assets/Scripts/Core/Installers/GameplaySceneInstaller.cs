@@ -3,6 +3,10 @@ using Zenject;
 
 public class GameplaySceneInstaller : MonoInstaller
 {
+    [SerializeField] CharacterController _playerController;
+    [SerializeField] MapController _mapController;
+    [SerializeField] LevelManager _levelManager;
+
     public static DiContainer DiContainer { get; private set; }
 
     public override void InstallBindings()
@@ -10,6 +14,10 @@ public class GameplaySceneInstaller : MonoInstaller
         InitializeOrCleanInstaller();
 
         Container.Bind<Controls>().FromNew().AsSingle().NonLazy();
+
+        Container.Bind<CharacterController>().FromInstance(_playerController).AsSingle().NonLazy();
+        Container.Bind<MapController>().FromInstance(_mapController).AsSingle().NonLazy();
+        Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle().NonLazy();
 
         //Container.Bind<NetworkManager>().FromInstance(NetworkManager.singleton).AsSingle().NonLazy();
         //Container.Bind<BaseRoundManager>().FromInstance(_roundManager).AsSingle().NonLazy();
