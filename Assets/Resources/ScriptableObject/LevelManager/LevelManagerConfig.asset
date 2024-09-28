@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0986607646e08fc4496e6a54b9f5fd1f, type: 3}
   m_Name: LevelManagerConfig
   m_EditorClassIdentifier: 
-  _mapControllerConfigAddress: 
-  _backgroundControllerConfigAddress: 
+  _mapControllerConfig: {fileID: 11400000, guid: 69c079b5360608043b395dd6666131ef, type: 2}
+  _backgroundControllerConfig: {fileID: 11400000, guid: ab4c7439801651b419279e97cbd79e71, type: 2}
+  _playerSavedHeight: NaN

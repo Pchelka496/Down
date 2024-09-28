@@ -12,29 +12,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f830477e03f73741b57ffc3aa3658a7, type: 3}
   m_Name: MapControllerConfig
   m_EditorClassIdentifier: 
-  _prefabCurrentCheckpointPlatformAddress: 
-  _prefabTargetCheckpointPlatformAddress: 
-  _prefabWorldBorderAddress: 
-  _worldBorderSize: {x: 0, y: 0}
+  _prefabCurrentCheckpointPlatformAddress: Prefab/Map/Checkpoint/CheckpointPlatform
+  _prefabTargetCheckpointPlatformAddress: Prefab/Map/Checkpoint/CheckpointPlatform
+  _prefabWorldBorderAddress: Prefab/Map/Checkpoint/PlatformPiece
+  _worldBorderSize: {x: 1.6, y: 1.6}
   _levels:
-  - _mapPrefabAddress: 
+  - _mapPrefabAddress: Prefab/Map/Maps/MapLevel0
     _levelHeight: 100
-    _levelWidth: 10
+    _levelWidth: 50
     _heightAfterTheCurrentPlatform: 20
     _heightHeightBeforeTheCurrentPlatform: 20
     _currentPlatformHeight: 280
     _targetPlatformHeight: 140
-  - _mapPrefabAddress: 
+    _currentPlatformWidth: 50
+    _targetPlatformWidth: 50
+  - _mapPrefabAddress: Prefab/Map/Maps/MapLevel0
     _levelHeight: 100
-    _levelWidth: 10
+    _levelWidth: 50
     _heightAfterTheCurrentPlatform: 20
     _heightHeightBeforeTheCurrentPlatform: 20
     _currentPlatformHeight: 140
     _targetPlatformHeight: 0
-  - _mapPrefabAddress: 
+    _currentPlatformWidth: 50
+    _targetPlatformWidth: 50
+  - _mapPrefabAddress: Prefab/Map/Maps/MapLevel0
     _levelHeight: 100
-    _levelWidth: 10
+    _levelWidth: 50
     _heightAfterTheCurrentPlatform: 20
     _heightHeightBeforeTheCurrentPlatform: 20
     _currentPlatformHeight: 0
     _targetPlatformHeight: -120
+    _currentPlatformWidth: 50
+    _targetPlatformWidth: 50

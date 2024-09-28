@@ -35,7 +35,7 @@ public class MapControllerConfigEditor : Editor
             var nextLevel = config.Levels[i + 1];
 
             level.TargetPlatformHeight = nextLevel.CurrentPlatformHeight;
-            level.CurrentPlatformHeight = level.TargetPlatformHeight + level.LevelHeight + level.HeightAfterTheCurrentPlatform + nextLevel.HeightHeightBeforeTheCurrentPlatform;
+            level.CurrentPlatformHeight = level.TargetPlatformHeight + level.LevelHeight + level.HeightAfterTheCurrentPlatform + nextLevel.HeightBeforeTheCurrentPlatform;
         }
 
         EditorUtility.SetDirty(config);
@@ -50,12 +50,11 @@ public class MapControllerConfigEditor : Editor
 
         for (int i = 0; i < levels.Length; i++)
         {
-            totalHeight += levels[i].LevelHeight + levels[i].HeightHeightBeforeTheCurrentPlatform + levels[i].HeightAfterTheCurrentPlatform;
+            totalHeight += levels[i].LevelHeight + levels[i].HeightBeforeTheCurrentPlatform + levels[i].HeightAfterTheCurrentPlatform;
         }
 
-        totalHeight -= levels[0].HeightHeightBeforeTheCurrentPlatform;
+        totalHeight -= levels[0].HeightBeforeTheCurrentPlatform;
         totalHeight -= levels[levels.Length - 1].HeightAfterTheCurrentPlatform;
-
 
         return totalHeight;
     }

@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -14,40 +15,47 @@ public class MapController : MonoBehaviour
     string _targetPlatformAddress;
     CheckpointPlatform _targetPlatform;
 
+    public float FirstPlatformHeight
+    {
+        get
+        {
+            _config.GetFirstPlatformHeight();
+            return 1f;
+        }
+    }
+
     [Inject]
     private void Construct(LevelManager levelManager)
     {
         _levelManager = levelManager;
     }
 
-    public void Initialize(MapControllerConfig config)
+    public async void Initialize(MapControllerConfig config)
     {
         _config = config;
+        var level = _config.GetLevel(_levelManager.PlayerSavedHeight);
+
+        await UpdateCurrentPlatform(level);
+        await UpdateTargetPlatform(level);
+
+        await UpdateWorldBorder();
     }
 
-    private async void UpdateCurrentPlatform()
+    private async UniTask UpdateCurrentPlatform(MapControllerConfig.Level currentLevel)
     {
         if (_currentPlatformAddress == _config.PrefabCurrentCheckpointPlatformAddress) return;
-
         _currentPlatformAddress = _config.PrefabCurrentCheckpointPlatformAddress;
         var checkPoint = await LoadPrefabs(_currentPlatformAddress);
 
         if (checkPoint.TryGetComponent<CheckpointPlatform>(out var checkpointPlatform))
         {
             _currentPlatform = Instantiate(checkpointPlatform);
-            InitializePlatform(_currentPlatform, CalculateCurrentPlatformHeight());
-
+            InitializePlatform(_currentPlatform, currentLevel.CurrentPlatformHeight, currentLevel.CurrentPlatformWidth);
         }
 
     }
 
-    private float CalculateCurrentPlatformHeight()
-    {
-
-        return 1f;
-    }
-
-    private async void UpdateTargetPlatform()
+    private async UniTask UpdateTargetPlatform(MapControllerConfig.Level currentLevel)
     {
         if (_targetPlatformAddress == _config.PrefabTargetCheckpointPlatformAddress) return;
 
@@ -57,20 +65,14 @@ public class MapController : MonoBehaviour
         if (checkPoint.TryGetComponent<CheckpointPlatform>(out var checkpointPlatform))
         {
             _targetPlatform = Instantiate(checkpointPlatform);
-            InitializePlatform(_targetPlatform, CalculateTargetPlatformHeight());
+            InitializePlatform(_targetPlatform, currentLevel.TargetPlatformHeight, currentLevel.TargetPlatformWidth);
         }
 
     }
 
-    private float CalculateTargetPlatformHeight()
+    private void InitializePlatform(CheckpointPlatform checkpointPlatform, float platformHeight, float platformWidth)
     {
-
-        return 1f;
-    }
-
-    private void InitializePlatform(CheckpointPlatform checkpointPlatform, float height)
-    {
-        checkpointPlatform.Initialize(height);
+        checkpointPlatform.Initialize(platformHeight, platformWidth);
     }
 
     private async UniTask<GameObject> LoadPrefabs(string address)
@@ -89,6 +91,35 @@ public class MapController : MonoBehaviour
             return default;
         }
 
+    }
+
+    private async UniTask UpdateWorldBorder()
+    {
+        var worldBorderPrefab = await LoadPrefabs(_config.PrefabWorldBorderAddress);
+        var worldBorderSize = _config.WorldBorderSize; // Размеры каждой стены
+
+        var currentLevel = _config.GetLevel(_levelManager.PlayerSavedHeight);
+        float levelWidth = currentLevel.LevelWidth;
+        float levelHeight = currentLevel.LevelHeight;
+
+        // Получаем позиции текущей и таргет платформ
+        float currentPlatformHeight = currentLevel.CurrentPlatformHeight;
+        float targetPlatformHeight = currentLevel.TargetPlatformHeight;
+
+        // Высота границ (между самой нижней платформой и самой верхней)
+        float totalHeight = Mathf.Abs(currentPlatformHeight - targetPlatformHeight);
+
+        // Позиции левой и правой стен
+        Vector3 leftWallPosition = new Vector3(-levelWidth / 2, currentPlatformHeight + totalHeight / 2, 0);
+        Vector3 rightWallPosition = new Vector3(levelWidth / 2, currentPlatformHeight + totalHeight / 2, 0);
+
+        // Создаем левую стену
+        var leftWall = Instantiate(worldBorderPrefab, leftWallPosition, Quaternion.identity);
+        leftWall.transform.localScale = new Vector3(worldBorderSize.x, totalHeight, 1);
+
+        // Создаем правую стену
+        var rightWall = Instantiate(worldBorderPrefab, rightWallPosition, Quaternion.identity);
+        rightWall.transform.localScale = new Vector3(worldBorderSize.x, totalHeight, 1);
     }
 
 }

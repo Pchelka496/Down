@@ -4,8 +4,9 @@ using Zenject;
 public class GameplaySceneInstaller : MonoInstaller
 {
     [SerializeField] CharacterController _playerController;
-    [SerializeField] MapController _mapController;
     [SerializeField] LevelManager _levelManager;
+    [SerializeField] MapController _mapController;
+    [SerializeField] BackgroundController _backgroundController;
 
     public static DiContainer DiContainer { get; private set; }
 
@@ -17,6 +18,7 @@ public class GameplaySceneInstaller : MonoInstaller
 
         Container.Bind<CharacterController>().FromInstance(_playerController).AsSingle().NonLazy();
         Container.Bind<MapController>().FromInstance(_mapController).AsSingle().NonLazy();
+        Container.Bind<BackgroundController>().FromInstance(_backgroundController).AsSingle().NonLazy();
         Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle().NonLazy();
 
         //Container.Bind<NetworkManager>().FromInstance(NetworkManager.singleton).AsSingle().NonLazy();

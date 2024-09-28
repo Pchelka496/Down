@@ -7,6 +7,10 @@ public class CharacterController : MonoBehaviour
     const float MAX_INTROPALITES_INPUT_VALUE = 0.5f;
     const float MIN_INTROPALITES_INPUT_VALUE = 0.05f;
 
+    [SerializeField] Transform _groundCheck;
+    [SerializeField] float _groundCheckDistance = 0.2f;
+    [SerializeField] float _jumpForce = 5f;
+
     [SerializeField] float _maxLinearDrag;
     [SerializeField] float _minLinearDrag;
 
@@ -91,6 +95,11 @@ public class CharacterController : MonoBehaviour
         else if (rightInput > 0f && leftInput > 0f)
         {
             _rb.gravityScale = 0f;
+
+            if (CheckGround())
+            {
+                Jump();
+            }
         }
         else
         {
@@ -111,6 +120,18 @@ public class CharacterController : MonoBehaviour
         _oldLinearDrag = linearDrag;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private bool CheckGround()
+    {
+        return Physics2D.Raycast(_groundCheck.position, Vector2.down, _groundCheckDistance);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void Jump()
+    {
+        _rb.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
+    }
+
     private void Reset()
     {
         if (gameObject.TryGetComponent<Rigidbody2D>(out var rb))
@@ -126,5 +147,10 @@ public class CharacterController : MonoBehaviour
             _collider = collider;
         }
     }
+
+#if UNITY_EDITOR
+    public Transform GroundCheck => _groundCheck;
+    public float GroundCheckDistance => _groundCheckDistance;
+#endif
 
 }

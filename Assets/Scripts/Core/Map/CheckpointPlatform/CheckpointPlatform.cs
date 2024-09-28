@@ -9,13 +9,13 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class CheckpointPlatform : MonoBehaviour
 {
-    const float PLATFORM_PIECE_Y_POSITION_OFFSET = 2f;
+    const float PLATFORM_PIECE_Y_POSITION_OFFSET = 1f;
 
     [SerializeField] float _waitTimeForStartNewLevel;
     [SerializeField] string _platformPieceAddress;
     float _levelWidth;
     MapController _mapController;
-    Queue<PlatformPiece> _platformPieces;
+    [SerializeField] Queue<PlatformPiece> _platformPieces = new();
     bool _saveStatus;
     CancellationTokenSource _cancellationTokenSource;
 
@@ -31,9 +31,10 @@ public class CheckpointPlatform : MonoBehaviour
         _cancellationTokenSource = new CancellationTokenSource();
     }
 
-    public void Initialize(float height)
-    { 
-    
+    public void Initialize(float platformHeight, float platformWidth)
+    {
+        transform.position = new(0f, platformHeight);
+        _ = ResizeAsync(platformWidth);
     }
 
     private async UniTask ResizeAsync(float fullPlatformSize)
@@ -48,7 +49,7 @@ public class CheckpointPlatform : MonoBehaviour
 
         int pieceCount = Mathf.CeilToInt(fullPlatformSize / pieceXSize);
 
-        Vector2 basePosition = transform.position;
+        Vector2 basePosition = new(transform.position.x, transform.position.y - PLATFORM_PIECE_Y_POSITION_OFFSET);
 
         var centerPiece = Instantiate(platformPiece, basePosition, Quaternion.identity, transform);
         _platformPieces.Enqueue(centerPiece);
@@ -69,7 +70,7 @@ public class CheckpointPlatform : MonoBehaviour
     {
         foreach (var platformPieces in _platformPieces)
         {
-            Destroy(platformPieces);
+            Destroy(platformPieces.gameObject);
         }
     }
 
@@ -85,7 +86,6 @@ public class CheckpointPlatform : MonoBehaviour
 
             if (platformPieceGO.TryGetComponent<PlatformPiece>(out var platformPiece))
             {
-                Debug.Log("The platform has been successfully uploaded.");
                 return platformPiece;
             }
             else
@@ -174,6 +174,31 @@ public class CheckpointPlatform : MonoBehaviour
         _cancellationTokenSource?.Cancel();
         _cancellationTokenSource?.Dispose();
     }
+
+#if UNITY_EDITOR
+    [Header("UNITY_EDITOR")]
+    [SerializeField] float _width;
+
+    [ContextMenu("Resize")]
+    public void Resize()
+    {
+        _ = ResizeAsync(_width);
+    }
+
+    [ContextMenu("ClearPlatformPieces")]
+    public void Clear()
+    {
+        while (_platformPieces.Count > 0)
+        {
+            var platformPiece = _platformPieces.Dequeue();
+
+            if (platformPiece != null && platformPiece.gameObject != null)
+            {
+                DestroyImmediate(platformPiece.gameObject);
+            }
+        }
+    }
+#endif
 
 }
 
