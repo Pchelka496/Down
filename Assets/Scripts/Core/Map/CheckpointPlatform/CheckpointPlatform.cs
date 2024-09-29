@@ -2,28 +2,39 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 using System.Threading;
-using System;
 using System.Collections.Generic;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-
+using TMPro;
+using System.Runtime.CompilerServices;
 public class CheckpointPlatform : MonoBehaviour
 {
     const float PLATFORM_PIECE_Y_POSITION_OFFSET = 1f;
 
+    [SerializeField] EdgeCollider2D _edgeCollider;
+    [SerializeField] float _colliderHeight;
+    [SerializeField] RectTransform _worldCanvas;
+    [SerializeField] float _canvasSizeDeltaY;
+    [SerializeField] TextMeshProUGUI _timer;
+    [SerializeField] string _startText = "Go!";
+
     [SerializeField] float _waitTimeForStartNewLevel;
     [SerializeField] string _platformPieceAddress;
-    float _levelWidth;
-    MapController _mapController;
+    [SerializeField] GameObject[] _objectsOnDisabled;
     [SerializeField] Queue<PlatformPiece> _platformPieces = new();
-    bool _saveStatus;
+
+    float[] _doorLocalXPosition;
+    MapController _mapController;
+    LevelManager _levelManager;
+    float _levelWidth;
+    bool _savingOption = false;
     CancellationTokenSource _cancellationTokenSource;
 
     [Inject]
-    private void Construct(MapController mapController)
+    private void Construct(MapController mapController, LevelManager levelManager)
     {
         _mapController = mapController;
-
+        _levelManager = levelManager;
     }
 
     private void Start()
@@ -31,10 +42,27 @@ public class CheckpointPlatform : MonoBehaviour
         _cancellationTokenSource = new CancellationTokenSource();
     }
 
-    public void Initialize(float platformHeight, float platformWidth)
+    public void Initialize(Initializer initializer)
     {
-        transform.position = new(0f, platformHeight);
-        _ = ResizeAsync(platformWidth);
+        transform.position = new(0f, initializer.PlatformHeight);
+        _timer.text = "";
+        _edgeCollider.enabled = true;
+        _ = ResizeAsync(initializer.PlatformWidth);
+        _doorLocalXPosition = initializer.DoorLocalXPosition;
+
+        PlatformActivation(initializer.PlatformHeight, initializer.PlatformWidth);
+        _savingOption = initializer.SavingOption;
+    }
+
+    public void PlatformActivation(float platformHeight, float platformWidth)
+    {
+        if (_objectsOnDisabled != null)
+        {
+            foreach (var @object in _objectsOnDisabled)
+            {
+                @object.SetActive(true);
+            }
+        }
     }
 
     private async UniTask ResizeAsync(float fullPlatformSize)
@@ -45,8 +73,30 @@ public class CheckpointPlatform : MonoBehaviour
 
         ClearPlatformPieces();
 
-        var pieceXSize = platformPiece.Size.x;
+        ColliderSetting(fullPlatformSize);
+        CanvasSetting(fullPlatformSize);
+        CreatePlatformPieces(platformPiece, fullPlatformSize);
+    }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void ColliderSetting(float fullPlatformSize)
+    {
+        _edgeCollider.points = new Vector2[2]
+         {
+            new Vector2(fullPlatformSize * 0.5f, _colliderHeight),
+            new Vector2(-fullPlatformSize * 0.5f, _colliderHeight)
+         };
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void CanvasSetting(float fullPlatformSize)
+    {
+        _worldCanvas.sizeDelta = new(fullPlatformSize, _canvasSizeDeltaY);
+    }
+
+    private void CreatePlatformPieces(PlatformPiece platformPiece, float fullPlatformSize)
+    {
+        var pieceXSize = platformPiece.Size.x;
         int pieceCount = Mathf.CeilToInt(fullPlatformSize / pieceXSize);
 
         Vector2 basePosition = new(transform.position.x, transform.position.y - PLATFORM_PIECE_Y_POSITION_OFFSET);
@@ -70,7 +120,10 @@ public class CheckpointPlatform : MonoBehaviour
     {
         foreach (var platformPieces in _platformPieces)
         {
-            Destroy(platformPieces.gameObject);
+            if (platformPieces != null)
+            {
+                Destroy(platformPieces.gameObject);
+            }
         }
     }
 
@@ -99,39 +152,26 @@ public class CheckpointPlatform : MonoBehaviour
             Debug.LogError("Error loading platform via Addressables.");
             return null;
         }
-
     }
 
-    private void PlayerRespawn()
-    {
-        PlatformActivation();
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.TryGetComponent<CharacterController>(out var player))
         {
-            // Останавливаем процесс старта следующего уровня, если игрок вернулся на платформу
             if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
             {
-                _cancellationTokenSource.Cancel();
-                Debug.Log("Игрок вернулся на платформу, отменяем запуск следующего уровня.");
+                CancelNextLevelTransitions();
             }
 
             PlayerSaving();
+
         }
     }
 
-    private void PlayerSaving()
-    {
-        // _saveStatus = true;
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.TryGetComponent<CharacterController>(out var player))
         {
-            // Запускаем процесс старта следующего уровня, если игрок ушел с платформы
             if (_cancellationTokenSource != null)
             {
                 _cancellationTokenSource.Cancel();
@@ -143,30 +183,81 @@ public class CheckpointPlatform : MonoBehaviour
         }
     }
 
+    private void PlayerSaving()
+    {
+        if (!_savingOption) return;
+        _savingOption = false;
+        var heightOffset = 10f;
+
+        _levelManager.PlayerSavedHeight = transform.position.y + heightOffset;
+        _levelManager.SwitchToNextLevel();
+    }
+
+    private void CancelNextLevelTransitions()
+    {
+        _cancellationTokenSource.Cancel();
+        _timer.text = "";
+    }
+
     private async UniTask NextLevelStart(CancellationToken cancellationToken)
     {
-        try
+        float remainingTime = _waitTimeForStartNewLevel;
+        _timer.text = "";
+
+        while (remainingTime > 0)
         {
-            Debug.Log("Ожидание запуска следующего уровня...");
-            await UniTask.Delay(System.TimeSpan.FromSeconds(_waitTimeForStartNewLevel), cancellationToken: cancellationToken);
-            PlatformDeactivation();
-            Debug.Log("Запускаем следующий уровень.");
+            cancellationToken.ThrowIfCancellationRequested();
+            _timer.text = Mathf.CeilToInt(remainingTime).ToString();
+            await UniTask.Delay(1000, cancellationToken: cancellationToken);
+            remainingTime--;
         }
-        catch (OperationCanceledException)
-        {
-            Debug.Log("Запуск следующего уровня отменён.");
-        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        _timer.text = _startText;
+        _edgeCollider.enabled = false;
+        PlatformDeactivation();
+        _levelManager.StartNextLevel();
     }
 
     private void PlatformDeactivation()
     {
-        gameObject.SetActive(false);
+        DisableClosestPlatformPieces();
+
+        if (_objectsOnDisabled != null)
+        {
+            foreach (var @object in _objectsOnDisabled)
+            {
+                @object.SetActive(false);
+            }
+        }
     }
 
-    private void PlatformActivation()
+    private void DisableClosestPlatformPieces()
     {
-        gameObject.SetActive(true);
+        foreach (var doorX in _doorLocalXPosition)
+        {
+            PlatformPiece closestPiece = null;
+            float closestDistance = float.MaxValue;
 
+            foreach (var piece in _platformPieces)
+            {
+                if (piece == null) continue;
+                float pieceX = piece.transform.localPosition.x;
+                float distance = Mathf.Abs(pieceX - doorX);
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestPiece = piece;
+                }
+
+                if (closestPiece != null)
+                {
+                    closestPiece.gameObject.SetActive(false);
+                }
+            }
+        }
     }
 
     private void OnDestroy()
@@ -199,6 +290,23 @@ public class CheckpointPlatform : MonoBehaviour
         }
     }
 #endif
+
+    public readonly struct Initializer
+    {
+        public readonly float PlatformHeight;
+        public readonly float PlatformWidth;
+        public readonly float[] DoorLocalXPosition;
+        public readonly bool SavingOption;
+
+        public Initializer(float platformHeight, float platformWidth, float[] doorLocalXPosition, bool savingOption)
+        {
+            PlatformHeight = platformHeight;
+            PlatformWidth = platformWidth;
+            DoorLocalXPosition = doorLocalXPosition;
+            SavingOption = savingOption;
+        }
+
+    }
 
 }
 

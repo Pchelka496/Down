@@ -199,7 +199,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _groundCheck: {fileID: 7093339506161423062}
   _groundCheckDistance: 0.2
-  _jumpForce: 5
+  _jumpForce: 10
+  _maxNegativeGravity: -0.5
   _maxLinearDrag: 5
   _minLinearDrag: 0.2
   _rb: {fileID: 214474271056522076}

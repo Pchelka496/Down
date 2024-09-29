@@ -9,4 +9,9 @@ public class BackgroundController : MonoBehaviour
         _config = config;
     }
 
+    public void SwitchToNextLevel()
+    {
+
+    }
+
 }

@@ -1,16 +1,21 @@
+using Cysharp.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Zenject;
 
 public class CharacterController : MonoBehaviour
 {
+    const float SIDE_MOVE_GRAVITY_MULTIPLIER = 0.8f;
     const float MAX_INTROPALITES_INPUT_VALUE = 0.5f;
     const float MIN_INTROPALITES_INPUT_VALUE = 0.05f;
+    const float JUMP_RELOAD = 0.5f;
 
     [SerializeField] Transform _groundCheck;
     [SerializeField] float _groundCheckDistance = 0.2f;
     [SerializeField] float _jumpForce = 5f;
 
+    [SerializeField][Range(-10f, 0f)] float _maxNegativeGravity = -0.5f;
     [SerializeField] float _maxLinearDrag;
     [SerializeField] float _minLinearDrag;
 
@@ -18,15 +23,14 @@ public class CharacterController : MonoBehaviour
     [SerializeField] Collider2D _collider;
     [SerializeField] float _maxMoveSpeed = 0.1f;
 
+    Controls _controls;
     float _currentMoveSpeed = 0f;
     float _defaultGravityScale = 1f;
-
-    Controls _controls;
-
     float _oldLeftInputValue;
     float _oldRightInputValue;
-
     float _oldLinearDrag;
+
+    bool _jumpReloaded = true;
 
     [Inject]
     private void Construct(Controls controls)
@@ -84,19 +88,18 @@ public class CharacterController : MonoBehaviour
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void YAxisManipulation(float leftInput, float rightInput)
     {
-        if (leftInput > rightInput)
+        if (leftInput != rightInput)
         {
-            ApplyGravityAndDrag(leftInput, Vector2.left);
+            var inputValue = Mathf.Max(rightInput, leftInput);
+            ApplyGravity(inputValue);
+            ApplyDrag(inputValue);
         }
-        else if (rightInput > leftInput)
+        else if (rightInput >= 0.9f && leftInput >= 0.9f)
         {
-            ApplyGravityAndDrag(rightInput, Vector2.right);
-        }
-        else if (rightInput > 0f && leftInput > 0f)
-        {
-            _rb.gravityScale = 0f;
+            _rb.gravityScale = _maxNegativeGravity;
+            ApplyDrag(1f);
 
-            if (CheckGround())
+            if (JumpFeasibilityCheck())
             {
                 Jump();
             }
@@ -109,21 +112,45 @@ public class CharacterController : MonoBehaviour
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private void ApplyGravityAndDrag(float inputValue, Vector2 direction)
+    private void ApplyGravity(float inputValue)
     {
-        _rb.gravityScale = _defaultGravityScale * 0.8f;
+        _rb.gravityScale = _defaultGravityScale * SIDE_MOVE_GRAVITY_MULTIPLIER;
+    }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void ApplyDrag(float inputValue)
+    {
         var linearDrag = Mathf.Max(_maxLinearDrag * inputValue, _minLinearDrag);
-        var currentDrag = Mathf.Clamp(_oldLinearDrag, linearDrag, 0.5f);
-
+        var currentDrag = Mathf.Lerp(_oldLinearDrag, linearDrag, 0.5f);
         _rb.drag = currentDrag;
         _oldLinearDrag = linearDrag;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private bool CheckGround()
+    private bool JumpFeasibilityCheck()
     {
-        return Physics2D.Raycast(_groundCheck.position, Vector2.down, _groundCheckDistance);
+        int layerMask = 1 << 11;
+        var hit = Physics2D.Raycast(_groundCheck.position, Vector2.down, _groundCheckDistance, layerMask);
+
+        if (hit.collider == null) return false;
+
+        var groundCheck = true;
+        var feasibility = groundCheck & _jumpReloaded;
+
+        _jumpReloaded = false;
+
+        if (feasibility)
+        {
+            JumpReload();
+        }
+
+        return feasibility;
+    }
+
+    private async void JumpReload()
+    {
+        await UniTask.WaitForSeconds(JUMP_RELOAD);
+        _jumpReloaded = true;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

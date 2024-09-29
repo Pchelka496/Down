@@ -41,6 +41,7 @@ public class MapControllerConfig : ScriptableObject
     public record Level
     {
         [SerializeField] string _mapPrefabAddress;
+        [SerializeField] Vector2 _mapGlobalPosition;
         [SerializeField] float _levelHeight;
         [SerializeField] float _levelWidth;
         [SerializeField] float _heightAfterTheCurrentPlatform;
@@ -49,8 +50,13 @@ public class MapControllerConfig : ScriptableObject
         [SerializeField] float _targetPlatformHeight;
         [SerializeField] float _currentPlatformWidth;
         [SerializeField] float _targetPlatformWidth;
+        [Tooltip("Checkpoint LocalPositions")]
+        [SerializeField] float[] _currentPlatformDoorsXPositions;
+        [Tooltip("Checkpoint LocalPositions")]
+        [SerializeField] float[] _targetPlatformDoorsXPositions;
 
         public string MapPrefabAddress { get => _mapPrefabAddress; }
+        public Vector2 MapGlobalPosition { get => _mapGlobalPosition; set => _mapGlobalPosition = value; }
         public float LevelHeight { get => _levelHeight; }
         public float LevelWidth { get => _levelWidth; }
         public float HeightBeforeTheCurrentPlatform { get => _heightHeightBeforeTheCurrentPlatform; }
@@ -59,6 +65,18 @@ public class MapControllerConfig : ScriptableObject
         public float TargetPlatformHeight { get => _targetPlatformHeight; set => _targetPlatformHeight = value; }
         public float CurrentPlatformWidth { get => _currentPlatformWidth; }
         public float TargetPlatformWidth { get => _targetPlatformWidth; }
+        public float[] TargetPlatformDoorsPositions
+        {
+            get => _targetPlatformDoorsXPositions != null ? (float[])_targetPlatformDoorsXPositions.Clone() : null;
+            set => _targetPlatformDoorsXPositions = value;
+        }
+
+        public float[] CurrentPlatformDoorsPositions
+        {
+            get => _currentPlatformDoorsXPositions != null ? (float[])_currentPlatformDoorsXPositions.Clone() : null;
+            set => _currentPlatformDoorsXPositions = value;
+        }
+
     }
 
 }
