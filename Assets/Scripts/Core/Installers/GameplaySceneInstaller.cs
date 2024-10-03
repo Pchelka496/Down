@@ -13,7 +13,6 @@ public class GameplaySceneInstaller : MonoInstaller
     public override void InstallBindings()
     {
         InitializeOrCleanInstaller();
-
         Container.Bind<Controls>().FromNew().AsSingle().NonLazy();
 
         Container.Bind<CharacterController>().FromInstance(_playerController).AsSingle().NonLazy();

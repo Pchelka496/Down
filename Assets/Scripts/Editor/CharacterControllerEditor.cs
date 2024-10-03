@@ -8,13 +8,13 @@ public class CharacterControllerEditor : Editor
     {
         CharacterController characterController = (CharacterController)target;
 
-        if (characterController != null && characterController.GroundCheck != null)
+        if (characterController != null && characterController.GroundCheckEditor != null)
         {
             Handles.color = Color.red;
 
-            Vector3 groundCheckPosition = characterController.GroundCheck.position;
+            Vector3 groundCheckPosition = characterController.GroundCheckEditor.position;
 
-            Vector3 rayEndPoint = groundCheckPosition + Vector3.down * characterController.GroundCheckDistance;
+            Vector3 rayEndPoint = groundCheckPosition + Vector3.down * characterController.GroundCheckDistanceEditor;
 
             Handles.DrawLine(groundCheckPosition, rayEndPoint);
 

@@ -25,20 +25,6 @@ public class MapUpdater
         _config = config;
     }
 
-    public async UniTask UpdateMap(MapControllerConfig.Level currentLevel)
-    {
-        if (_map != null)
-        {
-            MonoBehaviour.Destroy(_map);
-        }
-
-        _mapAddress = currentLevel.MapPrefabAddress;
-        var mapPrefab = await LoadPrefabs(currentLevel.MapPrefabAddress);
-        _map = GameplaySceneInstaller.DiContainer.InstantiatePrefab(mapPrefab);
-
-        _map.transform.position = currentLevel.MapGlobalPosition;
-    }
-
     private async UniTask<GameObject> LoadPrefabs(string address)
     {
         AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);

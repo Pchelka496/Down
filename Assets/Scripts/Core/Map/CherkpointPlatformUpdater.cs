@@ -19,59 +19,8 @@ public class CheckpointPlatformUpdater
         _config = config;
     }
 
-    public async UniTask SwitchToNextLevel(MapControllerConfig.Level currentLevel)
+    public async UniTask CreatePlatforms(float height)
     {
-        _ = ResetTargetPlatform(currentLevel);
-
-        await UniTask.CompletedTask;
-    }
-
-    public async UniTask CreatePlatforms(MapControllerConfig.Level currentLevel)
-    {
-        _ = CreateCurrentPlatform(currentLevel);
-        _ = CreateTargetPlatform(currentLevel);
-
-        await UniTask.CompletedTask;
-    }
-
-    private async UniTask CreateCurrentPlatform(MapControllerConfig.Level currentLevel)
-    {
-        if (_currentPlatformAddress == _config.PrefabCurrentCheckpointPlatformAddress) return;
-
-        _currentPlatformAddress = _config.PrefabCurrentCheckpointPlatformAddress;
-        var checkPoint = await LoadPrefabs(_currentPlatformAddress);
-
-        if (checkPoint.TryGetComponent<CheckpointPlatform>(out var checkpointPlatform))
-        {
-            _currentPlatform = GameplaySceneInstaller.DiContainer.InstantiatePrefabForComponent<CheckpointPlatform>(checkpointPlatform);
-            var initializer = new CheckpointPlatform.Initializer(currentLevel.CurrentPlatformHeight, currentLevel.CurrentPlatformWidth, currentLevel.CurrentPlatformDoorsPositions, false);
-
-            InitializePlatform(_currentPlatform, initializer);
-        }
-
-    }
-
-    private async UniTask CreateTargetPlatform(MapControllerConfig.Level currentLevel)
-    {
-        if (_targetPlatformAddress == _config.PrefabTargetCheckpointPlatformAddress) return;
-
-        _targetPlatformAddress = _config.PrefabTargetCheckpointPlatformAddress;
-        var initializer = new CheckpointPlatform.Initializer(currentLevel.TargetPlatformHeight, currentLevel.TargetPlatformWidth, currentLevel.TargetPlatformDoorsPositions, true);
-
-        _targetPlatform = await CreatePlatform(_targetPlatformAddress, initializer);
-    }
-
-    private async UniTask ResetTargetPlatform(MapControllerConfig.Level currentLevel)
-    {
-        if (_currentPlatformAddress != _config.PrefabTargetCheckpointPlatformAddress)
-        {
-            _ = CreateTargetPlatform(currentLevel);
-            return;
-        }
-        (_currentPlatform, _targetPlatform) = (_targetPlatform, _currentPlatform);
-
-        var initializer = new CheckpointPlatform.Initializer(currentLevel.TargetPlatformHeight, currentLevel.TargetPlatformWidth, currentLevel.TargetPlatformDoorsPositions, true);
-        InitializePlatform(_targetPlatform, initializer);
 
         await UniTask.CompletedTask;
     }

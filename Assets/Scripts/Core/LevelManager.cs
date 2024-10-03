@@ -28,7 +28,7 @@ public class LevelManager : MonoBehaviour
 
             if (float.IsNaN(value))
             {
-                return _mapController.FirstPlatformHeight;
+                return _mapController.FirstHeight;
             }
             else
             {
@@ -69,7 +69,6 @@ public class LevelManager : MonoBehaviour
     public void SwitchToNextLevel()
     {
          _mapController.SwitchToNextLevel();
-         _backgroundController.SwitchToNextLevel();
     }
 
 }

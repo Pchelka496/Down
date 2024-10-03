@@ -28,7 +28,8 @@ public class CheckpointPlatform : MonoBehaviour
     LevelManager _levelManager;
     float _levelWidth;
     bool _savingOption = false;
-    CancellationTokenSource _cancellationTokenSource;
+    CancellationTokenSource _nextLevelTransitions;
+    CancellationTokenSource _timerMovement;
 
     [Inject]
     private void Construct(MapController mapController, LevelManager levelManager)
@@ -39,7 +40,8 @@ public class CheckpointPlatform : MonoBehaviour
 
     private void Start()
     {
-        _cancellationTokenSource = new CancellationTokenSource();
+        _nextLevelTransitions = new CancellationTokenSource();
+        _timerMovement = new CancellationTokenSource();
     }
 
     public void Initialize(Initializer initializer)
@@ -47,14 +49,14 @@ public class CheckpointPlatform : MonoBehaviour
         transform.position = new(0f, initializer.PlatformHeight);
         _timer.text = "";
         _edgeCollider.enabled = true;
-        _ = ResizeAsync(initializer.PlatformWidth);
+        ResizeAsync(initializer.PlatformWidth).Forget();
         _doorLocalXPosition = initializer.DoorLocalXPosition;
 
         PlatformActivation(initializer.PlatformHeight, initializer.PlatformWidth);
         _savingOption = initializer.SavingOption;
     }
 
-    public void PlatformActivation(float platformHeight, float platformWidth)
+    private void PlatformActivation(float platformHeight, float platformWidth)
     {
         if (_objectsOnDisabled != null)
         {
@@ -81,10 +83,11 @@ public class CheckpointPlatform : MonoBehaviour
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void ColliderSetting(float fullPlatformSize)
     {
+        _edgeCollider.offset = new(0f, _colliderHeight);
         _edgeCollider.points = new Vector2[2]
          {
-            new Vector2(fullPlatformSize * 0.5f, _colliderHeight),
-            new Vector2(-fullPlatformSize * 0.5f, _colliderHeight)
+            new Vector2(fullPlatformSize * 0.5f, 0f),
+            new Vector2(-fullPlatformSize * 0.5f, 0f)
          };
     }
 
@@ -96,21 +99,22 @@ public class CheckpointPlatform : MonoBehaviour
 
     private void CreatePlatformPieces(PlatformPiece platformPiece, float fullPlatformSize)
     {
-        var pieceXSize = platformPiece.Size.x;
-        int pieceCount = Mathf.CeilToInt(fullPlatformSize / pieceXSize);
+        var pieceSize = platformPiece.Size;
 
-        Vector2 basePosition = new(transform.position.x, transform.position.y - PLATFORM_PIECE_Y_POSITION_OFFSET);
+        int pieceCount = Mathf.CeilToInt(fullPlatformSize / pieceSize.x);
+
+        Vector2 basePosition = new(transform.position.x, transform.position.y - pieceSize.y / 2 - PLATFORM_PIECE_Y_POSITION_OFFSET);
 
         var centerPiece = Instantiate(platformPiece, basePosition, Quaternion.identity, transform);
         _platformPieces.Enqueue(centerPiece);
 
         for (int i = 1; i <= pieceCount / 2; i++)
         {
-            Vector2 leftPosition = basePosition - new Vector2(i * pieceXSize, 0);
+            Vector2 leftPosition = basePosition - new Vector2(i * pieceSize.x, 0);
             var leftPiece = Instantiate(platformPiece, leftPosition, Quaternion.identity, transform);
             _platformPieces.Enqueue(leftPiece);
 
-            Vector2 rightPosition = basePosition + new Vector2(i * pieceXSize, 0);
+            Vector2 rightPosition = basePosition + new Vector2(i * pieceSize.x, 0);
             var rightPiece = Instantiate(platformPiece, rightPosition, Quaternion.identity, transform);
             _platformPieces.Enqueue(rightPiece);
         }
@@ -158,7 +162,7 @@ public class CheckpointPlatform : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent<CharacterController>(out var player))
         {
-            if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
+            if (_nextLevelTransitions != null && !_nextLevelTransitions.IsCancellationRequested)
             {
                 CancelNextLevelTransitions();
             }
@@ -172,14 +176,40 @@ public class CheckpointPlatform : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent<CharacterController>(out var player))
         {
-            if (_cancellationTokenSource != null)
+            _nextLevelTransitions?.Cancel();
+            _nextLevelTransitions?.Dispose();
+            _timerMovement?.Cancel();
+            _timerMovement?.Dispose();
+
+            _nextLevelTransitions = new CancellationTokenSource();
+            _timerMovement = new CancellationTokenSource();
+
+            NextLevelStart(_nextLevelTransitions.Token).Forget();
+            TimerFollowing(player.transform, 2f, 10f, 0.5f, _timerMovement.Token).Forget();
+        }
+    }
+
+    private async UniTask TimerFollowing(Transform followTransform, float baseSpeed, float maxSpeed, float followDistance, CancellationToken cancellationToken)
+    {
+        var timerTransform = _timer.rectTransform;
+
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            var deltaTime = Time.deltaTime;
+            var targetX = followTransform.position.x;
+            var currentX = timerTransform.position.x;
+
+            var distance = Mathf.Abs(targetX - currentX);
+
+            if (distance > followDistance)
             {
-                _cancellationTokenSource.Cancel();
-                _cancellationTokenSource.Dispose();
+                var speed = Mathf.Min(baseSpeed * (distance / followDistance), maxSpeed);
+                var newX = Mathf.Lerp(currentX, targetX, speed * deltaTime);
+
+                timerTransform.position = new Vector3(newX, timerTransform.position.y, timerTransform.position.z);
             }
 
-            _cancellationTokenSource = new CancellationTokenSource();
-            NextLevelStart(_cancellationTokenSource.Token).Forget();
+            await UniTask.WaitForSeconds(deltaTime, cancellationToken: cancellationToken);
         }
     }
 
@@ -195,7 +225,7 @@ public class CheckpointPlatform : MonoBehaviour
 
     private void CancelNextLevelTransitions()
     {
-        _cancellationTokenSource.Cancel();
+        _nextLevelTransitions.Cancel();
         _timer.text = "";
     }
 
@@ -217,12 +247,16 @@ public class CheckpointPlatform : MonoBehaviour
         _timer.text = _startText;
         _edgeCollider.enabled = false;
         PlatformDeactivation();
+
         _levelManager.StartNextLevel();
+
+        await UniTask.CompletedTask;
     }
 
     private void PlatformDeactivation()
     {
         DisableClosestPlatformPieces();
+        Dispose();
 
         if (_objectsOnDisabled != null)
         {
@@ -243,6 +277,7 @@ public class CheckpointPlatform : MonoBehaviour
             foreach (var piece in _platformPieces)
             {
                 if (piece == null) continue;
+
                 float pieceX = piece.transform.localPosition.x;
                 float distance = Mathf.Abs(pieceX - doorX);
 
@@ -251,19 +286,45 @@ public class CheckpointPlatform : MonoBehaviour
                     closestDistance = distance;
                     closestPiece = piece;
                 }
+            }
 
-                if (closestPiece != null)
-                {
-                    closestPiece.gameObject.SetActive(false);
-                }
+            if (closestPiece != null)
+            {
+                closestPiece.gameObject.SetActive(false);
             }
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void Dispose()
+    {
+        if (_nextLevelTransitions != null && !_nextLevelTransitions.IsCancellationRequested)
+        {
+            _nextLevelTransitions.Cancel();
+        }
+
+        if (_nextLevelTransitions != null)
+        {
+            _nextLevelTransitions.Dispose();
+            _nextLevelTransitions = null;
+        }
+
+        if (_timerMovement != null && !_timerMovement.IsCancellationRequested)
+        {
+            _timerMovement.Cancel();
+        }
+
+        if (_timerMovement != null)
+        {
+            _timerMovement.Dispose();
+            _timerMovement = null;
+        }
+    }
+
+
     private void OnDestroy()
     {
-        _cancellationTokenSource?.Cancel();
-        _cancellationTokenSource?.Dispose();
+        Dispose();
     }
 
 #if UNITY_EDITOR

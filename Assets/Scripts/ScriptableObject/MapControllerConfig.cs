@@ -4,79 +4,44 @@ using System.Linq;
 [CreateAssetMenu(fileName = "MapControllerConfig", menuName = "Scriptable Objects/MapControllerConfig")]
 public class MapControllerConfig : ScriptableObject
 {
-    [SerializeField] string _prefabCurrentCheckpointPlatformAddress;
-    [SerializeField] string _prefabTargetCheckpointPlatformAddress;
+    [SerializeField] string _prefabCheckpointPlatformAddress;
+    [SerializeField] string _prefabEarthSurface;
+    [SerializeField] float[] _savingHeights;
 
-    [SerializeField] string _prefabWorldBorderAddress;
-    [SerializeField] Vector2 _worldBorderSize;
+    public string PrefabCheckpointPlatformAddress { get => _prefabCheckpointPlatformAddress; set => _prefabCheckpointPlatformAddress = value; }
+    public string PrefabEarthSurface { get => _prefabEarthSurface; set => _prefabEarthSurface = value; }
 
-    [Header("Levels in order, top to bottom")]
-    [SerializeField] Level[] _levels;
-
-    public float GetFirstPlatformHeight()
+    public float FirstPlatformHeight()
     {
-        return _levels[0].CurrentPlatformHeight;
+        if (_savingHeights == null || _savingHeights.Length == 0)
+            return default;
+
+        return _savingHeights[0];
     }
 
-    public Level GetLevel(float height)
+    public float HighestSavingHeight()
     {
-        if (_levels == null || _levels.Length == 0)
-            return null;
+        if (_savingHeights == null || _savingHeights.Length == 0)
+            return default;
 
-        var closestLevel = _levels
-            .OrderBy(level => Mathf.Abs(level.CurrentPlatformHeight - height))
+        return _savingHeights[_savingHeights.Length - 1];
+    }
+
+    public float GetSavingHeight(float height)
+    {
+        if (_savingHeights == null || _savingHeights.Length == 0)
+            return default;
+
+        var closestHeight = _savingHeights
+            .OrderBy(level => Mathf.Abs(level - height))
             .FirstOrDefault();
 
-        return closestLevel;
+        return closestHeight;
     }
 
-    public string PrefabCurrentCheckpointPlatformAddress { get => _prefabCurrentCheckpointPlatformAddress; set => _prefabCurrentCheckpointPlatformAddress = value; }
-    public string PrefabTargetCheckpointPlatformAddress { get => _prefabTargetCheckpointPlatformAddress; set => _prefabTargetCheckpointPlatformAddress = value; }
-    public string PrefabWorldBorderAddress { get => _prefabWorldBorderAddress; set => _prefabWorldBorderAddress = value; }
-    public Vector2 WorldBorderSize { get => _worldBorderSize; set => _worldBorderSize = value; }
+#if UNITY_EDITOR
+    public float[] SavingHeights { get => _savingHeights; set => _savingHeights = value; }
 
-    public Level[] Levels { get => _levels; set => _levels = value; }
-
-    [System.Serializable]
-    public record Level
-    {
-        [SerializeField] string _mapPrefabAddress;
-        [SerializeField] Vector2 _mapGlobalPosition;
-        [SerializeField] float _levelHeight;
-        [SerializeField] float _levelWidth;
-        [SerializeField] float _heightAfterTheCurrentPlatform;
-        [SerializeField] float _heightHeightBeforeTheCurrentPlatform;
-        [SerializeField] float _currentPlatformHeight;
-        [SerializeField] float _targetPlatformHeight;
-        [SerializeField] float _currentPlatformWidth;
-        [SerializeField] float _targetPlatformWidth;
-        [Tooltip("Checkpoint LocalPositions")]
-        [SerializeField] float[] _currentPlatformDoorsXPositions;
-        [Tooltip("Checkpoint LocalPositions")]
-        [SerializeField] float[] _targetPlatformDoorsXPositions;
-
-        public string MapPrefabAddress { get => _mapPrefabAddress; }
-        public Vector2 MapGlobalPosition { get => _mapGlobalPosition; set => _mapGlobalPosition = value; }
-        public float LevelHeight { get => _levelHeight; }
-        public float LevelWidth { get => _levelWidth; }
-        public float HeightBeforeTheCurrentPlatform { get => _heightHeightBeforeTheCurrentPlatform; }
-        public float HeightAfterTheCurrentPlatform { get => _heightAfterTheCurrentPlatform; }
-        public float CurrentPlatformHeight { get => _currentPlatformHeight; set => _currentPlatformHeight = value; }
-        public float TargetPlatformHeight { get => _targetPlatformHeight; set => _targetPlatformHeight = value; }
-        public float CurrentPlatformWidth { get => _currentPlatformWidth; }
-        public float TargetPlatformWidth { get => _targetPlatformWidth; }
-        public float[] TargetPlatformDoorsPositions
-        {
-            get => _targetPlatformDoorsXPositions != null ? (float[])_targetPlatformDoorsXPositions.Clone() : null;
-            set => _targetPlatformDoorsXPositions = value;
-        }
-
-        public float[] CurrentPlatformDoorsPositions
-        {
-            get => _currentPlatformDoorsXPositions != null ? (float[])_currentPlatformDoorsXPositions.Clone() : null;
-            set => _currentPlatformDoorsXPositions = value;
-        }
-
-    }
+#endif
 
 }

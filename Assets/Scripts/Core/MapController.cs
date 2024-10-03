@@ -3,31 +3,24 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
-using static MapControllerConfig;
 
 public class MapController : MonoBehaviour
 {
     LevelManager _levelManager;
     MapControllerConfig _config;
 
-    WorldBorderUpdater _worldBorderUpdater;
     CheckpointPlatformUpdater _checkpointPlatform;
     MapUpdater _mapUpdater;
+    float _fullMapHeight;
 
-    public float FirstPlatformHeight
-    {
-        get
-        {
-            return _config.GetFirstPlatformHeight();
-        }
-    }
+    public float FirstHeight => _config.FirstPlatformHeight();
+    public float FullMapHeight { get => _fullMapHeight; }
 
     [Inject]
     private void Construct(LevelManager levelManager)
     {
         _levelManager = levelManager;
 
-        _worldBorderUpdater = GameplaySceneInstaller.DiContainer.Instantiate<WorldBorderUpdater>();
         _checkpointPlatform = GameplaySceneInstaller.DiContainer.Instantiate<CheckpointPlatformUpdater>();
         _mapUpdater = GameplaySceneInstaller.DiContainer.Instantiate<MapUpdater>();
     }
@@ -36,25 +29,18 @@ public class MapController : MonoBehaviour
     {
         _config = config;
 
-        _worldBorderUpdater.Initialize(this, config);
         _checkpointPlatform.Initialize(this, config);
         _mapUpdater.Initialize(this, config);
 
-        var level = _config.GetLevel(_levelManager.PlayerSavedHeight);
+        var level = _config.GetSavingHeight(_levelManager.PlayerSavedHeight);
 
         _ = _checkpointPlatform.CreatePlatforms(level);
 
-        _ = _worldBorderUpdater.UpdateWorldBorder(level);
-        _ = _mapUpdater.UpdateMap(level);
     }
 
     public void SwitchToNextLevel()
     {
-        var level = _config.GetLevel(_levelManager.PlayerSavedHeight);
-
-        _ = _checkpointPlatform.SwitchToNextLevel(level);
-        _ = _worldBorderUpdater.UpdateWorldBorder(level);
-        _ = _mapUpdater.UpdateMap(level);
+        var level = _config.GetSavingHeight(_levelManager.PlayerSavedHeight);
     }
 
     private async UniTask<GameObject> LoadPrefabs(string address)

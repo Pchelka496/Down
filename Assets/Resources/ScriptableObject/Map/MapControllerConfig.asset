@@ -12,67 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f830477e03f73741b57ffc3aa3658a7, type: 3}
   m_Name: MapControllerConfig
   m_EditorClassIdentifier: 
-  _prefabCurrentCheckpointPlatformAddress: Prefab/Map/Checkpoint/CheckpointPlatform
-  _prefabTargetCheckpointPlatformAddress: Prefab/Map/Checkpoint/CheckpointPlatform
-  _prefabWorldBorderAddress: Prefab/Map/Checkpoint/PlatformPiece
-  _worldBorderSize: {x: 1.6, y: 1.6}
-  _levels:
-  - _mapPrefabAddress: Prefab/Map/Maps/MapLevel0
-    _mapGlobalPosition: {x: 0, y: 225}
-    _levelHeight: 50
-    _levelWidth: 50
-    _heightAfterTheCurrentPlatform: 20
-    _heightHeightBeforeTheCurrentPlatform: 20
-    _currentPlatformHeight: 270
-    _targetPlatformHeight: 180
-    _currentPlatformWidth: 50
-    _targetPlatformWidth: 50
-    _currentPlatformDoorsXPositions:
-    - 0
-    _targetPlatformDoorsXPositions:
-    - 2
-    - -2
-  - _mapPrefabAddress: Prefab/Map/Maps/MapLevel0
-    _mapGlobalPosition: {x: 0, y: 135}
-    _levelHeight: 50
-    _levelWidth: 50
-    _heightAfterTheCurrentPlatform: 20
-    _heightHeightBeforeTheCurrentPlatform: 20
-    _currentPlatformHeight: 180
-    _targetPlatformHeight: 90
-    _currentPlatformWidth: 50
-    _targetPlatformWidth: 50
-    _currentPlatformDoorsXPositions:
-    - 2
-    - -2
-    _targetPlatformDoorsXPositions:
-    - 1
-    - 3
-  - _mapPrefabAddress: Prefab/Map/Maps/MapLevel0
-    _mapGlobalPosition: {x: 0, y: 45}
-    _levelHeight: 50
-    _levelWidth: 10
-    _heightAfterTheCurrentPlatform: 20
-    _heightHeightBeforeTheCurrentPlatform: 20
-    _currentPlatformHeight: 90
-    _targetPlatformHeight: 0
-    _currentPlatformWidth: 50
-    _targetPlatformWidth: 50
-    _currentPlatformDoorsXPositions:
-    - 1
-    - 3
-    _targetPlatformDoorsXPositions:
-    - 0
-  - _mapPrefabAddress: Prefab/Map/Maps/MapLevel0
-    _mapGlobalPosition: {x: 0, y: -10}
-    _levelHeight: 0
-    _levelWidth: 50
-    _heightAfterTheCurrentPlatform: 20
-    _heightHeightBeforeTheCurrentPlatform: 20
-    _currentPlatformHeight: 0
-    _targetPlatformHeight: -20
-    _currentPlatformWidth: 50
-    _targetPlatformWidth: 50
-    _currentPlatformDoorsXPositions:
-    - 0
-    _targetPlatformDoorsXPositions: []
+  _prefabCheckpointPlatformAddress: Prefab/Map/Checkpoint/CheckpointPlatform
+  _savingHeights:
+  - 100
+  - 500
+  - 1000
+  - 1500
+  - 3000
+  - 6000
+  - 9000
+  - 12000
+  - 15000
