@@ -20,9 +20,9 @@ public class MapControllerConfigEditor : Editor
 
     private void HeightEdit(MapControllerConfig config)
     {
-        var savingHeights = config.SavingHeights;
-        var sortedHeights = savingHeights.OrderBy(h => h).ToArray();
-        config.SavingHeights = sortedHeights;
+        var savingHeights = config.Platforms;
+        var sortedHeights = savingHeights.OrderBy(h => h.PlatformHeight).ToArray();
+        config.Platforms = sortedHeights;
     }
 
 }

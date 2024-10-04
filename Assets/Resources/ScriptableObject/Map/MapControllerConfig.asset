@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: MapControllerConfig
   m_EditorClassIdentifier: 
   _prefabCheckpointPlatformAddress: Prefab/Map/Checkpoint/CheckpointPlatform
-  _savingHeights:
-  - 100
-  - 500
-  - 1000
-  - 1500
-  - 3000
-  - 6000
-  - 9000
-  - 12000
-  - 15000
+  _prefabEarthSurface: 
+  _platforms:
+  - _pointsForOpen: 0
+    _isOpen: 0
+    _platformHeight: 0
+  - _pointsForOpen: 0
+    _isOpen: 0
+    _platformHeight: 0
+  - _pointsForOpen: 0
+    _isOpen: 0
+    _platformHeight: 0
+  _maximumHeight: 15000

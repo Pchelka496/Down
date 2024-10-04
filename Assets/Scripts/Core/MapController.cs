@@ -11,10 +11,9 @@ public class MapController : MonoBehaviour
 
     CheckpointPlatformUpdater _checkpointPlatform;
     MapUpdater _mapUpdater;
-    float _fullMapHeight;
 
     public float FirstHeight => _config.FirstPlatformHeight();
-    public float FullMapHeight { get => _fullMapHeight; }
+    public float FullMapHeight { get => _config.MaximumHeight; }
 
     [Inject]
     private void Construct(LevelManager levelManager)

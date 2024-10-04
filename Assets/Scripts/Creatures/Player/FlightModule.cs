@@ -7,18 +7,15 @@ using Zenject;
 
 public class FlightModule : IFlightModule
 {
-    const float SIDE_MOVE_GRAVITY_MULTIPLIER = 0.8f;
     const float MAX_INTROPALITES_INPUT_VALUE = 0.5f;
     const float MIN_INTROPALITES_INPUT_VALUE = 0.05f;
 
-    float _maxNegativeGravity = -0.5f;
     float _maxLinearDrag = 5f;
     float _minLinearDrag = 0.2f;
 
     float _maxMoveSpeed = 0.1f;
 
     Controls _controls;
-    float _defaultGravityScale = 1f;
     float _currentMoveSpeed = 0f;
 
     float _oldLeftInputValue;
@@ -88,25 +85,16 @@ public class FlightModule : IFlightModule
         if (leftInput != rightInput)
         {
             var inputValue = Mathf.Max(rightInput, leftInput);
-            ApplyGravity(inputValue);
             ApplyDrag(inputValue);
         }
         else if (rightInput >= 0.9f && leftInput >= 0.9f)
         {
-            _rb.gravityScale = _maxNegativeGravity;
             ApplyDrag(1f);
         }
         else
         {
-            _rb.gravityScale = _defaultGravityScale;
             _rb.drag = _minLinearDrag;
         }
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private void ApplyGravity(float inputValue)
-    {
-        _rb.gravityScale = _defaultGravityScale * SIDE_MOVE_GRAVITY_MULTIPLIER;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

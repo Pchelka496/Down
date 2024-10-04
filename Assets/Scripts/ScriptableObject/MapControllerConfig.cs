@@ -6,41 +6,55 @@ public class MapControllerConfig : ScriptableObject
 {
     [SerializeField] string _prefabCheckpointPlatformAddress;
     [SerializeField] string _prefabEarthSurface;
-    [SerializeField] float[] _savingHeights;
+    [SerializeField] PlatformInformation[] _platforms;
+    [SerializeField] float _maximumHeight;
 
     public string PrefabCheckpointPlatformAddress { get => _prefabCheckpointPlatformAddress; set => _prefabCheckpointPlatformAddress = value; }
     public string PrefabEarthSurface { get => _prefabEarthSurface; set => _prefabEarthSurface = value; }
+    public float MaximumHeight { get => _maximumHeight; }
 
     public float FirstPlatformHeight()
     {
-        if (_savingHeights == null || _savingHeights.Length == 0)
+        if (_platforms == null || _platforms.Length == 0)
             return default;
 
-        return _savingHeights[0];
+        return _platforms[0].PlatformHeight;
     }
 
     public float HighestSavingHeight()
     {
-        if (_savingHeights == null || _savingHeights.Length == 0)
+        if (_platforms == null || _platforms.Length == 0)
             return default;
 
-        return _savingHeights[_savingHeights.Length - 1];
+        return _platforms[_platforms.Length - 1].PlatformHeight;
     }
 
     public float GetSavingHeight(float height)
     {
-        if (_savingHeights == null || _savingHeights.Length == 0)
+        if (_platforms == null || _platforms.Length == 0)
             return default;
 
-        var closestHeight = _savingHeights
-            .OrderBy(level => Mathf.Abs(level - height))
+        var closestHeight = _platforms
+            .OrderBy(platform => Mathf.Abs(platform.PlatformHeight - height))
             .FirstOrDefault();
 
-        return closestHeight;
+        return closestHeight.PlatformHeight;
+    }
+
+    [System.Serializable]
+    public record PlatformInformation
+    {
+        [SerializeField] int _pointsForOpen;
+        [SerializeField] bool _isOpen;
+        [SerializeField] float _platformHeight;
+
+        public int PointsForOpen { get => _pointsForOpen; set => _pointsForOpen = value; }
+        public bool IsOpen { get => _isOpen; set => _isOpen = value; }
+        public float PlatformHeight { get => _platformHeight; set => _platformHeight = value; }
     }
 
 #if UNITY_EDITOR
-    public float[] SavingHeights { get => _savingHeights; set => _savingHeights = value; }
+    public PlatformInformation[] Platforms { get => _platforms; set => _platforms = value; }
 
 #endif
 

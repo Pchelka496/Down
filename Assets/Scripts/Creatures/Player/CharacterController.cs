@@ -7,10 +7,12 @@ using Zenject;
 public class CharacterController : MonoBehaviour
 {
     const int LAYER_MASK = 1 << 11;
+
+    const float SET_FLYGHT_CONTROL_DELAY = 1f;
     const float SIDE_MOVE_GRAVITY_MULTIPLIER = 0.8f;
     const float MAX_INTROPALITES_INPUT_VALUE = 0.5f;
     const float MIN_INTROPALITES_INPUT_VALUE = 0.001f;
-    const float JUMP_RELOAD = 0.5f;
+    const float JUMP_RELOAD = 0.3f;
 
     [SerializeField] Transform _groundCheck;
     [SerializeField] Transform _bodySprite;
@@ -23,6 +25,8 @@ public class CharacterController : MonoBehaviour
 
     IFlightModule _flightModule;
 
+    bool _onGround;
+    CancellationTokenSource _flightModeTransfer;
     CancellationTokenSource _flightCancellationToken;
     CancellationTokenSource _groundMovementCancellationToken;
 
@@ -33,7 +37,7 @@ public class CharacterController : MonoBehaviour
     float _oldRightInputValue;
     float _oldLinearDrag;
 
-    //bool _jumpReloaded = true;
+    bool _jumpReloaded = true;
 
     public Rigidbody2D Rb { get => _rb; set => _rb = value; }
     public IFlightModule FlightModule { get => _flightModule; set => _flightModule = value; }
@@ -54,6 +58,10 @@ public class CharacterController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (_flightModeTransfer != null)
+        {
+            TokenClearing(ref _flightModeTransfer);
+        }
         if (_flightCancellationToken != null)
         {
             TokenClearing(ref _flightCancellationToken);
@@ -69,6 +77,27 @@ public class CharacterController : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
+        if (_flightModeTransfer != null)
+        {
+            TokenClearing(ref _flightModeTransfer);
+        }
+
+        _flightModeTransfer = new();
+        SetFlightControl(_flightModeTransfer).Forget();
+    }
+
+    private async UniTask SetFlightControl(CancellationTokenSource cancellationToken)
+    {
+        await UniTask.WaitForSeconds(SET_FLYGHT_CONTROL_DELAY);
+
+        if (cancellationToken.IsCancellationRequested) return;
+
+        if (GroundCheck())
+        {
+            SetFlightControl(cancellationToken).Forget();
+            return;
+        }
+
         if (_groundMovementCancellationToken != null)
         {
             TokenClearing(ref _groundMovementCancellationToken);
@@ -105,7 +134,8 @@ public class CharacterController : MonoBehaviour
 
             if (newLeftInput >= 0.9f && newRightInput >= 0.9f)
             {
-                Jump();
+                JumpIfPossible();
+
             }
 
             var moveSpeed = _maxMoveSpeed * (Mathf.Max(newLeftInput, newRightInput) - Mathf.Min(newLeftInput, newRightInput));
@@ -131,21 +161,21 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-    //private bool JumpFeasibilityCheck()
-    //{
-    //    var groundCheck = GroundCheck();
-    //    var feasibility = groundCheck & _jumpReloaded;
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private bool JumpIfPossible()
+    {
+        var groundCheck = GroundCheck();
+        var feasibility = groundCheck & _jumpReloaded;
 
-    //    _jumpReloaded = false;
+        if (feasibility)
+        {
+            _jumpReloaded = false;
+            JumpReload();
+            Jump();
+        }
 
-    //    if (feasibility)
-    //    {
-    //        JumpReload();
-    //    }
-
-    //    return feasibility;
-    //}
+        return feasibility;
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool GroundCheck()
@@ -161,11 +191,11 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    //private async void JumpReload()
-    //{
-    //    await UniTask.WaitForSeconds(JUMP_RELOAD);
-    //    _jumpReloaded = true;
-    //}
+    private async void JumpReload()
+    {
+        await UniTask.WaitForSeconds(JUMP_RELOAD);
+        _jumpReloaded = true;
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void Jump()
@@ -191,9 +221,18 @@ public class CharacterController : MonoBehaviour
 
     private void OnDestroy()
     {
-        _flightCancellationToken.Cancel();
-        _flightCancellationToken.Dispose();
-        _flightCancellationToken = null;
+        if (_flightModeTransfer != null)
+        {
+            TokenClearing(ref _flightModeTransfer);
+        }
+        if (_flightCancellationToken != null)
+        {
+            TokenClearing(ref _flightCancellationToken);
+        }
+        if (_groundMovementCancellationToken != null)
+        {
+            TokenClearing(ref _groundMovementCancellationToken);
+        }
     }
 
 #if UNITY_EDITOR

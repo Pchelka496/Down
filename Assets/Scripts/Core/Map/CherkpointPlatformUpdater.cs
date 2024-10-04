@@ -8,10 +8,7 @@ public class CheckpointPlatformUpdater
     MapController _mapController;
     MapControllerConfig _config;
 
-    string _currentPlatformAddress;
     CheckpointPlatform _currentPlatform;
-    string _targetPlatformAddress;
-    CheckpointPlatform _targetPlatform;
 
     public void Initialize(MapController mapController, MapControllerConfig config)
     {
@@ -21,19 +18,22 @@ public class CheckpointPlatformUpdater
 
     public async UniTask CreatePlatforms(float height)
     {
-
+        CreatePlatform(_config.PrefabCheckpointPlatformAddress, height).Forget();
         await UniTask.CompletedTask;
     }
 
-    public async UniTask<CheckpointPlatform> CreatePlatform(string prefabAddress, CheckpointPlatform.Initializer initializer)
+    public async UniTask<CheckpointPlatform> CreatePlatform(string prefabAddress, float height)
     {
         var checkPoint = await LoadPrefabs(prefabAddress);
 
         if (checkPoint.TryGetComponent<CheckpointPlatform>(out var checkpointPlatform))
         {
             var platform = GameplaySceneInstaller.DiContainer
-                .InstantiatePrefabForComponent<CheckpointPlatform>(checkpointPlatform);
+                          .InstantiatePrefabForComponent<CheckpointPlatform>(checkpointPlatform);
+
+            var initializer = new CheckpointPlatform.Initializer(height);
             InitializePlatform(platform, initializer);
+
             return platform;
         }
 
