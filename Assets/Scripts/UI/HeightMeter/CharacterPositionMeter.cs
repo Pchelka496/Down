@@ -1,10 +1,14 @@
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Zenject;
 
-public class HeightMeter : MonoBehaviour
+public class CharacterPositionMeter : MonoBehaviour
 {
+    public static float YPosition { get; private set; }
+    public static float XPosition { get; private set; }
+
     [SerializeField] TextMeshProUGUI _currentHeight;
     Transform _playerTransform;
 
@@ -21,9 +25,17 @@ public class HeightMeter : MonoBehaviour
 
     private async UniTask UpdateAverageFps()
     {
+        var position = _playerTransform.position;
+
         while (true)
         {
-            _currentHeight.text = _playerTransform.position.y.ToString("F0") + " m";
+            position = _playerTransform.position;
+
+            YPosition = position.y;
+            XPosition = position.x;
+
+            _currentHeight.text = YPosition.ToString("F0") + " m";
+
             await UniTask.WaitForSeconds(0.2f);
         }
     }

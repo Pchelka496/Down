@@ -186,6 +186,7 @@ GameObject:
   - component: {fileID: 5085788769918750624}
   - component: {fileID: 1652729351496365450}
   - component: {fileID: 4046265569928490949}
+  - component: {fileID: 5025364747396660594}
   m_Layer: 11
   m_Name: CheckpointPlatform
   m_TagString: Untagged
@@ -296,6 +297,43 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 33.121674, y: 0.6565552}
   m_EdgeRadius: 0
+--- !u!70 &5025364747396660594
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7297665293868185103}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.26547667, y: 3.586021}
+  m_Size: {x: 41.847065, y: 9.417956}
+  m_Direction: 1
 --- !u!1 &7840206990526190601
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,6 +4,7 @@ using Zenject;
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] LevelManagerConfig _config;
+    EnemyManager _enemyManager;
     CharacterController _player;
     MapController _mapController;
     BackgroundController _backgroundController;
@@ -42,9 +43,10 @@ public class LevelManager : MonoBehaviour
     }
 
     [Inject]
-    private void Construct(MapController mapController, BackgroundController backgroundController, CharacterController player)
+    private void Construct(MapController mapController, EnemyManager enemyManager, BackgroundController backgroundController, CharacterController player)
     {
         _mapController = mapController;
+        _enemyManager = enemyManager;
         _backgroundController = backgroundController;
         _player = player;
     }
@@ -53,6 +55,7 @@ public class LevelManager : MonoBehaviour
     {
         _mapController.Initialize(_config.MapControllerConfig);
         _backgroundController.Initialize(_config.BackgroundControllerConfig);
+        _enemyManager.Initialize(_config.EnemyManagerConfig);
     }
 
     private void Start()
@@ -60,15 +63,9 @@ public class LevelManager : MonoBehaviour
         _player.transform.position = new(0f, PlayerSavedHeight);
     }
 
-    public void StartNextLevel()
+    public void RoundStart()
     {
-        //_mapController.St
-         //_backgroundController.
-    }
-
-    public void SwitchToNextLevel()
-    {
-         _mapController.SwitchToNextLevel();
+        _enemyManager.RoundStart();
     }
 
 }

@@ -3,14 +3,16 @@ using Zenject;
 
 public class CheckpointPlatform : MonoBehaviour
 {
+    CharacterController _player;
     MapController _mapController;
     LevelManager _levelManager;
 
     [Inject]
-    private void Construct(MapController mapController, LevelManager levelManager)
+    private void Construct(MapController mapController, LevelManager levelManager, CharacterController player)
     {
         _mapController = mapController;
         _levelManager = levelManager;
+        _player = player;
     }
 
     public void Initialize(Initializer initializer)
@@ -19,9 +21,17 @@ public class CheckpointPlatform : MonoBehaviour
 
     }
 
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject == _player.gameObject)
+        {
+            _levelManager.RoundStart();
+        }
+    }
+
     private void PlatformDeactivation()
     {
-     
+
     }
 
     public readonly struct Initializer

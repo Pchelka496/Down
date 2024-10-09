@@ -37,11 +37,6 @@ public class MapController : MonoBehaviour
 
     }
 
-    public void SwitchToNextLevel()
-    {
-        var level = _config.GetSavingHeight(_levelManager.PlayerSavedHeight);
-    }
-
     private async UniTask<GameObject> LoadPrefabs(string address)
     {
         AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);
@@ -57,7 +52,6 @@ public class MapController : MonoBehaviour
             Debug.LogError("Error loading via Addressables.");
             return default;
         }
-
     }
 
 }
