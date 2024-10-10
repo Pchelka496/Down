@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using System.Net;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -209,9 +208,16 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-
     private void EnemySettings(int index, EnemyCore enemy, GameObject visualPart, float speed, EnumMotionPattern motionPattern, float2 motionCharacteristic, Vector2 isolationDistance)
     {
+#if UNITY_EDITOR
+        if (Application.isEditor)
+        {
+            DestroyImmediate(visualPart);
+            return;
+        }
+#endif
+
         enemy.Initialize(visualPart);
         _enemyController.UpdateEnemyValues(index, speed, motionPattern, motionCharacteristic, isolationDistance);
     }

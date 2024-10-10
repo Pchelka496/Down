@@ -7,14 +7,13 @@ public struct InitialPlacementJob : IJobParallelFor
     const float UPDATE_POSITION_Y_DISTANCE_TO_PLAYER = 100f;
     const float UPDATE_POSITION_X_DISTANCE_TO_PLAYER = 50f;
 
-    const float MAX_PLAYER_Y_DISTANCE = 10f;//down
-    const float MAX_PLAYER_X_DISTANCE = 20f;//left and right
+    const float MAX_X_STATI_ENEMY_DISTANCE_TO_PLAYER = 10f;
 
-    const float MAX_X_TRAVEL_DISTANCE_TO_PLAYER = 30f;
-    const float MIN_X_TRAVEL_DISTANCE_TO_PLAYER = 10f;
+    const float MAX_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 30f;
+    const float MIN_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 10f;
 
-    const float MAX_Y_TRAVEL_DISTANCE_TO_PLAYER = 50f;
-    const float MIN_Y_TRAVEL_DISTANCE_TO_PLAYER = 30f;
+    const float MAX_Y_TRAVEL_DISTANCE_TO_PLAYER = 100f;
+    const float MIN_Y_TRAVEL_DISTANCE_TO_PLAYER = 40f;
 
     // RandomHelper.GetRandomFloat(10f, 100f);
 
@@ -64,19 +63,19 @@ public struct InitialPlacementJob : IJobParallelFor
             _positionProcessingMethods[index] == EnumMotionPattern.JerkyRight)
         {
             // Если объект движется вправо, перемещаем его слева от игрока на случайное расстояние
-            newXPosition = CharacterPositionMeter.XPosition - RandomHelper.GetRandomFloat(MIN_X_TRAVEL_DISTANCE_TO_PLAYER, MAX_X_TRAVEL_DISTANCE_TO_PLAYER);
+            newXPosition = CharacterPositionMeter.XPosition - RandomHelper.GetRandomFloat(MIN_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER, MAX_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER);
         }
         else if (_positionProcessingMethods[index] == EnumMotionPattern.LinearHorizontalLeft ||
                  _positionProcessingMethods[index] == EnumMotionPattern.WavyLeft ||
                  _positionProcessingMethods[index] == EnumMotionPattern.JerkyLeft)
         {
             // Если объект движется влево, перемещаем его справа от игрока на случайное расстояние
-            newXPosition = CharacterPositionMeter.XPosition + RandomHelper.GetRandomFloat(MIN_X_TRAVEL_DISTANCE_TO_PLAYER, MAX_X_TRAVEL_DISTANCE_TO_PLAYER);
+            newXPosition = CharacterPositionMeter.XPosition + RandomHelper.GetRandomFloat(MIN_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER, MAX_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER);
         }
         else
         {
             // Для статичных объектов или вертикальных движений размещаем его по центру игрока по оси X
-            newXPosition = CharacterPositionMeter.XPosition + RandomHelper.GetRandomFloat(-MAX_PLAYER_X_DISTANCE, MAX_PLAYER_X_DISTANCE);
+            newXPosition = CharacterPositionMeter.XPosition + RandomHelper.GetRandomFloat(-MAX_X_STATI_ENEMY_DISTANCE_TO_PLAYER, MAX_X_STATI_ENEMY_DISTANCE_TO_PLAYER);
         }
 
         // Обновляем позицию по оси X

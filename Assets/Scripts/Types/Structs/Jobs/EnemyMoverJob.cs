@@ -1,4 +1,3 @@
-using System;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -6,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Jobs;
 
 [BurstCompile]
-public struct EnemyMoverJobs : IJobParallelForTransform
+public struct EnemyMoverJob : IJobParallelForTransform
 {
     [ReadOnly] readonly NativeArray<float> _speeds;
     [ReadOnly] readonly NativeArray<EnumMotionPattern> _positionProcessingMethods;
@@ -22,7 +21,7 @@ public struct EnemyMoverJobs : IJobParallelForTransform
 
     [WriteOnly] NativeArray<Vector2> _currentPosition;
 
-    public EnemyMoverJobs(ref NativeArray<float> speeds,
+    public EnemyMoverJob(ref NativeArray<float> speeds,
                           ref NativeArray<EnumMotionPattern> positionProcessingMethods,
                           ref NativeArray<float2> motionCharacteristic,
                           ref NativeArray<Vector2> currentPosition,
@@ -122,7 +121,7 @@ public struct EnemyMoverJobs : IJobParallelForTransform
         var frequency = _motionCharacteristic[index].x;
         var amplitude = _motionCharacteristic[index].y;
 
-        var horizontalMovement = direction * speed * DeltaTime;
+        var horizontalMovement = DeltaTime * speed * direction;
 
         var waveOffsetY = Mathf.Sin(Time * frequency) * amplitude;
 

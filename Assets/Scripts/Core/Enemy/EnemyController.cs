@@ -84,7 +84,7 @@ public class EnemyController : IDisposable
 
     private async UniTask EnemyMoving()
     {
-        var enemyMoverJobs = new EnemyMoverJobs(ref _speeds,
+        var enemyMoverJobs = new EnemyMoverJob(ref _speeds,
                                                 ref _positionProcessingMethods,
                                                 ref _motionCharacteristic,
                                                 ref _currentEnemyPosition,
@@ -118,6 +118,8 @@ public class EnemyController : IDisposable
     {
         if (_enemyCount - 1 < index) return;
 
+        if (_enemyInitialPlacement == default || _enemyMoverHandler == default) return;
+
         _enemyMoverHandler.Complete();
         _enemyInitialPlacement.Complete();
 
@@ -132,10 +134,12 @@ public class EnemyController : IDisposable
         if (_enemyMoverHandler != null)
         {
             _enemyMoverHandler.Complete();
+            _enemyMoverHandler = default;
         }
         if (_enemyInitialPlacement != null)
         {
             _enemyInitialPlacement.Complete();
+            _enemyInitialPlacement = default;
         }
 
         _speeds.Dispose();

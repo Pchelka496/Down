@@ -16,4 +16,5 @@ public class LevelManagerConfigEditor : Editor
             EditorUtility.SetDirty(config);
         }
     }
+
 }

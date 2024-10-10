@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5c1d856ba85bd1f42be00e78b9c8a71a
+guid: cac337e5325c58249943e15cabbda2d2
 importerOverride:
   nativeImporterType: 2089858483
   scriptedImporterType:
@@ -40,7 +40,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 500
+    spritePixelsToUnits: 100
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -76,7 +76,7 @@ ScriptedImporter:
     textureFormatSet: 0
     applyGammaDecoding: 0
   singleSpriteImportData:
-  - name: Watermelon_1
+  - name: BaseEnemy_1
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -86,32 +86,36 @@ ScriptedImporter:
       serializedVersion: 2
       x: 0
       y: 0
-      width: 1024
-      height: 1024
-    spriteID: f28d0d2e422ce8744a9256a881e22b81
+      width: 256
+      height: 256
+    spriteID: 0807d53d24d681442aa8f5ce8498bb3d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+    spritePosition: {x: 0, y: 0}
+  multiSpriteImportData: []
+  layeredSpriteImportData:
+  - name: "\u0421\u043B\u043E\u0439 1"
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 242
+      height: 228
+    spriteID: 274b3d17aa00258498b8cd78153d7dc7
     spriteBone: []
     spriteOutline: []
     vertices:
-    - position: {x: 1024, y: 1024}
-      boneWeight:
-        weight0: 0
-        weight1: 0
-        weight2: 0
-        weight3: 0
-        boneIndex0: 0
-        boneIndex1: 0
-        boneIndex2: 0
-        boneIndex3: 0
-    - position: {x: 116.22461, y: 900.4349}
-      boneWeight:
-        weight0: 0
-        weight1: 0
-        weight2: 0
-        weight3: 0
-        boneIndex0: 0
-        boneIndex1: 0
-        boneIndex2: 0
-        boneIndex3: 0
     - position: {x: 0, y: 0}
       boneWeight:
         weight0: 0
@@ -122,7 +126,27 @@ ScriptedImporter:
         boneIndex1: 0
         boneIndex2: 0
         boneIndex3: 0
-    - position: {x: 881.0054, y: 150.48029}
+    - position: {x: 242, y: 0}
+      boneWeight:
+        weight0: 0
+        weight1: 0
+        weight2: 0
+        weight3: 0
+        boneIndex0: 0
+        boneIndex1: 0
+        boneIndex2: 0
+        boneIndex3: 0
+    - position: {x: 242, y: 228}
+      boneWeight:
+        weight0: 0
+        weight1: 0
+        weight2: 0
+        weight3: 0
+        boneIndex0: 0
+        boneIndex1: 0
+        boneIndex2: 0
+        boneIndex3: 0
+    - position: {x: 0, y: 228}
       boneWeight:
         weight0: 0
         weight1: 0
@@ -140,32 +164,8 @@ ScriptedImporter:
     - {x: 1, y: 2}
     - {x: 2, y: 3}
     tessellationDetail: 0
-    uvTransform: {x: 0, y: 0}
-    spritePosition: {x: 0, y: 0}
-  multiSpriteImportData: []
-  layeredSpriteImportData:
-  - name: "\u0421\u043B\u043E\u0439 1"
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    customData: 
-    rect:
-      serializedVersion: 2
-      x: 4
-      y: 4
-      width: 852
-      height: 841
-    spriteID: 9f22bd0634e39cb4095bdb8219ed5939
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 4, y: 4}
-    spritePosition: {x: 79, y: 103}
+    uvTransform: {x: -1, y: -8}
+    spritePosition: {x: 5, y: 12}
   spriteImportData: []
   rigSpriteImportData: []
   sharedRigSpriteImportData: []
@@ -179,16 +179,25 @@ ScriptedImporter:
     boneReadOnly: 0
   characterData:
     bones: []
-    parts: []
+    parts:
+    - spritePosition:
+        x: 5
+        y: 11
+        width: 242
+        height: 228
+      spriteId: 274b3d17aa00258498b8cd78153d7dc7
+      bones: 
+      parentGroup: 0
+      order: 0
     dimension: {x: 0, y: 0}
     characterGroups: []
-    pivot: {x: 0, y: 0}
+    pivot: {x: 0.5, y: 0}
     boneReadOnly: 0
   platformSettings:
   - name: DefaultTexturePlatform
     overridden: 0
     ignorePlatformSupport: 0
-    maxTextureSize: 128
+    maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -235,7 +244,7 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   mosaicLayers: 1
   characterMode: 1
-  documentPivot: {x: 0, y: 0}
+  documentPivot: {x: 0.5, y: 0}
   documentAlignment: 7
   importHiddenLayers: 0
   layerMappingOption: 2
@@ -257,17 +266,27 @@ ScriptedImporter:
     spriteName: "\u0421\u043B\u043E\u0439 1"
     isGroup: 0
     parentIndex: -1
-    spriteID: 9f22bd0634e39cb4095bdb8219ed5939
+    spriteID: 274b3d17aa00258498b8cd78153d7dc7
     layerID: 2
     mosaicPosition: {x: 4, y: 4}
     flatten: 0
     isImported: 1
     isVisible: 1
+  - name: "\u0424\u043E\u043D"
+    spriteName: "\u0424\u043E\u043D"
+    isGroup: 0
+    parentIndex: -1
+    spriteID: d1d417251e7d8154b92469ff14336d64
+    layerID: 1
+    mosaicPosition: {x: 4, y: 4}
+    flatten: 0
+    isImported: 0
+    isVisible: 0
   mosaicPSDLayers: []
   rigPSDLayers: []
   sharedRigPSDLayers: []
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638635544303124682
+  platformSettingsDirtyTick: 638640934710143763
   spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 
