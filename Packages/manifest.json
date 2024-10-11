@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.coffee.softmask-for-ugui": "file:C:/Users/496/Desktop/SoftMaskForUGUI-main",
     "com.cysharp.unitask": "file:Y:/Projects/KnightTournament/Assets/Plugins/UniTask",
     "com.unity.addressables.android": "1.0.4",
     "com.unity.cinemachine": "3.1.1",

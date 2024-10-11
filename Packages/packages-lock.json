@@ -1,5 +1,13 @@
 {
   "dependencies": {
+    "com.coffee.softmask-for-ugui": {
+      "version": "file:C:/Users/496/Desktop/SoftMaskForUGUI-main",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      }
+    },
     "com.cysharp.unitask": {
       "version": "file:Y:/Projects/KnightTournament/Assets/Plugins/UniTask",
       "depth": 0,

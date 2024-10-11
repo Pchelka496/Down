@@ -1,105 +1,97 @@
 using System.Runtime.CompilerServices;
-using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
+using UnityEngine;
 
-//[BurstCompile]
 public struct MechanicalCounterJob : IJob
 {
-    const float MinSpeed = 1f;                                   // Минимальная скорость анимации
-    const float MaxSpeed = 10f;                                  // Максимальная скорость анимации
-    const float SpeedAdjustmentFactor = 0.5f;                    // Фактор корректировки скорости
-    const float Epsilon = 0.1f;                                  // Порог для определения близости к значению
+    const float MinSpeed = 20f;
+    const float MaxSpeed = 50f;
+    const float SpeedAdjustmentFactor = 0.3f;
 
-    [ReadOnly] public NativeArray<float> _targetYPositions;      // Целевая позиция Y для каждого числа
+    [ReadOnly] public readonly NativeArray<float> _targetYPositions;
+    NativeArray<float> _textYPositions;
+    NativeArray<float> _textSpeeds;
+    NativeArray<int> _currentDigits;
 
-    NativeArray<float> _textYPositions;                          // Текущие позиции текста
-    NativeArray<float> _textSpeeds;                              // Текущие скорости для каждого барабана
-    NativeArray<bool> _useSpareDrum;                             // Указывает, используется ли запасной барабан для анимации
-
-    public float DeltaTime;                                      // Время кадра для расчёта анимации
-    public int Value;                                            // Текущее значение на барабанах (например, 89891)
+    public float DeltaTime;
+    public int Value;
 
     public MechanicalCounterJob(ref NativeArray<float> targetYPositions,
                                 ref NativeArray<float> textYPositions,
                                 ref NativeArray<float> textSpeeds,
-                                ref NativeArray<bool> useSpareDrum) : this()
+                                ref NativeArray<int> currentDigits) : this()
     {
         _targetYPositions = targetYPositions;
         _textYPositions = textYPositions;
         _textSpeeds = textSpeeds;
-        _useSpareDrum = useSpareDrum;
+        _currentDigits = currentDigits;
     }
 
     public void Execute()
     {
-        // Получаем цифры из числа Value для каждого барабана
-        int drumCount = _textYPositions.Length;  // Количество барабанов
-        int[] digits = new int[drumCount];
+        int drumCount = _textYPositions.Length;
 
-        // Преобразуем значение в массив цифр, начиная с конца, добавляем нули в начало
-        for (int i = drumCount - 1; i >= 0; i--)
-        {
-            // Получаем каждую цифру из Value, если число закончилось, заполняем нулями
-            digits[i] = Value > 0 ? Value % 10 : 0;
-            Value /= 10;
-        }
+        int[] targetDigits = GetTargetDigits(drumCount);
 
-        // Для каждого барабана
         for (int i = 0; i < drumCount; i++)
         {
-            int currentDigit = digits[i];
-
-            // Преобразуем значение в индекс с учётом смещения
-            int currentValueIndex = GetIndexForDigit(currentDigit);
-
-            // Определяем использование запасного барабана для перехода
-            if (currentDigit == 9)
+            if (_currentDigits[i] != targetDigits[i])
             {
-                _useSpareDrum[i] = true;
-            }
-
-            var targetY = _targetYPositions[currentValueIndex];  // Целевая позиция для текущей цифры
-
-            float currentY = _textYPositions[i];
-
-            // Проверка, если барабан близок к позиции индекса 10 (цифра 9)
-            if (math.abs(currentY - _targetYPositions[10]) < Epsilon)
-            {
-                _textYPositions[i] = _targetYPositions[0];  // Моментально перемещаем на позицию индекса 0
-                _textSpeeds[i] = 0f;  // Обнуляем скорость, чтобы не было дальнейшей анимации
-                continue;  // Переходим к следующему барабану
-            }
-
-            // Расчёт разницы между текущей и целевой позицией
-            float distanceToTarget = targetY - currentY;
-
-            // Корректировка скорости в зависимости от расстояния до цели
-            if (math.abs(distanceToTarget) > 0.01f)  // Допустимый порог для остановки
-            {
-                // Если барабан отстаёт, увеличиваем скорость, если опережает — уменьшаем
-                _textSpeeds[i] += distanceToTarget * SpeedAdjustmentFactor * DeltaTime;
-
-                // Ограничиваем скорость между минимальной и максимальной
-                _textSpeeds[i] = math.clamp(_textSpeeds[i], MinSpeed, MaxSpeed);
-
-                // Обновление позиции текста с использованием lerp, кроме перехода с 10 на 0
-                _textYPositions[i] = math.lerp(currentY, targetY, _textSpeeds[i] * DeltaTime);
+                if (math.abs(_textYPositions[i] - _targetYPositions[_currentDigits[i]]) < 0.1f)
+                {
+                    IncrementOrDecrementDigit(i, targetDigits[i]);
+                }
+                SmoothTransfer(i, targetDigits[i]);
+                //_textYPositions[i] = _targetYPositions[_currentDigits[i]];
             }
         }
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private int GetIndexForDigit(int digit)
+    private int[] GetTargetDigits(int drumCount)
     {
-        if (digit == 9)
+        int[] targetDigits = new int[drumCount];
+        int tempValue = Value;
+
+        // Преобразуем значение Value в массив цифр, начиная с конца
+        for (int i = drumCount - 1; i >= 0; i--)
         {
-            return 0;  // Цифра 9 соответствует индексу 0
+            targetDigits[i] = tempValue > 0 ? tempValue % 10 : 0;
+            tempValue /= 10;
+        }
+
+        return targetDigits;
+    }
+
+    private void IncrementOrDecrementDigit(int index, int targetDigit)
+    {
+        int currentDigit = _currentDigits[index];
+
+        int delta = targetDigit - currentDigit;
+
+        int pathUp = (delta + CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS) % CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS;
+        int pathDown = (currentDigit - targetDigit + CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS) % CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS;
+
+        if (pathUp <= pathDown)
+        {
+            _currentDigits[index] = (currentDigit + 1) % CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS;
         }
         else
         {
-            return digit + 1;  // Остальные цифры смещены на +1
+            _currentDigits[index] = (currentDigit - 1 + CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS) % CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS;
         }
     }
+
+    private void SmoothTransfer(int drumIndex, int targetIndex)
+    {
+        //_textYPositions[drumIndex] = _targetYPositions[targetIndex];
+
+        var oldPosition = _textYPositions[drumIndex];
+        var targetPosition = _targetYPositions[targetIndex];
+
+        _textYPositions[drumIndex] = math.lerp(oldPosition, targetPosition, 0.1f);
+    }
+
 }
+

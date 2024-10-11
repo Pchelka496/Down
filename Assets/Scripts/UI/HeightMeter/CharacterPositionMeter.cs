@@ -10,7 +10,7 @@ using Zenject;
 
 public class CharacterPositionMeter : MonoBehaviour
 {
-    const int DRUM_NUMBER_OF_NUMBERS = 11;
+    public const int DRUM_NUMBER_OF_NUMBERS = 10;
     [Tooltip("Each index is a number, and in the value the y-axis position")]
     [SerializeField] float[] _drumTargetYPosition = new float[11];
     [SerializeField] RectTransform[] _drumTransform;
@@ -23,6 +23,7 @@ public class CharacterPositionMeter : MonoBehaviour
     NativeArray<float> _textYPositions;
     NativeArray<float> _textSpeeds;
     NativeArray<bool> _useSpareDrum;
+    NativeArray<int> _currentDigits;
 
     Transform _playerTransform;
     JobHandle _counterHandle;
@@ -61,6 +62,7 @@ public class CharacterPositionMeter : MonoBehaviour
         _textYPositions = new NativeArray<float>(_drumCount, Allocator.Persistent);
         _textSpeeds = new NativeArray<float>(_drumCount, Allocator.Persistent);
         _useSpareDrum = new NativeArray<bool>(_drumCount, Allocator.Persistent);
+        _currentDigits = new NativeArray<int>(_drumCount, Allocator.Persistent);
     }
 
     private async UniTask UpdatePlayerPosition()
@@ -70,7 +72,8 @@ public class CharacterPositionMeter : MonoBehaviour
         var counter = new MechanicalCounterJob(ref _targetYPositions,
                                                ref _textYPositions,
                                                ref _textSpeeds,
-                                               ref _useSpareDrum
+                                              // ref _useSpareDrum,
+                                               ref _currentDigits
                                                );
         _counterHandle = counter.Schedule();
         _counterHandle.Complete();
@@ -85,9 +88,9 @@ public class CharacterPositionMeter : MonoBehaviour
             XPosition = position.x;
 
             deltaTime = Time.deltaTime;
-            //
+            
             counter.DeltaTime = deltaTime;
-            counter.Value = value;//(int)YPosition;
+            counter.Value = (int)YPosition;
 
             _counterHandle = counter.Schedule();
             _counterHandle.Complete();
@@ -117,6 +120,7 @@ public class CharacterPositionMeter : MonoBehaviour
         _textYPositions.Dispose();
         _textSpeeds.Dispose();
         _useSpareDrum.Dispose();
+        _currentDigits.Dispose();
     }
 
 }
