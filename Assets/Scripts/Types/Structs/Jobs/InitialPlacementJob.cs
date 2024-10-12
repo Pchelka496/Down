@@ -4,22 +4,22 @@ using UnityEngine;
 
 public struct InitialPlacementJob : IJobParallelFor
 {
-    const float UPDATE_POSITION_Y_DISTANCE_TO_PLAYER = 100f;
+    const float UPDATE_POSITION_Y_DISTANCE_TO_PLAYER = 120f;
     const float UPDATE_POSITION_X_DISTANCE_TO_PLAYER = 50f;
 
-    const float MAX_X_STATI_ENEMY_DISTANCE_TO_PLAYER = 10f;
+    const float MAX_X_STATIC_ENEMY_DISTANCE_TO_PLAYER = 10f;
 
-    const float MAX_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 30f;
+    const float MAX_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 40f;
     const float MIN_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 10f;
 
-    const float MAX_Y_TRAVEL_DISTANCE_TO_PLAYER = 100f;
-    const float MIN_Y_TRAVEL_DISTANCE_TO_PLAYER = 40f;
+    const float MAX_Y_TRAVEL_DISTANCE_TO_PLAYER = 110f;
+    const float MIN_Y_TRAVEL_DISTANCE_TO_PLAYER = 50f;
 
     // RandomHelper.GetRandomFloat(10f, 100f);
 
     [ReadOnly] readonly NativeArray<EnumMotionPattern> _positionProcessingMethods;
     [ReadOnly] readonly NativeArray<Vector2> _isolationDistance;
-
+    
     [WriteOnly] public NativeArray<bool> NeedToChange;
 
     [ReadOnly] public readonly NativeArray<Vector2> CurrentPosition;
@@ -75,7 +75,7 @@ public struct InitialPlacementJob : IJobParallelFor
         else
         {
             // Для статичных объектов или вертикальных движений размещаем его по центру игрока по оси X
-            newXPosition = CharacterPositionMeter.XPosition + RandomHelper.GetRandomFloat(-MAX_X_STATI_ENEMY_DISTANCE_TO_PLAYER, MAX_X_STATI_ENEMY_DISTANCE_TO_PLAYER);
+            newXPosition = CharacterPositionMeter.XPosition + RandomHelper.GetRandomFloat(-MAX_X_STATIC_ENEMY_DISTANCE_TO_PLAYER, MAX_X_STATIC_ENEMY_DISTANCE_TO_PLAYER);
         }
 
         // Обновляем позицию по оси X

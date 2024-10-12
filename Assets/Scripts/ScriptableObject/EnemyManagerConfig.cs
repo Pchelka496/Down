@@ -18,7 +18,7 @@ public class EnemyManagerConfig : ScriptableObject
     {
         get
         {
-            return new Stack<EnemyRegion>(_enemyRegions.OrderByDescending(region => region.StartHeight));
+            return new Stack<EnemyRegion>(_enemyRegions.OrderBy(region => region.StartHeight));
         }
     }
 

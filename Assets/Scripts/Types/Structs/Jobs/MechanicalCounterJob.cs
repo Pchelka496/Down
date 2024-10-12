@@ -1,19 +1,20 @@
-using System.Runtime.CompilerServices;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
 
+[BurstCompile]
 public struct MechanicalCounterJob : IJob
 {
     const float MinSpeed = 20f;
     const float MaxSpeed = 50f;
     const float SpeedAdjustmentFactor = 0.3f;
 
-    [ReadOnly] public readonly NativeArray<float> _targetYPositions;
+    [ReadOnly] readonly NativeArray<float> _targetYPositions;
+    [ReadOnly] readonly NativeArray<float> _textSpeeds;
     NativeArray<float> _textYPositions;
-    NativeArray<float> _textSpeeds;
     NativeArray<int> _currentDigits;
+    NativeArray<int> _targetDigits;
 
     public float DeltaTime;
     public int Value;
@@ -21,9 +22,13 @@ public struct MechanicalCounterJob : IJob
     public MechanicalCounterJob(ref NativeArray<float> targetYPositions,
                                 ref NativeArray<float> textYPositions,
                                 ref NativeArray<float> textSpeeds,
-                                ref NativeArray<int> currentDigits) : this()
+                                ref NativeArray<int> currentDigits,
+                                 ref NativeArray<int> targetDigits
+
+        ) : this()
     {
         _targetYPositions = targetYPositions;
+        _targetDigits = targetDigits;
         _textYPositions = textYPositions;
         _textSpeeds = textSpeeds;
         _currentDigits = currentDigits;
@@ -31,37 +36,38 @@ public struct MechanicalCounterJob : IJob
 
     public void Execute()
     {
-        int drumCount = _textYPositions.Length;
-
-        int[] targetDigits = GetTargetDigits(drumCount);
+        int drumCount = _targetDigits.Length;
+        SetTargetDigits();
 
         for (int i = 0; i < drumCount; i++)
         {
-            if (_currentDigits[i] != targetDigits[i])
+            if (_currentDigits[i] != _targetDigits[i])
             {
                 if (math.abs(_textYPositions[i] - _targetYPositions[_currentDigits[i]]) < 0.1f)
                 {
-                    IncrementOrDecrementDigit(i, targetDigits[i]);
+                    IncrementOrDecrementDigit(i, _targetDigits[i]);
                 }
-                SmoothTransfer(i, targetDigits[i]);
-                //_textYPositions[i] = _targetYPositions[_currentDigits[i]];
             }
+
+            _textYPositions[i] = _targetYPositions[_currentDigits[i]];
+
         }
     }
 
-    private int[] GetTargetDigits(int drumCount)
+    private void SetTargetDigits()
     {
-        int[] targetDigits = new int[drumCount];
-        int tempValue = Value;
-
-        // Преобразуем значение Value в массив цифр, начиная с конца
-        for (int i = drumCount - 1; i >= 0; i--)
+        for (int i = 0; i < _targetDigits.Length; i++)
         {
-            targetDigits[i] = tempValue > 0 ? tempValue % 10 : 0;
-            tempValue /= 10;
+            _targetDigits[i] = 0;
         }
 
-        return targetDigits;
+        int tempValue = Value;
+
+        for (int i = _targetDigits.Length - 1; i >= 0 && tempValue != 0; i--)
+        {
+            _targetDigits[i] = math.abs(tempValue % 10);
+            tempValue /= 10;
+        }
     }
 
     private void IncrementOrDecrementDigit(int index, int targetDigit)
@@ -83,15 +89,4 @@ public struct MechanicalCounterJob : IJob
         }
     }
 
-    private void SmoothTransfer(int drumIndex, int targetIndex)
-    {
-        //_textYPositions[drumIndex] = _targetYPositions[targetIndex];
-
-        var oldPosition = _textYPositions[drumIndex];
-        var targetPosition = _targetYPositions[targetIndex];
-
-        _textYPositions[drumIndex] = math.lerp(oldPosition, targetPosition, 0.1f);
-    }
-
 }
-

@@ -17,11 +17,29 @@ MonoBehaviour:
   _platforms:
   - _pointsForOpen: 0
     _isOpen: 0
-    _platformHeight: 0
-  - _pointsForOpen: 0
+    _platformHeight: 1488
+  - _pointsForOpen: 2000
     _isOpen: 0
-    _platformHeight: 0
-  - _pointsForOpen: 0
+    _platformHeight: 2077
+  - _pointsForOpen: 2000
     _isOpen: 0
-    _platformHeight: 0
-  _maximumHeight: 15000
+    _platformHeight: 10000
+  - _pointsForOpen: 2000
+    _isOpen: 0
+    _platformHeight: 20000
+  - _pointsForOpen: 1000
+    _isOpen: 0
+    _platformHeight: 30000
+  - _pointsForOpen: 2000
+    _isOpen: 0
+    _platformHeight: 50000
+  - _pointsForOpen: 2000
+    _isOpen: 0
+    _platformHeight: 70000
+  - _pointsForOpen: 2000
+    _isOpen: 0
+    _platformHeight: 80000
+  - _pointsForOpen: 2000
+    _isOpen: 0
+    _platformHeight: 99999
+  _maximumHeight: 99999

@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -9,6 +10,8 @@ using static EnemyManagerConfig;
 
 public class EnemyManager : MonoBehaviour
 {
+    static readonly Vector3 _enemySpawnPosition = new Vector3(float.MaxValue / 2, float.MaxValue / 2, 0f);
+
     EnemyManagerConfig _config;
     EnemyCore[] _enemyCore;
     EnemyController _enemyController;
@@ -57,7 +60,7 @@ public class EnemyManager : MonoBehaviour
 
         for (var i = 0; i < enemyCount; i++)
         {
-            var enemyCore = installer.InstantiatePrefabForComponent<EnemyCore>(enemyGameObjectPrefab, transform);
+            var enemyCore = installer.InstantiatePrefabForComponent<EnemyCore>(enemyGameObjectPrefab, _enemySpawnPosition, Quaternion.identity, transform);
 
             if (enemyCore == null)
             {
@@ -129,16 +132,12 @@ public class EnemyManager : MonoBehaviour
 
     private async void UpdateEnemyRegion(EnemyManagerConfig.EnemyRegion enemyRegion)
     {
-        // Получаем врагов
         var enemies = enemyRegion.Enemies;
 
-        // Рассчитываем количество врагов для каждого типа
         int[] enemyCounts = CalculateEnemyCounts(enemies, _enemyCore.Length);
 
-        // Загружаем визуальные части для всех врагов
         var enemyVisualParts = await LoadAllEnemyVisualParts(enemies, enemyCounts);
 
-        // Настраиваем врагов с их характеристиками
         AssignEnemySettings(enemies, enemyCounts, enemyVisualParts);
     }
 
@@ -146,13 +145,11 @@ public class EnemyManager : MonoBehaviour
     {
         int[] enemyCounts = new int[enemies.Length];
 
-        // Рассчитываем количество врагов для каждого типа
         for (int i = 0; i < enemies.Length; i++)
         {
             enemyCounts[i] = Mathf.RoundToInt(totalEnemies * enemies[i].RelativeAmount);
         }
 
-        // Корректируем количество врагов, чтобы сумма была равна totalEnemies
         int sum = 0;
         for (int i = 0; i < enemyCounts.Length; i++)
         {
@@ -170,7 +167,6 @@ public class EnemyManager : MonoBehaviour
     {
         var enemyVisualPartAddresses = new List<string>();
 
-        // Собираем адреса всех визуальных частей врагов
         for (int i = 0; i < enemies.Length; i++)
         {
             for (int j = 0; j < enemyCounts[i]; j++)
@@ -179,15 +175,13 @@ public class EnemyManager : MonoBehaviour
             }
         }
 
-        // Загружаем визуальные части
         return await LoadEnemyVisualPart(enemyVisualPartAddresses.ToArray());
     }
 
     private void AssignEnemySettings(Enemy[] enemies, int[] enemyCounts, GameObject[] enemyVisualParts)
     {
-        int visualPartIndex = 0; // Индекс для визуальных частей
+        int visualPartIndex = 0;
 
-        // Настраиваем каждого врага с его характеристиками
         for (int i = 0; i < enemies.Length; i++)
         {
             for (int j = 0; j < enemyCounts[i]; j++)
@@ -211,7 +205,7 @@ public class EnemyManager : MonoBehaviour
     private void EnemySettings(int index, EnemyCore enemy, GameObject visualPart, float speed, EnumMotionPattern motionPattern, float2 motionCharacteristic, Vector2 isolationDistance)
     {
 #if UNITY_EDITOR
-        if (Application.isEditor)
+        if (!EditorApplication.isPlaying)
         {
             DestroyImmediate(visualPart);
             return;

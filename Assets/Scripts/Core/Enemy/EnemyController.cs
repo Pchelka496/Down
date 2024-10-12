@@ -67,14 +67,13 @@ public class EnemyController : IDisposable
 
         var batchSize = _enemyCount / 4;
 
-        // Указываем зависимость для InitialPlacementJob
         _enemyInitialPlacement = initialPlacementJob.Schedule(_enemyCount, batchSize, _enemyMoverHandler);
 
         while (true)
         {
             deltaTime = Time.deltaTime;
 
-            _enemyInitialPlacement.Complete();  // Дождаться завершения предыдущей работы
+            _enemyInitialPlacement.Complete();
 
             _enemyInitialPlacement = initialPlacementJob.Schedule(_enemyCount, batchSize, _enemyMoverHandler);  // Снова указываем зависимость
 
@@ -95,7 +94,6 @@ public class EnemyController : IDisposable
 
         enemyMoverJobs.DeltaTime = deltaTime;
 
-        // Указываем зависимость для EnemyMoverJobs
         _enemyMoverHandler = enemyMoverJobs.Schedule(_enemyTransforms, _enemyInitialPlacement);
 
         while (true)
@@ -105,7 +103,7 @@ public class EnemyController : IDisposable
             enemyMoverJobs.Time = deltaTime;
             enemyMoverJobs.DeltaTime = deltaTime;
 
-            _enemyMoverHandler.Complete();  // Дождаться завершения предыдущей работы
+            _enemyMoverHandler.Complete();
 
             _enemyMoverHandler = enemyMoverJobs.Schedule(_enemyTransforms, _enemyInitialPlacement);  // Снова указываем зависимость
 
@@ -113,12 +111,9 @@ public class EnemyController : IDisposable
         }
     }
 
-
     public void UpdateEnemyValues(int index, float speed, EnumMotionPattern motionPattern, float2 motionCharacteristic, Vector2 isolationDistance)
     {
         if (_enemyCount - 1 < index) return;
-
-        if (_enemyInitialPlacement == default || _enemyMoverHandler == default) return;
 
         _enemyMoverHandler.Complete();
         _enemyInitialPlacement.Complete();

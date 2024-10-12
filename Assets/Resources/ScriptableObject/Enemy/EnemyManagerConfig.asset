@@ -33,3 +33,147 @@ MonoBehaviour:
       IsolationDistance: {x: 0, y: 0}
       RelativeAmount: 0.5
     _startHeight: 10000
+  - _enemies:
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 0
+      MotionCharacteristic:
+        x: 0.5
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 1
+      MotionCharacteristic:
+        x: 1
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    _startHeight: 20000
+  - _enemies:
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 0
+      MotionCharacteristic:
+        x: 0.5
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 1
+      MotionCharacteristic:
+        x: 1
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    _startHeight: 30000
+  - _enemies:
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 0
+      MotionCharacteristic:
+        x: 0.5
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 1
+      MotionCharacteristic:
+        x: 1
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    _startHeight: 40000
+  - _enemies:
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 0
+      MotionCharacteristic:
+        x: 0.5
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 1
+      MotionCharacteristic:
+        x: 1
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    _startHeight: 50000
+  - _enemies:
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 0
+      MotionCharacteristic:
+        x: 0.5
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 1
+      MotionCharacteristic:
+        x: 1
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    _startHeight: 60000
+  - _enemies:
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 0
+      MotionCharacteristic:
+        x: 0.5
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 1
+      MotionCharacteristic:
+        x: 1
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    _startHeight: 70000
+  - _enemies:
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 0
+      MotionCharacteristic:
+        x: 0.5
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 1
+      MotionCharacteristic:
+        x: 1
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    _startHeight: 80000
+  - _enemies:
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 0
+      MotionCharacteristic:
+        x: 0.5
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+      Speed: 2
+      MotionPattern: 1
+      MotionCharacteristic:
+        x: 1
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.5
+    _startHeight: 90000

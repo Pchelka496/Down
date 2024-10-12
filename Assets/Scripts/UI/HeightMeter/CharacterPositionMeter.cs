@@ -24,6 +24,7 @@ public class CharacterPositionMeter : MonoBehaviour
     NativeArray<float> _textSpeeds;
     NativeArray<bool> _useSpareDrum;
     NativeArray<int> _currentDigits;
+    NativeArray<int> _targetDigits;
 
     Transform _playerTransform;
     JobHandle _counterHandle;
@@ -63,6 +64,7 @@ public class CharacterPositionMeter : MonoBehaviour
         _textSpeeds = new NativeArray<float>(_drumCount, Allocator.Persistent);
         _useSpareDrum = new NativeArray<bool>(_drumCount, Allocator.Persistent);
         _currentDigits = new NativeArray<int>(_drumCount, Allocator.Persistent);
+        _targetDigits = new NativeArray<int>(_drumCount, Allocator.Persistent);
     }
 
     private async UniTask UpdatePlayerPosition()
@@ -72,8 +74,8 @@ public class CharacterPositionMeter : MonoBehaviour
         var counter = new MechanicalCounterJob(ref _targetYPositions,
                                                ref _textYPositions,
                                                ref _textSpeeds,
-                                              // ref _useSpareDrum,
-                                               ref _currentDigits
+                                               ref _currentDigits,
+                                               ref _targetDigits
                                                );
         _counterHandle = counter.Schedule();
         _counterHandle.Complete();
@@ -88,7 +90,7 @@ public class CharacterPositionMeter : MonoBehaviour
             XPosition = position.x;
 
             deltaTime = Time.deltaTime;
-            
+
             counter.DeltaTime = deltaTime;
             counter.Value = (int)YPosition;
 
@@ -121,6 +123,7 @@ public class CharacterPositionMeter : MonoBehaviour
         _textSpeeds.Dispose();
         _useSpareDrum.Dispose();
         _currentDigits.Dispose();
+        _targetDigits.Dispose();
     }
 
 }
