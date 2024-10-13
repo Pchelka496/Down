@@ -125,11 +125,13 @@ namespace ModestTree.Util
             }
         }
 
+        [System.Obsolete]
         public static IEnumerable<GameObject> GetAllGameObjects()
         {
             return GameObject.FindObjectsOfType<Transform>().Select(x => x.gameObject);
         }
 
+        [System.Obsolete]
         public static List<GameObject> GetAllRootGameObjects()
         {
             return GetAllGameObjects().Where(x => x.transform.parent == null).ToList();

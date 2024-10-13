@@ -95,6 +95,7 @@ namespace Zenject
             return null;
         }
 
+        [Obsolete]
         static void InstantiateAndInitialize()
         {
 #if UNITY_EDITOR

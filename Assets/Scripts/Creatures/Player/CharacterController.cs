@@ -135,7 +135,6 @@ public class CharacterController : MonoBehaviour
             if (newLeftInput >= 0.9f && newRightInput >= 0.9f)
             {
                 JumpIfPossible();
-
             }
 
             var moveSpeed = _maxMoveSpeed * (Mathf.Max(newLeftInput, newRightInput) - Mathf.Min(newLeftInput, newRightInput));
@@ -182,13 +181,17 @@ public class CharacterController : MonoBehaviour
     {
         var hit = Physics2D.Raycast(_groundCheck.position, Vector2.down, _groundCheckDistance, LAYER_MASK);
 
-        switch (hit.collider)
+        if (hit.collider == null)
         {
-            case null:
-                return false;
-            default:
-                return true;
+            return false;
         }
+
+        if (hit.collider.isTrigger)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private async void JumpReload()

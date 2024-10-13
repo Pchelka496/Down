@@ -8,6 +8,9 @@ public class GameplaySceneInstaller : MonoInstaller
     [SerializeField] EnemyManager _enemyManager;
     [SerializeField] MapController _mapController;
     [SerializeField] BackgroundController _backgroundController;
+    [SerializeField] Camera _mainCamera;
+    [SerializeField] PointKeeperConfig _pointKeeperConfig;
+    [SerializeField] EnumLanguage _enumLanguage;
 
     public static DiContainer DiContainer { get; private set; }
 
@@ -21,15 +24,12 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<BackgroundController>().FromInstance(_backgroundController).AsSingle().NonLazy();
         Container.Bind<EnemyManager>().FromInstance(_enemyManager).AsSingle().NonLazy();
         Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle().NonLazy();
+        Container.Bind<Camera>().FromInstance(_mainCamera).AsSingle().NonLazy();
+        Container.Bind<EnumLanguage>().FromInstance(_enumLanguage).AsSingle().NonLazy();
 
-        //Container.Bind<NetworkManager>().FromInstance(NetworkManager.singleton).AsSingle().NonLazy();
-        //Container.Bind<BaseRoundManager>().FromInstance(_roundManager).AsSingle().NonLazy();
-        //Container.Bind<CamerasController>().FromInstance(_camerasController).AsSingle().NonLazy();
-        //Container.Bind<PlayerConnectionPanel>().FromInstance(_playerConnectionPanel).AsSingle().NonLazy();
-        //Container.Bind<CombatHUD>().FromInstance(_combatHUDPanel).AsSingle().NonLazy();
-        //Container.Bind<ItemStore>().FromInstance(_itemStore).AsSingle().NonLazy();
-        //Container.Bind<PlayerProfileConfig>().FromInstance(_playerProfileConfig).AsSingle().NonLazy();
-        //Container.Bind<GameplaySceneConfig>().FromInstance(_gameplaySceneConfig).AsSingle().NonLazy();
+        var pointKeeper = new PointKeeper();
+        pointKeeper.Initialize(_pointKeeperConfig);
+        Container.Bind<PointKeeper>().FromInstance(pointKeeper).AsSingle().NonLazy();
     }
 
     private void InitializeOrCleanInstaller()

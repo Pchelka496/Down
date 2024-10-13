@@ -40,11 +40,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b1b38f9584b925c448f8a29042d33955
-    m_Address: Prefab/Map/Maps/MapLevel0
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c7e4ef8c3efb28d4bb87929d907bc95f
     m_Address: Prefab/Map/Checkpoint/PlatformPiece
     m_ReadOnly: 0

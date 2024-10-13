@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -8,6 +9,8 @@ public class LevelManager : MonoBehaviour
     CharacterController _player;
     MapController _mapController;
     BackgroundController _backgroundController;
+
+    event Action _roundStartAction;
 
     private float CurrentSavedHeight
     {
@@ -66,6 +69,10 @@ public class LevelManager : MonoBehaviour
     public void RoundStart()
     {
         _enemyManager.RoundStart();
+        _roundStartAction?.Invoke();
+        _roundStartAction = null;
     }
+
+    public void SubscribeToRoundStart(Action action) => _roundStartAction += action;
 
 }

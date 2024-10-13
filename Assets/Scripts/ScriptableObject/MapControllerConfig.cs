@@ -8,10 +8,12 @@ public class MapControllerConfig : ScriptableObject
     [SerializeField] string _prefabEarthSurface;
     [SerializeField] PlatformInformation[] _platforms;
     [SerializeField] float _maximumHeight;
+    [SerializeField] AnimationCurve _platformCurveMovementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
     public string PrefabCheckpointPlatformAddress { get => _prefabCheckpointPlatformAddress; set => _prefabCheckpointPlatformAddress = value; }
     public string PrefabEarthSurface { get => _prefabEarthSurface; set => _prefabEarthSurface = value; }
     public float MaximumHeight { get => _maximumHeight; }
+    public AnimationCurve PlatformCurveMovementCurve { get => _platformCurveMovementCurve; }
 
     public float FirstPlatformHeight()
     {
@@ -39,6 +41,28 @@ public class MapControllerConfig : ScriptableObject
             .FirstOrDefault();
 
         return closestHeight.PlatformHeight;
+    }
+
+    public PlatformInformation GetClosestPlatformAboveHeight(float height)
+    {
+        if (_platforms == null || _platforms.Length == 0)
+            return null;
+
+        return _platforms
+            .Where(platform => platform.PlatformHeight > height)  
+            .OrderBy(platform => platform.PlatformHeight)         
+            .FirstOrDefault();                                    
+    }
+
+    public PlatformInformation GetClosestPlatformBelowHeight(float height)
+    {
+        if (_platforms == null || _platforms.Length == 0)
+            return null;
+
+        return _platforms
+            .Where(platform => platform.PlatformHeight < height)  
+            .OrderByDescending(platform => platform.PlatformHeight) 
+            .FirstOrDefault();                                   
     }
 
     [System.Serializable]

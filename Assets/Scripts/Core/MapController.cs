@@ -3,13 +3,14 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
+using static MapControllerConfig;
 
 public class MapController : MonoBehaviour
 {
     LevelManager _levelManager;
     MapControllerConfig _config;
 
-    CheckpointPlatformUpdater _checkpointPlatform;
+    CheckpointPlatformController _checkpointPlatform;
     MapUpdater _mapUpdater;
 
     public float FirstHeight => _config.FirstPlatformHeight();
@@ -20,7 +21,7 @@ public class MapController : MonoBehaviour
     {
         _levelManager = levelManager;
 
-        _checkpointPlatform = GameplaySceneInstaller.DiContainer.Instantiate<CheckpointPlatformUpdater>();
+        _checkpointPlatform = GameplaySceneInstaller.DiContainer.Instantiate<CheckpointPlatformController>();
         _mapUpdater = GameplaySceneInstaller.DiContainer.Instantiate<MapUpdater>();
     }
 
@@ -34,8 +35,10 @@ public class MapController : MonoBehaviour
         var level = _config.GetSavingHeight(_levelManager.PlayerSavedHeight);
 
         _ = _checkpointPlatform.CreatePlatforms(level);
-
     }
+
+    public PlatformInformation GetClosestPlatformAboveHeight(float height) => _config.GetClosestPlatformAboveHeight(height);
+    public PlatformInformation GetClosestPlatformBelowHeight(float height) => _config.GetClosestPlatformBelowHeight(height);
 
     private async UniTask<GameObject> LoadPrefabs(string address)
     {

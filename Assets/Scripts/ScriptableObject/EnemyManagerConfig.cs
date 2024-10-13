@@ -2,8 +2,6 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 
 [CreateAssetMenu(fileName = "EnemyManagerConfig", menuName = "Scriptable Objects/EnemyManagerConfig")]
 public class EnemyManagerConfig : ScriptableObject

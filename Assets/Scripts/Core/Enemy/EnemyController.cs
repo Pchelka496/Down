@@ -126,16 +126,11 @@ public class EnemyController : IDisposable
 
     public void Dispose()
     {
-        if (_enemyMoverHandler != null)
-        {
-            _enemyMoverHandler.Complete();
-            _enemyMoverHandler = default;
-        }
-        if (_enemyInitialPlacement != null)
-        {
-            _enemyInitialPlacement.Complete();
-            _enemyInitialPlacement = default;
-        }
+        _enemyMoverHandler.Complete();
+        _enemyMoverHandler = default;
+
+        _enemyInitialPlacement.Complete();
+        _enemyInitialPlacement = default;
 
         _speeds.Dispose();
         _positionProcessingMethods.Dispose();
