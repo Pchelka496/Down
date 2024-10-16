@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyManagerConfig
   m_EditorClassIdentifier: 
   _enemyCorePrefab: Prefab/Creatures/EnemyCore
-  _enemyCount: 100
+  _enemyCount: 2
   _enemyRegions:
   - _enemies:
     - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab

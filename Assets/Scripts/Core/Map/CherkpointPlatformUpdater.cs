@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class CheckpointPlatformController
 {
+   public const float PLATFORM_MOVE_DURATION = 15f;
+
     MapController _mapController;
     MapControllerConfig _config;
     CheckpointPlatform _currentPlatform;
 
-    float _overshootHeightMultiplier = 1.01f;
-    float _moveDuration = 30f;
+    float _overshootHeightMultiplier = 1.005f;
 
     AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
@@ -33,8 +34,8 @@ public class CheckpointPlatformController
         Vector3 overshootPos = new Vector3(startPos.x, targetHeight * _overshootHeightMultiplier, startPos.z);
         Vector3 finalPos = new Vector3(startPos.x, targetHeight, startPos.z);
 
-        await MovePlatform(startPos, overshootPos, _moveDuration / 2);
-        await MovePlatform(overshootPos, finalPos, _moveDuration / 2);
+        await MovePlatform(startPos, overshootPos, PLATFORM_MOVE_DURATION / 2);
+        await MovePlatform(overshootPos, finalPos, PLATFORM_MOVE_DURATION / 2);
     }
 
     private async UniTask MovePlatform(Vector3 startPos, Vector3 endPos, float duration)
@@ -87,7 +88,6 @@ public class CheckpointPlatformController
     {
         checkpointPlatform.Initialize(initializer, this);
         _currentPlatform = checkpointPlatform;
-        Debug.Log(checkpointPlatform);
     }
 
     private async UniTask<GameObject> LoadPrefabs(string address)

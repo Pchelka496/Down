@@ -8,6 +8,7 @@ public class GameplaySceneInstaller : MonoInstaller
     [SerializeField] EnemyManager _enemyManager;
     [SerializeField] MapController _mapController;
     [SerializeField] BackgroundController _backgroundController;
+    [SerializeField] CamerasController _camerasController;
     [SerializeField] Camera _mainCamera;
     [SerializeField] PointKeeperConfig _pointKeeperConfig;
     [SerializeField] EnumLanguage _enumLanguage;
@@ -24,6 +25,7 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<BackgroundController>().FromInstance(_backgroundController).AsSingle().NonLazy();
         Container.Bind<EnemyManager>().FromInstance(_enemyManager).AsSingle().NonLazy();
         Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle().NonLazy();
+        Container.Bind<CamerasController>().FromInstance(_camerasController).AsSingle().NonLazy();
         Container.Bind<Camera>().FromInstance(_mainCamera).AsSingle().NonLazy();
         Container.Bind<EnumLanguage>().FromInstance(_enumLanguage).AsSingle().NonLazy();
 

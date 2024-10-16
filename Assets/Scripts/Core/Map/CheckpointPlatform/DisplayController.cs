@@ -15,7 +15,6 @@ public class DisplayController : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI _displayText;
     [SerializeField] TextConfigLanguageAddresses _textConfigLanguageAddresses;
-    [SerializeField] float _delayBeforeDisplayingCurrentPoints = 3f;
     PointKeeper _pointKeeper;
     DisplayControllerConfig _config;
     string _targetText;
@@ -58,33 +57,24 @@ public class DisplayController : MonoBehaviour
         TargetText(DefaultText()).Forget();
     }
 
-    public async UniTask SetClimbingMode()
+    public async UniTask SetClimbingMode(float displayTime)
     {
-        await TargetText(_config.SetClimbingMode);
+        await TargetText(_config.SetClimbingMode, displayTime);
     }
 
-    public async UniTask SetDescendingMode()
+    public async UniTask SetDescendingMode(float displayTime)
     {
-        await TargetText(_config.SetDescendingMode);
+        await TargetText(_config.SetDescendingMode, displayTime);
     }
 
-    private async UniTask TargetText(string value)
+    private async UniTask TargetText(string value, float displayTime = 0f)
     {
         _cts?.Cancel();
         _cts = new CancellationTokenSource();
 
         _targetText = value;
-        await StartTypingTextAsync(_targetText);
-    }
 
-    private async void TargetText(string startText, int value, string endText)
-    {
-        _cts?.Cancel();
-        _cts = new CancellationTokenSource();
-
-        _targetText = ConvertText(startText, value, endText);
-
-        await StartTypingTextAsync(_targetText);
+        await StartTypingTextAsync(_targetText, displayTime);
     }
 
     private string ConvertText(string startText, int value, string endText)
@@ -109,50 +99,62 @@ public class DisplayController : MonoBehaviour
         }
     }
 
-    private async UniTask StartTypingTextAsync(string targetText)
+    private async UniTask StartTypingTextAsync(string targetText, float displayTime)
     {
+        // Очищаем текст сразу и стираем, если что-то есть
         await EraseTextAsync(_cts.Token);
 
+        // Убеждаемся, что поле очищено перед печатью
         _displayText.text = string.Empty;
 
-        await TypeTextAsync(targetText, _cts.Token);
+        await TypeTextAsync(targetText, _cts.Token, displayTime);
     }
 
     private async UniTask EraseTextAsync(CancellationToken token)
     {
         while (_displayText.text.Length > 0)
         {
-            if (token.IsCancellationRequested)
+            if (token.IsCancellationRequested) return;
+
+            if (_displayText.text.Length == 1)
             {
-                return;
+                _displayText.text = string.Empty; 
+            }
+            else
+            {
+                _displayText.text = _displayText.text.Substring(0, _displayText.text.Length - 2) + CURSOR_CHAR;// 2 = 1 element + 1 cursor
             }
 
-            _displayText.text = _displayText.text.Substring(0, _displayText.text.Length - 1) + CURSOR_CHAR;
             await UniTask.WaitForSeconds(ERASE_SPEED);
         }
     }
 
-    private async UniTask TypeTextAsync(string text, CancellationToken token)
+    private async UniTask TypeTextAsync(string text, CancellationToken token, float displayTime)
     {
         for (int i = 0; i <= text.Length; i++)
         {
             if (token.IsCancellationRequested)
             {
+                // Если операция отменена, сразу выходим
                 return;
             }
 
+            // Печатаем текст символ за символом с курсором в конце
             _displayText.text = text.Substring(0, i) + CURSOR_CHAR;
             await UniTask.WaitForSeconds(TYPING_SPEED);
         }
 
+        // Начинаем мигание курсора после вывода текста
         StartCursorBlinkingAsync(token).Forget();
 
+        // Если текст не является текстом по умолчанию, ждём указанное время и возвращаемся к тексту по умолчанию
         if (_targetText != DefaultText())
         {
-            await UniTask.WaitForSeconds(_delayBeforeDisplayingCurrentPoints);
+            await UniTask.WaitForSeconds(displayTime);
             TargetText(DefaultText()).Forget();
         }
     }
+
 
     private string DefaultText()
     {

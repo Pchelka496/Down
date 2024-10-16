@@ -1,24 +1,28 @@
 using Cysharp.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 using Zenject;
 
 public class CheckpointPlatform : MonoBehaviour
 {
+    const float START_MOVEMENT_DELAY = 2f;
+    const float CAMERA_SHAKE_DELAY = 0.5f;
     [SerializeField] Canvas _canvas;
     [SerializeField] DisplayController _displayController;
+
     CheckpointPlatformController _platformController;
     CharacterController _player;
     MapController _mapController;
     LevelManager _levelManager;
+    CamerasController _camerasController;
 
     [Inject]
-    private void Construct(MapController mapController, LevelManager levelManager, CharacterController player, Camera camera)
+    private void Construct(MapController mapController, LevelManager levelManager, CharacterController player, Camera camera, CamerasController camerasController)
     {
         _mapController = mapController;
         _levelManager = levelManager;
         _player = player;
         _canvas.worldCamera = camera;
+        _camerasController = camerasController;
     }
 
     public void Initialize(Initializer initializer, CheckpointPlatformController platformController)
@@ -38,19 +42,25 @@ public class CheckpointPlatform : MonoBehaviour
     public async void SetClimbingMode()
     {
         _player.transform.SetParent(transform);
-        _displayController.SetClimbingMode().Forget();
+        _displayController.SetClimbingMode(CheckpointPlatformController.PLATFORM_MOVE_DURATION).Forget();
 
-        await UniTask.WaitForSeconds(1f);
-        await _platformController.MovePlatformToHeight(_mapController.GetClosestPlatformAboveHeight(transform.position.y).PlatformHeight);
+        await UniTask.WaitForSeconds(START_MOVEMENT_DELAY);
+        _platformController.MovePlatformToHeight(_mapController.GetClosestPlatformAboveHeight(transform.position.y).PlatformHeight).Forget();
+
+        await UniTask.WaitForSeconds(CAMERA_SHAKE_DELAY);
+        _camerasController.EnableCameraShake(CheckpointPlatformController.PLATFORM_MOVE_DURATION - CAMERA_SHAKE_DELAY);
     }
 
     public async void SetDescendingMode()
     {
         _player.transform.SetParent(transform);
-        _displayController.SetDescendingMode().Forget();
+        _displayController.SetDescendingMode(CheckpointPlatformController.PLATFORM_MOVE_DURATION).Forget();
 
-        await UniTask.WaitForSeconds(1f);
-        await _platformController.MovePlatformToHeight(_mapController.GetClosestPlatformBelowHeight(transform.position.y).PlatformHeight);
+        await UniTask.WaitForSeconds(START_MOVEMENT_DELAY);
+        _platformController.MovePlatformToHeight(_mapController.GetClosestPlatformBelowHeight(transform.position.y).PlatformHeight).Forget();
+
+        await UniTask.WaitForSeconds(CAMERA_SHAKE_DELAY);
+        _camerasController.EnableCameraShake(CheckpointPlatformController.PLATFORM_MOVE_DURATION - CAMERA_SHAKE_DELAY);
     }
 
     public readonly struct Initializer
