@@ -23,7 +23,7 @@ public class CamerasController : MonoBehaviour
         levelManager.SubscribeToRoundStart(RoundStart);
     }
 
-    private void RoundStart()
+    private void RoundStart(LevelManager levelManager)
     {
         SetFlyMode();
     }

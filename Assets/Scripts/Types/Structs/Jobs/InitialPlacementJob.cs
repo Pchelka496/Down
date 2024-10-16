@@ -20,7 +20,7 @@ public struct InitialPlacementJob : IJobParallelFor
     [ReadOnly] readonly NativeArray<EnumMotionPattern> _positionProcessingMethods;
     [ReadOnly] readonly NativeArray<Vector2> _isolationDistance;
     
-    [WriteOnly] public NativeArray<bool> NeedToChange;
+    [WriteOnly] NativeArray<bool> _needToChange;
 
     [ReadOnly] public readonly NativeArray<Vector2> CurrentPosition;
     [WriteOnly] public NativeArray<Vector2> TargetPosition;
@@ -34,7 +34,7 @@ public struct InitialPlacementJob : IJobParallelFor
         _positionProcessingMethods = positionProcessingMethods;
         this.CurrentPosition = CurrentPosition;
         this.TargetPosition = TargetPosition;
-        this.NeedToChange = NeedToChange;
+        this._needToChange = NeedToChange;
         _isolationDistance = isolationDistance;
     }
 
@@ -43,12 +43,12 @@ public struct InitialPlacementJob : IJobParallelFor
         if (Mathf.Abs(CharacterPositionMeter.XPosition - CurrentPosition[index].x) > UPDATE_POSITION_X_DISTANCE_TO_PLAYER)
         {
             GlobalXTransfer(index);
-            NeedToChange[index] = true;
+            _needToChange[index] = true;
         }
         if (Mathf.Abs(CharacterPositionMeter.YPosition - CurrentPosition[index].y) > UPDATE_POSITION_Y_DISTANCE_TO_PLAYER)
         {
             GlobalYTransfer(index);
-            NeedToChange[index] = true;
+            _needToChange[index] = true;
         }
     }
 
@@ -88,7 +88,6 @@ public struct InitialPlacementJob : IJobParallelFor
         var currentPosition = CurrentPosition[index];
         var newYPosition = CharacterPositionMeter.YPosition - RandomHelper.GetRandomFloat(MIN_Y_TRAVEL_DISTANCE_TO_PLAYER, MAX_Y_TRAVEL_DISTANCE_TO_PLAYER);
 
-        // Обновляем позицию по оси Y
         TargetPosition[index] = new(currentPosition.x, newYPosition);
 
     }

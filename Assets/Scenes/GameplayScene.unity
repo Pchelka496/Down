@@ -2785,7 +2785,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -10
-  m_Time: 1
+  m_Time: 0.2
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -2817,7 +2817,7 @@ TrailRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -2833,7 +2833,7 @@ TrailRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 21823
+      atime1: 65535
       atime2: 65535
       atime3: 65535
       atime4: 0
@@ -2843,7 +2843,7 @@ TrailRenderer:
       m_Mode: 0
       m_ColorSpace: 0
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 3
+      m_NumAlphaKeys: 2
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
@@ -3566,44 +3566,37 @@ MonoBehaviour:
     _defaultShakeDuration: 3
     _shakeAmplitude: 0.5
     _shakeFrequency: 1.5
-  _maxLens:
-    FieldOfView: 0
-    OrthographicSize: 0
-    NearClipPlane: 0
-    FarClipPlane: 0
-    Dutch: 0
-    ModeOverride: 0
-    PhysicalProperties:
-      GateFit: 0
-      SensorSize: {x: 0, y: 0}
-      LensShift: {x: 0, y: 0}
-      FocusDistance: 0
-      Iso: 0
-      ShutterSpeed: 0
-      Aperture: 0
-      BladeCount: 0
-      Curvature: {x: 0, y: 0}
-      BarrelClipping: 0
-      Anamorphism: 0
-  _minLens:
-    FieldOfView: 0
-    OrthographicSize: 0
-    NearClipPlane: 0
-    FarClipPlane: 0
-    Dutch: 0
-    ModeOverride: 0
-    PhysicalProperties:
-      GateFit: 0
-      SensorSize: {x: 0, y: 0}
-      LensShift: {x: 0, y: 0}
-      FocusDistance: 0
-      Iso: 0
-      ShutterSpeed: 0
-      Aperture: 0
-      BladeCount: 0
-      Curvature: {x: 0, y: 0}
-      BarrelClipping: 0
-      Anamorphism: 0
+  _lensController:
+    _maxOrthographicSize: 20
+    _minOrthographicSize: 10
+    _minVelocityThreshold: 10
+    _maxVelocityThreshold: 40
+    _changeThreshold: 2
+    _lensInterpolationCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _updateFrequency: 3
 --- !u!114 &1984348356
 MonoBehaviour:
   m_ObjectHideFlags: 0

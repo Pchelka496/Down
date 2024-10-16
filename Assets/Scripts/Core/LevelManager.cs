@@ -10,7 +10,8 @@ public class LevelManager : MonoBehaviour
     MapController _mapController;
     BackgroundController _backgroundController;
 
-    event Action _roundStartAction;
+    event Action<LevelManager> _roundStartAction;
+    event Action<LevelManager, RoundResultsEnum> _roundEndAction;
 
     private float CurrentSavedHeight
     {
@@ -68,11 +69,17 @@ public class LevelManager : MonoBehaviour
 
     public void RoundStart()
     {
-        _enemyManager.RoundStart();
-        _roundStartAction?.Invoke();
+        _roundStartAction?.Invoke(this);
         _roundStartAction = null;
     }
 
-    public void SubscribeToRoundStart(Action action) => _roundStartAction += action;
+    public void RoundEnd()
+    {
+        _roundEndAction?.Invoke(this, RoundResultsEnum.Positive);
+        _roundEndAction = null;
+    }
+
+    public void SubscribeToRoundStart(Action<LevelManager> action) => _roundStartAction += action;
+    public void SubscribeToRoundEnd(Action<LevelManager, RoundResultsEnum> action) => _roundEndAction += action;//bool is win status
 
 }

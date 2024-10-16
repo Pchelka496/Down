@@ -11,7 +11,7 @@ public class MapController : MonoBehaviour
     MapControllerConfig _config;
 
     CheckpointPlatformController _checkpointPlatform;
-    MapUpdater _mapUpdater;
+    RewardController _rewardController;
 
     public float FirstHeight => _config.FirstPlatformHeight();
     public float FullMapHeight { get => _config.MaximumHeight; }
@@ -22,7 +22,7 @@ public class MapController : MonoBehaviour
         _levelManager = levelManager;
 
         _checkpointPlatform = GameplaySceneInstaller.DiContainer.Instantiate<CheckpointPlatformController>();
-        _mapUpdater = GameplaySceneInstaller.DiContainer.Instantiate<MapUpdater>();
+        _rewardController = GameplaySceneInstaller.DiContainer.Instantiate<RewardController>();
     }
 
     public void Initialize(MapControllerConfig config)
@@ -30,7 +30,7 @@ public class MapController : MonoBehaviour
         _config = config;
 
         _checkpointPlatform.Initialize(this, config);
-        _mapUpdater.Initialize(this, config);
+        _rewardController.Initialize(this, config.RewardControllerConfig);
 
         var level = _config.GetSavingHeight(_levelManager.PlayerSavedHeight);
 
@@ -39,22 +39,5 @@ public class MapController : MonoBehaviour
 
     public PlatformInformation GetClosestPlatformAboveHeight(float height) => _config.GetClosestPlatformAboveHeight(height);
     public PlatformInformation GetClosestPlatformBelowHeight(float height) => _config.GetClosestPlatformBelowHeight(height);
-
-    private async UniTask<GameObject> LoadPrefabs(string address)
-    {
-        AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);
-
-        await handle;
-
-        if (handle.Status == AsyncOperationStatus.Succeeded)
-        {
-            return handle.Result;
-        }
-        else
-        {
-            Debug.LogError("Error loading via Addressables.");
-            return default;
-        }
-    }
 
 }

@@ -20,9 +20,10 @@ public class EnemyManager : MonoBehaviour
     AsyncOperationHandle<GameObject>[] _loadedHandles;
 
     [Inject]
-    private void Construct(CharacterController player)
+    private void Construct(CharacterController player, LevelManager levelManager)
     {
         _player = player;
+        levelManager.SubscribeToRoundStart(RoundStart);
     }
 
     public async void Initialize(EnemyManagerConfig config)
@@ -261,7 +262,7 @@ public class EnemyManager : MonoBehaviour
         return UniTask.CompletedTask;
     }
 
-    public void RoundStart()
+    public void RoundStart(LevelManager levelManager)
     {
         EnemyRegionUpdater().Forget();
     }
