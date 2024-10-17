@@ -3,10 +3,10 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class PresetsCreator : MonoBehaviour
 {
+#if UNITY_EDITOR
+
     [SerializeField] public RewardControllerConfig _rewardControllerConfig;
     [SerializeField] public RewardControllerConfig.RewardPosition _rewardPosition;
-
-#if UNITY_EDITOR
 
     private void Reset()
     {
@@ -24,6 +24,7 @@ public class PresetsCreator : MonoBehaviour
         return null;
     }
 
+    [ContextMenu("Add Reward Position to Config")]
     public void AddRewardPosition()
     {
         if (_rewardControllerConfig != null && _rewardPosition != null)
@@ -32,6 +33,7 @@ public class PresetsCreator : MonoBehaviour
         }
     }
 
+    [ContextMenu("Remove Last Reward Position from Config")]
     public void RemoveLastRewardPosition()
     {
         if (_rewardControllerConfig != null)
@@ -39,5 +41,6 @@ public class PresetsCreator : MonoBehaviour
             _rewardControllerConfig.DeleteLastPreset();
         }
     }
+
 #endif
 }

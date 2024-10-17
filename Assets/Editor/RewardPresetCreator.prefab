@@ -44,9 +44,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28df6c50367104d4d8db70cb706899a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rewardControllerConfig: {fileID: 11400000, guid: b2df20998a47eca4a91e77ebe5644ca7, type: 2}
+  _rewardControllerConfig: {fileID: 11400000, guid: ddefa030c7bd37b42b5c9c28ee4076c7, type: 2}
   _rewardPosition:
     _rewardPositions:
-    - {x: -3, y: 0}
-    - {x: 3.31746, y: 0.07054669}
-    - {x: 0.3174603, y: 1.3051146}
+    - {x: -14.827108, y: 1.1827106}
+    - {x: 2.32, y: 5.66}
+    - {x: 7.002058, y: -1.0666752}
+    - {x: -0.21, y: 0.1}
+    - {x: -10.73, y: 13.94}
+    - {x: -16.71, y: 13.79}
+    - {x: -11.65, y: 6.27}
+    - {x: -2.05, y: 10.721312}
+    - {x: -6.76, y: 3.36}
+    - {x: -10.27, y: 10.721312}
+    _size: {x: 1, y: 1}

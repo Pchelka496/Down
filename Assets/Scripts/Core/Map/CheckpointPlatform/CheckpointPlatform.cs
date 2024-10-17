@@ -6,6 +6,7 @@ public class CheckpointPlatform : MonoBehaviour
 {
     const float START_MOVEMENT_DELAY = 2f;
     const float CAMERA_SHAKE_DELAY = 0.5f;
+
     [SerializeField] Canvas _canvas;
     [SerializeField] DisplayController _displayController;
 

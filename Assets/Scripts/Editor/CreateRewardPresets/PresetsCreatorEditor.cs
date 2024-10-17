@@ -1,14 +1,29 @@
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.Rendering;
+using static UnityEngine.Rendering.STP;
 
 [CustomEditor(typeof(PresetsCreator))]
 public class PresetsCreatorEditor : Editor
 {
     private void OnSceneGUI()
     {
+        base.OnInspectorGUI();
+
         PresetsCreator presetsCreator = (PresetsCreator)target;
 
-        // Проверяем, если массив RewardPositions существует
+        if (GUILayout.Button("Add Reward Position to Config"))
+        {
+            presetsCreator.AddRewardPosition();
+            EditorUtility.SetDirty(presetsCreator);
+        }
+
+        if (GUILayout.Button("Remove Last Reward Position from Config"))
+        {
+            presetsCreator.RemoveLastRewardPosition();
+            EditorUtility.SetDirty(presetsCreator);
+        }
+
         if (presetsCreator != null && presetsCreator._rewardPosition?.RewardPositions != null)
         {
             // Проходим по всем позициям в массиве

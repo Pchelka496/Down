@@ -11,7 +11,6 @@ public class MapController : MonoBehaviour
     MapControllerConfig _config;
 
     CheckpointPlatformController _checkpointPlatform;
-    RewardController _rewardController;
 
     public float FirstHeight => _config.FirstPlatformHeight();
     public float FullMapHeight { get => _config.MaximumHeight; }
@@ -22,7 +21,6 @@ public class MapController : MonoBehaviour
         _levelManager = levelManager;
 
         _checkpointPlatform = GameplaySceneInstaller.DiContainer.Instantiate<CheckpointPlatformController>();
-        _rewardController = GameplaySceneInstaller.DiContainer.Instantiate<RewardController>();
     }
 
     public void Initialize(MapControllerConfig config)
@@ -30,7 +28,6 @@ public class MapController : MonoBehaviour
         _config = config;
 
         _checkpointPlatform.Initialize(this, config);
-        _rewardController.Initialize(this, config.RewardControllerConfig);
 
         var level = _config.GetSavingHeight(_levelManager.PlayerSavedHeight);
 

@@ -9,9 +9,10 @@ public class LevelManager : MonoBehaviour
     CharacterController _player;
     MapController _mapController;
     BackgroundController _backgroundController;
+    RewardManager _rewardManager;
 
     event Action<LevelManager> _roundStartAction;
-    event Action<LevelManager, RoundResultsEnum> _roundEndAction;
+    event Action<LevelManager, EnumRoundResults> _roundEndAction;
 
     private float CurrentSavedHeight
     {
@@ -47,11 +48,12 @@ public class LevelManager : MonoBehaviour
     }
 
     [Inject]
-    private void Construct(MapController mapController, EnemyManager enemyManager, BackgroundController backgroundController, CharacterController player)
+    private void Construct(MapController mapController, EnemyManager enemyManager, BackgroundController backgroundController, CharacterController player, RewardManager rewardManager)
     {
         _mapController = mapController;
         _enemyManager = enemyManager;
         _backgroundController = backgroundController;
+        _rewardManager = rewardManager;
         _player = player;
     }
 
@@ -60,6 +62,8 @@ public class LevelManager : MonoBehaviour
         _mapController.Initialize(_config.MapControllerConfig);
         _backgroundController.Initialize(_config.BackgroundControllerConfig);
         _enemyManager.Initialize(_config.EnemyManagerConfig);
+        _rewardManager.Initialize(_config.RewardManagerConfig);
+
     }
 
     private void Start()
@@ -75,11 +79,11 @@ public class LevelManager : MonoBehaviour
 
     public void RoundEnd()
     {
-        _roundEndAction?.Invoke(this, RoundResultsEnum.Positive);
+        _roundEndAction?.Invoke(this, EnumRoundResults.Positive);
         _roundEndAction = null;
     }
 
     public void SubscribeToRoundStart(Action<LevelManager> action) => _roundStartAction += action;
-    public void SubscribeToRoundEnd(Action<LevelManager, RoundResultsEnum> action) => _roundEndAction += action;//bool is win status
+    public void SubscribeToRoundEnd(Action<LevelManager, EnumRoundResults> action) => _roundEndAction += action;//bool is win status
 
 }

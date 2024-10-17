@@ -15,14 +15,14 @@ public class DisplayController : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI _displayText;
     [SerializeField] TextConfigLanguageAddresses _textConfigLanguageAddresses;
-    PointKeeper _pointKeeper;
+    RewardManager _rewardManager;
     DisplayControllerConfig _config;
     string _targetText;
     CancellationTokenSource _cts;
     bool _cursorVisible = true;
 
     [Inject]
-    private async void Construct(EnumLanguage language, PointKeeper pointKeeper)
+    private async void Construct(EnumLanguage language, RewardManager rewardManager)
     {
         switch (language)
         {
@@ -48,12 +48,12 @@ public class DisplayController : MonoBehaviour
                 }
             default:
                 {
-                    Construct(EnumLanguage.English, pointKeeper);
+                    Construct(EnumLanguage.English, rewardManager);
                     return;
                 }
         }
 
-        _pointKeeper = pointKeeper;
+        _rewardManager = rewardManager;
         TargetText(DefaultText()).Forget();
     }
 
@@ -101,10 +101,8 @@ public class DisplayController : MonoBehaviour
 
     private async UniTask StartTypingTextAsync(string targetText, float displayTime)
     {
-        // Очищаем текст сразу и стираем, если что-то есть
         await EraseTextAsync(_cts.Token);
 
-        // Убеждаемся, что поле очищено перед печатью
         _displayText.text = string.Empty;
 
         await TypeTextAsync(targetText, _cts.Token, displayTime);
@@ -118,7 +116,7 @@ public class DisplayController : MonoBehaviour
 
             if (_displayText.text.Length == 1)
             {
-                _displayText.text = string.Empty; 
+                _displayText.text = string.Empty;
             }
             else
             {
@@ -135,19 +133,15 @@ public class DisplayController : MonoBehaviour
         {
             if (token.IsCancellationRequested)
             {
-                // Если операция отменена, сразу выходим
                 return;
             }
 
-            // Печатаем текст символ за символом с курсором в конце
             _displayText.text = text.Substring(0, i) + CURSOR_CHAR;
             await UniTask.WaitForSeconds(TYPING_SPEED);
         }
 
-        // Начинаем мигание курсора после вывода текста
         StartCursorBlinkingAsync(token).Forget();
 
-        // Если текст не является текстом по умолчанию, ждём указанное время и возвращаемся к тексту по умолчанию
         if (_targetText != DefaultText())
         {
             await UniTask.WaitForSeconds(displayTime);
@@ -155,10 +149,9 @@ public class DisplayController : MonoBehaviour
         }
     }
 
-
     private string DefaultText()
     {
-        return ConvertText(_config.StartPointsInformation, _pointKeeper.GetPoint(), _config.EndPointsInformation);
+        return ConvertText(_config.StartPointsInformation, _rewardManager.GetPoints(), _config.EndPointsInformation);
     }
 
     private async UniTask StartCursorBlinkingAsync(CancellationToken token)
