@@ -12,6 +12,7 @@ public class GameplaySceneInstaller : MonoInstaller
     [SerializeField] CamerasController _camerasController;
     [SerializeField] Camera _mainCamera;
     [SerializeField] RewardCounter _rewardCounter;
+    [SerializeField] AudioSourcePool _audioSourcePool;
     [SerializeField] EnumLanguage _enumLanguage;
 
     public static DiContainer DiContainer { get; private set; }
@@ -28,6 +29,7 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<RewardManager>().FromInstance(_rewardManager).AsSingle().NonLazy();
         Container.Bind<CamerasController>().FromInstance(_camerasController).AsSingle().NonLazy();
         Container.Bind<RewardCounter>().FromInstance(_rewardCounter).AsSingle().NonLazy();
+        Container.Bind<AudioSourcePool>().FromInstance(_audioSourcePool).AsSingle().NonLazy();
         Container.Bind<Camera>().FromInstance(_mainCamera).AsSingle().NonLazy();
         Container.Bind<EnumLanguage>().FromInstance(_enumLanguage).AsSingle().NonLazy();
         Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle().NonLazy();

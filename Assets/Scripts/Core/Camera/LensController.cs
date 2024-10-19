@@ -16,6 +16,7 @@ public class LensController
 
     [SerializeField] float _minVelocityThreshold = 10f;
     [SerializeField] float _maxVelocityThreshold = 40f;
+
     [SerializeField] float _changeThreshold = 5f;
 
     [SerializeField] AnimationCurve _lensInterpolationCurve;

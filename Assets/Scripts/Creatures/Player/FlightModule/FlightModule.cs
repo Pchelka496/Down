@@ -1,11 +1,10 @@
 using Cysharp.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using Zenject;
 
-public class FlightModule : IFlightModule
+public class FlightModule : BaseModule, IFlightModule
 {
     const float MAX_INTROPALITES_INPUT_VALUE = 0.5f;
     const float MIN_INTROPALITES_INPUT_VALUE = 0.05f;
@@ -26,16 +25,21 @@ public class FlightModule : IFlightModule
     Transform _transform;
 
     [Inject]
-    private void Construct(CharacterController character, Controls controls)
+    private void Construct(CharacterController player, Controls controls)
     {
-        _rb = character.Rb;
-        _transform = character.transform;
+        _rb = player.Rb;
+        _rb.freezeRotation = false;
+
+        _transform = player.transform;
         _controls = controls;
+        transform.parent = player.transform;
+
+        player.FlightModule = this;
     }
 
-    public async UniTask Fly(CancellationTokenSource cancellationToken)
+    public async UniTask Fly(CancellationTokenSource cts)
     {
-        while (!cancellationToken.IsCancellationRequested)
+        while (!cts.IsCancellationRequested)
         {
             var newLeftInputValue = _controls.Player.MoveLeft.ReadValue<float>();
             var newRightInputValue = _controls.Player.MoveRight.ReadValue<float>();

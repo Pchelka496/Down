@@ -45,8 +45,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c37d7d21cc32cf44ca1cf689215c4a40
+    m_Address: Prefab/PlayerModule/FlightModule/JetEngineModule
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c7e4ef8c3efb28d4bb87929d907bc95f
     m_Address: Prefab/Map/Checkpoint/PlatformPiece
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f354d9411d8fead4ea2bb50a92154609
+    m_Address: Prefab/PlayerModule/SupportModul/StabilizationModule
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
