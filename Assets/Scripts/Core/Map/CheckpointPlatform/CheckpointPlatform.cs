@@ -36,7 +36,7 @@ public class CheckpointPlatform : MonoBehaviour
     {
         if (collision.gameObject == _player.gameObject)
         {
-            _levelManager.RoundStart();
+            _levelManager.RoundStart().Forget();
         }
     }
 

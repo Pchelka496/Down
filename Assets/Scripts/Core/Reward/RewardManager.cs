@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -24,7 +25,12 @@ public class RewardManager : MonoBehaviour
 
     }
 
-    public int GetPoints() => _config.GetPoints();
+    public async UniTask<int> GetPoints()
+    {
+        await UniTask.WaitUntil(() => _config != null);
+
+        return _config.GetPoints();
+    }
 
     public void IncreasePoints(int increaseValue) => _config.IncreasePoints(increaseValue);
 

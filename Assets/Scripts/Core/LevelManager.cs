@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 using Zenject;
@@ -71,14 +72,18 @@ public class LevelManager : MonoBehaviour
         _player.transform.position = new(0f, PlayerSavedHeight);
     }
 
-    public void RoundStart()
+    public async UniTaskVoid RoundStart()
     {
+        await UniTask.WaitForSeconds(1f);
+
         _roundStartAction?.Invoke(this);
         _roundStartAction = null;
     }
 
-    public void RoundEnd()
+    public async UniTaskVoid RoundEnd()
     {
+        await UniTask.WaitForSeconds(1f);
+
         _roundEndAction?.Invoke(this, EnumRoundResults.Positive);
         _roundEndAction = null;
     }

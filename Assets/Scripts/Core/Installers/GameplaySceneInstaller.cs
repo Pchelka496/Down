@@ -14,7 +14,7 @@ public class GameplaySceneInstaller : MonoInstaller
     [SerializeField] RewardCounter _rewardCounter;
     [SerializeField] AudioSourcePool _audioSourcePool;
     [SerializeField] EnumLanguage _enumLanguage;
-
+    [SerializeField] PlayerModuleConfigs _playerModulesConfig;
     public static DiContainer DiContainer { get; private set; }
 
     public override void InstallBindings()
@@ -33,6 +33,9 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<Camera>().FromInstance(_mainCamera).AsSingle().NonLazy();
         Container.Bind<EnumLanguage>().FromInstance(_enumLanguage).AsSingle().NonLazy();
         Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle().NonLazy();
+        Container.Bind<PlayerModuleConfigs>().FromInstance(_playerModulesConfig).AsSingle().NonLazy();
+
+        BindPlayerModuleConfigs();
     }
 
     private void InitializeOrCleanInstaller()
@@ -48,6 +51,44 @@ public class GameplaySceneInstaller : MonoInstaller
                 Destroy(thisComponent);
             }
         }
+    }
+
+    private void BindPlayerModuleConfigs()
+    {
+        Container.Bind<EngineModulePowerConfig>()
+            .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.EngineModulePowerConfig))
+            .AsSingle().NonLazy();
+
+        Container.Bind<EngineModuleAccelerationSpeedConfig>()
+           .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.EngineModuleAccelerationSpeedConfig))
+           .AsSingle().NonLazy();
+
+        Container.Bind<StabilizationModuleConfig>()
+            .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.StabilizationModuleConfig))
+            .AsSingle().NonLazy();
+
+        Container.Bind<HealthModuleConfig>()
+            .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.HealthModuleConfig))
+            .AsSingle().NonLazy();
+
+        Container.Bind<EmergencyBrakeModuleConfig>()
+            .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.EmergencyBrakeModuleConfig))
+            .AsSingle().NonLazy();
+
+        Container.Bind<AirBrakeModuleConfig>()
+            .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.AirBrakeModuleConfig))
+            .AsSingle().NonLazy();
+    }
+
+    [System.Serializable]
+    public record PlayerModuleConfigs
+    {
+        [field: SerializeField] public EngineModulePowerConfig EngineModulePowerConfig { get; private set; }
+        [field: SerializeField] public EngineModuleAccelerationSpeedConfig EngineModuleAccelerationSpeedConfig { get; private set; }
+        [field: SerializeField] public StabilizationModuleConfig StabilizationModuleConfig { get; private set; }
+        [field: SerializeField] public HealthModuleConfig HealthModuleConfig { get; private set; }
+        [field: SerializeField] public EmergencyBrakeModuleConfig EmergencyBrakeModuleConfig { get; private set; }
+        [field: SerializeField] public AirBrakeModuleConfig AirBrakeModuleConfig { get; private set; }
     }
 
 }

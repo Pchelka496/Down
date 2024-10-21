@@ -1,9 +1,6 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using System;
-using System.Threading;
 using Unity.Cinemachine;
-using Unity.Collections.LowLevel.Unsafe;
 
 
 [System.Serializable]
@@ -13,14 +10,15 @@ public class PositionComposerController
     [SerializeField] CinemachinePositionComposer _composer;
     [SerializeField] float _maxYScreenPosition = 10f;
     [SerializeField] float _minYScreenPosition = 5f;
-    [SerializeField] float _transitionSpeed = 5f;
 
     [SerializeField] float _minVelocityThreshold = 0f;
     [SerializeField] float _maxVelocityThreshold = 20f;
 
     [SerializeField] float _updateFrequency = 1f;
+    [SerializeField] AnimationCurve _transitionCurve;
 
     float _currentYScreenPosition;
+    float _velocityYRef;
 
     Rigidbody2D _playerRb;
 
@@ -35,31 +33,43 @@ public class PositionComposerController
         while (true)
         {
             await AdjustLensSettingsBasedOnVelocity();
-            await UniTask.Yield(PlayerLoopTiming.Update);
+            await UniTask.WaitForSeconds(_updateFrequency);
         }
     }
 
     private async UniTask AdjustLensSettingsBasedOnVelocity()
     {
-        // ѕолучаем вертикальную скорость игрока
-        float velocityY = _playerRb.velocity.y;
+        var velocityY = Mathf.Abs(_playerRb.velocity.y);
 
-        // Ќормализуем скорость в диапазоне от 0 до 1
-        float normalizedVelocity = Mathf.InverseLerp(_minVelocityThreshold, _maxVelocityThreshold, velocityY);
-        normalizedVelocity = Mathf.Clamp01(normalizedVelocity); // ограничиваем значение от 0 до 1
+        var normalizedVelocity = Mathf.InverseLerp(_minVelocityThreshold, _maxVelocityThreshold, velocityY);
+        normalizedVelocity = Mathf.Clamp01(normalizedVelocity); 
 
-        // ¬ычисл€ем новое значение YScreenPosition на основе нормализованной скорости
-        float targetYScreenPosition = Mathf.Lerp(_minYScreenPosition, _maxYScreenPosition, normalizedVelocity);
+        var targetYScreenPosition = Mathf.Lerp(_minYScreenPosition, _maxYScreenPosition, normalizedVelocity);
 
-        // ѕлавно интерполируем текущее значение YScreenPosition к целевому значению
-        _currentYScreenPosition = Mathf.Lerp(_currentYScreenPosition, targetYScreenPosition, Time.deltaTime * _transitionSpeed);
+        var timeElapsed = 0f;
+        var duration = 0.5f; 
+        var initialYScreenPosition = _currentYScreenPosition;
 
-        // ”станавливаем новое значение YScreenPosition в composer
+        while (timeElapsed < duration)
+        {
+            var curveValue = _transitionCurve.Evaluate(timeElapsed / duration);
+
+            _currentYScreenPosition = Mathf.Lerp(initialYScreenPosition, targetYScreenPosition, curveValue);
+
+            _defaultComposition.ScreenPosition = new(0f, _currentYScreenPosition);
+            _composer.Composition = _defaultComposition;
+
+            await UniTask.Yield();
+
+            timeElapsed += Time.deltaTime;
+        }
+
+        _currentYScreenPosition = targetYScreenPosition;
         _defaultComposition.ScreenPosition = new(0f, _currentYScreenPosition);
         _composer.Composition = _defaultComposition;
 
-        await UniTask.Yield();
     }
+
 
     //private async UniTask AdjustLensSettingsBasedOnVelocity(CancellationToken token)
     //{

@@ -7,20 +7,23 @@ using Zenject;
 public class JetEngineModule : BaseModule, IFlightModule
 {
     [Header("General Settings")]
-    [SerializeField] private float maxThrust = 10f;  // Максимальная мощность
-    [SerializeField] private float thrustIncreaseSpeed = 0.1f;  // Скорость прироста мощности
+    [SerializeField] float maxThrust = 10f;
+    [SerializeField] float thrustIncreaseSpeed = 0.1f;
 
     [Header("Engine Transforms")]
-    [SerializeField] private Transform leftEngine;  // Левый двигатель
-    [SerializeField] private Transform rightEngine;  // Правый двигатель
+    [SerializeField] Transform _leftEngine;
+    [SerializeField] Transform _rightEngine;
 
-    private Rigidbody2D _rb;
-    private Controls _controls;
+    [SerializeField] ParticleSystem _leftParticleSystem;
+    [SerializeField] ParticleSystem _rightParticleSystem;
 
-    private float _leftThrust;  // Мощность левого двигателя
-    private float _rightThrust;  // Мощность правого двигателя
-    private float _currentLeftThrust;  // Текущая мощность левого двигателя
-    private float _currentRightThrust;  // Текущая мощность правого двигателя
+    Rigidbody2D _rb;
+    Controls _controls;
+
+    float _leftThrust;
+    float _rightThrust;
+    float _currentLeftThrust;
+    float _currentRightThrust;
 
     [Inject]
     private void Construct(CharacterController player, Controls controls)
@@ -46,10 +49,13 @@ public class JetEngineModule : BaseModule, IFlightModule
             _currentRightThrust = Mathf.Lerp(_currentRightThrust, _rightThrust * maxThrust, thrustIncreaseSpeed);
 
             // Применение силы к каждому двигателю
-            ApplyThrust(leftEngine, _currentLeftThrust);
-            ApplyThrust(rightEngine, _currentRightThrust);
+            ApplyThrust(_leftEngine, _currentLeftThrust);
+            ApplyThrust(_rightEngine, _currentRightThrust);
 
-            await UniTask.Yield(PlayerLoopTiming.FixedUpdate);  // Используем FixedUpdate для работы с физикой
+            UpdateEngineParticles(_leftParticleSystem, _currentLeftThrust);
+            UpdateEngineParticles(_rightParticleSystem, _currentRightThrust);
+
+            await UniTask.Yield(PlayerLoopTiming.FixedUpdate); 
         }
     }
 
@@ -65,20 +71,40 @@ public class JetEngineModule : BaseModule, IFlightModule
 
     }
 
+    private void UpdateEngineParticles(ParticleSystem particleSystem, float currentThrust)
+    {
+        var emission = particleSystem.emission;
+        var main = particleSystem.main;
+
+        emission.rateOverTime = Mathf.Lerp(0, 20f, currentThrust / maxThrust);
+
+        main.startSpeed = Mathf.Lerp(2f, 10f, currentThrust / maxThrust);
+
+        if (currentThrust > 0 && !particleSystem.isPlaying)
+        {
+            particleSystem.Play();
+        }
+        else if (currentThrust <= 0 && particleSystem.isPlaying)
+        {
+            particleSystem.Stop();
+        }
+    }
+
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         // Рисуем направления двигателей для наглядности в редакторе
-        if (leftEngine != null)
+        if (_leftEngine != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawRay(leftEngine.position, leftEngine.up * 2);  // Левый двигатель
+            Gizmos.DrawRay(_leftEngine.position, _leftEngine.up * 2);  // Левый двигатель
         }
 
-        if (rightEngine != null)
+        if (_rightEngine != null)
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawRay(rightEngine.position, rightEngine.up * 2);  // Правый двигатель
+            Gizmos.DrawRay(_rightEngine.position, _rightEngine.up * 2);  // Правый двигатель
         }
     }
 #endif
