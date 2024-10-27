@@ -1,9 +1,5 @@
-using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
-using static MapControllerConfig;
 
 public class MapController : MonoBehaviour
 {
@@ -12,13 +8,13 @@ public class MapController : MonoBehaviour
 
     CheckpointPlatformController _checkpointPlatform;
 
-    public float FirstHeight => _config.FirstPlatformHeight();
-    public float FullMapHeight { get => _config.MaximumHeight; }
+    public float FullMapHeight { get => LevelManager.PLAYER_START_Y_POSITION; }
 
     [Inject]
     private void Construct(LevelManager levelManager)
     {
         _levelManager = levelManager;
+        levelManager.SubscribeToRoundStart(RoundStart);
 
         _checkpointPlatform = GameplaySceneInstaller.DiContainer.Instantiate<CheckpointPlatformController>();
     }
@@ -29,12 +25,21 @@ public class MapController : MonoBehaviour
 
         _checkpointPlatform.Initialize(this, config);
 
-        var level = _config.GetSavingHeight(_levelManager.PlayerSavedHeight);
+        var level = LevelManager.PLAYER_START_Y_POSITION;
 
         _ = _checkpointPlatform.CreatePlatforms(level);
     }
 
-    public PlatformInformation GetClosestPlatformAboveHeight(float height) => _config.GetClosestPlatformAboveHeight(height);
-    public PlatformInformation GetClosestPlatformBelowHeight(float height) => _config.GetClosestPlatformBelowHeight(height);
+    private void RoundStart(LevelManager levelManager)
+    {
+        levelManager.SubscribeToRoundEnd(RoundEnd);
+
+    }
+
+    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
+    {
+        levelManager.SubscribeToRoundStart(RoundStart);
+
+    }
 
 }

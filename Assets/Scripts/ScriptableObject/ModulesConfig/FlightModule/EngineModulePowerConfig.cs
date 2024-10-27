@@ -16,13 +16,13 @@ public class EngineModulePowerConfig : BaseModuleConfig
         _currentLevel = level;
     }
 
-    public override int GetMaxLevel() => _engineMaxPower.Length;
+    public override int GetMaxLevel() => _engineMaxPower.Length - 1;
 
     public float GetMaxPower() => _engineMaxPower[_currentLevel];
 
     public override bool SetLevelCheck(int level)
     {
-        return !(level > _engineMaxPower.Length);
+        return !(level > _engineMaxPower.Length - 1);
     }
 
 }

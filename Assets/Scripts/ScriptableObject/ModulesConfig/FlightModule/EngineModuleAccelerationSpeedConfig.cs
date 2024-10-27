@@ -16,12 +16,12 @@ public class EngineModuleAccelerationSpeedConfig : BaseModuleConfig
         _currentLevel = level;
     }
 
-    public override int GetMaxLevel() => _engineAccelerationSpeed.Length;
+    public override int GetMaxLevel() => _engineAccelerationSpeed.Length - 1;
 
     public float GetAccelerationSpeed() => _engineAccelerationSpeed[_currentLevel];
 
     public override bool SetLevelCheck(int level)
     {
-        return !(level > _engineAccelerationSpeed.Length);
+        return !(level > _engineAccelerationSpeed.Length - 1);
     }
 }

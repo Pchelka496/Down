@@ -1,11 +1,19 @@
-using Unity.VisualScripting;
 using UnityEngine;
+using Zenject;
 
 public class EnemyCore : MonoBehaviour
 {
-    GameObject _visualPart;
+    static HealthModule _playerHealthModule;
 
-    public void Initialize(GameObject visualPart)
+    EnemyVisualPart _visualPart;
+
+    [Inject]
+    private void Construct(CharacterController player)
+    {
+        _playerHealthModule = player.HealthModule;
+    }
+
+    public void Initialize(EnemyVisualPart visualPart)
     {
         if (_visualPart != null)
         {
@@ -19,6 +27,7 @@ public class EnemyCore : MonoBehaviour
             }
             return;
         }
+        if (visualPart == null) return;
 
         _visualPart = visualPart;
         _visualPart.transform.parent = transform;

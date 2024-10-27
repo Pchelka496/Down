@@ -16,11 +16,11 @@ public class HealthModuleConfig : BaseModuleConfig
         _currentLevel = level;
     }
 
-    public override int GetMaxLevel() => _maxHealthOnLevel.Length;
+    public override int GetMaxLevel() => _maxHealthOnLevel.Length - 1;
 
     public override bool SetLevelCheck(int level)
     {
-        return !(level > _maxHealthOnLevel.Length);
+        return !(level > _maxHealthOnLevel.Length - 1);
     }
 
     public int GetMaxHealth() => _maxHealthOnLevel[_currentLevel];

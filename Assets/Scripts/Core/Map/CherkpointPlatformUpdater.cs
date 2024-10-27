@@ -5,65 +5,28 @@ using UnityEngine;
 
 public class CheckpointPlatformController
 {
-   public const float PLATFORM_MOVE_DURATION = 15f;
-
     MapController _mapController;
     MapControllerConfig _config;
     CheckpointPlatform _currentPlatform;
 
-    float _overshootHeightMultiplier = 1.005f;
-
-    AnimationCurve movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    AsyncOperationHandle<GameObject> _currentPlatformHandle;
 
     public void Initialize(MapController mapController, MapControllerConfig config)
     {
         _mapController = mapController;
         _config = config;
-        movementCurve = config.PlatformCurveMovementCurve;
-    }
-
-    public async UniTask MovePlatformToHeight(float targetHeight)
-    {
-        if (_currentPlatform == null)
-        {
-            Debug.LogWarning("No platform available to move.");
-            return;
-        }
-
-        Vector3 startPos = _currentPlatform.transform.position;
-        Vector3 overshootPos = new Vector3(startPos.x, targetHeight * _overshootHeightMultiplier, startPos.z);
-        Vector3 finalPos = new Vector3(startPos.x, targetHeight, startPos.z);
-
-        await MovePlatform(startPos, overshootPos, PLATFORM_MOVE_DURATION / 2);
-        await MovePlatform(overshootPos, finalPos, PLATFORM_MOVE_DURATION / 2);
-    }
-
-    private async UniTask MovePlatform(Vector3 startPos, Vector3 endPos, float duration)
-    {
-        float timeElapsed = 0f;
-        var transform = _currentPlatform.transform;
-
-        while (timeElapsed < duration)
-        {
-            if (_currentPlatform == null) return;
-
-            timeElapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(timeElapsed / duration);
-            float curvedT = movementCurve.Evaluate(t);
-
-            Vector3 newPos = Vector3.Lerp(startPos, endPos, curvedT);
-            transform.position = newPos;
-
-            await UniTask.Yield();
-        }
-
-        transform.position = endPos;
     }
 
     public async UniTask CreatePlatforms(float height)
     {
         CreatePlatform(_config.PrefabCheckpointPlatformAddress, height).Forget();
         await UniTask.CompletedTask;
+    }
+
+    public void ClearPlatform()
+    {
+        MonoBehaviour.Destroy(_currentPlatform.gameObject);
+        Addressables.Release(_currentPlatformHandle);
     }
 
     public async UniTask<CheckpointPlatform> CreatePlatform(string prefabAddress, float height)
@@ -92,13 +55,13 @@ public class CheckpointPlatformController
 
     private async UniTask<GameObject> LoadPrefabs(string address)
     {
-        AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);
+        _currentPlatformHandle = Addressables.LoadAssetAsync<GameObject>(address);
 
-        await handle;
+        await _currentPlatformHandle;
 
-        if (handle.Status == AsyncOperationStatus.Succeeded)
+        if (_currentPlatformHandle.Status == AsyncOperationStatus.Succeeded)
         {
-            return handle.Result;
+            return _currentPlatformHandle.Result;
         }
         else
         {

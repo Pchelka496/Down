@@ -35,7 +35,7 @@ ScriptedImporter:
     ignoreMipmapLimit: 0
     nPOTScale: 1
     sRGBTexture: 1
-    spriteMode: 1
+    spriteMode: 2
     spriteExtrude: 1
     spriteMeshType: 1
     alignment: 0
@@ -100,7 +100,95 @@ ScriptedImporter:
     spritePosition: {x: 0, y: 0}
   multiSpriteImportData: []
   layeredSpriteImportData:
-  - name: "\u0421\u043B\u043E\u0439 1"
+  - name: Yellow
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 256
+      width: 242
+      height: 236
+    spriteID: fce51017ac05c0a4682ded49e911da31
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 256}
+    spritePosition: {x: 7, y: 13}
+  - name: White
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 500
+      width: 242
+      height: 236
+    spriteID: b6967f23960c66445a63c88af13b2188
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 500}
+    spritePosition: {x: 7, y: 13}
+  - name: Red
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 744
+      width: 242
+      height: 236
+    spriteID: 66b4a5889120aca448cb5eb11e1bb0d5
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 744}
+    spritePosition: {x: 7, y: 13}
+  - name: Green
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 256
+      y: 4
+      width: 242
+      height: 236
+    spriteID: c894d655ecd5a0148a77664325ef6bb7
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 256, y: 4}
+    spritePosition: {x: 7, y: 13}
+  - name: "\u0422\u0440\u0435\u0443\u0433\u043E\u043B\u044C\u043D\u0438\u043A 1"
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -110,62 +198,18 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 242
-      height: 228
-    spriteID: 274b3d17aa00258498b8cd78153d7dc7
+      width: 244
+      height: 244
+    spriteID: bba585f4195918f40a44973040a3b00c
     spriteBone: []
     spriteOutline: []
-    vertices:
-    - position: {x: 0, y: 0}
-      boneWeight:
-        weight0: 0
-        weight1: 0
-        weight2: 0
-        weight3: 0
-        boneIndex0: 0
-        boneIndex1: 0
-        boneIndex2: 0
-        boneIndex3: 0
-    - position: {x: 242, y: 0}
-      boneWeight:
-        weight0: 0
-        weight1: 0
-        weight2: 0
-        weight3: 0
-        boneIndex0: 0
-        boneIndex1: 0
-        boneIndex2: 0
-        boneIndex3: 0
-    - position: {x: 242, y: 228}
-      boneWeight:
-        weight0: 0
-        weight1: 0
-        weight2: 0
-        weight3: 0
-        boneIndex0: 0
-        boneIndex1: 0
-        boneIndex2: 0
-        boneIndex3: 0
-    - position: {x: 0, y: 228}
-      boneWeight:
-        weight0: 0
-        weight1: 0
-        weight2: 0
-        weight3: 0
-        boneIndex0: 0
-        boneIndex1: 0
-        boneIndex2: 0
-        boneIndex3: 0
+    vertices: []
     spritePhysicsOutline: []
-    indices: 000000000300000001000000010000000300000002000000
-    edges:
-    - {x: 0, y: 1}
-    - {x: 0, y: 3}
-    - {x: 1, y: 2}
-    - {x: 2, y: 3}
+    indices: 
+    edges: []
     tessellationDetail: 0
-    uvTransform: {x: -1, y: -8}
-    spritePosition: {x: 5, y: 12}
+    uvTransform: {x: 4, y: 4}
+    spritePosition: {x: 6, y: 5}
   spriteImportData: []
   rigSpriteImportData: []
   sharedRigSpriteImportData: []
@@ -197,7 +241,7 @@ ScriptedImporter:
   - name: DefaultTexturePlatform
     overridden: 0
     ignorePlatformSupport: 0
-    maxTextureSize: 128
+    maxTextureSize: 512
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -262,12 +306,53 @@ ScriptedImporter:
   resliceFromLayer: 0
   pSDLayerImportSetting: []
   psdLayers:
-  - name: "\u0421\u043B\u043E\u0439 1"
-    spriteName: "\u0421\u043B\u043E\u0439 1"
+  - name: Yellow
+    spriteName: Yellow
     isGroup: 0
     parentIndex: -1
-    spriteID: 274b3d17aa00258498b8cd78153d7dc7
-    layerID: 2
+    spriteID: fce51017ac05c0a4682ded49e911da31
+    layerID: 7
+    mosaicPosition: {x: 4, y: 256}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: White
+    spriteName: White
+    isGroup: 0
+    parentIndex: -1
+    spriteID: b6967f23960c66445a63c88af13b2188
+    layerID: 8
+    mosaicPosition: {x: 4, y: 500}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Red
+    spriteName: Red
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 66b4a5889120aca448cb5eb11e1bb0d5
+    layerID: 10
+    mosaicPosition: {x: 4, y: 744}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Green
+    spriteName: Green
+    isGroup: 0
+    parentIndex: -1
+    spriteID: c894d655ecd5a0148a77664325ef6bb7
+    layerID: 12
+    mosaicPosition: {x: 256, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: "\u0422\u0440\u0435\u0443\u0433\u043E\u043B\u044C\u043D\u0438\u043A 1"
+    spriteName: "\u0422\u0440\u0435\u0443\u0433\u043E\u043B\u044C\u043D\u0438\u043A
+      1"
+    isGroup: 0
+    parentIndex: -1
+    spriteID: bba585f4195918f40a44973040a3b00c
+    layerID: 15
     mosaicPosition: {x: 4, y: 4}
     flatten: 0
     isImported: 1
@@ -286,7 +371,7 @@ ScriptedImporter:
   rigPSDLayers: []
   sharedRigPSDLayers: []
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638646117121461582
+  platformSettingsDirtyTick: 638656404044493911
   spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 

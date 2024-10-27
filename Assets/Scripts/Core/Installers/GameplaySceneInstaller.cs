@@ -12,9 +12,13 @@ public class GameplaySceneInstaller : MonoInstaller
     [SerializeField] CamerasController _camerasController;
     [SerializeField] Camera _mainCamera;
     [SerializeField] RewardCounter _rewardCounter;
+    [SerializeField] UpgradePanelController _upgradePanelController;
     [SerializeField] AudioSourcePool _audioSourcePool;
+    [SerializeField] EffectController _effectController;
+    [SerializeField] ScreenFader _screenFader;
     [SerializeField] EnumLanguage _enumLanguage;
     [SerializeField] PlayerModuleConfigs _playerModulesConfig;
+
     public static DiContainer DiContainer { get; private set; }
 
     public override void InstallBindings()
@@ -29,9 +33,12 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<RewardManager>().FromInstance(_rewardManager).AsSingle().NonLazy();
         Container.Bind<CamerasController>().FromInstance(_camerasController).AsSingle().NonLazy();
         Container.Bind<RewardCounter>().FromInstance(_rewardCounter).AsSingle().NonLazy();
+        Container.Bind<UpgradePanelController>().FromInstance(_upgradePanelController).AsSingle().NonLazy();
         Container.Bind<AudioSourcePool>().FromInstance(_audioSourcePool).AsSingle().NonLazy();
+        Container.Bind<EffectController>().FromInstance(_effectController).AsSingle().NonLazy();
         Container.Bind<Camera>().FromInstance(_mainCamera).AsSingle().NonLazy();
         Container.Bind<EnumLanguage>().FromInstance(_enumLanguage).AsSingle().NonLazy();
+        Container.Bind<ScreenFader>().FromInstance(_screenFader).AsSingle().NonLazy();
         Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle().NonLazy();
         Container.Bind<PlayerModuleConfigs>().FromInstance(_playerModulesConfig).AsSingle().NonLazy();
 
@@ -89,6 +96,20 @@ public class GameplaySceneInstaller : MonoInstaller
         [field: SerializeField] public HealthModuleConfig HealthModuleConfig { get; private set; }
         [field: SerializeField] public EmergencyBrakeModuleConfig EmergencyBrakeModuleConfig { get; private set; }
         [field: SerializeField] public AirBrakeModuleConfig AirBrakeModuleConfig { get; private set; }
+
+        public BaseModuleConfig[] GetAllConfigsAsBase()
+        {
+            return new BaseModuleConfig[]
+            {
+            EngineModulePowerConfig,
+            EngineModuleAccelerationSpeedConfig,
+            StabilizationModuleConfig,
+            HealthModuleConfig,
+            EmergencyBrakeModuleConfig,
+            AirBrakeModuleConfig
+            };
+        }
+
     }
 
 }

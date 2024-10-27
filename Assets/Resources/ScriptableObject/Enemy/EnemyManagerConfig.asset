@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyManagerConfig
   m_EditorClassIdentifier: 
   _enemyCorePrefab: Prefab/Creatures/EnemyCore
-  _enemyCount: 40
+  _enemyCount: 50
   _enemyRegions:
   - _enemies:
     - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
@@ -160,20 +160,60 @@ MonoBehaviour:
       RelativeAmount: 0.5
     _startHeight: 80000
   - _enemies:
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/WhiteEnemy.prefab
       Speed: 2
-      MotionPattern: 0
+      MotionPattern: 6
       MotionCharacteristic:
         x: 0.5
         y: 1
       IsolationDistance: {x: 0, y: 0}
       RelativeAmount: 0.5
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/RedEnemy.prefab
+      Speed: 3
       MotionPattern: 1
       MotionCharacteristic:
         x: 1
         y: 1
       IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    _startHeight: 90000
+      RelativeAmount: 0.1
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/RedEnemy.prefab
+      Speed: 3
+      MotionPattern: 0
+      MotionCharacteristic:
+        x: 1
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.1
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/YellowEnemy.prefab
+      Speed: 2
+      MotionPattern: 2
+      MotionCharacteristic:
+        x: 1
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.1
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/YellowEnemy.prefab
+      Speed: 2
+      MotionPattern: 2
+      MotionCharacteristic:
+        x: 1
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.1
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/YellowEnemy.prefab
+      Speed: 2
+      MotionPattern: 2
+      MotionCharacteristic:
+        x: 1
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.3
+    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/YellowEnemy.prefab
+      Speed: 2
+      MotionPattern: 2
+      MotionCharacteristic:
+        x: 1
+        y: 1
+      IsolationDistance: {x: 0, y: 0}
+      RelativeAmount: 0.2
+    _startHeight: 99700

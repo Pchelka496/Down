@@ -11,18 +11,6 @@ public class MapControllerConfigEditor : Editor
 
         MapControllerConfig config = (MapControllerConfig)target;
 
-        if (GUILayout.Button("Height edit"))
-        {
-            HeightEdit(config);
-        }
-
-    }
-
-    private void HeightEdit(MapControllerConfig config)
-    {
-        var savingHeights = config.Platforms;
-        var sortedHeights = savingHeights.OrderBy(h => h.PlatformHeight).ToArray();
-        config.Platforms = sortedHeights;
     }
 
 }

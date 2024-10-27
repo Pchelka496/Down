@@ -12,19 +12,15 @@ public class CharacterController : MonoBehaviour
     [SerializeField] Transform _bodySprite;
     [SerializeField] Rigidbody2D _rb;
     [SerializeField] CircleCollider2D _collider;
+    [SerializeField] HealthModule _healthModule;
 
     IFlightModule _flightModule;
-    IGroundMovementModule _groundMovementModule;
 
-    // CancellationTokenSource _flightModeTransfer;
     CancellationTokenSource _flightCts;
     CancellationTokenSource _groundMovementCts;
 
-    Controls _controls;
-
     public Rigidbody2D Rb { get => _rb; set => _rb = value; }
-    public Transform BodySprite { get => _bodySprite; set => _bodySprite = value; }
-    public CircleCollider2D Collider { get => _collider; set => _collider = value; }
+    public HealthModule HealthModule { get => _healthModule; }
 
     public IFlightModule FlightModule
     {
@@ -37,34 +33,38 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    public IGroundMovementModule GroundMovementModule
-    {
-        get => _groundMovementModule; set
-        {
-            TokenClearing(ref _groundMovementCts);
-            _groundMovementModule = value;
-
-            SetGroundMovement();
-        }
-    }
 
     [Inject]
     private void Construct(Controls controls, LevelManager levelManager)
     {
-        _controls = controls;
-        _controls.Enable();
-        //levelManager.SubscribeToRoundStart(RoundStart);
+        controls.Enable();
+        SetLobbyMode();
+        levelManager.SubscribeToRoundStart(RoundStart);
     }
 
-    //private void RoundStart(LevelManager levelManager)
-    //{
-    //    levelManager.SubscribeToRoundEnd(RoundEnd);
-    //}
+    private void RoundStart(LevelManager levelManager)
+    {
+        levelManager.SubscribeToRoundEnd(RoundEnd);
+        SetGameplayMode();
+    }
 
-    //private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
-    //{
-    //    levelManager.SubscribeToRoundStart(RoundStart);
-    //}
+    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
+    {
+        levelManager.SubscribeToRoundStart(RoundStart);
+        SetLobbyMode();
+    }
+
+    private void SetLobbyMode()
+    {
+        _rb.gravityScale = 0f;
+
+    }
+
+    private void SetGameplayMode()
+    {
+        _rb.gravityScale = 1f;
+
+    }
 
     //private void OnCollisionEnter2D(Collision2D collision)
     //{
@@ -75,15 +75,6 @@ public class CharacterController : MonoBehaviour
     //{
 
     //}
-
-    private void SetGroundMovement()
-    {
-        TokenClearing(ref _groundMovementCts);
-        TokenClearing(ref _flightCts);
-
-        _groundMovementCts = new();
-        GroundMovementModule.GroundMovement(_groundMovementCts).Forget();
-    }
 
     private void SetFlightControl()
     {
@@ -121,7 +112,7 @@ public class CharacterController : MonoBehaviour
         }
         if (gameObject.TryGetComponent<CircleCollider2D>(out var collider))
         {
-            Collider = collider;
+            _collider = collider;
         }
     }
 

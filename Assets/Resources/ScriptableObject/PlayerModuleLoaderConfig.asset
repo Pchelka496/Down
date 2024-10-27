@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d387409448c39547ac509b8d856bfdb, type: 3}
   m_Name: PlayerModuleLoaderConfig
   m_EditorClassIdentifier: 
-  _flightModuleAddressPrefab: Prefab/PlayerModule/FlightModule/JetEngineModule
-  _groundMovementModuleAddressPrefab: Prefab/PlayerModule/GroundMovementModule/DefaultGroundMovementModule
-  _supportModules:
-  - Prefab/PlayerModule/SupportModul/StabilizationModule
+  _moduleInfoArray:
+  - _modulePrefabAddress: Prefab/PlayerModule/FlightModule/EngineModule
+    _activityCheck: {fileID: 11400000, guid: 86305f5a4a685e24ca4675511b6d8a12, type: 2}
+  - _modulePrefabAddress: Prefab/PlayerModule/SupportModul/StabilizationModule
+    _activityCheck: {fileID: 11400000, guid: 1d39a1f1e7a0f624e96e99cf9b0d8174, type: 2}
+  - _modulePrefabAddress: Prefab/PlayerModule/SupportModul/AirBrakeModule
+    _activityCheck: {fileID: 11400000, guid: 01af5e91489c1324bbc678ea0a162154, type: 2}

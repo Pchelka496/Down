@@ -45,9 +45,19 @@ public class EnemyManagerConfig : ScriptableObject
         [SerializeField] public float Speed;
         [SerializeField] public EnumMotionPattern MotionPattern;
         [SerializeField] public float2 MotionCharacteristic;
-        [Tooltip("Minimum distance at which no other objects will be present")]
-        [SerializeField] public Vector2 IsolationDistance;
+
         [SerializeField][Range(0f, 1f)] public float RelativeAmount;
+
+        public static Enemy EmptyEnemy()
+        {
+            return new Enemy
+            {
+                EnemyAddress = null,
+                Speed = 0f,
+                MotionPattern = EnumMotionPattern.Static,
+                MotionCharacteristic = 0f
+            };
+        }
 
     }
 

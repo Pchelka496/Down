@@ -7,36 +7,51 @@ using static GameplaySceneInstaller;
 public class PlayerUpgradePanel : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI _currentPointsText;
+    [SerializeField] SoundPlayerRandomPitch _unsuccessfulSoundPlayer;
+    [SerializeField] SoundPlayerRandomPitch _successfulSoundPlayer;
     [SerializeField] UpgradeInfo _stabilizer;
     [SerializeField] UpgradeInfo _enginePower;
     [SerializeField] UpgradeInfo _engineAccelerationSpeed;
     [SerializeField] UpgradeInfo _outerSkinStrength;
     [SerializeField] UpgradeInfo _airBrake;
     [SerializeField] UpgradeInfo _emergencyBrakeSystem;
+    AudioSourcePool _audioSourcePool;
+    PlayerModuleConfigs _configs;
     RewardManager _rewardManager;
 
     [Inject]
-    private void Construct(RewardManager rewardManager, PlayerModuleConfigs configs)
+    private void Construct(RewardManager rewardManager, PlayerModuleConfigs configs, AudioSourcePool audioSourcePool)
     {
-        _rewardManager = rewardManager;
+        _unsuccessfulSoundPlayer.Initialize(audioSourcePool);
+        _successfulSoundPlayer.Initialize(audioSourcePool);
 
-        _stabilizer.Initialize(configs.StabilizationModuleConfig);
-        _enginePower.Initialize(configs.EngineModulePowerConfig);
-        _engineAccelerationSpeed.Initialize(configs.EngineModuleAccelerationSpeedConfig);
-        _outerSkinStrength.Initialize(configs.HealthModuleConfig);
-        _airBrake.Initialize(configs.AirBrakeModuleConfig);
-        _emergencyBrakeSystem.Initialize(configs.EmergencyBrakeModuleConfig);
+        _rewardManager = rewardManager;
+        _audioSourcePool = audioSourcePool;
+        _configs = configs;
     }
 
     private void Start()
     {
+        ClosePanel();
+
         UpdateCurrentPoints();
+
+        _stabilizer.Initialize(_configs.StabilizationModuleConfig);
+        _enginePower.Initialize(_configs.EngineModulePowerConfig);
+        _engineAccelerationSpeed.Initialize(_configs.EngineModuleAccelerationSpeedConfig);
+        _outerSkinStrength.Initialize(_configs.HealthModuleConfig);
+        _airBrake.Initialize(_configs.AirBrakeModuleConfig);
+        _emergencyBrakeSystem.Initialize(_configs.EmergencyBrakeModuleConfig);
     }
 
-    private void OnEnable()
+    public void OpenPanel()
     {
+        gameObject.SetActive(true);
+    }
 
-
+    public void ClosePanel()
+    {
+        gameObject.SetActive(false);
     }
 
     private async void UpdateCurrentPoints()
@@ -82,16 +97,18 @@ public class PlayerUpgradePanel : MonoBehaviour
 
         if (await _rewardManager.GetPoints() >= pointsNeeded && config.SetLevelCheck(config.GetCurrentLevel() + 1))
         {
-            HandleSufficientPoints(config, upgradeInfo, pointsNeeded);
+            HandleSuccessfulUpgrade(config, upgradeInfo, pointsNeeded);
         }
         else
         {
-            HandleInsufficientPoints();
+            HandleUnsuccessfulUpgrade();
         }
     }
 
-    private void HandleSufficientPoints(BaseModuleConfig config, UpgradeInfo upgradeInfo, int pointsNeeded)
+    private void HandleSuccessfulUpgrade(BaseModuleConfig config, UpgradeInfo upgradeInfo, int pointsNeeded)
     {
+        _successfulSoundPlayer.PlayNextSound();
+
         _rewardManager.DecreasePoints(pointsNeeded);
 
         config.SetLevel(config.GetCurrentLevel() + 1);
@@ -101,8 +118,9 @@ public class PlayerUpgradePanel : MonoBehaviour
         UpdateCurrentPoints();
     }
 
-    private void HandleInsufficientPoints()
+    private void HandleUnsuccessfulUpgrade()
     {
+        _unsuccessfulSoundPlayer.PlayNextSound();
         Debug.Log("Not enough points to upgrade the level.");
     }
 

@@ -5,56 +5,28 @@ using Zenject;
 
 public class LevelManager : MonoBehaviour
 {
+    public const float PLAYER_START_Y_POSITION = 99999f;
+    public const float PLAYER_START_X_POSITION = 0;
+
     [SerializeField] LevelManagerConfig _config;
     EnemyManager _enemyManager;
     CharacterController _player;
     MapController _mapController;
     BackgroundController _backgroundController;
     RewardManager _rewardManager;
+    ScreenFader _screenFader;
 
     event Action<LevelManager> _roundStartAction;
     event Action<LevelManager, EnumRoundResults> _roundEndAction;
 
-    private float CurrentSavedHeight
-    {
-        get
-        {
-            return _config.PlayerSavedHeight;
-        }
-        set
-        {
-            _config.PlayerSavedHeight = value;
-        }
-    }
-
-    public float PlayerSavedHeight
-    {
-        get
-        {
-            var value = _config.PlayerSavedHeight;
-
-            if (float.IsNaN(value))
-            {
-                return _mapController.FirstHeight;
-            }
-            else
-            {
-                return _config.PlayerSavedHeight;
-            }
-        }
-        set
-        {
-            _config.PlayerSavedHeight = value;
-        }
-    }
-
     [Inject]
-    private void Construct(MapController mapController, EnemyManager enemyManager, BackgroundController backgroundController, CharacterController player, RewardManager rewardManager)
+    private void Construct(MapController mapController, EnemyManager enemyManager, BackgroundController backgroundController, CharacterController player, RewardManager rewardManager, ScreenFader screenFader)
     {
         _mapController = mapController;
         _enemyManager = enemyManager;
         _backgroundController = backgroundController;
         _rewardManager = rewardManager;
+        _screenFader = screenFader;
         _player = player;
     }
 
@@ -69,7 +41,14 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        _player.transform.position = new(0f, PlayerSavedHeight);
+        ResetPlayerPosition();
+        _screenFader.FadeToClear().Forget();
+    }
+
+    private void ResetPlayerPosition()
+    {
+        _player.transform.position = new(PLAYER_START_X_POSITION, PLAYER_START_Y_POSITION);
+        _player.Rb.velocity = Vector2.zero;
     }
 
     public async UniTaskVoid RoundStart()
@@ -86,6 +65,12 @@ public class LevelManager : MonoBehaviour
 
         _roundEndAction?.Invoke(this, EnumRoundResults.Positive);
         _roundEndAction = null;
+
+        await _screenFader.FadeToBlack();
+
+        ResetPlayerPosition();
+
+        await _screenFader.FadeToClear();
     }
 
     public void SubscribeToRoundStart(Action<LevelManager> action) => _roundStartAction += action;

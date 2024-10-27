@@ -1,16 +1,18 @@
 using Unity.Cinemachine;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using System;
 using System.Threading;
+using DG.Tweening;
+using System;
 
 [System.Serializable]
-public class LensController
+public class LensController : System.IDisposable
 {
     const float _lensFarClipPlane = 1000f;
     const float _lensNearClipPlane = 0.3f;
     const bool _lensIsOrthographic = true;
 
+    [SerializeField] float _lobbyModeOrthographicSize = 10f;
     [SerializeField] float _maxOrthographicSize = 10f;
     [SerializeField] float _minOrthographicSize = 5f;
 
@@ -30,47 +32,69 @@ public class LensController
     {
         _camera = camera;
         _player = player;
+    }
+
+    public void SetLobbyMod()
+    {
+        ClearToken(ref _cts);
+        _camera.Lens.OrthographicSize = _lobbyModeOrthographicSize;
+    }
+
+    public void SetFlyMode()
+    {
         StartAdjustingLensSettingsAsync().Forget();
     }
 
     private async UniTaskVoid StartAdjustingLensSettingsAsync()
     {
-        _cts?.Cancel();
-        _cts = new CancellationTokenSource();
-        var token = _cts.Token;
-
         try
         {
-            await AdjustLensSettingsBasedOnVelocity(token);
+            ClearToken(ref _cts);
+
+            _cts = new CancellationTokenSource();
+
+            await SmoothSizeIncrease();
+
+            await AdjustLensSettingsBasedOnVelocity(_cts.Token);
         }
-        catch (OperationCanceledException)
+        catch (Exception ex)
         {
-            Debug.Log("Lens adjustment was canceled.");
+            Debug.LogWarning($"Exception caught in StartAdjustingLensSettingsAsync: {ex}");
         }
+    }
+
+    private async UniTask SmoothSizeIncrease()
+    {
+        _camera.Lens.OrthographicSize = 0;
+
+        var tween = DOTween.To(() => _camera.Lens.OrthographicSize,
+                   x =>
+                   {
+                       var lensSettings = _camera.Lens;
+                       _camera.Lens.OrthographicSize = x;
+                   },
+                   _minOrthographicSize,
+                   3f);
+
+        await tween.AsyncWaitForCompletion();
     }
 
     private async UniTask AdjustLensSettingsBasedOnVelocity(CancellationToken token)
     {
-        // Прежнее "уровневое" значение скорости
         float previousClampedVelocity = Mathf.FloorToInt(_minVelocityThreshold / _changeThreshold) * _changeThreshold;
 
         while (!token.IsCancellationRequested)
         {
             float velocityY = Mathf.Abs(_player.velocity.y);
 
-            // Ограничиваем скорость по Y между порогами
             float clampedVelocity = Mathf.Clamp(velocityY, _minVelocityThreshold, _maxVelocityThreshold);
 
-            // Округляем к ближайшему шагу (_changeThreshold)
             float roundedVelocity = Mathf.FloorToInt(clampedVelocity / _changeThreshold) * _changeThreshold;
 
-            // Проверяем, изменился ли шаг
             if (roundedVelocity != previousClampedVelocity)
             {
-                // Нормализуем скорость для получения значения от 0 до 1
                 float t = Mathf.InverseLerp(_minVelocityThreshold, _maxVelocityThreshold, roundedVelocity);
 
-                // Применяем кривую интерполяции
                 float interpolatedValue = _lensInterpolationCurve.Evaluate(t);
 
                 await SmoothlyAdjustLensSettings(interpolatedValue, token);
@@ -82,13 +106,10 @@ public class LensController
         }
     }
 
-
     private async UniTask SmoothlyAdjustLensSettings(float interpolationFactor, CancellationToken token)
     {
-        // Целевое значение орфографического размера
         float targetOrthographicSize = Mathf.Lerp(_minOrthographicSize, _maxOrthographicSize, interpolationFactor);
 
-        // Начальное значение текущей линзы
         float startValue = _camera.Lens.OrthographicSize;
 
         float duration = 1f;
@@ -96,31 +117,35 @@ public class LensController
 
         while (timeElapsed < duration && !token.IsCancellationRequested)
         {
-            // Линейная интерполяция по времени
             float t = timeElapsed / duration;
             float newValue = Mathf.Lerp(startValue, targetOrthographicSize, t);
 
-            // Устанавливаем новое значение для орфографического размера
-            var lensSettings = _camera.Lens;
-            lensSettings.OrthographicSize = newValue;
-            lensSettings.FarClipPlane = _lensFarClipPlane;
-            lensSettings.NearClipPlane = _lensNearClipPlane;
+            _camera.Lens.OrthographicSize = newValue;
 
-            _camera.Lens = lensSettings;
-
-            // Ожидание следующего кадра
             await UniTask.Yield(token);
 
-            // Обновляем время
             timeElapsed += Time.deltaTime;
         }
 
-        var finalLensSettings = _camera.Lens;
-        finalLensSettings.OrthographicSize = targetOrthographicSize;
-        finalLensSettings.FarClipPlane = _lensFarClipPlane;
-        finalLensSettings.NearClipPlane = _lensNearClipPlane;
+        _camera.Lens.OrthographicSize = targetOrthographicSize;
+    }
 
-        _camera.Lens = finalLensSettings;
+    private void ClearToken(ref CancellationTokenSource cts)
+    {
+        if (cts == null) return;
+
+        if (!cts.IsCancellationRequested)
+        {
+            cts.Cancel();
+        }
+
+        cts.Dispose();
+        cts = null;
+    }
+
+    public void Dispose()
+    {
+        ClearToken(ref _cts);
     }
 
 }

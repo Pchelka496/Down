@@ -1,6 +1,4 @@
 using Cysharp.Threading.Tasks;
-using System;
-using System.Threading;
 using Unity.Cinemachine;
 using UnityEngine;
 using Zenject;
@@ -8,36 +6,59 @@ using Zenject;
 public class CamerasController : MonoBehaviour
 {
     [SerializeField] CinemachineCamera _camera;
-    //   [SerializeField] CinemachinePositionComposer _composer;
-    //  [SerializeField] CameraCharacteristic _flyMode;
-    // [SerializeField] CameraCharacteristic _checkpointPlatformMode;
     [SerializeField] CameraShaker _cameraShaker;
     [SerializeField] LensController _lensController;
     [SerializeField] PositionComposerController _positionComposerController;
+    [SerializeField] Transform _cameraDefaultTrackingTarget;
+    CharacterController _player;
 
     [Inject]
     public void Construct(LevelManager levelManager, CharacterController player)
     {
-        _lensController.Initialize(_camera, player.Rb);
-        _positionComposerController.Initialize(player.Rb);
+        _player = player;
 
-        SetCheckpointPlatformMode();
         levelManager.SubscribeToRoundStart(RoundStart);
+
+        _lensController.Initialize(_camera, _player.Rb);
+        _positionComposerController.Initialize(_player.Rb);
+
+        SetLobbyMod();
     }
 
     private void RoundStart(LevelManager levelManager)
     {
         SetFlyMode();
+        levelManager.SubscribeToRoundEnd(RoundEnd);
     }
 
-    public void SetFlyMode()
+    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
     {
-        //  ApplyCameraCharacteristics(_flyMode);
+        levelManager.SubscribeToRoundStart(RoundStart);
+        SetLobbyMod();
     }
 
-    public void SetCheckpointPlatformMode()
+    private void SetLobbyMod()
     {
-        //  ApplyCameraCharacteristics(_checkpointPlatformMode);
+        SetTrackingTarget(_cameraDefaultTrackingTarget);
+
+        _positionComposerController.SetLobbyMod();
+        _lensController.SetLobbyMod();
+    }
+
+    private void SetFlyMode()
+    {
+        SetTrackingTarget(_player.transform);
+
+        _lensController.SetFlyMode();
+        _positionComposerController.SetLobbyMod();
+    }
+
+    private void SetTrackingTarget(Transform transform)
+    {
+        var target = new CameraTarget();
+
+        target.TrackingTarget = transform;
+        _camera.Target = target;
     }
 
     public void EnableCameraShake(float? time = null)
@@ -57,18 +78,10 @@ public class CamerasController : MonoBehaviour
         _cameraShaker.StopShake();
     }
 
-    //private void ApplyCameraCharacteristics(CameraCharacteristic characteristic)
-    //{
-    //    _composer.Lookahead = characteristic.LookHead;
-    //    _composer.Composition = characteristic.ComposerSettings;
-    //}
-
-    //[System.Serializable]
-    //private record CameraCharacteristic
-    //{
-    //    [field: SerializeField] public ScreenComposerSettings ComposerSettings { get; private set; }
-    //    [field: SerializeField] public LookaheadSettings LookHead { get; private set; }
-
-    //}
+    private void OnDestroy()
+    {
+        _lensController?.Dispose();
+        _positionComposerController?.Dispose();
+    }
 
 }

@@ -16,12 +16,12 @@ public class AirBrakeModuleConfig : BaseModuleConfig
         _currentLevel = level;
     }
 
-    public override int GetMaxLevel() => _brakePower.Length;
+    public override int GetMaxLevel() => _brakePower.Length - 1;
     public float GetBrakePower() => _brakePower[_currentLevel];
 
     public override bool SetLevelCheck(int level)
     {
-        return !(level > _brakePower.Length);
+        return !(level > _brakePower.Length - 1);
     }
 
 }

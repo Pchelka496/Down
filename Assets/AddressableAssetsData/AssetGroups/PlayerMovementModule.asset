@@ -15,13 +15,23 @@ MonoBehaviour:
   m_GroupName: PlayerMovementModule
   m_GUID: 06e04e2886f42224cb7cffa45174ad1d
   m_SerializeEntries:
-  - m_GUID: 727d673874779ec4ba89e01c52ceb722
-    m_Address: Prefab/PlayerModule/FlightModule/DefaultFlightModule
+  - m_GUID: 4739f8c1cc8fd3f46a9240d71ac3ca01
+    m_Address: Prefab/PlayerModule/SupportModul/AirBrakeModule
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 844001ca01fd2fb4ea2a3b5279042994
     m_Address: Prefab/PlayerModule/GroundMovementModule/DefaultGroundMovementModule
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c37d7d21cc32cf44ca1cf689215c4a40
+    m_Address: Prefab/PlayerModule/FlightModule/EngineModule
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f354d9411d8fead4ea2bb50a92154609
+    m_Address: Prefab/PlayerModule/SupportModul/StabilizationModule
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

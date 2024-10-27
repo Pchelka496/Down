@@ -8,70 +8,46 @@ public class PlayerModuleLoader : MonoBehaviour
 {
     [SerializeField] PlayerModuleLoaderConfig _config;
 
-    string _currentGroundMovementModuleAddress;
-    string _currentFlightModuleAddress;
-
-    AsyncOperationHandle<GameObject> _flightModuleHandle;
-    AsyncOperationHandle<GameObject> _groundMovementModule;
-
     [Inject]
     private void Construct(LevelManager levelManager)
     {
         levelManager.SubscribeToRoundStart(RoundStart);
-        LoadGroundMovementModule().Forget();
+
+        LoadModules();
     }
 
     private void RoundStart(LevelManager levelManager)
     {
-        LoadFlightModule().Forget();
-        LoadSupportModules().Forget();
+        LoadModules();
 
         levelManager.SubscribeToRoundEnd(RoundEnd);
     }
 
     private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
     {
-        LoadGroundMovementModule().Forget();
-
         levelManager.SubscribeToRoundStart(RoundStart);
     }
 
-    private async UniTaskVoid LoadFlightModule()
+    private void LoadModules()
     {
-        if (_currentFlightModuleAddress == _config.FlightModuleAddressPrefab) return;
+        var modulesInfo = _config.ModuleInfoArray;
 
-        if (_currentFlightModuleAddress != null)
+        foreach (var moduleInfo in modulesInfo)
         {
-            ReleaseOldModule(_flightModuleHandle);
+            if (moduleInfo.ActivityCheck && moduleInfo.CreatedModule == null)
+            {
+                ModuleLoud(moduleInfo);
+            }
+            else if (!moduleInfo.ActivityCheck && moduleInfo.CreatedModule != null)
+            {
+                ReleaseOldModule(moduleInfo.CreatedModuleHandler);
+            }
         }
-
-        _currentFlightModuleAddress = _config.FlightModuleAddressPrefab;
-        await GetModuleObject(_currentFlightModuleAddress, _flightModuleHandle);
     }
 
-    private async UniTaskVoid LoadGroundMovementModule()
+    private async void ModuleLoud(PlayerModuleLoaderConfig.ModuleInfo moduleInfo)
     {
-        if (_currentGroundMovementModuleAddress == _config.GroundMovementModuleAddressPrefab) return;
-
-        if (_currentGroundMovementModuleAddress != null)
-        {
-            ReleaseOldModule(_groundMovementModule);
-        }
-
-        _currentGroundMovementModuleAddress = _config.GroundMovementModuleAddressPrefab;
-        await GetModuleObject(_currentGroundMovementModuleAddress, _groundMovementModule);
-    }
-
-    private async UniTaskVoid LoadSupportModules()
-    {
-        var supportModulesPrefabAddress = _config.SupportModules;
-
-        foreach (var moduleAddress in supportModulesPrefabAddress)
-        {
-            GetModuleObject(moduleAddress).Forget();
-        }
-
-        await UniTask.CompletedTask;
+        moduleInfo.CreatedModule = await GetModuleObject(moduleInfo.ModulePrefabAddress);
     }
 
     private void ReleaseOldModule(AsyncOperationHandle<GameObject> handle)
@@ -80,7 +56,7 @@ public class PlayerModuleLoader : MonoBehaviour
         Addressables.Release(handle);
     }
 
-    private async UniTask<GameObject> GetModuleObject(string address, AsyncOperationHandle<GameObject> handle = new())
+    private async UniTask<BaseModule> GetModuleObject(string address, AsyncOperationHandle<GameObject> handle = new())
     {
         handle = Addressables.LoadAssetAsync<GameObject>(address);
 
@@ -88,7 +64,7 @@ public class PlayerModuleLoader : MonoBehaviour
 
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            return GameplaySceneInstaller.DiContainer.InstantiatePrefab(handle.Result);
+            return GameplaySceneInstaller.DiContainer.InstantiatePrefabForComponent<BaseModule>(handle.Result);
         }
         else
         {

@@ -19,7 +19,6 @@ public class EnemyController : IDisposable
     NativeArray<Vector2> _currentEnemyPosition;
     NativeArray<bool> _needToChangeInitialPosition;
     NativeArray<Vector2> _initialPosition;
-    NativeArray<Vector2> _isolationDistance;
     TransformAccessArray _enemyTransforms;
 
     [Inject]
@@ -28,15 +27,15 @@ public class EnemyController : IDisposable
 
     }
 
-    public void Initialize(int enemyCount)
+    public void Initialize(int enemyCount, Transform[] enemyTransforms, float[] speeds, EnumMotionPattern[] motionPatterns, float2[] motionCharacteristic, Vector2[] isolationDistance)
     {
         _enemyCount = enemyCount;
+
+        CreateArrays(enemyTransforms, speeds, motionPatterns, motionCharacteristic, isolationDistance);
     }
 
-    public void RoundStart(Transform[] enemyTransforms, float[] speeds, EnumMotionPattern[] motionPatterns, float2[] motionCharacteristic, Vector2[] isolationDistance)
+    public void StartEnemyMoving()
     {
-        CreateArrays(enemyTransforms, speeds, motionPatterns, motionCharacteristic, isolationDistance);
-
         EnemyMoving().Forget();
         EnemyInitialPlacement().Forget();
     }
@@ -51,7 +50,6 @@ public class EnemyController : IDisposable
         _currentEnemyPosition = new(_enemyCount, Allocator.Persistent);
         _initialPosition = new(_enemyCount, Allocator.Persistent);
         _needToChangeInitialPosition = new(_enemyCount, Allocator.Persistent);
-        _isolationDistance = new(isolationDistance, Allocator.Persistent);
         _enemyTransforms = new(transforms);
     }
 
@@ -59,12 +57,10 @@ public class EnemyController : IDisposable
     {
         var initialPlacementJob = new InitialPlacementJob(ref _positionProcessingMethods,
                                                           ref _currentEnemyPosition,
-                                                          ref _isolationDistance,
                                                           ref _initialPosition,
                                                           ref _needToChangeInitialPosition);
 
         var deltaTime = Time.deltaTime;
-
         var batchSize = _enemyCount / 4;
 
         _enemyInitialPlacement = initialPlacementJob.Schedule(_enemyCount, batchSize, _enemyMoverHandler);
@@ -75,7 +71,7 @@ public class EnemyController : IDisposable
 
             _enemyInitialPlacement.Complete();
 
-            _enemyInitialPlacement = initialPlacementJob.Schedule(_enemyCount, batchSize, _enemyMoverHandler);  // Снова указываем зависимость
+            _enemyInitialPlacement = initialPlacementJob.Schedule(_enemyCount, batchSize, _enemyMoverHandler);
 
             await UniTask.WaitForSeconds(deltaTime);
         }
@@ -105,13 +101,13 @@ public class EnemyController : IDisposable
 
             _enemyMoverHandler.Complete();
 
-            _enemyMoverHandler = enemyMoverJobs.Schedule(_enemyTransforms, _enemyInitialPlacement);  // Снова указываем зависимость
+            _enemyMoverHandler = enemyMoverJobs.Schedule(_enemyTransforms, _enemyInitialPlacement); 
 
             await UniTask.WaitForSeconds(deltaTime);
         }
     }
 
-    public void UpdateEnemyValues(int index, float speed, EnumMotionPattern motionPattern, float2 motionCharacteristic, Vector2 isolationDistance)
+    public void UpdateEnemyValues(int index, float speed, EnumMotionPattern motionPattern, float2 motionCharacteristic)
     {
         if (_enemyCount - 1 < index) return;
 
@@ -121,7 +117,6 @@ public class EnemyController : IDisposable
         _speeds[index] = speed;
         _positionProcessingMethods[index] = motionPattern;
         _motionCharacteristic[index] = motionCharacteristic;
-        _isolationDistance[index] = isolationDistance;
     }
 
     public void Dispose()
@@ -138,7 +133,6 @@ public class EnemyController : IDisposable
         _currentEnemyPosition.Dispose();
         _initialPosition.Dispose();
         _needToChangeInitialPosition.Dispose();
-        _isolationDistance.Dispose();
         _enemyTransforms.Dispose();
     }
 

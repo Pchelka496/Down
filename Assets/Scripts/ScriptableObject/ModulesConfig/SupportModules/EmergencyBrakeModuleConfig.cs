@@ -16,11 +16,11 @@ public class EmergencyBrakeModuleConfig : BaseModuleConfig
         _currentLevel = level;
     }
 
-    public override int GetMaxLevel() => _usageQuantity.Length;
+    public override int GetMaxLevel() => _usageQuantity.Length - 1;
 
     public override bool SetLevelCheck(int level)
     {
-        return !(level > _usageQuantity.Length);
+        return !(level > _usageQuantity.Length - 1);
     }
 
 }

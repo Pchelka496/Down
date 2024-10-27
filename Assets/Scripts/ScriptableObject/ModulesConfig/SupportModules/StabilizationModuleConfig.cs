@@ -16,13 +16,13 @@ public class StabilizationModuleConfig : BaseModuleConfig
         _currentLevel = level;
     }
 
-    public override int GetMaxLevel() => _rotationSpeedOnLevel.Length;
+    public override int GetMaxLevel() => _rotationSpeedOnLevel.Length - 1;
 
     public float GetRotationSpeed() => _rotationSpeedOnLevel[_currentLevel];
 
     public override bool SetLevelCheck(int level)
     {
-        return !(level > _rotationSpeedOnLevel.Length);
+        return !(level > _rotationSpeedOnLevel.Length - 1);
     }
 
 }

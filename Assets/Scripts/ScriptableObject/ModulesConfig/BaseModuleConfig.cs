@@ -7,6 +7,7 @@ public abstract class BaseModuleConfig : ScriptableObject
     [SerializeField][Range(0, 100)] protected int _currentLevel = 0;
     [SerializeField] protected int[] _levelCost = new int[0];
 
+    public virtual bool ActivityCheck() => _currentLevel > 0;
     public abstract void SetLevel(int level);
     public int[] GetLevelCost() => _levelCost;
     public int GetCurrentLevelCost()

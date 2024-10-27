@@ -1,9 +1,11 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 [System.Serializable]
 public class LevelProgressDisplay
 {
+    [SerializeField] RectTransform _containerParent;
     [SerializeField] RectTransform _container;
     [SerializeField] Sprite _filledSprite;
     [SerializeField] Sprite _emptySprite;
@@ -18,8 +20,10 @@ public class LevelProgressDisplay
 
     Image[] _levelImages;
 
-    public void Initialize(int maxLevels, int currentLevel)
+    public async void Initialize(int maxLevels, int currentLevel)
     {
+        await UniTask.DelayFrame(1);
+
         foreach (Transform child in _container)
         {
             MonoBehaviour.Destroy(child.gameObject);

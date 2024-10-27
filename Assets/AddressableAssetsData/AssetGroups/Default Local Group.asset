@@ -26,12 +26,32 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 182bec38e4390eb4c80a823a8e28b168
-    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/WhiteEnemy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 42229b6273fddd444a67803328d5c208
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/SpinningEnemy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68e2bf7372f893d4ba5653e3fc7d6bc6
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/GreenEnemy.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8da0d59512cebd74e8db647504418b60
     m_Address: Material_Shaders/Material/StandartSpriteUnlitMaterial
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 95b7e8da7e45b6d4886752728399ab4f
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/YellowEnemy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f2d05f393fe9a14085e7baebbc3c403
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/BlackEnemy.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -45,23 +65,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c37d7d21cc32cf44ca1cf689215c4a40
-    m_Address: Prefab/PlayerModule/FlightModule/JetEngineModule
+  - m_GUID: cb62f25311e4fe64da9bd49b359e7d7b
+    m_Address: Prefab/UI/UpgradePanel/UpgradePanel
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c7e4ef8c3efb28d4bb87929d907bc95f
-    m_Address: Prefab/Map/Checkpoint/PlatformPiece
+  - m_GUID: e3e2bfedc0ee61c4eaee7bbb0399668e
+    m_Address: Prefab/Effects/ImpactEffect
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f354d9411d8fead4ea2bb50a92154609
-    m_Address: Prefab/PlayerModule/SupportModul/StabilizationModule
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fd76883d090683140854b6da3eca3992
-    m_Address: Material_Shaders/Material/StandartSpriteLitMaterial
+  - m_GUID: fc4215441811ce84489e6ca52ae0e812
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/RedEnemy.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

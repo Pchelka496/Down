@@ -131,7 +131,6 @@ public struct EnemyMoverJob : IJobParallelForTransform
         _currentPosition[index] = newPosition;
     }
 
-
     private void JerkyMoving(TransformAccess transform, int index, Vector2 direction)
     {
         //_speeds[index]

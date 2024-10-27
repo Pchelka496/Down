@@ -1,12 +1,14 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
-
+using System.Threading;
+using System;
 
 [System.Serializable]
-public class PositionComposerController
+public class PositionComposerController : System.IDisposable
 {
-    [SerializeField] ScreenComposerSettings _defaultComposition;
+    [SerializeField] ScreenComposerSettings _lobbyModeComposition;
+    [SerializeField] ScreenComposerSettings _defaultFlyModeComposition;
     [SerializeField] CinemachinePositionComposer _composer;
     [SerializeField] float _maxYScreenPosition = 10f;
     [SerializeField] float _minYScreenPosition = 5f;
@@ -21,34 +23,57 @@ public class PositionComposerController
     float _velocityYRef;
 
     Rigidbody2D _playerRb;
+    CancellationTokenSource _cts;
 
     public void Initialize(Rigidbody2D playerRb)
     {
         _playerRb = playerRb;
-        StartAdjustingLensSettingsAsync().Forget();
     }
 
-    private async UniTaskVoid StartAdjustingLensSettingsAsync()
+    public void SetLobbyMod()
     {
-        while (true)
+        ClearToken(ref _cts);
+        _composer.Composition = _lobbyModeComposition;
+    }
+
+    public void SetFlyMode()
+    {
+        ClearToken(ref _cts);
+        _cts = new();
+
+        try
         {
-            await AdjustLensSettingsBasedOnVelocity();
-            await UniTask.WaitForSeconds(_updateFrequency);
+            StartAdjustingPositionComposterSettings(_cts.Token).Forget();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"Exception caught in StartAdjustingPositionComposterSettings: {ex}");
         }
     }
 
-    private async UniTask AdjustLensSettingsBasedOnVelocity()
+    private async UniTaskVoid StartAdjustingPositionComposterSettings(CancellationToken token)
+    {
+        while (!token.IsCancellationRequested)
+        {
+            await AdjustPositionComposterSetting(token);
+            await UniTask.WaitForSeconds(_updateFrequency, cancellationToken: token);
+        }
+    }
+
+    private async UniTask AdjustPositionComposterSetting(CancellationToken token)
     {
         var velocityY = Mathf.Abs(_playerRb.velocity.y);
 
         var normalizedVelocity = Mathf.InverseLerp(_minVelocityThreshold, _maxVelocityThreshold, velocityY);
-        normalizedVelocity = Mathf.Clamp01(normalizedVelocity); 
+        normalizedVelocity = Mathf.Clamp01(normalizedVelocity);
 
         var targetYScreenPosition = Mathf.Lerp(_minYScreenPosition, _maxYScreenPosition, normalizedVelocity);
 
         var timeElapsed = 0f;
-        var duration = 0.5f; 
+        var duration = 0.5f;
         var initialYScreenPosition = _currentYScreenPosition;
+
+        var defaultComposition = _defaultFlyModeComposition;
 
         while (timeElapsed < duration)
         {
@@ -56,78 +81,35 @@ public class PositionComposerController
 
             _currentYScreenPosition = Mathf.Lerp(initialYScreenPosition, targetYScreenPosition, curveValue);
 
-            _defaultComposition.ScreenPosition = new(0f, _currentYScreenPosition);
-            _composer.Composition = _defaultComposition;
+            defaultComposition.ScreenPosition = new(0f, _currentYScreenPosition);
+            _composer.Composition = defaultComposition;
 
-            await UniTask.Yield();
+            await UniTask.Yield(cancellationToken: token);
 
             timeElapsed += Time.deltaTime;
         }
 
         _currentYScreenPosition = targetYScreenPosition;
-        _defaultComposition.ScreenPosition = new(0f, _currentYScreenPosition);
-        _composer.Composition = _defaultComposition;
-
+        defaultComposition.ScreenPosition = new(0f, _currentYScreenPosition);
+        _composer.Composition = defaultComposition;
     }
 
+    private void ClearToken(ref CancellationTokenSource cts)
+    {
+        if (cts == null) return;
 
-    //private async UniTask AdjustLensSettingsBasedOnVelocity(CancellationToken token)
-    //{
-    //    float previousClampedVelocity = Mathf.FloorToInt(_minVelocityThreshold / _changeThreshold) * _changeThreshold;
+        if (!cts.IsCancellationRequested)
+        {
+            cts.Cancel();
+        }
 
-    //    while (!token.IsCancellationRequested)
-    //    {
-    //        float velocityY = Mathf.Abs(_playerRb.velocity.y);
+        cts.Dispose();
+        cts = null;
+    }
 
-    //        // Ограничиваем скорость по Y между порогами
-    //        float clampedVelocity = Mathf.Clamp(velocityY, _minVelocityThreshold, _maxVelocityThreshold);
-
-    //        // Округляем к ближайшему шагу (_changeThreshold)
-    //        float roundedVelocity = Mathf.FloorToInt(clampedVelocity / _changeThreshold) * _changeThreshold;
-
-    //        if (roundedVelocity != previousClampedVelocity)
-    //        {
-    //            // Нормализуем скорость для получения значения от 0 до 1
-    //            float t = Mathf.InverseLerp(_minVelocityThreshold, _maxVelocityThreshold, roundedVelocity);
-
-    //            // Применяем кривую интерполяции
-    //            float interpolatedValue = _interpolationCurve.Evaluate(t);
-
-    //            await SmoothlyAdjustLensSettings(interpolatedValue, token);
-
-    //            previousClampedVelocity = roundedVelocity;
-    //        }
-
-    //        await UniTask.WaitForSeconds(_updateFrequency, cancellationToken: token);
-    //    }
-    //}
-
-    //private async UniTask SmoothlyAdjustLensSettings(float interpolationFactor, CancellationToken token)
-    //{
-    //    float targetYPosition = Mathf.Lerp(_minYScreenPosition, _maxYScreenPosition, interpolationFactor);
-
-    //    float startValue = _currentYScreenPosition;
-
-    //    float duration = 1f;
-    //    float timeElapsed = 0f;
-
-    //    while (timeElapsed < duration && !token.IsCancellationRequested)
-    //    {
-    //        float t = timeElapsed / duration;
-    //        float newValue = Mathf.Lerp(startValue, targetYPosition, t);
-
-    //        _defaultComposition.ScreenPosition = new(0f, newValue);
-    //        _composer.Composition = _defaultComposition;
-
-    //        await UniTask.Yield(token);
-
-    //        timeElapsed += Time.deltaTime;
-    //    }
-
-    //    _currentYScreenPosition = targetYPosition;
-
-    //    _defaultComposition.ScreenPosition = new(0f, targetYPosition);
-    //    _composer.Composition = _defaultComposition;
-    //}
+    public void Dispose()
+    {
+        ClearToken(ref _cts);
+    }
 
 }

@@ -2,9 +2,10 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
 using System.Threading;
+using System;
 
 [System.Serializable]
-public class CameraShaker
+public class CameraShaker : System.IDisposable
 {
     [SerializeField] CinemachineBasicMultiChannelPerlin _cameraNoise;
     [SerializeField] float _defaultShakeDuration = 0.5f;
@@ -25,13 +26,20 @@ public class CameraShaker
     {
         if (_cameraNoise == null) return;
 
-        _cts?.Cancel();
-        _cts = new CancellationTokenSource();
+        ClearToken(ref _cts);
+        _cts = new();
 
         _cameraNoise.AmplitudeGain = _shakeAmplitude;
         _cameraNoise.FrequencyGain = _shakeFrequency;
 
-        await UniTask.WaitForSeconds(duration ?? _defaultShakeDuration, cancellationToken: _cts.Token);
+        try
+        {
+            await UniTask.WaitForSeconds(duration ?? _defaultShakeDuration, cancellationToken: _cts.Token);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"Exception caught in StartShake WaitForSeconds : {ex}");
+        }
 
         StopShake();
     }
@@ -43,8 +51,8 @@ public class CameraShaker
             return UniTask.FromException(new System.Exception("Camera noise component not found."));
         }
 
-        _cts?.Cancel();
-        _cts = new CancellationTokenSource();
+        ClearToken(ref _cts);
+        _cts = new();
 
         _cameraNoise.AmplitudeGain = _shakeAmplitude;
         _cameraNoise.FrequencyGain = _shakeFrequency;
@@ -59,7 +67,25 @@ public class CameraShaker
         _cameraNoise.AmplitudeGain = 0f;
         _cameraNoise.FrequencyGain = 0f;
 
-        _cts?.Cancel();
+        ClearToken(ref _cts);
+    }
+    private void ClearToken(ref CancellationTokenSource cts)
+    {
+        if (cts == null) return;
+
+        if (!cts.IsCancellationRequested)
+        {
+            cts.Cancel();
+        }
+
+        cts.Dispose();
+        cts = null;
+    }
+
+
+    public void Dispose()
+    {
+        ClearToken(ref _cts);
     }
 
 }

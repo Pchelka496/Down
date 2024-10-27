@@ -15,11 +15,7 @@ public struct InitialPlacementJob : IJobParallelFor
     const float MAX_Y_TRAVEL_DISTANCE_TO_PLAYER = 110f;
     const float MIN_Y_TRAVEL_DISTANCE_TO_PLAYER = 50f;
 
-    // RandomHelper.GetRandomFloat(10f, 100f);
-
     [ReadOnly] readonly NativeArray<EnumMotionPattern> _positionProcessingMethods;
-    [ReadOnly] readonly NativeArray<Vector2> _isolationDistance;
-    
     [WriteOnly] NativeArray<bool> _needToChange;
 
     [ReadOnly] public readonly NativeArray<Vector2> CurrentPosition;
@@ -27,7 +23,6 @@ public struct InitialPlacementJob : IJobParallelFor
 
     public InitialPlacementJob(ref NativeArray<EnumMotionPattern> positionProcessingMethods,
                                ref NativeArray<Vector2> CurrentPosition,
-                               ref NativeArray<Vector2> isolationDistance,
                                ref NativeArray<Vector2> TargetPosition,
                                ref NativeArray<bool> NeedToChange) : this()
     {
@@ -35,7 +30,6 @@ public struct InitialPlacementJob : IJobParallelFor
         this.CurrentPosition = CurrentPosition;
         this.TargetPosition = TargetPosition;
         this._needToChange = NeedToChange;
-        _isolationDistance = isolationDistance;
     }
 
     public void Execute(int index)
