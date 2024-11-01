@@ -1,19 +1,20 @@
+using TMPro;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 
 public struct InitialPlacementJob : IJobParallelFor
 {
-    const float UPDATE_POSITION_Y_DISTANCE_TO_PLAYER = 120f;
-    const float UPDATE_POSITION_X_DISTANCE_TO_PLAYER = 50f;
+    const float UPDATE_POSITION_Y_DISTANCE_TO_PLAYER = 250f;
+    const float UPDATE_POSITION_X_DISTANCE_TO_PLAYER = 60f;
 
-    const float MAX_X_STATIC_ENEMY_DISTANCE_TO_PLAYER = 10f;
+    const float MAX_X_STATIC_ENEMY_DISTANCE_TO_PLAYER = 15f;
 
-    const float MAX_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 40f;
-    const float MIN_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 10f;
+    const float MAX_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 50f;
+    const float MIN_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 0f;
 
-    const float MAX_Y_TRAVEL_DISTANCE_TO_PLAYER = 110f;
-    const float MIN_Y_TRAVEL_DISTANCE_TO_PLAYER = 50f;
+    const float MAX_Y_TRAVEL_DISTANCE_TO_PLAYER = 200f;
+    const float MIN_Y_TRAVEL_DISTANCE_TO_PLAYER = 80f;
 
     [ReadOnly] readonly NativeArray<EnumMotionPattern> _positionProcessingMethods;
     [WriteOnly] NativeArray<bool> _needToChange;
@@ -34,19 +35,20 @@ public struct InitialPlacementJob : IJobParallelFor
 
     public void Execute(int index)
     {
-        if (Mathf.Abs(CharacterPositionMeter.XPosition - CurrentPosition[index].x) > UPDATE_POSITION_X_DISTANCE_TO_PLAYER)
+        if (Mathf.Abs(CharacterPositionMeter.YPosition - CurrentPosition[index].y) > UPDATE_POSITION_Y_DISTANCE_TO_PLAYER
+            ||
+            Mathf.Abs(CharacterPositionMeter.XPosition - CurrentPosition[index].x) > UPDATE_POSITION_X_DISTANCE_TO_PLAYER)
         {
-            GlobalXTransfer(index);
-            _needToChange[index] = true;
-        }
-        if (Mathf.Abs(CharacterPositionMeter.YPosition - CurrentPosition[index].y) > UPDATE_POSITION_Y_DISTANCE_TO_PLAYER)
-        {
-            GlobalYTransfer(index);
+            var newXPosition = GlobalXСalculation(index);
+            var newYPosition = GlobalYСalculation(index);
+
+            TargetPosition[index] = new(newXPosition, newYPosition);
+
             _needToChange[index] = true;
         }
     }
 
-    private void GlobalXTransfer(int index)
+    private float GlobalXСalculation(int index)
     {
         var currentPosition = CurrentPosition[index];
         float newXPosition;
@@ -68,22 +70,19 @@ public struct InitialPlacementJob : IJobParallelFor
         }
         else
         {
-            // Для статичных объектов или вертикальных движений размещаем его по центру игрока по оси X
+            // Для статичных объектов или вертикальных движений размещаем его по центру игрока по оси
             newXPosition = CharacterPositionMeter.XPosition + RandomHelper.GetRandomFloat(-MAX_X_STATIC_ENEMY_DISTANCE_TO_PLAYER, MAX_X_STATIC_ENEMY_DISTANCE_TO_PLAYER);
         }
 
-        // Обновляем позицию по оси X
-        TargetPosition[index] = new(newXPosition, currentPosition.y);
-
+        return newXPosition;
     }
 
-    private void GlobalYTransfer(int index)
+    private float GlobalYСalculation(int index)
     {
         var currentPosition = CurrentPosition[index];
         var newYPosition = CharacterPositionMeter.YPosition - RandomHelper.GetRandomFloat(MIN_Y_TRAVEL_DISTANCE_TO_PLAYER, MAX_Y_TRAVEL_DISTANCE_TO_PLAYER);
 
-        TargetPosition[index] = new(currentPosition.x, newYPosition);
-
+        return newYPosition;
     }
 
 }

@@ -188,7 +188,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &28845615
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1189,7 +1189,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: -1392185245
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!225 &519064067
 CanvasGroup:
@@ -2083,6 +2083,30 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3405173535535298813, guid: b09e4194dba3f4c4aaba3d67f7807713, type: 3}
+      propertyPath: _soundPlayer._maxPitch
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405173535535298813, guid: b09e4194dba3f4c4aaba3d67f7807713, type: 3}
+      propertyPath: _soundPlayer._minPitch
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405173535535298813, guid: b09e4194dba3f4c4aaba3d67f7807713, type: 3}
+      propertyPath: _damageSounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405173535535298813, guid: b09e4194dba3f4c4aaba3d67f7807713, type: 3}
+      propertyPath: '_damageSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 8a0f294a1d62ca642ac17b7de116059c, type: 3}
+    - target: {fileID: 3405173535535298813, guid: b09e4194dba3f4c4aaba3d67f7807713, type: 3}
+      propertyPath: _soundPlayer._sounds.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405173535535298813, guid: b09e4194dba3f4c4aaba3d67f7807713, type: 3}
+      propertyPath: '_soundPlayer._sounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 8a0f294a1d62ca642ac17b7de116059c, type: 3}
     - target: {fileID: 4064624497662816240, guid: b09e4194dba3f4c4aaba3d67f7807713, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2097,7 +2121,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6664346611491071001, guid: b09e4194dba3f4c4aaba3d67f7807713, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1001.96
+      value: 99999
       objectReference: {fileID: 0}
     - target: {fileID: 6664346611491071001, guid: b09e4194dba3f4c4aaba3d67f7807713, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2939,13 +2963,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57f460818d82e574285abc41e214acdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minPitch: 0.7
-  _maxPitch: 1.1
-  _volume: 0.4
-  _pickUpRewardAudio: {fileID: 8300000, guid: 69b88901c2542dd4388daf44c0a6c4d8, type: 3}
+  _soundPlayer:
+    _minPitch: 0.8
+    _maxPitch: 1.2
+    _volume: 0.7
+    _audioClip: {fileID: 8300000, guid: 69b88901c2542dd4388daf44c0a6c4d8, type: 3}
+    _resetTime: 3
+    _maxCoinsForMaxPitch: 5
   _text: {fileID: 246160106}
-  _pitchResetDelay: 3
-  _maxCoinsForMaxPitch: 10
 --- !u!114 &1337353399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3762,7 +3787,7 @@ Transform:
   m_GameObject: {fileID: 1984348348}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.00000011920929, y: 1001.96, z: -10}
+  m_LocalPosition: {x: -0.00000011920929, y: 99999, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

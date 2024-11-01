@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -13,17 +14,12 @@ public class RewardCounter : MonoBehaviour
     private void Construct(LevelManager levelManager, AudioSourcePool audioSource)
     {
         _soundPlayer.Initialize(audioSource);
-        levelManager.SubscribeToRoundStart(RoundStart);
     }
 
-    private void RoundStart(LevelManager levelManager)
+    private void OnEnable()
     {
-        levelManager.SubscribeToRoundEnd(RoundEnd);
-    }
-
-    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
-    {
-        levelManager.SubscribeToRoundStart(RoundStart);
+        _points = 0;
+        UpdateText();
     }
 
     public void IncreasePointsPerRound(int increaseValue)
@@ -35,6 +31,7 @@ public class RewardCounter : MonoBehaviour
         UpdateText();
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void UpdateText()
     {
         _text.text = _points.ToString();

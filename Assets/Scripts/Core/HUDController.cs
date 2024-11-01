@@ -3,24 +3,26 @@ using Zenject;
 
 public class HUDManager : MonoBehaviour
 {
+    [Header("Elements for switching off in lobby mode")]
     [SerializeField] GameObject[] _hudElements; 
 
     [Inject]
     private void Construct(LevelManager levelManager)
     {
         levelManager.SubscribeToRoundStart(RoundStart);
-        levelManager.SubscribeToRoundEnd(RoundEnd);
 
         SetHUDActive(false);
     }
 
     private void RoundStart(LevelManager levelManager)
     {
+        levelManager.SubscribeToRoundEnd(RoundEnd);
         SetHUDActive(true);
     }
 
     private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
     {
+        levelManager.SubscribeToRoundStart(RoundStart);
         SetHUDActive(false);
     }
 

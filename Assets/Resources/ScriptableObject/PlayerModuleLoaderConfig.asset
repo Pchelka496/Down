@@ -13,9 +13,24 @@ MonoBehaviour:
   m_Name: PlayerModuleLoaderConfig
   m_EditorClassIdentifier: 
   _moduleInfoArray:
-  - _modulePrefabAddress: Prefab/PlayerModule/FlightModule/EngineModule
+  - _modulePrefabAddress:
+      m_AssetGUID: c37d7d21cc32cf44ca1cf689215c4a40
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     _activityCheck: {fileID: 11400000, guid: 86305f5a4a685e24ca4675511b6d8a12, type: 2}
-  - _modulePrefabAddress: Prefab/PlayerModule/SupportModul/StabilizationModule
+  - _modulePrefabAddress:
+      m_AssetGUID: f354d9411d8fead4ea2bb50a92154609
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
     _activityCheck: {fileID: 11400000, guid: 1d39a1f1e7a0f624e96e99cf9b0d8174, type: 2}
-  - _modulePrefabAddress: Prefab/PlayerModule/SupportModul/AirBrakeModule
+  - _modulePrefabAddress:
+      m_AssetGUID: 4739f8c1cc8fd3f46a9240d71ac3ca01
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 1
     _activityCheck: {fileID: 11400000, guid: 01af5e91489c1324bbc678ea0a162154, type: 2}

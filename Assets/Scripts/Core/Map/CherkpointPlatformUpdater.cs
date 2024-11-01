@@ -29,9 +29,9 @@ public class CheckpointPlatformController
         Addressables.Release(_currentPlatformHandle);
     }
 
-    public async UniTask<CheckpointPlatform> CreatePlatform(string prefabAddress, float height)
+    public async UniTask<CheckpointPlatform> CreatePlatform(AssetReference platformReference, float height)
     {
-        var checkPoint = await LoadPrefabs(prefabAddress);
+        var checkPoint = await LoadPrefabs(platformReference);
 
         if (checkPoint.TryGetComponent<CheckpointPlatform>(out var checkpointPlatform))
         {
@@ -53,9 +53,9 @@ public class CheckpointPlatformController
         _currentPlatform = checkpointPlatform;
     }
 
-    private async UniTask<GameObject> LoadPrefabs(string address)
+    private async UniTask<GameObject> LoadPrefabs(AssetReference platformReference)
     {
-        _currentPlatformHandle = Addressables.LoadAssetAsync<GameObject>(address);
+        _currentPlatformHandle = Addressables.LoadAssetAsync<GameObject>(platformReference);
 
         await _currentPlatformHandle;
 

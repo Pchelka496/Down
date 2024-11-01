@@ -47,7 +47,7 @@ public class PlayerModuleLoader : MonoBehaviour
 
     private async void ModuleLoud(PlayerModuleLoaderConfig.ModuleInfo moduleInfo)
     {
-        moduleInfo.CreatedModule = await GetModuleObject(moduleInfo.ModulePrefabAddress);
+        moduleInfo.CreatedModule = await GetModuleObject(moduleInfo.ModulePrefabReference);
     }
 
     private void ReleaseOldModule(AsyncOperationHandle<GameObject> handle)
@@ -56,9 +56,9 @@ public class PlayerModuleLoader : MonoBehaviour
         Addressables.Release(handle);
     }
 
-    private async UniTask<BaseModule> GetModuleObject(string address, AsyncOperationHandle<GameObject> handle = new())
+    private async UniTask<BaseModule> GetModuleObject(AssetReference moduleReference, AsyncOperationHandle<GameObject> handle = new())
     {
-        handle = Addressables.LoadAssetAsync<GameObject>(address);
+        handle = Addressables.LoadAssetAsync<GameObject>(moduleReference);
 
         await handle;
 

@@ -5,7 +5,7 @@ using Zenject;
 
 public class LevelManager : MonoBehaviour
 {
-    public const float PLAYER_START_Y_POSITION = 99999f;
+    public const float PLAYER_START_Y_POSITION = 99989.1f;
     public const float PLAYER_START_X_POSITION = 0;
 
     [SerializeField] LevelManagerConfig _config;

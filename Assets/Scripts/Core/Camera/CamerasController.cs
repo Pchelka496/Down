@@ -23,6 +23,7 @@ public class CamerasController : MonoBehaviour
         _positionComposerController.Initialize(_player.Rb);
 
         SetLobbyMod();
+        _cameraDefaultTrackingTarget.position = new(LevelManager.PLAYER_START_X_POSITION, LevelManager.PLAYER_START_Y_POSITION);
     }
 
     private void RoundStart(LevelManager levelManager)

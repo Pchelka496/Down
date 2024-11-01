@@ -12,208 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 053971fb63537044298a61ac8d923740, type: 3}
   m_Name: EnemyManagerConfig
   m_EditorClassIdentifier: 
-  _enemyCorePrefab: Prefab/Creatures/EnemyCore
-  _enemyCount: 50
+  _enemyCorePrefab:
+    m_AssetGUID: ad34472246b673149ab1aa701880c768
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  _enemyCount: 100
+  _challengeCount: 1
   _enemyRegions:
-  - _enemies:
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 0
-      MotionCharacteristic:
-        x: 0.5
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 1
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    _startHeight: 10000
-  - _enemies:
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 0
-      MotionCharacteristic:
-        x: 0.5
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 1
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    _startHeight: 20000
-  - _enemies:
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 0
-      MotionCharacteristic:
-        x: 0.5
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 1
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    _startHeight: 30000
-  - _enemies:
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 0
-      MotionCharacteristic:
-        x: 0.5
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 1
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    _startHeight: 40000
-  - _enemies:
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 0
-      MotionCharacteristic:
-        x: 0.5
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 1
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    _startHeight: 50000
-  - _enemies:
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 0
-      MotionCharacteristic:
-        x: 0.5
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 1
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    _startHeight: 60000
-  - _enemies:
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 0
-      MotionCharacteristic:
-        x: 0.5
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 1
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    _startHeight: 70000
-  - _enemies:
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 0
-      MotionCharacteristic:
-        x: 0.5
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/EnemyCluster_0.prefab
-      Speed: 2
-      MotionPattern: 1
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    _startHeight: 80000
-  - _enemies:
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/WhiteEnemy.prefab
-      Speed: 2
-      MotionPattern: 6
-      MotionCharacteristic:
-        x: 0.5
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.5
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/RedEnemy.prefab
-      Speed: 3
-      MotionPattern: 1
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.1
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/RedEnemy.prefab
-      Speed: 3
-      MotionPattern: 0
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.1
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/YellowEnemy.prefab
-      Speed: 2
-      MotionPattern: 2
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.1
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/YellowEnemy.prefab
-      Speed: 2
-      MotionPattern: 2
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.1
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/YellowEnemy.prefab
-      Speed: 2
-      MotionPattern: 2
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.3
-    - EnemyAddress: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/YellowEnemy.prefab
-      Speed: 2
-      MotionPattern: 2
-      MotionCharacteristic:
-        x: 1
-        y: 1
-      IsolationDistance: {x: 0, y: 0}
-      RelativeAmount: 0.2
-    _startHeight: 99700
+  - {fileID: 11400000, guid: 069c3f731a5906242aa6b1abe68e2bce, type: 2}
+  - {fileID: 11400000, guid: 6eb344382735c294fac154a709fe0b62, type: 2}
+  - {fileID: 11400000, guid: bb36f32aa5984b84a89b8864f5d4a679, type: 2}
+  - {fileID: 11400000, guid: add76ee430958c74fa84d080b2edbf7b, type: 2}
+  - {fileID: 11400000, guid: bc58ebe86c1024146acd7f4ef98ca014, type: 2}
+  - {fileID: 11400000, guid: 324219f37c1f52540bece209cb329a2b, type: 2}
+  - {fileID: 11400000, guid: 324219f37c1f52540bece209cb329a2b, type: 2}
+  - {fileID: 11400000, guid: 3be7d1fe38f925a49aa15755c6527627, type: 2}
+  - {fileID: 11400000, guid: fdb24fd39bd1f134babf491b7bcc5542, type: 2}
+  - {fileID: 11400000, guid: 6365606e2a4702447a324230a9cdb7c6, type: 2}
+  - {fileID: 11400000, guid: 3ce71e7583a777e43ae7d3a38aea1934, type: 2}
+  _challengePrefabs:
+  - {fileID: 11400000, guid: 9daa7a351074914459fed9a295bc95e4, type: 2}

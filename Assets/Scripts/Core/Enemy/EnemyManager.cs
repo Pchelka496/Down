@@ -1,29 +1,30 @@
 using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
-using static EnemyManagerConfig;
+using static EnemyConfig;
 
 public class EnemyManager : MonoBehaviour
 {
     public const int ENEMY_LAYER_INDEX = 8;
-    public const float ENEMY_SPAWN_X_POSITION = LevelManager.PLAYER_START_X_POSITION + 123456789f;
-    public const float ENEMY_SPAWN_Y_POSITION = LevelManager.PLAYER_START_Y_POSITION * 2f;
+    public const float ENEMY_SPAWN_X_POSITION = LevelManager.PLAYER_START_X_POSITION + 99000f;
+    public const float ENEMY_SPAWN_Y_POSITION = LevelManager.PLAYER_START_Y_POSITION + 1000f;
+    public const float DELAY_BEFORE_START_CHALLENGE_SPAWNING = 3f;
+    public const float DELAY_BEFORE_CHALLENGE_RESPAWN = 2f;
 
     EnemyManagerConfig _config;
+    EnemyCoreFactory _enemyCoreFactory;
+    EnemyVisualPartController _enemyVisualPartFactory;
+    EnemyVisualPartController _challengeVisualPartFactory;
+    EnemyMovementController _enemyController;
     EnemyCore[] _enemyCore;
-    EnemyController _enemyController;
     CharacterController _player;
 
-    AsyncOperationHandle<GameObject>[] _loadedHandles;
-    EnemyVisualPart[] _enemyVisualParts;
+    AsyncOperationHandle<GameObject>[] _visualPartsLoadedHandles;
     CancellationTokenSource _enemyRegionUpdaterCts;
 
     [Inject]
@@ -36,12 +37,23 @@ public class EnemyManager : MonoBehaviour
     public async void Initialize(EnemyManagerConfig config)
     {
         _config = config;
-        _enemyController = GameplaySceneInstaller.DiContainer.Instantiate<EnemyController>();
+        _enemyCore = new EnemyCore[_config.AllEnemyCount];
 
-        _enemyVisualParts = new EnemyVisualPart[_config.EnemyCount];
+        var diContainer = GameplaySceneInstaller.DiContainer;
 
-        var enemyControllerRoundStart = await CreateEnemies();
-        _enemyController.Initialize(_config.EnemyCount,
+        _enemyCoreFactory = diContainer.Instantiate<EnemyCoreFactory>();
+        _enemyCoreFactory.Initialize(this, config, _enemyCore);
+
+        _challengeVisualPartFactory = diContainer.Instantiate<EnemyVisualPartController>();
+        _challengeVisualPartFactory.Initialize(this, _config.ChallengeCount);
+
+        _enemyVisualPartFactory = diContainer.Instantiate<EnemyVisualPartController>();
+        _enemyVisualPartFactory.Initialize(this, _config.EnemyCount);
+
+        _enemyController = diContainer.Instantiate<EnemyMovementController>();
+
+        var enemyControllerRoundStart = await _enemyCoreFactory.CreateEnemies();
+        _enemyController.Initialize(_config.AllEnemyCount,
                                     enemyControllerRoundStart.Transforms,
                                     enemyControllerRoundStart.Speeds,
                                     enemyControllerRoundStart.EnumMotionPatterns,
@@ -57,21 +69,45 @@ public class EnemyManager : MonoBehaviour
         _enemyRegionUpdaterCts = new CancellationTokenSource();
 
         EnemyRegionUpdater(_enemyRegionUpdaterCts.Token).Forget();
+        CreateChallenge();
 
         levelManager.SubscribeToRoundEnd(RoundEnd);
+    }
+
+    private async void CreateChallenge()
+    {
+        await UniTask.WaitForSeconds(DELAY_BEFORE_START_CHALLENGE_SPAWNING);
+
+        _challengeVisualPartFactory.SetEnemies(_config.ChallengeEnemies);
+
+        var enemyVisualParts = await _challengeVisualPartFactory.LoadAllEnemyVisualParts();
+
+        for (int i = 0; i < _challengeVisualPartFactory.EnemyCount; i++)
+        {
+            var enemyInfo = await _challengeVisualPartFactory.UpdateVisualPart(i);
+            var indexInManager = _config.AllEnemyCount - 1 - i;
+
+            EnemySettings(indexInManager,
+                            _enemyCore[indexInManager],
+                            enemyInfo.EnemyVisualPart,
+                            enemyInfo.Enemy.Speed,
+                            enemyInfo.Enemy.MotionPattern,
+                            enemyInfo.Enemy.MotionCharacteristic
+                            );
+        }
     }
 
     public void RoundEnd(LevelManager levelManager, EnumRoundResults results)
     {
         _enemyRegionUpdaterCts?.Cancel();
 
-        ReleaseLoadedResources().Forget();
+        ReleaseLoadedResources();
 
         levelManager.SubscribeToRoundStart(RoundStart);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private void ResetEnemyPosition()
+    private void ResetAllEnemyPosition()
     {
         Vector2 spawnPosition = new Vector2(ENEMY_SPAWN_X_POSITION, ENEMY_SPAWN_Y_POSITION);
 
@@ -81,69 +117,16 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    private async UniTask<EnemyControllerRoundStart> CreateEnemies()
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void ResetEnemyPosition(int index)
     {
-        var enemyCorePrefab = await LoadEnemyCorePrefabs(_config.EnemyCorePrefab);
-        var enemyCount = _config.EnemyCount;
-
-        _enemyCore = new EnemyCore[enemyCount];
-
-        var enemyTransforms = new Transform[enemyCount];
-
-        var enemySpeeds = new float[enemyCount];
-        var motionPatterns = new EnumMotionPattern[enemyCount];
-        var motionCharacteristic = new float2[enemyCount];
-        var isolationDistance = new Vector2[enemyCount];
-
-        var installer = GameplaySceneInstaller.DiContainer;
-        var enemyGameObjectPrefab = enemyCorePrefab.gameObject;
-
-        for (var i = 0; i < enemyCount; i++)
-        {
-            var enemyCore = installer.InstantiatePrefabForComponent<EnemyCore>(enemyGameObjectPrefab, new(ENEMY_SPAWN_X_POSITION, ENEMY_SPAWN_Y_POSITION), Quaternion.identity, transform);
-
-            if (enemyCore == null)
-            {
-                Debug.LogError("EnemyCore component missing in the instantiated prefab.");
-                continue;
-            }
-
-            enemyTransforms[i] = enemyCore.transform;
-            _enemyCore[i] = enemyCore;
-        }
-
-        return new EnemyControllerRoundStart(enemyTransforms, enemySpeeds, motionPatterns, motionCharacteristic, isolationDistance);
-    }
-
-    private async UniTask<EnemyCore> LoadEnemyCorePrefabs(string address)
-    {
-        AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);
-
-        await handle;
-
-        if (handle.Status == AsyncOperationStatus.Succeeded)
-        {
-            if (handle.Result.TryGetComponent<EnemyCore>(out var enemyCore))
-            {
-                return enemyCore;
-            }
-            else
-            {
-                Debug.LogError("Error get component EnemyCore.");
-                return default;
-            }
-        }
-        else
-        {
-            Debug.LogError("Error loading via Addressables.");
-            return default;
-        }
+        _enemyCore[index].transform.position = new Vector2(ENEMY_SPAWN_X_POSITION, ENEMY_SPAWN_Y_POSITION);
     }
 
     private async UniTask EnemyRegionUpdater(CancellationToken token)
     {
         var enemyRegions = _config.EnemyRegions;
-        EnemyRegion currentRegion = null;
+        EnemyRegionConfig currentRegion = null;
 
         while (enemyRegions.Count > 0 && !token.IsCancellationRequested)
         {
@@ -167,55 +150,13 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    private async void UpdateEnemyRegion(EnemyManagerConfig.EnemyRegion enemyRegion)
+    private async void UpdateEnemyRegion(EnemyRegionConfig enemyRegion)
     {
-        var enemies = CalculateEnemyVisualPartIndex(enemyRegion.Enemies, _enemyCore.Length);
+        var enemies = _enemyVisualPartFactory.UpdateEnemyRegion(enemyRegion.Enemies);
 
-        var enemyVisualParts = await LoadAllEnemyVisualParts(enemies);
+        var enemyVisualParts = await _enemyVisualPartFactory.LoadAllEnemyVisualParts();
 
         AssignEnemySettings(enemies, enemyVisualParts);
-    }
-
-    private Enemy[] CalculateEnemyVisualPartIndex(Enemy[] enemies, int totalEnemies)
-    {
-        List<Enemy> calculatedEnemies = new List<Enemy>();
-        int currentCount = 0;
-
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            int count = Mathf.RoundToInt(totalEnemies * enemies[i].RelativeAmount);
-            currentCount += count;
-
-            for (int j = 0; j < count; j++)
-            {
-                calculatedEnemies.Add(enemies[i]);
-            }
-        }
-
-        if (currentCount < totalEnemies)
-        {
-            int remainingCount = totalEnemies - currentCount;
-            Enemy emptyEnemy = Enemy.EmptyEnemy();
-
-            for (int i = 0; i < remainingCount; i++)
-            {
-                calculatedEnemies.Add(emptyEnemy);
-            }
-        }
-
-        return calculatedEnemies.Take(totalEnemies).ToArray();
-    }
-
-    private async UniTask<EnemyVisualPart[]> LoadAllEnemyVisualParts(Enemy[] enemies)
-    {
-        var enemyVisualPartAddresses = new string[enemies.Length];
-
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            enemyVisualPartAddresses[i] = enemies[i].EnemyAddress;
-        }
-
-        return await LoadEnemyVisualPart(enemyVisualPartAddresses);
     }
 
     private void AssignEnemySettings(Enemy[] enemies, EnemyVisualPart[] enemyVisualParts)
@@ -233,7 +174,7 @@ public class EnemyManager : MonoBehaviour
                          );
         }
 
-        ResetEnemyPosition();
+        ResetAllEnemyPosition();
     }
 
     private void EnemySettings(int index, EnemyCore enemy, EnemyVisualPart visualPart, float speed, EnumMotionPattern motionPattern, float2 motionCharacteristic)
@@ -245,66 +186,37 @@ public class EnemyManager : MonoBehaviour
             return;
         }
 #endif
+        if (visualPart != null)
+        {
+            visualPart.IndexInManager = index;
+        }
 
         enemy.Initialize(visualPart);
         _enemyController.UpdateEnemyValues(index, speed, motionPattern, motionCharacteristic);
     }
 
-    private async UniTask<EnemyVisualPart[]> LoadEnemyVisualPart(string[] addresses)
+    public async void UpdateChallenge(EnemyVisualPart visualPart)
     {
-        await ReleaseLoadedResources();
+        var indexInManager = visualPart.IndexInManager;
 
-        var installer = GameplaySceneInstaller.DiContainer;
-        var loadedObjects = new EnemyVisualPart[addresses.Length];
+        var enemyInfo = await _challengeVisualPartFactory.UpdateVisualPart(visualPart.IndexInFactory, DELAY_BEFORE_CHALLENGE_RESPAWN);
 
-        _loadedHandles = new AsyncOperationHandle<GameObject>[addresses.Length];
+        ResetEnemyPosition(indexInManager);
 
-        for (int i = 0; i < addresses.Length; i++)
-        {
-            if (addresses[i] == null)
-            {
-                continue;
-            }
-
-            var handle = Addressables.LoadAssetAsync<GameObject>(addresses[i]);
-            await handle;
-
-            if (handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                var enemyVisualPart = installer.InstantiatePrefabForComponent<EnemyVisualPart>(handle.Result);
-                loadedObjects[i] = enemyVisualPart;
-                _loadedHandles[i] = handle;
-                _enemyVisualParts[i] = enemyVisualPart;
-            }
-            else
-            {
-                Debug.LogError($"Failed to load asset at {addresses[i]}");
-            }
-        }
-
-        return loadedObjects;
+        EnemySettings(indexInManager,
+                        _enemyCore[indexInManager],
+                        enemyInfo.EnemyVisualPart,
+                        enemyInfo.Enemy.Speed,
+                        enemyInfo.Enemy.MotionPattern,
+                        enemyInfo.Enemy.MotionCharacteristic
+                        );
     }
 
-    private async UniTask ReleaseLoadedResources()
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void ReleaseLoadedResources()
     {
-        if (_loadedHandles == null) return;
-
-        foreach (var enemy in _enemyVisualParts)
-        {
-            Destroy(enemy.gameObject);
-        }
-
-        await UniTask.DelayFrame(1);
-
-        foreach (var handle in _loadedHandles)
-        {
-            if (handle.IsValid())
-            {
-                Addressables.Release(handle);
-            }
-        }
-
-        _loadedHandles = null;
+        _enemyVisualPartFactory.ReleaseAllLoadedResources().Forget();
+        _challengeVisualPartFactory.ReleaseAllLoadedResources().Forget();
     }
 
     private void ClearToken(ref CancellationTokenSource cts)
@@ -324,10 +236,10 @@ public class EnemyManager : MonoBehaviour
     {
         _enemyController.Dispose();
         ClearToken(ref _enemyRegionUpdaterCts);
-        ReleaseLoadedResources().Forget();
+        ReleaseLoadedResources();
     }
 
-    private readonly struct EnemyControllerRoundStart
+    public readonly struct EnemyControllerRoundStart
     {
         public readonly Transform[] Transforms;
         public readonly float[] Speeds;

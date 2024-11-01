@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 [CreateAssetMenu(fileName = "PlayerModuleLoaderConfig", menuName = "Scriptable Objects/PlayerModuleLoaderConfig")]
@@ -11,12 +12,12 @@ public class PlayerModuleLoaderConfig : ScriptableObject
     [System.Serializable]
     public record ModuleInfo
     {
-        [SerializeField] string _modulePrefabAddress;
+        [SerializeField] AssetReference _modulePrefabAddress;
         [SerializeField] BaseModuleConfig _activityCheck;
         BaseModule _createdModule;
         AsyncOperationHandle<GameObject> _createdModuleHandler;
 
-        public string ModulePrefabAddress { get => _modulePrefabAddress; set => _modulePrefabAddress = value; }
+        public AssetReference ModulePrefabReference { get => _modulePrefabAddress; set => _modulePrefabAddress = value; }
         public BaseModuleConfig ActivityCheck { get => _activityCheck; set => _activityCheck = value; }
 
         public BaseModule CreatedModule { get => _createdModule; set => _createdModule = value; }

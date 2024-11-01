@@ -13,9 +13,6 @@ public struct EnemyMoverJob : IJobParallelForTransform
     [ReadOnly] readonly NativeArray<Vector2> _initialPosition;
     NativeArray<bool> _needToChangeInitialPosition;
 
-    // [ReadOnly] readonly NativeArray<float> _isolationDistance;
-    //[ReadOnly] NativeArray<Vector2> _allEnemyPosition;
-
     [ReadOnly] public float Time;
     [ReadOnly] public float DeltaTime;
 
@@ -91,6 +88,11 @@ public struct EnemyMoverJob : IJobParallelForTransform
                 {
                     return;
                 }
+            case EnumMotionPattern.TurningOnTheSpot:
+                {
+                    RotateOnTheSpot(transform, index);
+                    return;
+                }
             default:
                 {
                     return;
@@ -135,6 +137,13 @@ public struct EnemyMoverJob : IJobParallelForTransform
     {
         //_speeds[index]
 
+    }
+
+    private void RotateOnTheSpot(TransformAccess transform, int index)
+    {
+        float rotationSpeed = _speeds[index];
+        float newRotation = transform.rotation.eulerAngles.z + rotationSpeed * DeltaTime;
+        transform.rotation = Quaternion.Euler(0f, 0f, newRotation);
     }
 
 }
