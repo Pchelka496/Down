@@ -5,6 +5,8 @@ public class EngineModulePowerConfig : BaseModuleConfig
 {
     [SerializeField] float[] _engineMaxPower = new float[0];
 
+    public override bool ActivityCheck() => true;
+
     public override void SetLevel(int level)
     {
         if (!SetLevelCheck(level))

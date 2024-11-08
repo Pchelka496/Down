@@ -42,8 +42,8 @@ public class CamerasController : MonoBehaviour
     {
         SetTrackingTarget(_cameraDefaultTrackingTarget);
 
-        _positionComposerController.SetLobbyMod();
-        _lensController.SetLobbyMod();
+        _positionComposerController.SetLobbyMode();
+        _lensController.SetLobbyMode();
     }
 
     private void SetFlyMode()
@@ -51,7 +51,7 @@ public class CamerasController : MonoBehaviour
         SetTrackingTarget(_player.transform);
 
         _lensController.SetFlyMode();
-        _positionComposerController.SetLobbyMod();
+        _positionComposerController.SetFlyMode();
     }
 
     private void SetTrackingTarget(Transform transform)

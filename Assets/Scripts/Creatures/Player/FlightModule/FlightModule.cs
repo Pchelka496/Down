@@ -32,7 +32,7 @@ public class FlightModule : BaseModule, IFlightModule
 
         _transform = player.transform;
         _controls = controls;
-        transform.parent = player.transform;
+        SnapToPlayer(player.transform);
 
         player.FlightModule = this;
     }

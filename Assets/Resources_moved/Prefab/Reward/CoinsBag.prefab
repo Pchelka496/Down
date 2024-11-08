@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4275088627503756575}
   - component: {fileID: 8285370698154835783}
   - component: {fileID: 9178775096147550829}
-  - component: {fileID: 6878003412860503446}
+  - component: {fileID: 153137105225670864}
   m_Layer: 11
   m_Name: CoinsBag
   m_TagString: Untagged
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 8938519347773440337}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.22, y: 1000.97, z: -9.931156}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -125,7 +125,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: -0.06}
   m_Radius: 0.8
---- !u!114 &6878003412860503446
+--- !u!114 &153137105225670864
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -134,9 +134,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8938519347773440337}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4ca35581284b204ba3768076d635284, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ccc95ad515187046a1506330aa844be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _rewardAmount: 10
-  _spriteRenderer: {fileID: 8285370698154835783}
-  _isDetachFromParent: 0

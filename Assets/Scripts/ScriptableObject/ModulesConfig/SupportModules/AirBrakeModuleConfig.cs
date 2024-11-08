@@ -10,7 +10,7 @@ public class AirBrakeModuleConfig : BaseModuleConfig
         if (!SetLevelCheck(level))
         {
             _currentLevel = _brakePower.Length - 1;
-            Debug.LogError($"{this.GetType()} Current level {_currentLevel} is out of bounds for the max health array! Array length: {_brakePower.Length}");
+            Debug.LogError($"{this.GetType()} Current level {_currentLevel} is out of bounds for the _brakePower array! Array length: {_brakePower.Length}");
         }
 
         _currentLevel = level;

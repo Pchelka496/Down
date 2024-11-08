@@ -15,8 +15,45 @@ MonoBehaviour:
   m_GroupName: Challenge
   m_GUID: b3c3dcee908f59e439498b07c400d01f
   m_SerializeEntries:
+  - m_GUID: 13ab06e7e555a474187627cbf3ad6084
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/Challenge
+      6.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2bf7c7e595b8d7f4e81353fe13b6e143
-    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/ChallengeX.prefab
+    m_Address: /EnemyParts/ChallengePrefab/Challenge 1.prefabParts/ChallengePrefab/Challenge
+      1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f22bdcdb4a5b004094e846d0a40b7e0
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/Challenge
+      4.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7200125546a1ea64082faea8030b205a
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/Challenge
+      7.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a556b5d9537e1b640b130ee3e46e0610
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/Challenge
+      5.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af37bcefcc2ad324bbe819075480d013
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/Challenge
+      3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b624b91058762034fb465fb051f51b76
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/Challenge
+      2.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

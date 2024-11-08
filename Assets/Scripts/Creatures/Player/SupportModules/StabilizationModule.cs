@@ -21,8 +21,7 @@ public class StabilizationModule : BaseModule
     {
         _rb = player.Rb;
 
-        transform.parent = player.transform;
-        transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        SnapToPlayer(player.transform);
 
         levelManager.SubscribeToRoundStart(RoundStart);
     }

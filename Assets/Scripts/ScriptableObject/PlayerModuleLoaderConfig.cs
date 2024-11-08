@@ -18,7 +18,7 @@ public class PlayerModuleLoaderConfig : ScriptableObject
         AsyncOperationHandle<GameObject> _createdModuleHandler;
 
         public AssetReference ModulePrefabReference { get => _modulePrefabAddress; set => _modulePrefabAddress = value; }
-        public BaseModuleConfig ActivityCheck { get => _activityCheck; set => _activityCheck = value; }
+        public bool ActivityCheck => _activityCheck.ActivityCheck();
 
         public BaseModule CreatedModule { get => _createdModule; set => _createdModule = value; }
         public AsyncOperationHandle<GameObject> CreatedModuleHandler { get => _createdModuleHandler; set => _createdModuleHandler = value; }

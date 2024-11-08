@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: PlayerModule
+  m_EditorClassIdentifier: 
+  m_GroupName: PlayerModule
+  m_GUID: 06e04e2886f42224cb7cffa45174ad1d
+  m_SerializeEntries:
+  - m_GUID: 4739f8c1cc8fd3f46a9240d71ac3ca01
+    m_Address: Prefab/PlayerModule/SupportModul/AirBrakeModule
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 844001ca01fd2fb4ea2a3b5279042994
+    m_Address: Prefab/PlayerModule/GroundMovementModule/DefaultGroundMovementModule
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99ef79ed2f5fbf1468264dd0997c333a
+    m_Address: Prefab/PlayerModule/SupportModul/BoosterModul
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b143a75a85a027c4d90d8bab8ebe7b3a
+    m_Address: Assets/Resources_moved/Prefab/PlayerModule/SupportModul/PickerModule.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c37d7d21cc32cf44ca1cf689215c4a40
+    m_Address: Prefab/PlayerModule/FlightModule/EngineModule
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e50f3b9a47e3eea47bfc9d916ca2b440
+    m_Address: Assets/Resources_moved/Prefab/PlayerModule/SupportModul/EmergencyBrakeModule.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f354d9411d8fead4ea2bb50a92154609
+    m_Address: Prefab/PlayerModule/SupportModul/StabilizationModule
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: e5f7e05cf874f8d4cb4029f4ef8d0723, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 393e4b38cf7adbb4cbef61aaa240f45e, type: 2}
+    - {fileID: 11400000, guid: b7591e65d759a5c4b8ee1e9cacbe3329, type: 2}

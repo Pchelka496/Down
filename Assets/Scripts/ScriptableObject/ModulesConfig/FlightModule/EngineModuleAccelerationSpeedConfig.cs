@@ -24,4 +24,5 @@ public class EngineModuleAccelerationSpeedConfig : BaseModuleConfig
     {
         return !(level > _engineAccelerationSpeed.Length - 1);
     }
+
 }

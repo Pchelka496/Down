@@ -2,13 +2,13 @@ using UnityEngine;
 
 public abstract class BaseModuleConfig : ScriptableObject
 {
-    public const int MAX_LEVEL_VALUE = int.MaxValue;
     [Header("Array index is a level")]
     [SerializeField][Range(0, 100)] protected int _currentLevel = 0;
     [SerializeField] protected int[] _levelCost = new int[0];
 
-    public virtual bool ActivityCheck() => _currentLevel > 0;
     public abstract void SetLevel(int level);
+    public virtual int MaxLevel() => _levelCost.Length - 1;
+    public virtual bool ActivityCheck() => _currentLevel > 0;
     public int[] GetLevelCost() => _levelCost;
     public int GetCurrentLevelCost()
     {
@@ -18,7 +18,7 @@ public abstract class BaseModuleConfig : ScriptableObject
         }
         else
         {
-            return MAX_LEVEL_VALUE;
+            return default;
         }
     }
 

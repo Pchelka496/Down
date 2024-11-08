@@ -25,5 +25,6 @@ MonoBehaviour:
       x: 0
       y: 0
     NeedUpdateRewards: 0
+    IsolateDistance: {x: 15, y: 15}
     RequiredAmount: 1
     RelativeAmount: 0

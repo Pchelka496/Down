@@ -31,8 +31,7 @@ public class EngineModule : BaseModule, IFlightModule
     {
         _rb = player.Rb;
         _controls = controls;
-        transform.parent = player.transform;
-        transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        SnapToPlayer(player.transform);
 
         player.FlightModule = this;
     }
@@ -41,13 +40,13 @@ public class EngineModule : BaseModule, IFlightModule
     {
         while (!cts.IsCancellationRequested)
         {
+            Debug.Log(_controls.Player.LeftBooster.ReadValue<Vector2>());
+
             _leftThrust = _controls.Player.MoveLeft.ReadValue<float>();
             _rightThrust = _controls.Player.MoveRight.ReadValue<float>();
 
             _currentLeftThrust = Mathf.Lerp(_currentLeftThrust, _leftThrust * maxThrust, thrustIncreaseSpeed);
             _currentRightThrust = Mathf.Lerp(_currentRightThrust, _rightThrust * maxThrust, thrustIncreaseSpeed);
-
-            //ApplyRotation(_currentLeftThrust, _currentRightThrust);
 
             ApplyThrust(_leftEngine, _currentLeftThrust);
             ApplyThrust(_rightEngine, _currentRightThrust);

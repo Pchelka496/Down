@@ -34,3 +34,17 @@ MonoBehaviour:
       m_SubObjectType: 
       m_EditorAssetChanged: 1
     _activityCheck: {fileID: 11400000, guid: 01af5e91489c1324bbc678ea0a162154, type: 2}
+  - _modulePrefabAddress:
+      m_AssetGUID: b143a75a85a027c4d90d8bab8ebe7b3a
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _activityCheck: {fileID: 11400000, guid: 341259fc17fac9a43b48078d63131374, type: 2}
+  - _modulePrefabAddress:
+      m_AssetGUID: e50f3b9a47e3eea47bfc9d916ca2b440
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _activityCheck: {fileID: 11400000, guid: c8cc2d0ac2eddb54ea4705607f358854, type: 2}

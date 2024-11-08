@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 9.9
   m_EditorClassIdentifier: 
   _enemies:
+  - {fileID: 11400000, guid: bb5b04ef93d52724ba14eb9cf33a41c2, type: 2}
   - {fileID: 11400000, guid: b96acc5522d612c4788e7ddb5e97f42e, type: 2}
   - {fileID: 11400000, guid: 8d956c6a2cd39a3488c36f6dc06f8f4d, type: 2}
-  - {fileID: 11400000, guid: bb5b04ef93d52724ba14eb9cf33a41c2, type: 2}
   _startHeight: 99900

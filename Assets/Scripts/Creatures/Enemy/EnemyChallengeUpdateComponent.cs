@@ -9,32 +9,20 @@ public class EnemyChallengeUpdateComponent : MonoBehaviour
 {
     const float UPDATE_CHALLENGE_DELAY = 3f;
     [SerializeField] EnemyVisualPart _visualPart;
+    [SerializeField] bool[] _visibilityStatuses;
     bool _isSeen;
     EnemyManager _enemyManager;
 
     CancellationTokenSource _cancellationTokenSource;
 
+#if UNITY_EDITOR
+    public bool[] VisibilityStatuses { get => _visibilityStatuses; set => _visibilityStatuses = value; }
+#endif
+
     [Inject]
     private void Construct(EnemyManager enemyManager)
     {
         _enemyManager = enemyManager;
-    }
-
-    private void OnBecameVisible()
-    {
-        _isSeen = true;
-
-        ClearToken(ref _cancellationTokenSource);
-    }
-
-    private void OnBecameInvisible()
-    {
-        if (_isSeen)
-        {
-            _cancellationTokenSource = new CancellationTokenSource();
-
-            DelayChallengeUpdate(_cancellationTokenSource.Token).Forget();
-        }
     }
 
     private async UniTaskVoid DelayChallengeUpdate(CancellationToken cancellationToken)
@@ -51,6 +39,38 @@ public class EnemyChallengeUpdateComponent : MonoBehaviour
         catch (OperationCanceledException)
         {
             _isSeen = false;
+        }
+    }
+
+    public void UpdateVisibilityStatus(int index, bool isVisible)
+    {
+        if (_visibilityStatuses == null || index < 0 || index >= _visibilityStatuses.Length) return;
+
+        _visibilityStatuses[index] = isVisible;
+        var allNotVisible = true;
+
+        foreach (var status in _visibilityStatuses)
+        {
+            if (status)
+            {
+                allNotVisible = false;
+                break;
+            }
+        }
+
+        if (allNotVisible)
+        {
+            _isSeen = true;
+            ClearToken(ref _cancellationTokenSource);
+
+            _cancellationTokenSource = new();
+
+            DelayChallengeUpdate(_cancellationTokenSource.Token).Forget();
+        }
+        else
+        {
+            _isSeen = false;
+            ClearToken(ref _cancellationTokenSource);
         }
     }
 
@@ -74,3 +94,4 @@ public class EnemyChallengeUpdateComponent : MonoBehaviour
     }
 
 }
+

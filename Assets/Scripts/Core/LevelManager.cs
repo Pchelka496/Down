@@ -9,6 +9,7 @@ public class LevelManager : MonoBehaviour
     public const float PLAYER_START_X_POSITION = 0;
 
     [SerializeField] LevelManagerConfig _config;
+    int _targetFrameRate = 90;
     EnemyManager _enemyManager;
     CharacterController _player;
     MapController _mapController;
@@ -18,6 +19,10 @@ public class LevelManager : MonoBehaviour
 
     event Action<LevelManager> _roundStartAction;
     event Action<LevelManager, EnumRoundResults> _roundEndAction;
+
+    bool _isRoundActive = false;
+
+    public bool IsRoundActive => _isRoundActive;
 
     [Inject]
     private void Construct(MapController mapController, EnemyManager enemyManager, BackgroundController backgroundController, CharacterController player, RewardManager rewardManager, ScreenFader screenFader)
@@ -36,24 +41,26 @@ public class LevelManager : MonoBehaviour
         _backgroundController.Initialize(_config.BackgroundControllerConfig);
         _enemyManager.Initialize(_config.EnemyManagerConfig);
         _rewardManager.Initialize(_config.RewardManagerConfig);
-
     }
 
     private void Start()
     {
         ResetPlayerPosition();
         _screenFader.FadeToClear().Forget();
+
+        Application.targetFrameRate = _targetFrameRate;
     }
 
     private void ResetPlayerPosition()
     {
-        _player.transform.position = new(PLAYER_START_X_POSITION, PLAYER_START_Y_POSITION);
+        _player.transform.position = new Vector2(PLAYER_START_X_POSITION, PLAYER_START_Y_POSITION);
         _player.Rb.velocity = Vector2.zero;
     }
 
     public async UniTaskVoid RoundStart()
     {
         await UniTask.WaitForSeconds(1f);
+        _isRoundActive = true;
 
         _roundStartAction?.Invoke(this);
         _roundStartAction = null;
@@ -62,6 +69,7 @@ public class LevelManager : MonoBehaviour
     public async UniTaskVoid RoundEnd()
     {
         await UniTask.WaitForSeconds(1f);
+        _isRoundActive = false;
 
         _roundEndAction?.Invoke(this, EnumRoundResults.Positive);
         _roundEndAction = null;
@@ -69,11 +77,12 @@ public class LevelManager : MonoBehaviour
         await _screenFader.FadeToBlack();
 
         ResetPlayerPosition();
+        await UniTask.WaitForSeconds(1f);
 
         await _screenFader.FadeToClear();
     }
 
     public void SubscribeToRoundStart(Action<LevelManager> action) => _roundStartAction += action;
-    public void SubscribeToRoundEnd(Action<LevelManager, EnumRoundResults> action) => _roundEndAction += action;//bool is win status
+    public void SubscribeToRoundEnd(Action<LevelManager, EnumRoundResults> action) => _roundEndAction += action;
 
 }

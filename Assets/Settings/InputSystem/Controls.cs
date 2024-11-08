@@ -47,13 +47,49 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""AirBreake"",
+                    ""name"": ""LeftBooster"",
+                    ""type"": ""Value"",
+                    ""id"": ""80e7f9fc-df26-4ad7-8bfc-41f5bc6c0efe"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""RightBooster"",
                     ""type"": ""Button"",
-                    ""id"": ""e256d674-dc31-44de-a294-a0fcd698e986"",
+                    ""id"": ""66b99a26-73ca-41b9-ab26-2fdd31ee63e8"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""MultiTap"",
-                    ""initialStateCheck"": true
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UpBooster"",
+                    ""type"": ""Button"",
+                    ""id"": ""f187d6d9-2d97-417b-b7f4-0ef0752dad32"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DownBooster"",
+                    ""type"": ""Button"",
+                    ""id"": ""e0d79dfe-9d69-427e-b54d-a22d847ab4c1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AirBreake"",
+                    ""type"": ""Button"",
+                    ""id"": ""fa417ed8-c9c1-413f-99ad-0ee18f1b953f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -61,17 +97,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""e30d22ed-cffb-42cf-81a9-bf3f04390620"",
                     ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""MoveRight"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8de3fe38-34a6-4347-91bb-3f10643cb078"",
-                    ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -92,58 +117,113 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""774f3873-f218-4e24-aafd-767cb62af088"",
+                    ""id"": ""c82ff680-1d17-4e25-afe1-47684b005805"",
                     ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""MoveLeft"",
+                    ""groups"": """",
+                    ""action"": ""LeftBooster"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""fc148dd8-b8c8-460f-9d8e-869cc3339497"",
+                    ""id"": ""9cc073aa-e125-4c46-896c-3b0dcc9af841"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightBooster"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""77b2a23a-754f-48a1-a6c9-d7cccecaca37"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpBooster"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""815d70ad-5e79-4de3-a065-1fb71601b431"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DownBooster"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""82095e26-7f80-4c24-8d66-637ec77dd2c3"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": ""MultiTap(tapDelay=0.5)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AirBreake"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""6fede8df-4b0f-4896-b8b5-446b556a16e5"",
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""AirBreake"",
                     ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""4ef49592-8de3-4f51-9361-1020b8efcfd4"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AirBreake"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""One Modifier"",
+                    ""id"": ""9753fbd6-5454-47e7-96c7-a0be0e29cfba"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": ""MultiTap(tapDelay=0.5)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AirBreake"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""b3401d46-eb26-493a-8fde-085764456c98"",
+                    ""name"": ""modifier"",
+                    ""id"": ""a5cba929-6e72-46cc-a6ea-77aa4189ace6"",
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""AirBreake"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""594924d7-7250-4e0e-864e-3fa9deabc5d8"",
-                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""name"": ""binding"",
+                    ""id"": ""5138f9ed-5916-4ad7-ac01-640c0ff89ba9"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""AirBreake"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ea57cec7-a3f7-4743-8929-0af89b3ad458"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AirBreake"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -731,6 +811,10 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_MoveRight = m_Player.FindAction("MoveRight", throwIfNotFound: true);
         m_Player_MoveLeft = m_Player.FindAction("MoveLeft", throwIfNotFound: true);
+        m_Player_LeftBooster = m_Player.FindAction("LeftBooster", throwIfNotFound: true);
+        m_Player_RightBooster = m_Player.FindAction("RightBooster", throwIfNotFound: true);
+        m_Player_UpBooster = m_Player.FindAction("UpBooster", throwIfNotFound: true);
+        m_Player_DownBooster = m_Player.FindAction("DownBooster", throwIfNotFound: true);
         m_Player_AirBreake = m_Player.FindAction("AirBreake", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -813,6 +897,10 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_MoveRight;
     private readonly InputAction m_Player_MoveLeft;
+    private readonly InputAction m_Player_LeftBooster;
+    private readonly InputAction m_Player_RightBooster;
+    private readonly InputAction m_Player_UpBooster;
+    private readonly InputAction m_Player_DownBooster;
     private readonly InputAction m_Player_AirBreake;
     public struct PlayerActions
     {
@@ -820,6 +908,10 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public PlayerActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @MoveRight => m_Wrapper.m_Player_MoveRight;
         public InputAction @MoveLeft => m_Wrapper.m_Player_MoveLeft;
+        public InputAction @LeftBooster => m_Wrapper.m_Player_LeftBooster;
+        public InputAction @RightBooster => m_Wrapper.m_Player_RightBooster;
+        public InputAction @UpBooster => m_Wrapper.m_Player_UpBooster;
+        public InputAction @DownBooster => m_Wrapper.m_Player_DownBooster;
         public InputAction @AirBreake => m_Wrapper.m_Player_AirBreake;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -836,6 +928,18 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @MoveLeft.started += instance.OnMoveLeft;
             @MoveLeft.performed += instance.OnMoveLeft;
             @MoveLeft.canceled += instance.OnMoveLeft;
+            @LeftBooster.started += instance.OnLeftBooster;
+            @LeftBooster.performed += instance.OnLeftBooster;
+            @LeftBooster.canceled += instance.OnLeftBooster;
+            @RightBooster.started += instance.OnRightBooster;
+            @RightBooster.performed += instance.OnRightBooster;
+            @RightBooster.canceled += instance.OnRightBooster;
+            @UpBooster.started += instance.OnUpBooster;
+            @UpBooster.performed += instance.OnUpBooster;
+            @UpBooster.canceled += instance.OnUpBooster;
+            @DownBooster.started += instance.OnDownBooster;
+            @DownBooster.performed += instance.OnDownBooster;
+            @DownBooster.canceled += instance.OnDownBooster;
             @AirBreake.started += instance.OnAirBreake;
             @AirBreake.performed += instance.OnAirBreake;
             @AirBreake.canceled += instance.OnAirBreake;
@@ -849,6 +953,18 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @MoveLeft.started -= instance.OnMoveLeft;
             @MoveLeft.performed -= instance.OnMoveLeft;
             @MoveLeft.canceled -= instance.OnMoveLeft;
+            @LeftBooster.started -= instance.OnLeftBooster;
+            @LeftBooster.performed -= instance.OnLeftBooster;
+            @LeftBooster.canceled -= instance.OnLeftBooster;
+            @RightBooster.started -= instance.OnRightBooster;
+            @RightBooster.performed -= instance.OnRightBooster;
+            @RightBooster.canceled -= instance.OnRightBooster;
+            @UpBooster.started -= instance.OnUpBooster;
+            @UpBooster.performed -= instance.OnUpBooster;
+            @UpBooster.canceled -= instance.OnUpBooster;
+            @DownBooster.started -= instance.OnDownBooster;
+            @DownBooster.performed -= instance.OnDownBooster;
+            @DownBooster.canceled -= instance.OnDownBooster;
             @AirBreake.started -= instance.OnAirBreake;
             @AirBreake.performed -= instance.OnAirBreake;
             @AirBreake.canceled -= instance.OnAirBreake;
@@ -1036,6 +1152,10 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     {
         void OnMoveRight(InputAction.CallbackContext context);
         void OnMoveLeft(InputAction.CallbackContext context);
+        void OnLeftBooster(InputAction.CallbackContext context);
+        void OnRightBooster(InputAction.CallbackContext context);
+        void OnUpBooster(InputAction.CallbackContext context);
+        void OnDownBooster(InputAction.CallbackContext context);
         void OnAirBreake(InputAction.CallbackContext context);
     }
     public interface IUIActions

@@ -90,9 +90,7 @@ public class EnemyManager : MonoBehaviour
             EnemySettings(indexInManager,
                             _enemyCore[indexInManager],
                             enemyInfo.EnemyVisualPart,
-                            enemyInfo.Enemy.Speed,
-                            enemyInfo.Enemy.MotionPattern,
-                            enemyInfo.Enemy.MotionCharacteristic
+                            enemyInfo.Enemy
                             );
         }
     }
@@ -168,16 +166,14 @@ public class EnemyManager : MonoBehaviour
             EnemySettings(i,
                           _enemyCore[i],
                           enemyVisualParts[i],
-                          enemyCharacteristics.Speed,
-                          enemyCharacteristics.MotionPattern,
-                          enemyCharacteristics.MotionCharacteristic
+                          enemyCharacteristics
                          );
         }
 
         ResetAllEnemyPosition();
     }
 
-    private void EnemySettings(int index, EnemyCore enemy, EnemyVisualPart visualPart, float speed, EnumMotionPattern motionPattern, float2 motionCharacteristic)
+    private void EnemySettings(int index, EnemyCore enemyCore, EnemyVisualPart visualPart, Enemy enemyCharacteristics)
     {
 #if UNITY_EDITOR
         if (!EditorApplication.isPlaying)
@@ -191,8 +187,14 @@ public class EnemyManager : MonoBehaviour
             visualPart.IndexInManager = index;
         }
 
-        enemy.Initialize(visualPart);
-        _enemyController.UpdateEnemyValues(index, speed, motionPattern, motionCharacteristic);
+        enemyCore.Initialize(visualPart);
+
+        if (visualPart != null)
+        {
+            visualPart.Initialize(enemyCore);
+        }
+
+        _enemyController.UpdateEnemyValues(index, enemyCharacteristics.Speed, enemyCharacteristics.MotionPattern, enemyCharacteristics.MotionCharacteristic, enemyCharacteristics.IsolateDistance);
     }
 
     public async void UpdateChallenge(EnemyVisualPart visualPart)
@@ -206,9 +208,7 @@ public class EnemyManager : MonoBehaviour
         EnemySettings(indexInManager,
                         _enemyCore[indexInManager],
                         enemyInfo.EnemyVisualPart,
-                        enemyInfo.Enemy.Speed,
-                        enemyInfo.Enemy.MotionPattern,
-                        enemyInfo.Enemy.MotionCharacteristic
+                        enemyInfo.Enemy
                         );
     }
 
@@ -235,6 +235,7 @@ public class EnemyManager : MonoBehaviour
     private void OnDestroy()
     {
         _enemyController.Dispose();
+
         ClearToken(ref _enemyRegionUpdaterCts);
         ReleaseLoadedResources();
     }

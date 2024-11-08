@@ -2,7 +2,6 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
 using System.Threading;
-using System;
 
 [System.Serializable]
 public class PositionComposerController : System.IDisposable
@@ -10,8 +9,8 @@ public class PositionComposerController : System.IDisposable
     [SerializeField] ScreenComposerSettings _lobbyModeComposition;
     [SerializeField] ScreenComposerSettings _defaultFlyModeComposition;
     [SerializeField] CinemachinePositionComposer _composer;
-    [SerializeField] float _maxYScreenPosition = 10f;
-    [SerializeField] float _minYScreenPosition = 5f;
+    [SerializeField] float _maxYScreenPosition = -1f;
+    [SerializeField] float _minYScreenPosition = 0f;
 
     [SerializeField] float _minVelocityThreshold = 0f;
     [SerializeField] float _maxVelocityThreshold = 20f;
@@ -30,7 +29,7 @@ public class PositionComposerController : System.IDisposable
         _playerRb = playerRb;
     }
 
-    public void SetLobbyMod()
+    public void SetLobbyMode()
     {
         ClearToken(ref _cts);
         _composer.Composition = _lobbyModeComposition;
@@ -45,7 +44,7 @@ public class PositionComposerController : System.IDisposable
         {
             StartAdjustingPositionComposterSettings(_cts.Token).Forget();
         }
-        catch (Exception ex)
+        catch (System.Exception ex)
         {
             Debug.LogWarning($"Exception caught in StartAdjustingPositionComposterSettings: {ex}");
         }

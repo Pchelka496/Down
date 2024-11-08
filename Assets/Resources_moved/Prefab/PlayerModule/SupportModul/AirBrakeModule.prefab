@@ -50,10 +50,10 @@ MonoBehaviour:
   _rightAirBrake: {fileID: 8709136687993158293}
   _airBrakeDrag: 4
   _defaultDrag: 0.2
-  _leftAirBrakeOpenPosition: {x: -0.517, y: -0.406}
-  _leftAirBrakeClosePosition: {x: 0.433, y: -0.406}
-  _rightAirBrakeOpenPosition: {x: 0.517, y: -0.406}
-  _rightAirBrakeClosePosition: {x: -0.433, y: -0.406}
+  _leftAirBrakeOpenPosition: {x: -0.517, y: -0.406, z: 1}
+  _leftAirBrakeClosePosition: {x: 0.433, y: -0.406, z: 1}
+  _rightAirBrakeOpenPosition: {x: 0.517, y: -0.406, z: 1}
+  _rightAirBrakeClosePosition: {x: -0.433, y: -0.406, z: 1}
   _transitionTime: 0.5
 --- !u!1 &3303639319702028416
 GameObject:

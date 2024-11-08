@@ -17,6 +17,7 @@ public class EnemyConfig : ScriptableObject
         [SerializeField] public EnumMotionPattern MotionPattern;
         [SerializeField] public float2 MotionCharacteristic;
         [SerializeField] public bool NeedUpdateRewards;
+        [SerializeField] public Vector2 IsolateDistance;
 
         [Header("Free number, but the total cannot exceed the number of all enemies")]
         [SerializeField] public int RequiredAmount;

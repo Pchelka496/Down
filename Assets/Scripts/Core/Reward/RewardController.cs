@@ -20,7 +20,7 @@ public class RewardController
     int _currentPresetIndex = 0;
 
     RewardControllerConfig _config;
-    RewardForController[] _rewards;
+    Reward[] _rewards;
 
     private Vector2 DistanceCheckRewardPosition { get; set; }
 
@@ -54,11 +54,11 @@ public class RewardController
         if (rewardPrefab != null)
         {
             var diContainer = GameplaySceneInstaller.DiContainer;
-            _rewards = new RewardForController[count];
+            _rewards = new Reward[count];
 
             for (int i = 0; i < count; i++)
             {
-                var reward = diContainer.InstantiatePrefabForComponent<RewardForController>(rewardPrefab, _rewardSpawnPosition, Quaternion.identity, rewardParentTransform);
+                var reward = diContainer.InstantiatePrefabForComponent<Reward>(rewardPrefab, _rewardSpawnPosition, Quaternion.identity, rewardParentTransform);
 
                 reward.gameObject.SetActive(false);
 

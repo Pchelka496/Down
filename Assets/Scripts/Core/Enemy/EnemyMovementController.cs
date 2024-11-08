@@ -2,11 +2,9 @@ using Cysharp.Threading.Tasks;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Jobs;
-using Zenject;
 using Unity.Mathematics;
 using System;
 using Unity.Jobs;
-using System.Collections.Generic;
 
 public class EnemyMovementController : IDisposable
 {
@@ -14,10 +12,11 @@ public class EnemyMovementController : IDisposable
     JobHandle _enemyMoverHandler;
     JobHandle _enemyInitialPlacement;
 
-    NativeArray<float> _speeds;
     NativeArray<EnumMotionPattern> _positionProcessingMethods;
     NativeArray<float2> _motionCharacteristic;
     NativeArray<Vector2> _currentEnemyPosition;
+    NativeArray<Vector2> _isolateStaticElementDistance;
+    NativeArray<float> _speeds;
     NativeArray<bool> _needToChangeInitialPosition;
     NativeArray<Vector2> _initialPosition;
     TransformAccessArray _enemyTransforms;
@@ -40,6 +39,7 @@ public class EnemyMovementController : IDisposable
         if (_enemyCount == transforms.Length - 1 && _enemyCount == speeds.Length - 1 && _enemyCount == motionPatterns.Length - 1) return;
 
         _speeds = new(speeds, Allocator.Persistent);
+        _isolateStaticElementDistance = new(isolationDistance, Allocator.Persistent);
         _positionProcessingMethods = new(motionPatterns, Allocator.Persistent);
         _motionCharacteristic = new(motionCharacteristic, Allocator.Persistent);
         _currentEnemyPosition = new(_enemyCount, Allocator.Persistent);
@@ -50,20 +50,19 @@ public class EnemyMovementController : IDisposable
 
     private async UniTask EnemyInitialPlacement()
     {
-        var initialPlacementJob = new InitialPlacementJob(ref _positionProcessingMethods,
-                                                          ref _currentEnemyPosition,
-                                                          ref _initialPosition,
-                                                          ref _needToChangeInitialPosition);
+        var initialPlacementJob = new InitialPlacementJob(positionProcessingMethods: ref _positionProcessingMethods,
+                                                          currentPosition: ref _currentEnemyPosition,
+                                                          targetPosition: ref _initialPosition,
+                                                          isolateStaticElementDistance: ref _isolateStaticElementDistance,
+                                                          needToChange: ref _needToChangeInitialPosition
+                                                          );
 
-        //var deltaTime = Time.deltaTime;
-        var batchSize = _enemyCount / 4;
+        var batchSize = 1;
 
         _enemyInitialPlacement = initialPlacementJob.Schedule(_enemyCount, batchSize, _enemyMoverHandler);
 
         while (true)
         {
-            //deltaTime = Time.deltaTime;
-
             _enemyInitialPlacement.Complete();
 
             _enemyInitialPlacement = initialPlacementJob.Schedule(_enemyCount, batchSize, _enemyMoverHandler);
@@ -75,12 +74,12 @@ public class EnemyMovementController : IDisposable
     private async UniTask EnemyMoving()
     {
         var enemyMoverJobs = new EnemyMoverJob(ref _speeds,
-                                                ref _positionProcessingMethods,
-                                                ref _motionCharacteristic,
-                                                ref _currentEnemyPosition,
-                                                ref _initialPosition,
-                                                ref _needToChangeInitialPosition);
-
+                                               ref _positionProcessingMethods,
+                                               ref _motionCharacteristic,
+                                               ref _currentEnemyPosition,
+                                               ref _initialPosition,
+                                               ref _needToChangeInitialPosition
+                                               );
         var deltaTime = Time.deltaTime;
 
         enemyMoverJobs.DeltaTime = deltaTime;
@@ -102,7 +101,7 @@ public class EnemyMovementController : IDisposable
         }
     }
 
-    public void UpdateEnemyValues(int index, float speed, EnumMotionPattern motionPattern, float2 motionCharacteristic)
+    public void UpdateEnemyValues(int index, float speed, EnumMotionPattern motionPattern, float2 motionCharacteristic, Vector2 spawnIsolateDistance)
     {
         if (_enemyCount - 1 < index) return;
 
@@ -112,6 +111,7 @@ public class EnemyMovementController : IDisposable
         _speeds[index] = speed;
         _positionProcessingMethods[index] = motionPattern;
         _motionCharacteristic[index] = motionCharacteristic;
+        _isolateStaticElementDistance[index] = spawnIsolateDistance;
     }
 
     public void Dispose()
@@ -125,6 +125,7 @@ public class EnemyMovementController : IDisposable
         _speeds.Dispose();
         _positionProcessingMethods.Dispose();
         _motionCharacteristic.Dispose();
+        _isolateStaticElementDistance.Dispose();
         _currentEnemyPosition.Dispose();
         _initialPosition.Dispose();
         _needToChangeInitialPosition.Dispose();

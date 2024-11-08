@@ -6,7 +6,7 @@ using Zenject;
 
 public class AirTrailController : MonoBehaviour
 {
-    const float ROTAION_Z = -90f;
+    const float Z_ROTATION_OFFSET = 0f;
 
     [SerializeField] Material _airTrailMaterial;
     [SerializeField] SpriteRenderer _spriteRenderer;
@@ -38,10 +38,9 @@ public class AirTrailController : MonoBehaviour
     private void Construct(CharacterController player, LevelManager levelManager, Controls controls)
     {
         _rb = player.Rb;
+        player.MultiTargetRotationFollower.RegisterRotationObject(transform, Z_ROTATION_OFFSET);
         AirBrakeDisabled();
-        controls.Player.AirBreake.performed += ctx => SwitchAirBrake();
-        transform.rotation = Quaternion.Euler(0f, 0f, ROTAION_Z);
-
+        transform.rotation = Quaternion.Euler(0f, 0f, Z_ROTATION_OFFSET);
     }
 
     private void OnEnable()
@@ -85,7 +84,7 @@ public class AirTrailController : MonoBehaviour
         }
     }
 
-    private void SwitchAirBrake()
+    public void SwitchAirBrake()
     {
         if (_isAirBrakeActive)
         {
@@ -114,19 +113,6 @@ public class AirTrailController : MonoBehaviour
         _minVelocityThreshold = _minDefaultModeVelocityThreshold;
         _maxVelocityThreshold = _maxDefaultModeVelocityThreshold;
     }
-
-    //public async UniTask ScaleObjectYAsync(CancellationToken token)
-    //{
-    //    // Увеличение масштаба по оси Y
-    //    await transform.DOScaleY(_maxScaleY, _scaleTime)
-    //                    .SetEase(Ease.OutQuad)
-    //                    .AsyncWaitForCompletion();
-
-    //    // Возвращение масштаба обратно к 1
-    //    await transform.DOScaleY(1f, _scaleTime)
-    //                    .SetEase(Ease.InQuad)
-    //                    .AsyncWaitForCompletion();
-    //}
 
     private void OnDestroy()
     {

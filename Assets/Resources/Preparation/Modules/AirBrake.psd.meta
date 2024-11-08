@@ -37,7 +37,7 @@ ScriptedImporter:
     sRGBTexture: 1
     spriteMode: 1
     spriteExtrude: 32
-    spriteMeshType: 1
+    spriteMeshType: 0
     alignment: 9
     spritePivot: {x: 0.91875756, y: 0.083631985}
     spritePixelsToUnits: 250
@@ -55,12 +55,12 @@ ScriptedImporter:
     flipbookColumns: 0
     ignorePngGamma: 0
     cookieMode: 0
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
-    wrapW: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
     normalMap: 0
     textureFormat: 0
     maxTextureSize: 0
@@ -191,7 +191,7 @@ ScriptedImporter:
     maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     forceMaximumCompressionQuality_BC6H_BC7: 0
     crunchedCompression: 0
@@ -277,7 +277,7 @@ ScriptedImporter:
   rigPSDLayers: []
   sharedRigPSDLayers: []
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638653800988854242
+  platformSettingsDirtyTick: 638665796228448483
   spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 

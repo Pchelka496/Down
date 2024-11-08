@@ -1,47 +1,81 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
-using Zenject;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.OnScreen;
 
-public class ScreenTouchController : MonoBehaviour
+public class ScreenTouchController : OnScreenButton, IPointerDownHandler, IPointerUpHandler
 {
-    //[SerializeField] RectTransform[] _touchHandlerTransforms;
+    [SerializeField] TouchHandler _leftTouch;
+    [SerializeField] TouchHandler _rightTouch;
 
-    //[SerializeField] float _originalStartTop;
-    //[SerializeField] float _roundStartTop;
+    [SerializeField] TouchHandler _rightSwipe;
+    [SerializeField] TouchHandler _leftSwipe;
+    [SerializeField] TouchHandler _upSwipe;
+    [SerializeField] TouchHandler _downSwipe;
 
-    //[Inject]
-    //private void Construct(LevelManager levelManager)
-    //{
-    //    levelManager.SubscribeToRoundStart(RoundStart);
-    //}
+    [SerializeField] float minSwipeDistance = 50f;
 
-    //private void Start()
-    //{
-    //    if (_touchHandlerTransforms == null) return;
+    Vector2 _touchStartPosition;
 
-    //    foreach (var handler in _touchHandlerTransforms)
-    //    {
-    //        SetTopOffset(handler, _originalStartTop);
-    //    }
-    //}
+    public new void OnPointerDown(PointerEventData eventData)
+    {
+        _touchStartPosition = eventData.position;
 
-    //private void RoundStart()
-    //{
-    //    if (_touchHandlerTransforms == null) return;
+        if (eventData.position.x < Screen.width / 2)
+        {
+            _leftTouch.OnPointerDown(eventData);
+        }
+        else
+        {
+            _rightTouch.OnPointerDown(eventData);
+        }
+    }
 
-    //    foreach (var handler in _touchHandlerTransforms)
-    //    {
-    //        SetTopOffset(handler, _roundStartTop);
-    //    }
-    //}
+    public new void OnPointerUp(PointerEventData eventData)
+    {
+        _leftTouch.OnPointerUp(eventData);
+        _rightTouch.OnPointerUp(eventData);
 
-    //private void SetTopOffset(RectTransform rectTransform, float topOffset)
-    //{
-    //    float bottomOffset = rectTransform.offsetMin.y;
+        ActivateSwipe(eventData);
+    }
 
-    //    rectTransform.offsetMax = new Vector2(rectTransform.offsetMax.x, -topOffset);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void ActivateSwipe(PointerEventData eventData)
+    {
+        Vector2 endPosition = eventData.position;
+        Vector2 swipeDelta = endPosition - _touchStartPosition;
 
-    //    rectTransform.offsetMin = new Vector2(rectTransform.offsetMin.x, bottomOffset);
-    //}
+        if (swipeDelta.magnitude >= minSwipeDistance)
+        {
+            if (Mathf.Abs(swipeDelta.x) > Mathf.Abs(swipeDelta.y))
+            {
+                if (swipeDelta.x > 0)
+                {
+                    _rightSwipe.OnPointerDown(eventData);
+                    _rightSwipe.OnPointerUp(eventData);
+                }
+                else
+                {
+                    _leftSwipe.OnPointerDown(eventData);
+                    _leftSwipe.OnPointerUp(eventData);
+                }
+            }
+            else
+            {
+                if (swipeDelta.y > 0)
+                {
+                    _upSwipe.OnPointerDown(eventData);
+                    _upSwipe.OnPointerUp(eventData);
+                }
+                else
+                {
+                    _downSwipe.OnPointerDown(eventData);
+                    _downSwipe.OnPointerUp(eventData);
+                }
+            }
+        }
+    }
 
 }
+
 

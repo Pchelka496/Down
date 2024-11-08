@@ -20,10 +20,11 @@ MonoBehaviour:
       m_SubObjectType: 
       m_EditorAssetChanged: 0
     Speed: 30
-    MotionPattern: 8
+    MotionPattern: 9
     MotionCharacteristic:
       x: 0
       y: 0
     NeedUpdateRewards: 0
+    IsolateDistance: {x: 5, y: 5}
     RequiredAmount: 2
     RelativeAmount: 0

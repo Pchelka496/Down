@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2592789325908897550}
   - component: {fileID: 7789235357773834107}
+  - component: {fileID: 1433484047925066136}
   m_Layer: 8
   m_Name: EnemyCore
   m_TagString: Untagged
@@ -44,3 +45,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 048d54d1f9e823e4d97740cc96983d2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &1433484047925066136
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917769837762218858}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 50
+  m_LinearDrag: 2
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 6200000, guid: 4559295b6db56b9449bd26919220a624, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4

@@ -34,7 +34,7 @@ public class LensController : System.IDisposable
         _player = player;
     }
 
-    public void SetLobbyMod()
+    public void SetLobbyMode()
     {
         ClearToken(ref _cts);
         _camera.Lens.OrthographicSize = _lobbyModeOrthographicSize;

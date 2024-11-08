@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
 using Zenject;
@@ -12,6 +11,7 @@ public class CharacterController : MonoBehaviour
     [SerializeField] Transform _bodySprite;
     [SerializeField] Rigidbody2D _rb;
     [SerializeField] CircleCollider2D _collider;
+    [SerializeField] MultiTargetRotationFollower _follower;
     [SerializeField] HealthModule _healthModule;
 
     IFlightModule _flightModule;
@@ -20,7 +20,10 @@ public class CharacterController : MonoBehaviour
     CancellationTokenSource _groundMovementCts;
 
     public Rigidbody2D Rb { get => _rb; set => _rb = value; }
+    public CircleCollider2D Collider { get => _collider; set => _collider = value; }
+    public MultiTargetRotationFollower MultiTargetRotationFollower => _follower;
     public HealthModule HealthModule { get => _healthModule; }
+    public EmergencyBrakeModule EmergencyBrakeModule { get; set; }
 
     public IFlightModule FlightModule
     {
@@ -32,7 +35,6 @@ public class CharacterController : MonoBehaviour
             SetFlightControl();
         }
     }
-
 
     [Inject]
     private void Construct(Controls controls, LevelManager levelManager)
@@ -66,16 +68,6 @@ public class CharacterController : MonoBehaviour
 
     }
 
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-
-    //}
-
-    //private void OnCollisionExit2D(Collision2D collision)
-    //{
-
-    //}
-
     private void SetFlightControl()
     {
         TokenClearing(ref _groundMovementCts);
@@ -89,7 +81,10 @@ public class CharacterController : MonoBehaviour
     {
         if (cancellationToken != null)
         {
-            cancellationToken.Cancel();
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                cancellationToken.Cancel();
+            }
             cancellationToken.Dispose();
             cancellationToken = null;
         }
@@ -112,7 +107,7 @@ public class CharacterController : MonoBehaviour
         }
         if (gameObject.TryGetComponent<CircleCollider2D>(out var collider))
         {
-            _collider = collider;
+            Collider = collider;
         }
     }
 

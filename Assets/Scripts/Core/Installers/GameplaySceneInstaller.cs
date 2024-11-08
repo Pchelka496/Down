@@ -10,12 +10,14 @@ public class GameplaySceneInstaller : MonoInstaller
     [SerializeField] BackgroundController _backgroundController;
     [SerializeField] RewardManager _rewardManager;
     [SerializeField] CamerasController _camerasController;
+    [SerializeField] AirTrailController _airTrailController;
     [SerializeField] Camera _mainCamera;
     [SerializeField] RewardCounter _rewardCounter;
     [SerializeField] UpgradePanelController _upgradePanelController;
     [SerializeField] AudioSourcePool _audioSourcePool;
     [SerializeField] EffectController _effectController;
     [SerializeField] ScreenFader _screenFader;
+    [SerializeField] BoosterIndicator _boosterIndicator;
     [SerializeField] EnumLanguage _enumLanguage;
     [SerializeField] PlayerModuleConfigs _playerModulesConfig;
 
@@ -36,9 +38,11 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<UpgradePanelController>().FromInstance(_upgradePanelController).AsSingle().NonLazy();
         Container.Bind<AudioSourcePool>().FromInstance(_audioSourcePool).AsSingle().NonLazy();
         Container.Bind<EffectController>().FromInstance(_effectController).AsSingle().NonLazy();
+        Container.Bind<AirTrailController>().FromInstance(_airTrailController).AsSingle().NonLazy();
         Container.Bind<Camera>().FromInstance(_mainCamera).AsSingle().NonLazy();
         Container.Bind<EnumLanguage>().FromInstance(_enumLanguage).AsSingle().NonLazy();
         Container.Bind<ScreenFader>().FromInstance(_screenFader).AsSingle().NonLazy();
+        Container.Bind<BoosterIndicator>().FromInstance(_boosterIndicator).AsSingle().NonLazy();
         Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle().NonLazy();
         Container.Bind<PlayerModuleConfigs>().FromInstance(_playerModulesConfig).AsSingle().NonLazy();
 
@@ -66,6 +70,10 @@ public class GameplaySceneInstaller : MonoInstaller
             .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.EngineModulePowerConfig))
             .AsSingle().NonLazy();
 
+        Container.Bind<PickerModuleConfig>()
+            .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.PickerModuleConfig))
+            .AsSingle().NonLazy();
+
         Container.Bind<EngineModuleAccelerationSpeedConfig>()
            .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.EngineModuleAccelerationSpeedConfig))
            .AsSingle().NonLazy();
@@ -85,17 +93,23 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<AirBrakeModuleConfig>()
             .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.AirBrakeModuleConfig))
             .AsSingle().NonLazy();
+
+        Container.Bind<BoosterModuleConfig>()
+            .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.BoosterModuleConfig))
+            .AsSingle().NonLazy();
     }
 
     [System.Serializable]
     public record PlayerModuleConfigs
     {
         [field: SerializeField] public EngineModulePowerConfig EngineModulePowerConfig { get; private set; }
+        [field: SerializeField] public PickerModuleConfig PickerModuleConfig { get; private set; }
         [field: SerializeField] public EngineModuleAccelerationSpeedConfig EngineModuleAccelerationSpeedConfig { get; private set; }
         [field: SerializeField] public StabilizationModuleConfig StabilizationModuleConfig { get; private set; }
         [field: SerializeField] public HealthModuleConfig HealthModuleConfig { get; private set; }
         [field: SerializeField] public EmergencyBrakeModuleConfig EmergencyBrakeModuleConfig { get; private set; }
         [field: SerializeField] public AirBrakeModuleConfig AirBrakeModuleConfig { get; private set; }
+        [field: SerializeField] public BoosterModuleConfig BoosterModuleConfig { get; private set; }
 
         public BaseModuleConfig[] GetAllConfigsAsBase()
         {
@@ -106,7 +120,9 @@ public class GameplaySceneInstaller : MonoInstaller
             StabilizationModuleConfig,
             HealthModuleConfig,
             EmergencyBrakeModuleConfig,
-            AirBrakeModuleConfig
+            AirBrakeModuleConfig,
+            BoosterModuleConfig,
+            PickerModuleConfig
             };
         }
 

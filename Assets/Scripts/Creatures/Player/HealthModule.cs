@@ -1,9 +1,13 @@
 using UnityEngine;
 using Zenject;
+using Cysharp.Threading.Tasks;
+using System.Threading;
+using System;
 
 public class HealthModule : BaseModule
 {
     [SerializeField] float _cameraShakeTime = 0.3f;
+    [SerializeField] float _invulnerabilityDuration = 0.5f;
     [SerializeField] SoundPlayerRandomPitch _soundPlayer;
     [SerializeField] int _maxHealth;
     [SerializeField] int _currentHealth;
@@ -12,6 +16,9 @@ public class HealthModule : BaseModule
     HealthModuleConfig _config;
     EffectController _effectController;
     CamerasController _camerasController;
+
+   // bool _isInvulnerable = false;
+   // CancellationTokenSource _invulnerabilityCancellationTokenSource;
 
     [Inject]
     private void Construct(HealthModuleConfig config, EffectController effectController, CamerasController camerasController, LevelManager levelManager, AudioSourcePool audioSourcePool)
@@ -28,30 +35,58 @@ public class HealthModule : BaseModule
     private void RoundStart(LevelManager levelManager)
     {
         _maxHealth = _config.GetMaxHealth();
-
         _currentHealth = _maxHealth;
+       // _isInvulnerable = false;
+
+       // _invulnerabilityCancellationTokenSource?.Cancel();
+      //  _invulnerabilityCancellationTokenSource = null;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        _effectController.PlayImpactEffect(collision.contacts[0].point);
-        _camerasController.EnableCameraShake(_cameraShakeTime);
-        _soundPlayer.PlayNextSound();
-
         if (collision.gameObject.layer == EnemyManager.ENEMY_LAYER_INDEX)
         {
-            ApplyDamage();
+            ApplyDamage(collision.contacts[0].point);
         }
     }
 
-    public void ApplyDamage()
+    public void ApplyDamage(Vector2 point)
     {
+       // if (_isInvulnerable) return;
+
         _currentHealth--;
+
+        _effectController.PlayImpactEffect(point);
+        _camerasController.EnableCameraShake(_cameraShakeTime);
+        _soundPlayer.PlayNextSound();
 
         if (_currentHealth < 0)
         {
             GameplaySceneInstaller.DiContainer.Resolve<LevelManager>().RoundEnd().Forget();
         }
+        // else
+        //  {
+        //      StartInvulnerability();
+        // }
     }
 
+    //private async void StartInvulnerability()
+    //{
+    //    _isInvulnerable = true;
+    //    _invulnerabilityCancellationTokenSource = new CancellationTokenSource();
+    //    try
+    //    {
+    //        await UniTask.Delay((int)(_invulnerabilityDuration * 1000), cancellationToken: _invulnerabilityCancellationTokenSource.Token);
+    //    }
+    //    catch (OperationCanceledException)
+    //    {
+    //    }
+    //    finally
+    //    {
+    //        _isInvulnerable = false;
+    //        _invulnerabilityCancellationTokenSource = null;
+    //    }
+    //}
+
 }
+
