@@ -29,58 +29,13 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             ""id"": ""df70fa95-8a34-4494-b137-73ab6b9c7d37"",
             ""actions"": [
                 {
-                    ""name"": ""MoveRight"",
-                    ""type"": ""Value"",
-                    ""id"": ""107ebe45-9dad-4bbd-acf9-6027a4235b8f"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""MoveLeft"",
-                    ""type"": ""Value"",
-                    ""id"": ""bd310e5c-fa7d-487c-a18c-9cda15b31135"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""LeftBooster"",
-                    ""type"": ""Value"",
+                    ""name"": ""TouchScreen"",
+                    ""type"": ""Button"",
                     ""id"": ""80e7f9fc-df26-4ad7-8bfc-41f5bc6c0efe"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""RightBooster"",
-                    ""type"": ""Button"",
-                    ""id"": ""66b99a26-73ca-41b9-ab26-2fdd31ee63e8"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""UpBooster"",
-                    ""type"": ""Button"",
-                    ""id"": ""f187d6d9-2d97-417b-b7f4-0ef0752dad32"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""DownBooster"",
-                    ""type"": ""Button"",
-                    ""id"": ""e0d79dfe-9d69-427e-b54d-a22d847ab4c1"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""AirBreake"",
@@ -95,67 +50,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""e30d22ed-cffb-42cf-81a9-bf3f04390620"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""MoveRight"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""908fe5f3-0483-47ed-b84a-0efc1aec7d8c"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""MoveLeft"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""c82ff680-1d17-4e25-afe1-47684b005805"",
-                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""path"": ""<Keyboard>/anyKey"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""LeftBooster"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9cc073aa-e125-4c46-896c-3b0dcc9af841"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RightBooster"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""77b2a23a-754f-48a1-a6c9-d7cccecaca37"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""UpBooster"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""815d70ad-5e79-4de3-a065-1fb71601b431"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""DownBooster"",
+                    ""action"": ""TouchScreen"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -173,7 +73,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""modifier"",
                     ""id"": ""6fede8df-4b0f-4896-b8b5-446b556a16e5"",
-                    ""path"": ""<Keyboard>/a"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -184,39 +84,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""binding"",
                     ""id"": ""4ef49592-8de3-4f51-9361-1020b8efcfd4"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AirBreake"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""9753fbd6-5454-47e7-96c7-a0be0e29cfba"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": ""MultiTap(tapDelay=0.5)"",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AirBreake"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""a5cba929-6e72-46cc-a6ea-77aa4189ace6"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AirBreake"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""binding"",
-                    ""id"": ""5138f9ed-5916-4ad7-ac01-640c0ff89ba9"",
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
@@ -809,12 +676,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_MoveRight = m_Player.FindAction("MoveRight", throwIfNotFound: true);
-        m_Player_MoveLeft = m_Player.FindAction("MoveLeft", throwIfNotFound: true);
-        m_Player_LeftBooster = m_Player.FindAction("LeftBooster", throwIfNotFound: true);
-        m_Player_RightBooster = m_Player.FindAction("RightBooster", throwIfNotFound: true);
-        m_Player_UpBooster = m_Player.FindAction("UpBooster", throwIfNotFound: true);
-        m_Player_DownBooster = m_Player.FindAction("DownBooster", throwIfNotFound: true);
+        m_Player_TouchScreen = m_Player.FindAction("TouchScreen", throwIfNotFound: true);
         m_Player_AirBreake = m_Player.FindAction("AirBreake", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -895,23 +757,13 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_MoveRight;
-    private readonly InputAction m_Player_MoveLeft;
-    private readonly InputAction m_Player_LeftBooster;
-    private readonly InputAction m_Player_RightBooster;
-    private readonly InputAction m_Player_UpBooster;
-    private readonly InputAction m_Player_DownBooster;
+    private readonly InputAction m_Player_TouchScreen;
     private readonly InputAction m_Player_AirBreake;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
         public PlayerActions(@Controls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MoveRight => m_Wrapper.m_Player_MoveRight;
-        public InputAction @MoveLeft => m_Wrapper.m_Player_MoveLeft;
-        public InputAction @LeftBooster => m_Wrapper.m_Player_LeftBooster;
-        public InputAction @RightBooster => m_Wrapper.m_Player_RightBooster;
-        public InputAction @UpBooster => m_Wrapper.m_Player_UpBooster;
-        public InputAction @DownBooster => m_Wrapper.m_Player_DownBooster;
+        public InputAction @TouchScreen => m_Wrapper.m_Player_TouchScreen;
         public InputAction @AirBreake => m_Wrapper.m_Player_AirBreake;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -922,24 +774,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @MoveRight.started += instance.OnMoveRight;
-            @MoveRight.performed += instance.OnMoveRight;
-            @MoveRight.canceled += instance.OnMoveRight;
-            @MoveLeft.started += instance.OnMoveLeft;
-            @MoveLeft.performed += instance.OnMoveLeft;
-            @MoveLeft.canceled += instance.OnMoveLeft;
-            @LeftBooster.started += instance.OnLeftBooster;
-            @LeftBooster.performed += instance.OnLeftBooster;
-            @LeftBooster.canceled += instance.OnLeftBooster;
-            @RightBooster.started += instance.OnRightBooster;
-            @RightBooster.performed += instance.OnRightBooster;
-            @RightBooster.canceled += instance.OnRightBooster;
-            @UpBooster.started += instance.OnUpBooster;
-            @UpBooster.performed += instance.OnUpBooster;
-            @UpBooster.canceled += instance.OnUpBooster;
-            @DownBooster.started += instance.OnDownBooster;
-            @DownBooster.performed += instance.OnDownBooster;
-            @DownBooster.canceled += instance.OnDownBooster;
+            @TouchScreen.started += instance.OnTouchScreen;
+            @TouchScreen.performed += instance.OnTouchScreen;
+            @TouchScreen.canceled += instance.OnTouchScreen;
             @AirBreake.started += instance.OnAirBreake;
             @AirBreake.performed += instance.OnAirBreake;
             @AirBreake.canceled += instance.OnAirBreake;
@@ -947,24 +784,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(IPlayerActions instance)
         {
-            @MoveRight.started -= instance.OnMoveRight;
-            @MoveRight.performed -= instance.OnMoveRight;
-            @MoveRight.canceled -= instance.OnMoveRight;
-            @MoveLeft.started -= instance.OnMoveLeft;
-            @MoveLeft.performed -= instance.OnMoveLeft;
-            @MoveLeft.canceled -= instance.OnMoveLeft;
-            @LeftBooster.started -= instance.OnLeftBooster;
-            @LeftBooster.performed -= instance.OnLeftBooster;
-            @LeftBooster.canceled -= instance.OnLeftBooster;
-            @RightBooster.started -= instance.OnRightBooster;
-            @RightBooster.performed -= instance.OnRightBooster;
-            @RightBooster.canceled -= instance.OnRightBooster;
-            @UpBooster.started -= instance.OnUpBooster;
-            @UpBooster.performed -= instance.OnUpBooster;
-            @UpBooster.canceled -= instance.OnUpBooster;
-            @DownBooster.started -= instance.OnDownBooster;
-            @DownBooster.performed -= instance.OnDownBooster;
-            @DownBooster.canceled -= instance.OnDownBooster;
+            @TouchScreen.started -= instance.OnTouchScreen;
+            @TouchScreen.performed -= instance.OnTouchScreen;
+            @TouchScreen.canceled -= instance.OnTouchScreen;
             @AirBreake.started -= instance.OnAirBreake;
             @AirBreake.performed -= instance.OnAirBreake;
             @AirBreake.canceled -= instance.OnAirBreake;
@@ -1150,12 +972,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     }
     public interface IPlayerActions
     {
-        void OnMoveRight(InputAction.CallbackContext context);
-        void OnMoveLeft(InputAction.CallbackContext context);
-        void OnLeftBooster(InputAction.CallbackContext context);
-        void OnRightBooster(InputAction.CallbackContext context);
-        void OnUpBooster(InputAction.CallbackContext context);
-        void OnDownBooster(InputAction.CallbackContext context);
+        void OnTouchScreen(InputAction.CallbackContext context);
         void OnAirBreake(InputAction.CallbackContext context);
     }
     public interface IUIActions

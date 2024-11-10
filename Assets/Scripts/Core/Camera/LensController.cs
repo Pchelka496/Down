@@ -130,18 +130,7 @@ public class LensController : System.IDisposable
         _camera.Lens.OrthographicSize = targetOrthographicSize;
     }
 
-    private void ClearToken(ref CancellationTokenSource cts)
-    {
-        if (cts == null) return;
-
-        if (!cts.IsCancellationRequested)
-        {
-            cts.Cancel();
-        }
-
-        cts.Dispose();
-        cts = null;
-    }
+    private void ClearToken(ref CancellationTokenSource cts) => ClearTokenSupport.ClearToken(ref cts);
 
     public void Dispose()
     {

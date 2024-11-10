@@ -16,9 +16,6 @@ public class CharacterController : MonoBehaviour
 
     IFlightModule _flightModule;
 
-    CancellationTokenSource _flightCts;
-    CancellationTokenSource _groundMovementCts;
-
     public Rigidbody2D Rb { get => _rb; set => _rb = value; }
     public CircleCollider2D Collider { get => _collider; set => _collider = value; }
     public MultiTargetRotationFollower MultiTargetRotationFollower => _follower;
@@ -29,10 +26,7 @@ public class CharacterController : MonoBehaviour
     {
         get => _flightModule; set
         {
-            TokenClearing(ref _flightCts);
             _flightModule = value;
-
-            SetFlightControl();
         }
     }
 
@@ -68,15 +62,6 @@ public class CharacterController : MonoBehaviour
 
     }
 
-    private void SetFlightControl()
-    {
-        TokenClearing(ref _groundMovementCts);
-        TokenClearing(ref _flightCts);
-
-        _flightCts = new();
-        FlightModule.Fly(_flightCts).Forget();
-    }
-
     private void TokenClearing(ref CancellationTokenSource cancellationToken)
     {
         if (cancellationToken != null)
@@ -108,18 +93,6 @@ public class CharacterController : MonoBehaviour
         if (gameObject.TryGetComponent<CircleCollider2D>(out var collider))
         {
             Collider = collider;
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (_flightCts != null)
-        {
-            TokenClearing(ref _flightCts);
-        }
-        if (_groundMovementCts != null)
-        {
-            TokenClearing(ref _groundMovementCts);
         }
     }
 

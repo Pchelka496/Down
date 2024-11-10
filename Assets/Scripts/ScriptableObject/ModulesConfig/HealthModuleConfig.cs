@@ -3,27 +3,59 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "HealthModuleConfig", menuName = "Scriptable Objects/HealthModuleConfig")]
 public class HealthModuleConfig : BaseModuleConfig
 {
-    [SerializeField] int[] _maxHealthOnLevel = new int[1];
+    [SerializeField] UpdateCharacteristicsInfo<EnumCharacteristics, float>[] _characteristics;
 
-    public override void SetLevel(int level)
+    public override bool ActivityCheck()
     {
-        if (!SetLevelCheck(level))
+        return true;
+    }
+
+    public int GetLevel(EnumCharacteristics characteristic)
+    {
+        var level = base.GetLevel<EnumCharacteristics, float>(_characteristics, characteristic);
+
+        if (level == null)
         {
-            _currentLevel = _maxHealthOnLevel.Length - 1;
-            Debug.LogError($"{this.GetType()} Current level {_currentLevel} is out of bounds for the array! Array length: {_maxHealthOnLevel.Length}");
+            return 0;
         }
 
-        _currentLevel = level;
+        return level.Value;
     }
 
-    public override int GetMaxLevel() => _maxHealthOnLevel.Length - 1;
-
-    public override bool SetLevelCheck(int level)
+    public void SetLevel(EnumCharacteristics characteristic, int newLevel)
     {
-        return !(level > _maxHealthOnLevel.Length - 1);
+        base.SetLevel<EnumCharacteristics, float>(_characteristics, characteristic, newLevel);
     }
 
-    public int GetMaxHealth() => _maxHealthOnLevel[_currentLevel];
+    public int GetMaxLevel(EnumCharacteristics characteristic)
+    {
+        var maxLevel = base.GetMaxLevel<EnumCharacteristics, float>(_characteristics, characteristic);
+
+        if (maxLevel == null)
+        {
+            return 0;
+        }
+
+        return maxLevel.Value;
+    }
+
+    public int GetLevelCost(EnumCharacteristics characteristic, int level)
+    {
+        var levelCost = base.GetLevelCost<EnumCharacteristics, float>(_characteristics, characteristic, level);
+
+        if (levelCost == null)
+        {
+            return 0;
+        }
+
+        return levelCost.Value;
+    }
+
+    public enum EnumCharacteristics
+    {
+        MaximumHealth,
+        NumberOfPartsRequiredForRepair,
+    }
 
 }
 

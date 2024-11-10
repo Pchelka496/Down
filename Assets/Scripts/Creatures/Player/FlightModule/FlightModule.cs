@@ -41,18 +41,18 @@ public class FlightModule : BaseModule, IFlightModule
     {
         while (!cts.IsCancellationRequested)
         {
-            var newLeftInputValue = _controls.Player.MoveLeft.ReadValue<float>();
-            var newRightInputValue = _controls.Player.MoveRight.ReadValue<float>();
+            //var newLeftInputValue = _controls.Player.MoveLeft.ReadValue<float>();
+           // var newRightInputValue = _controls.Player.MoveRight.ReadValue<float>();
 
             var intraplateValue = MIN_INTROPALITES_INPUT_VALUE;
 
-            if (newLeftInputValue != 0f && newRightInputValue != 0f)
-            {
-                intraplateValue = MAX_INTROPALITES_INPUT_VALUE;
-            }
+          //  if (newLeftInputValue != 0f && newRightInputValue != 0f)
+           // {
+           //     intraplateValue = MAX_INTROPALITES_INPUT_VALUE;
+           // }
 
-            _oldLeftInputValue = Mathf.Lerp(_oldLeftInputValue, newLeftInputValue, intraplateValue);
-            _oldRightInputValue = Mathf.Lerp(_oldRightInputValue, newRightInputValue, intraplateValue);
+           // _oldLeftInputValue = Mathf.Lerp(_oldLeftInputValue, newLeftInputValue, intraplateValue);
+           // _oldRightInputValue = Mathf.Lerp(_oldRightInputValue, newRightInputValue, intraplateValue);
 
             if (_oldLeftInputValue != 1f || _oldRightInputValue != 1f)
             {

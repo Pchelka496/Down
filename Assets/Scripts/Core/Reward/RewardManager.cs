@@ -28,12 +28,7 @@ public class RewardManager : MonoBehaviour
 
     }
 
-    public async UniTask<int> GetPoints()
-    {
-        await UniTask.WaitUntil(() => _config != null);
-
-        return _config.GetPoints();
-    }
+    public int GetPoints() => _config.GetPoints();
 
     public void IncreasePoints(int increaseValue) => _config.IncreasePoints(increaseValue);
 

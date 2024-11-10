@@ -6,58 +6,13 @@
             "id": "df70fa95-8a34-4494-b137-73ab6b9c7d37",
             "actions": [
                 {
-                    "name": "MoveRight",
-                    "type": "Value",
-                    "id": "107ebe45-9dad-4bbd-acf9-6027a4235b8f",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "MoveLeft",
-                    "type": "Value",
-                    "id": "bd310e5c-fa7d-487c-a18c-9cda15b31135",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "LeftBooster",
-                    "type": "Value",
+                    "name": "TouchScreen",
+                    "type": "Button",
                     "id": "80e7f9fc-df26-4ad7-8bfc-41f5bc6c0efe",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "RightBooster",
-                    "type": "Button",
-                    "id": "66b99a26-73ca-41b9-ab26-2fdd31ee63e8",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "UpBooster",
-                    "type": "Button",
-                    "id": "f187d6d9-2d97-417b-b7f4-0ef0752dad32",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "DownBooster",
-                    "type": "Button",
-                    "id": "e0d79dfe-9d69-427e-b54d-a22d847ab4c1",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 },
                 {
                     "name": "AirBreake",
@@ -72,67 +27,12 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "e30d22ed-cffb-42cf-81a9-bf3f04390620",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "MoveRight",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "908fe5f3-0483-47ed-b84a-0efc1aec7d8c",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "MoveLeft",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "c82ff680-1d17-4e25-afe1-47684b005805",
-                    "path": "<Keyboard>/leftArrow",
+                    "path": "<Keyboard>/anyKey",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "LeftBooster",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9cc073aa-e125-4c46-896c-3b0dcc9af841",
-                    "path": "<Keyboard>/rightArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RightBooster",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "77b2a23a-754f-48a1-a6c9-d7cccecaca37",
-                    "path": "<Keyboard>/upArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UpBooster",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "815d70ad-5e79-4de3-a065-1fb71601b431",
-                    "path": "<Keyboard>/downArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "DownBooster",
+                    "action": "TouchScreen",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -150,7 +50,7 @@
                 {
                     "name": "modifier",
                     "id": "6fede8df-4b0f-4896-b8b5-446b556a16e5",
-                    "path": "<Keyboard>/a",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -161,39 +61,6 @@
                 {
                     "name": "binding",
                     "id": "4ef49592-8de3-4f51-9361-1020b8efcfd4",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "AirBreake",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "One Modifier",
-                    "id": "9753fbd6-5454-47e7-96c7-a0be0e29cfba",
-                    "path": "OneModifier",
-                    "interactions": "MultiTap(tapDelay=0.5)",
-                    "processors": "",
-                    "groups": "",
-                    "action": "AirBreake",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "modifier",
-                    "id": "a5cba929-6e72-46cc-a6ea-77aa4189ace6",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "AirBreake",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "binding",
-                    "id": "5138f9ed-5916-4ad7-ac01-640c0ff89ba9",
                     "path": "",
                     "interactions": "",
                     "processors": "",

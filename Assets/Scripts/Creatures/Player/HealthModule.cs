@@ -17,8 +17,8 @@ public class HealthModule : BaseModule
     EffectController _effectController;
     CamerasController _camerasController;
 
-   // bool _isInvulnerable = false;
-   // CancellationTokenSource _invulnerabilityCancellationTokenSource;
+    // bool _isInvulnerable = false;
+    // CancellationTokenSource _invulnerabilityCancellationTokenSource;
 
     [Inject]
     private void Construct(HealthModuleConfig config, EffectController effectController, CamerasController camerasController, LevelManager levelManager, AudioSourcePool audioSourcePool)
@@ -34,12 +34,12 @@ public class HealthModule : BaseModule
 
     private void RoundStart(LevelManager levelManager)
     {
-        _maxHealth = _config.GetMaxHealth();
+        _maxHealth = 1;//_config.GetMaxHealth();
         _currentHealth = _maxHealth;
-       // _isInvulnerable = false;
+        // _isInvulnerable = false;
 
-       // _invulnerabilityCancellationTokenSource?.Cancel();
-      //  _invulnerabilityCancellationTokenSource = null;
+        // _invulnerabilityCancellationTokenSource?.Cancel();
+        //  _invulnerabilityCancellationTokenSource = null;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -52,7 +52,7 @@ public class HealthModule : BaseModule
 
     public void ApplyDamage(Vector2 point)
     {
-       // if (_isInvulnerable) return;
+        // if (_isInvulnerable) return;
 
         _currentHealth--;
 

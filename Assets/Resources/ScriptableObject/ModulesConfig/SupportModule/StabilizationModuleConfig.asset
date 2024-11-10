@@ -12,21 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d8eb55280ed53e4cae45e77f2c6587b, type: 3}
   m_Name: StabilizationModuleConfig
   m_EditorClassIdentifier: 
-  _currentLevel: 0
-  _levelCost: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  _rotationSpeedOnLevel:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
+  _resetThePriceAfterPurchase: 0
+  _characteristics:
+  - updateType: 0
+    currentLevel: 0
+    characteristicsPerLevel:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    levelCost: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  - updateType: 1
+    currentLevel: 0
+    characteristicsPerLevel:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    levelCost: 000000000000000000000000000000000000000000000000000000000000000000000000

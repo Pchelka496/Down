@@ -54,7 +54,7 @@ public class DisplayController : MonoBehaviour
         }
 
         _rewardManager = rewardManager;
-        TargetText(await DefaultText()).Forget();
+        TargetText(DefaultText()).Forget();
     }
 
     public async UniTask SetClimbingMode(float displayTime)
@@ -142,16 +142,16 @@ public class DisplayController : MonoBehaviour
 
         StartCursorBlinkingAsync(token).Forget();
 
-        if (_targetText != await DefaultText())
+        if (_targetText != DefaultText())
         {
             await UniTask.WaitForSeconds(displayTime);
-            TargetText(await DefaultText()).Forget();
+            TargetText(DefaultText()).Forget();
         }
     }
 
-    private async UniTask<string> DefaultText()
+    private string DefaultText()
     {
-        return ConvertText(_config.StartPointsInformation, await _rewardManager.GetPoints(), _config.EndPointsInformation);
+        return ConvertText(_config.StartPointsInformation, _rewardManager.GetPoints(), _config.EndPointsInformation);
     }
 
     private async UniTask StartCursorBlinkingAsync(CancellationToken token)

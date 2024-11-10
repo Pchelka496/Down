@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: RewardManagerConfig
   m_EditorClassIdentifier: 
   _rewardControllerConfig: {fileID: 11400000, guid: ddefa030c7bd37b42b5c9c28ee4076c7, type: 2}
+  _points: 558964180

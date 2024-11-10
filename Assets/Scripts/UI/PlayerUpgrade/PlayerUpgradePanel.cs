@@ -9,13 +9,14 @@ public class PlayerUpgradePanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI _currentPointsText;
     [SerializeField] SoundPlayerRandomPitch _unsuccessfulSoundPlayer;
     [SerializeField] SoundPlayerRandomPitch _successfulSoundPlayer;
-    [SerializeField] UpgradeInfo _stabilizer;
-    [SerializeField] UpgradeInfo _enginePower;
-    [SerializeField] UpgradeInfo _engineAccelerationSpeed;
-    [SerializeField] UpgradeInfo _outerSkinStrength;
-    [SerializeField] UpgradeInfo _airBrake;
-    [SerializeField] UpgradeInfo _emergencyBrakeSystem;
-    [SerializeField] UpgradeInfo _boosterModule;
+
+    [SerializeField] EngineUpdater _engineUpdater;
+    [SerializeField] HealthModuleUpdater _healthModuleUpdater;
+    [SerializeField] PickerModuleUpdater _pieceModuleUpdater;
+    [SerializeField] AirBrakeUpdater _airBrakeUpdater;
+    [SerializeField] StabilizationModuleUpdater _stabilizationModuleUpdater;
+    [SerializeField] EmergencyBrakeUpdater _emergencyBrakeUpdater;
+
     AudioSourcePool _audioSourcePool;
     PlayerModuleConfigs _configs;
     RewardManager _rewardManager;
@@ -37,13 +38,12 @@ public class PlayerUpgradePanel : MonoBehaviour
 
         UpdateCurrentPoints();
 
-        _stabilizer.Initialize(_configs.StabilizationModuleConfig);
-        _enginePower.Initialize(_configs.EngineModulePowerConfig);
-        _engineAccelerationSpeed.Initialize(_configs.EngineModuleAccelerationSpeedConfig);
-        _outerSkinStrength.Initialize(_configs.HealthModuleConfig);
-        _airBrake.Initialize(_configs.AirBrakeModuleConfig);
-        _emergencyBrakeSystem.Initialize(_configs.EmergencyBrakeModuleConfig);
-        _boosterModule.Initialize(_configs.BoosterModuleConfig);
+        _engineUpdater.Initialize(_configs.EngineModuleConfig, this);
+        _healthModuleUpdater.Initialize(_configs.HealthModuleConfig, this);
+        _pieceModuleUpdater.Initialize(_configs.PickerModuleConfig, this);
+        _airBrakeUpdater.Initialize(_configs.AirBrakeModuleConfig, this);
+        _stabilizationModuleUpdater.Initialize(_configs.StabilizationModuleConfig, this);
+        _emergencyBrakeUpdater.Initialize(_configs.EmergencyBrakeModuleConfig, this);
     }
 
     public void OpenPanel()
@@ -56,73 +56,46 @@ public class PlayerUpgradePanel : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private async void UpdateCurrentPoints()
+    private void UpdateCurrentPoints()
     {
-        var points = await _rewardManager.GetPoints();
+        var points = _rewardManager.GetPoints();
 
         _currentPointsText.text = points.ToString();
     }
 
-    //Buttons
-    public void UpgradeStabilizer()
+    public bool UpgradeLevelCheck(int pointsNeeded, int currentLevel, int maxLevel)
     {
-        UpgradeLevel(_stabilizer.ModuleConfig, _stabilizer).Forget();
-    }
-
-    public void UpgradeEnginePower()
-    {
-        UpgradeLevel(_enginePower.ModuleConfig, _enginePower).Forget();
-    }
-
-    public void UpgradeEngineAccelerationSpeed()
-    {
-        UpgradeLevel(_engineAccelerationSpeed.ModuleConfig, _engineAccelerationSpeed).Forget();
-    }
-
-    public void UpgradeOuterSkinStrength()
-    {
-        UpgradeLevel(_outerSkinStrength.ModuleConfig, _outerSkinStrength).Forget();
-    }
-
-    public void UpgradeAirBrake()
-    {
-        UpgradeLevel(_airBrake.ModuleConfig, _airBrake).Forget();
-    }
-
-    public void UpgradeEmergencyBrakeSystem()
-    {
-        UpgradeLevel(_emergencyBrakeSystem.ModuleConfig, _emergencyBrakeSystem).Forget();
-    }
-
-    public void UpgradeBoosterPower()
-    {
-        UpgradeLevel(_boosterModule.ModuleConfig, _boosterModule).Forget();
-    }
-    //
-
-    public async UniTaskVoid UpgradeLevel(BaseModuleConfig config, UpgradeInfo upgradeInfo)
-    {
-        var pointsNeeded = config.GetCurrentLevelCost();
-
-        if (await _rewardManager.GetPoints() >= pointsNeeded && config.SetLevelCheck(config.GetCurrentLevel() + 1))
+        if (_rewardManager.GetPoints() >= pointsNeeded && currentLevel < maxLevel)
         {
-            HandleSuccessfulUpgrade(config, upgradeInfo, pointsNeeded);
+            HandleSuccessfulUpgrade(pointsNeeded);
+            return true;
         }
         else
         {
             HandleUnsuccessfulUpgrade();
+            return false;
         }
     }
 
-    private void HandleSuccessfulUpgrade(BaseModuleConfig config, UpgradeInfo upgradeInfo, int pointsNeeded)
+    public bool DowngradeLevelCheck(int currentLevel)
+    {
+        if (currentLevel >= 0)
+        {
+            HandleSuccessfulUpgrade(0);
+            return true;
+        }
+        else
+        {
+            HandleUnsuccessfulUpgrade();
+            return false;
+        }
+    }
+
+    private void HandleSuccessfulUpgrade(int pointsNeeded)
     {
         _successfulSoundPlayer.PlayNextSound();
 
         _rewardManager.DecreasePoints(pointsNeeded);
-
-        config.SetLevel(config.GetCurrentLevel() + 1);
-
-        upgradeInfo.UpdateCurrentLevel(config.GetCurrentLevel());
 
         UpdateCurrentPoints();
     }

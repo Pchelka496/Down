@@ -20,7 +20,7 @@ public class LevelProgressDisplay
 
     Image[] _levelImages;
 
-    public async void Initialize(int maxLevels, int currentLevel)
+    public async UniTask Initialize(int currentLevel, int maxLevel)
     {
         await UniTask.DelayFrame(1);
 
@@ -29,15 +29,15 @@ public class LevelProgressDisplay
             MonoBehaviour.Destroy(child.gameObject);
         }
 
-        _levelImages = new Image[maxLevels];
+        _levelImages = new Image[maxLevel];
 
         float containerWidth = _container.rect.width - _leftPadding - _rightPadding;
         float containerHeight = _container.rect.height - _topPadding - _bottomPadding;
 
-        float elementWidth = (containerWidth - (_spacing * (maxLevels - 1))) / maxLevels;
+        float elementWidth = (containerWidth - (_spacing * (maxLevel - 1))) / maxLevel;
         float elementHeight = containerHeight;
 
-        for (int i = 0; i < maxLevels; i++)
+        for (int i = 0; i < maxLevel; i++)
         {
             GameObject levelObject = new GameObject("Level_" + i, typeof(Image));
             levelObject.transform.SetParent(_container, false);
@@ -57,7 +57,7 @@ public class LevelProgressDisplay
             _levelImages[i] = image;
         }
 
-        UpdateLevelProgress(currentLevel);
+        await UniTask.CompletedTask;
     }
 
     public void UpdateLevelProgress(int activeLevels)

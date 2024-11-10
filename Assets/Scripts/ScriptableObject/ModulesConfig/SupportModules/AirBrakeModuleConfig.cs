@@ -3,25 +3,67 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "AirBrakeConfig", menuName = "Scriptable Objects/AirBrakeConfig")]
 public class AirBrakeModuleConfig : BaseModuleConfig
 {
-    [SerializeField] float[] _brakePower = new float[0];
+    [SerializeField] UpdateCharacteristicsInfo<EnumCharacteristics, float>[] _characteristics;
 
-    public override void SetLevel(int level)
+    public float AirMaxBrakeDrag => GetCharacteristicForLevel(_characteristics,
+                                                             EnumCharacteristics.AirBrakeDrag,
+                                                             GetLevel(EnumCharacteristics.AirBrakeDrag)
+                                                             );
+    public float AirBrakeReleaseRate => GetCharacteristicForLevel(_characteristics,
+                                                             EnumCharacteristics.AirBrakeReleaseRate,
+                                                             GetLevel(EnumCharacteristics.AirBrakeReleaseRate)
+                                                             );
+
+    public override bool ActivityCheck()
     {
-        if (!SetLevelCheck(level))
-        {
-            _currentLevel = _brakePower.Length - 1;
-            Debug.LogError($"{this.GetType()} Current level {_currentLevel} is out of bounds for the _brakePower array! Array length: {_brakePower.Length}");
-        }
-
-        _currentLevel = level;
+        return true;
     }
 
-    public override int GetMaxLevel() => _brakePower.Length - 1;
-    public float GetBrakePower() => _brakePower[_currentLevel];
-
-    public override bool SetLevelCheck(int level)
+    public int GetLevel(EnumCharacteristics characteristic)
     {
-        return !(level > _brakePower.Length - 1);
+        var level = base.GetLevel<EnumCharacteristics, float>(_characteristics, characteristic);
+
+        if (level == null)
+        {
+            return 0;
+        }
+
+        return level.Value;
+    }
+
+    public void SetLevel(EnumCharacteristics characteristic, int newLevel)
+    {
+        base.SetLevel<EnumCharacteristics, float>(_characteristics, characteristic, newLevel);
+    }
+
+    public int GetMaxLevel(EnumCharacteristics characteristic)
+    {
+        var maxLevel = base.GetMaxLevel<EnumCharacteristics, float>(_characteristics, characteristic);
+
+        if (maxLevel == null)
+        {
+            return 0;
+        }
+
+        return maxLevel.Value;
+    }
+
+    public int GetLevelCost(EnumCharacteristics characteristic, int level)
+    {
+        var levelCost = base.GetLevelCost<EnumCharacteristics, float>(_characteristics, characteristic, level);
+
+        if (levelCost == null)
+        {
+            return 0;
+        }
+
+        return levelCost.Value;
+    }
+
+    public enum EnumCharacteristics
+    {
+        AirBrakeDrag,
+        AirBrakeReleaseRate,
     }
 
 }

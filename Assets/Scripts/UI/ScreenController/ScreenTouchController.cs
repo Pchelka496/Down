@@ -1,79 +1,47 @@
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.OnScreen;
+using Zenject;
 
-public class ScreenTouchController : OnScreenButton, IPointerDownHandler, IPointerUpHandler
+public class ScreenTouchController : OnScreenButton, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-    [SerializeField] TouchHandler _leftTouch;
-    [SerializeField] TouchHandler _rightTouch;
-
-    [SerializeField] TouchHandler _rightSwipe;
-    [SerializeField] TouchHandler _leftSwipe;
-    [SerializeField] TouchHandler _upSwipe;
-    [SerializeField] TouchHandler _downSwipe;
-
-    [SerializeField] float minSwipeDistance = 50f;
-
+    Camera _mainCamera;
     Vector2 _touchStartPosition;
+    Vector2 _touchEndPosition;
+    Vector2 _currentTouchPosition;
+
+    public Vector2 TouchStartPosition => _touchStartPosition;
+    public Vector2 TouchEndPosition => _touchEndPosition;
+    public Vector2 TouchCurrentPosition => _currentTouchPosition;
+
+    [Inject]
+    private void Construct(Camera mainCamera)
+    {
+        _mainCamera = mainCamera;
+    }
 
     public new void OnPointerDown(PointerEventData eventData)
     {
         _touchStartPosition = eventData.position;
+        OnDrag(eventData);
 
-        if (eventData.position.x < Screen.width / 2)
-        {
-            _leftTouch.OnPointerDown(eventData);
-        }
-        else
-        {
-            _rightTouch.OnPointerDown(eventData);
-        }
+        base.OnPointerDown(eventData);
     }
 
     public new void OnPointerUp(PointerEventData eventData)
     {
-        _leftTouch.OnPointerUp(eventData);
-        _rightTouch.OnPointerUp(eventData);
+        _touchEndPosition = eventData.position;
+        OnDrag(eventData);
 
-        ActivateSwipe(eventData);
+        base.OnPointerUp(eventData);
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private void ActivateSwipe(PointerEventData eventData)
+    public void OnDrag(PointerEventData eventData)
     {
-        Vector2 endPosition = eventData.position;
-        Vector2 swipeDelta = endPosition - _touchStartPosition;
-
-        if (swipeDelta.magnitude >= minSwipeDistance)
-        {
-            if (Mathf.Abs(swipeDelta.x) > Mathf.Abs(swipeDelta.y))
-            {
-                if (swipeDelta.x > 0)
-                {
-                    _rightSwipe.OnPointerDown(eventData);
-                    _rightSwipe.OnPointerUp(eventData);
-                }
-                else
-                {
-                    _leftSwipe.OnPointerDown(eventData);
-                    _leftSwipe.OnPointerUp(eventData);
-                }
-            }
-            else
-            {
-                if (swipeDelta.y > 0)
-                {
-                    _upSwipe.OnPointerDown(eventData);
-                    _upSwipe.OnPointerUp(eventData);
-                }
-                else
-                {
-                    _downSwipe.OnPointerDown(eventData);
-                    _downSwipe.OnPointerUp(eventData);
-                }
-            }
-        }
+        _currentTouchPosition = eventData.position;
+        Debug.DrawLine(_mainCamera.ScreenToWorldPoint(new Vector3(_touchStartPosition.x, _touchStartPosition.y, 10f)),
+                      _mainCamera.ScreenToWorldPoint(new Vector3(_currentTouchPosition.x, _currentTouchPosition.y, 10f)),
+                      Color.red);
     }
 
 }

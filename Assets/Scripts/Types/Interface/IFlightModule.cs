@@ -3,6 +3,5 @@ using System.Threading;
 
 public interface IFlightModule
 {
-    public UniTask Fly(CancellationTokenSource tokenSource);
 
 }

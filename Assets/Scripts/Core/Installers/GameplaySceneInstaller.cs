@@ -18,6 +18,7 @@ public class GameplaySceneInstaller : MonoInstaller
     [SerializeField] EffectController _effectController;
     [SerializeField] ScreenFader _screenFader;
     [SerializeField] BoosterIndicator _boosterIndicator;
+    [SerializeField] ScreenTouchController _screenTouchController;
     [SerializeField] EnumLanguage _enumLanguage;
     [SerializeField] PlayerModuleConfigs _playerModulesConfig;
 
@@ -43,6 +44,7 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<EnumLanguage>().FromInstance(_enumLanguage).AsSingle().NonLazy();
         Container.Bind<ScreenFader>().FromInstance(_screenFader).AsSingle().NonLazy();
         Container.Bind<BoosterIndicator>().FromInstance(_boosterIndicator).AsSingle().NonLazy();
+        Container.Bind<ScreenTouchController>().FromInstance(_screenTouchController).AsSingle().NonLazy();
         Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle().NonLazy();
         Container.Bind<PlayerModuleConfigs>().FromInstance(_playerModulesConfig).AsSingle().NonLazy();
 
@@ -66,17 +68,13 @@ public class GameplaySceneInstaller : MonoInstaller
 
     private void BindPlayerModuleConfigs()
     {
-        Container.Bind<EngineModulePowerConfig>()
-            .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.EngineModulePowerConfig))
+        Container.Bind<EngineModuleConfig>()
+            .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.EngineModuleConfig))
             .AsSingle().NonLazy();
 
         Container.Bind<PickerModuleConfig>()
             .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.PickerModuleConfig))
             .AsSingle().NonLazy();
-
-        Container.Bind<EngineModuleAccelerationSpeedConfig>()
-           .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.EngineModuleAccelerationSpeedConfig))
-           .AsSingle().NonLazy();
 
         Container.Bind<StabilizationModuleConfig>()
             .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.StabilizationModuleConfig))
@@ -93,35 +91,27 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<AirBrakeModuleConfig>()
             .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.AirBrakeModuleConfig))
             .AsSingle().NonLazy();
-
-        Container.Bind<BoosterModuleConfig>()
-            .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.BoosterModuleConfig))
-            .AsSingle().NonLazy();
     }
 
     [System.Serializable]
     public record PlayerModuleConfigs
     {
-        [field: SerializeField] public EngineModulePowerConfig EngineModulePowerConfig { get; private set; }
+        [field: SerializeField] public EngineModuleConfig EngineModuleConfig { get; private set; }
         [field: SerializeField] public PickerModuleConfig PickerModuleConfig { get; private set; }
-        [field: SerializeField] public EngineModuleAccelerationSpeedConfig EngineModuleAccelerationSpeedConfig { get; private set; }
         [field: SerializeField] public StabilizationModuleConfig StabilizationModuleConfig { get; private set; }
         [field: SerializeField] public HealthModuleConfig HealthModuleConfig { get; private set; }
         [field: SerializeField] public EmergencyBrakeModuleConfig EmergencyBrakeModuleConfig { get; private set; }
         [field: SerializeField] public AirBrakeModuleConfig AirBrakeModuleConfig { get; private set; }
-        [field: SerializeField] public BoosterModuleConfig BoosterModuleConfig { get; private set; }
 
         public BaseModuleConfig[] GetAllConfigsAsBase()
         {
             return new BaseModuleConfig[]
             {
-            EngineModulePowerConfig,
-            EngineModuleAccelerationSpeedConfig,
+            EngineModuleConfig,
             StabilizationModuleConfig,
             HealthModuleConfig,
             EmergencyBrakeModuleConfig,
             AirBrakeModuleConfig,
-            BoosterModuleConfig,
             PickerModuleConfig
             };
         }

@@ -1,41 +1,40 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UpgradeInfo : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI _costText;
     [SerializeField] LevelProgressDisplay _levelProgressDisplay;
-    BaseModuleConfig _moduleConfig;
 
-    public BaseModuleConfig ModuleConfig { get => _moduleConfig; }
+    [SerializeField] Button _upgradeButton;
+    [SerializeField] Button _downgradeButton;
 
-    public void Initialize(BaseModuleConfig moduleConfig)
+    public async void Initialize(int currentLevel, int maxLevel, string currentLevelConst, System.Action upgradeAction, System.Action downgradeAction)
     {
-        var maxLevel = moduleConfig.GetMaxLevel();
-        var currentLevel = moduleConfig.GetCurrentLevel();
+        await _levelProgressDisplay.Initialize(currentLevel: currentLevel, maxLevel: maxLevel);
 
-        _levelProgressDisplay.Initialize(maxLevel, currentLevel);
-        _moduleConfig = moduleConfig;
-        SetUpgradeCost(currentLevel);
-    }
-
-    public void UpdateCurrentLevel(int currentLevel)
-    {
-        _levelProgressDisplay.UpdateLevelProgress(currentLevel);
-        SetUpgradeCost(currentLevel);
-    }
-
-    private void SetUpgradeCost(int currentLevel)
-    {
-        if (currentLevel >= _moduleConfig.MaxLevel())
+        if (_upgradeButton != null)
         {
-            _costText.text = "Максимальный уровень";
-            return;
+            _upgradeButton.onClick.AddListener(() => upgradeAction?.Invoke());
+        }
+        if (_downgradeButton != null)
+        {
+            _downgradeButton.onClick.AddListener(() => downgradeAction?.Invoke());
         }
 
-        _costText.text = _moduleConfig.GetCurrentLevelCost().ToString();
+        UpdateCurrentLevel(currentLevel, currentLevelConst);
+    }
 
+    public void UpdateCurrentLevel(int currentLevel, string costText)
+    {
+        _levelProgressDisplay.UpdateLevelProgress(currentLevel);
+        SetUpgradeCost(costText);
+    }
+
+    private void SetUpgradeCost(string costText)
+    {
+        _costText.text = costText;
     }
 
 }
