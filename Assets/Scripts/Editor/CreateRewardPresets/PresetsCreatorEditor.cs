@@ -1,17 +1,17 @@
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.Rendering;
-using static UnityEngine.Rendering.STP;
 
 [CustomEditor(typeof(PresetsCreator))]
 public class PresetsCreatorEditor : Editor
 {
-    private void OnSceneGUI()
+    public override void OnInspectorGUI()
     {
+        // Рендерим стандартный интерфейс инспектора
         base.OnInspectorGUI();
 
         PresetsCreator presetsCreator = (PresetsCreator)target;
 
+        // Добавляем кнопки для управления позициями
         if (GUILayout.Button("Add Reward Position to Config"))
         {
             presetsCreator.AddRewardPosition();
@@ -23,6 +23,11 @@ public class PresetsCreatorEditor : Editor
             presetsCreator.RemoveLastRewardPosition();
             EditorUtility.SetDirty(presetsCreator);
         }
+    }
+
+    private void OnSceneGUI()
+    {
+        PresetsCreator presetsCreator = (PresetsCreator)target;
 
         if (presetsCreator != null && presetsCreator._rewardPosition?.RewardPositions != null)
         {
@@ -52,5 +57,7 @@ public class PresetsCreatorEditor : Editor
             }
         }
     }
+
 }
+
 

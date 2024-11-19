@@ -3,16 +3,25 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "HealthModuleConfig", menuName = "Scriptable Objects/HealthModuleConfig")]
 public class HealthModuleConfig : BaseModuleConfig
 {
-    [SerializeField] UpdateCharacteristicsInfo<EnumCharacteristics, float>[] _characteristics;
+    [SerializeField] UpdateCharacteristicsInfo<EnumCharacteristics, int>[] _characteristics;
 
-    public override bool ActivityCheck()
-    {
-        return true;
-    }
+    public int MaximumHealth => GetCharacteristicForLevel(_characteristics,
+                                                             EnumCharacteristics.MaxHealth,
+                                                             GetLevel(EnumCharacteristics.MaxHealth)
+                                                             );
+
+    public int RepairKitNumberForRepair => GetCharacteristicForLevel(_characteristics,
+                                                             EnumCharacteristics.RepairKitNumberForRepair,
+                                                             GetLevel(EnumCharacteristics.RepairKitNumberForRepair)
+                                                             );
+
+    public override bool ActivityCheck() => true;
+
+    public override System.Type GetModuleType() => typeof(HealthModule);
 
     public int GetLevel(EnumCharacteristics characteristic)
     {
-        var level = base.GetLevel<EnumCharacteristics, float>(_characteristics, characteristic);
+        var level = base.GetLevel<EnumCharacteristics, int>(_characteristics, characteristic);
 
         if (level == null)
         {
@@ -24,12 +33,12 @@ public class HealthModuleConfig : BaseModuleConfig
 
     public void SetLevel(EnumCharacteristics characteristic, int newLevel)
     {
-        base.SetLevel<EnumCharacteristics, float>(_characteristics, characteristic, newLevel);
+        base.SetLevel<EnumCharacteristics, int>(_characteristics, characteristic, newLevel);
     }
 
     public int GetMaxLevel(EnumCharacteristics characteristic)
     {
-        var maxLevel = base.GetMaxLevel<EnumCharacteristics, float>(_characteristics, characteristic);
+        var maxLevel = base.GetMaxLevel<EnumCharacteristics, int>(_characteristics, characteristic);
 
         if (maxLevel == null)
         {
@@ -41,7 +50,7 @@ public class HealthModuleConfig : BaseModuleConfig
 
     public int GetLevelCost(EnumCharacteristics characteristic, int level)
     {
-        var levelCost = base.GetLevelCost<EnumCharacteristics, float>(_characteristics, characteristic, level);
+        var levelCost = base.GetLevelCost<EnumCharacteristics, int>(_characteristics, characteristic, level);
 
         if (levelCost == null)
         {
@@ -53,8 +62,8 @@ public class HealthModuleConfig : BaseModuleConfig
 
     public enum EnumCharacteristics
     {
-        MaximumHealth,
-        NumberOfPartsRequiredForRepair,
+        MaxHealth,
+        RepairKitNumberForRepair,
     }
 
 }

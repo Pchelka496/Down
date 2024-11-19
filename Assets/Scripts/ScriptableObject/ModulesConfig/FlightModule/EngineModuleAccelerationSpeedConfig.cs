@@ -6,6 +6,7 @@ public class EngineModuleAccelerationSpeedConfig : BaseModuleConfig
     [SerializeField] float[] _engineAccelerationSpeed = new float[0];
 
     public override bool ActivityCheck()=> true;
+    public override System.Type GetModuleType() => typeof(PickerModule);
 
     //public override void SetLevel(int level)
     //{

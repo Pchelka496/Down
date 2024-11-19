@@ -19,6 +19,15 @@ public class EngineModuleConfig : BaseModuleConfig
                                                          EnumCharacteristics.BoostPower,
                                                          GetLevel(EnumCharacteristics.BoostPower)
                                                          );
+    public float BoosterChargeCount => GetCharacteristicForLevel(_characteristics,
+                                                        EnumCharacteristics.BoosterChargeCount,
+                                                        GetLevel(EnumCharacteristics.BoosterChargeCount)
+                                                        );
+
+    public float BoosterChargeCooldown => GetCharacteristicForLevel(_characteristics,
+                                                       EnumCharacteristics.BoosterChargeCooldown,
+                                                       GetLevel(EnumCharacteristics.BoosterChargeCooldown)
+                                                       );
 
     public float EngineForceIncreaseDuration => GetCharacteristicForLevel(_characteristics,
                                                                           EnumCharacteristics.EngineForceIncreaseDuration,
@@ -30,15 +39,9 @@ public class EngineModuleConfig : BaseModuleConfig
                                                                              GetLevel(EnumCharacteristics.InterpolateForceApplyRateValue)
                                                                              );
 
-    public float EngineRotationSpeed => GetCharacteristicForLevel(_characteristics,
-                                                                  EnumCharacteristics.EngineRotationSpeed,
-                                                                  GetLevel(EnumCharacteristics.EngineRotationSpeed)
-                                                                  );
+    public override bool ActivityCheck() => true;
 
-    public override bool ActivityCheck()
-    {
-        return true;
-    }
+    public override System.Type GetModuleType() => typeof(EngineModule);
 
     public int GetLevel(EnumCharacteristics characteristic)
     {
@@ -97,7 +100,8 @@ public class EngineModuleConfig : BaseModuleConfig
         BoostPower,
         EngineForceIncreaseDuration,
         InterpolateForceApplyRateValue,
-        EngineRotationSpeed,
+        BoosterChargeCount,
+        BoosterChargeCooldown
     }
 
 }

@@ -8,24 +8,26 @@ public class LevelManager : MonoBehaviour
     public const float PLAYER_START_Y_POSITION = 99989.1f;
     public const float PLAYER_START_X_POSITION = 0;
 
+    [SerializeField] int _targetFrameRate = 90;
     [SerializeField] LevelManagerConfig _config;
-    int _targetFrameRate = 90;
+
     EnemyManager _enemyManager;
     CharacterController _player;
     MapController _mapController;
     BackgroundController _backgroundController;
-    RewardManager _rewardManager;
+    PickUpItemManager _rewardManager;
     ScreenFader _screenFader;
 
-    event Action<LevelManager> _roundStartAction;
-    event Action<LevelManager, EnumRoundResults> _roundEndAction;
+    event Action<LevelManager> RoundStartAction;
+    event Action<LevelManager, EnumRoundResults> RoundEndAction;
 
     bool _isRoundActive = false;
 
     public bool IsRoundActive => _isRoundActive;
 
     [Inject]
-    private void Construct(MapController mapController, EnemyManager enemyManager, BackgroundController backgroundController, CharacterController player, RewardManager rewardManager, ScreenFader screenFader)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    private void Construct(MapController mapController, EnemyManager enemyManager, BackgroundController backgroundController, CharacterController player, PickUpItemManager rewardManager, ScreenFader screenFader)
     {
         _mapController = mapController;
         _enemyManager = enemyManager;
@@ -62,8 +64,22 @@ public class LevelManager : MonoBehaviour
         await UniTask.WaitForSeconds(1f);
         _isRoundActive = true;
 
-        _roundStartAction?.Invoke(this);
-        _roundStartAction = null;
+        if (RoundStartAction != null)
+        {
+            foreach (var handler in RoundStartAction.GetInvocationList())
+            {
+                try
+                {
+                    ((Action<LevelManager>)handler)?.Invoke(this);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Error in RoundStartAction handler: {ex.Message}\n{ex.StackTrace}");
+                }
+            }
+        }
+
+        RoundStartAction = null;
     }
 
     public async UniTaskVoid RoundEnd()
@@ -71,8 +87,22 @@ public class LevelManager : MonoBehaviour
         await UniTask.WaitForSeconds(1f);
         _isRoundActive = false;
 
-        _roundEndAction?.Invoke(this, EnumRoundResults.Positive);
-        _roundEndAction = null;
+        if (RoundEndAction != null)
+        {
+            foreach (var handler in RoundEndAction.GetInvocationList())
+            {
+                try
+                {
+                    ((Action<LevelManager, EnumRoundResults>)handler)?.Invoke(this, EnumRoundResults.Positive);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Error in RoundEndAction handler: {ex.Message}\n{ex.StackTrace}");
+                }
+            }
+        }
+
+        RoundEndAction = null;
 
         await _screenFader.FadeToBlack();
 
@@ -82,7 +112,8 @@ public class LevelManager : MonoBehaviour
         await _screenFader.FadeToClear();
     }
 
-    public void SubscribeToRoundStart(Action<LevelManager> action) => _roundStartAction += action;
-    public void SubscribeToRoundEnd(Action<LevelManager, EnumRoundResults> action) => _roundEndAction += action;
+
+    public void SubscribeToRoundStart(Action<LevelManager> action) => RoundStartAction += action;
+    public void SubscribeToRoundEnd(Action<LevelManager, EnumRoundResults> action) => RoundEndAction += action;
 
 }

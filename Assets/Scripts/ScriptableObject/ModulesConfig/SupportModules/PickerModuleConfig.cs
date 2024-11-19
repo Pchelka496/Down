@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PickerModuleConfig", menuName = "Scriptable Objects/PickerModuleConfig")]
@@ -5,10 +6,29 @@ public class PickerModuleConfig : BaseModuleConfig
 {
     [SerializeField] UpdateCharacteristicsInfo<EnumCharacteristics, float>[] _characteristics;
 
-    public override bool ActivityCheck()
+    public float PickUpRadius => base.GetCharacteristicForLevel(_characteristics,
+                                                              EnumCharacteristics.PickUpRadius,
+                                                              GetLevel(EnumCharacteristics.PickUpRadius)
+                                                              );
+
+    public float PickUpRewardMultiplier => base.GetCharacteristicForLevel(_characteristics,
+                                                             EnumCharacteristics.PickUpRewardMultiplier,
+                                                             GetLevel(EnumCharacteristics.PickUpRewardMultiplier)
+                                                             );
+
+    public float GetCharacteristicForLevel(int level, EnumCharacteristics characteristics)
     {
-        return true;
+        level = Mathf.Clamp(level, 0, GetMaxLevel(characteristics));
+
+        return GetCharacteristicForLevel(_characteristics,
+                                         characteristics,
+                                         level
+                                         );
     }
+
+    public override bool ActivityCheck() => true;
+
+    public override System.Type GetModuleType() => typeof(PickerModule);
 
     public int GetLevel(EnumCharacteristics characteristic)
     {
@@ -54,7 +74,7 @@ public class PickerModuleConfig : BaseModuleConfig
     public enum EnumCharacteristics
     {
         PickUpRadius,
-        PickUpMultiplier,
+        PickUpRewardMultiplier,
     }
 
 }

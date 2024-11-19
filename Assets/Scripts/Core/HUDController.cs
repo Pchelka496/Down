@@ -3,15 +3,20 @@ using Zenject;
 
 public class HUDManager : MonoBehaviour
 {
-    [Header("Elements for switching off in lobby mode")]
-    [SerializeField] GameObject[] _hudElements; 
+    [SerializeField] GameObject[] _allHudElements;
+    [SerializeField] GameObject[] _elementsOnActiveForRound;
 
     [Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
     private void Construct(LevelManager levelManager)
     {
         levelManager.SubscribeToRoundStart(RoundStart);
-
         SetHUDActive(false);
+    }
+
+    private void Start()
+    {
+        AdjustForSafeArea();
     }
 
     private void RoundStart(LevelManager levelManager)
@@ -28,9 +33,30 @@ public class HUDManager : MonoBehaviour
 
     private void SetHUDActive(bool isActive)
     {
-        foreach (var element in _hudElements)
+        foreach (var element in _elementsOnActiveForRound)
         {
             element.SetActive(isActive);
+        }
+    }
+
+    private void AdjustForSafeArea()
+    {
+        Rect safeArea = Screen.safeArea;
+
+        foreach (var element in _allHudElements)
+        {
+            if (!element.TryGetComponent<RectTransform>(out var rectTransform)) continue;
+
+            Vector2 anchorMin = safeArea.position;
+            Vector2 anchorMax = safeArea.position + safeArea.size;
+
+            anchorMin.x /= Screen.width;
+            anchorMin.y /= Screen.height;
+            anchorMax.x /= Screen.width;
+            anchorMax.y /= Screen.height;
+
+            rectTransform.anchorMin = anchorMin;
+            rectTransform.anchorMax = anchorMax;
         }
     }
 

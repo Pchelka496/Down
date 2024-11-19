@@ -7,6 +7,7 @@ public abstract class BaseModuleConfig : ScriptableObject
     [SerializeField] bool _resetThePriceAfterPurchase;
 
     public abstract bool ActivityCheck();
+    public abstract System.Type GetModuleType();
 
     protected Characteristics GetCharacteristicForLevel<EnumCharacteristics, Characteristics>(
         UpdateCharacteristicsInfo<EnumCharacteristics, Characteristics>[] allCharacteristicsInfo,

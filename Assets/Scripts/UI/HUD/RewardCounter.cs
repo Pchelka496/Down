@@ -7,16 +7,37 @@ public class RewardCounter : MonoBehaviour
 {
     [SerializeField] SoundPlayerIncreasePitch _soundPlayer;
     [SerializeField] TextMeshProUGUI _text;
+    PickUpItemManager _pickUpItemManager;
 
+    float _pickUpRewardMultiplier = 1f;
     int _points;
 
+    public float PickUpRewardMultiplier { set => _pickUpRewardMultiplier = value; }
+
     [Inject]
-    private void Construct(LevelManager levelManager, AudioSourcePool audioSource)
+    private void Construct(LevelManager levelManager, PickUpItemManager pickUpItemManager, AudioSourcePool audioSource)
     {
         _soundPlayer.Initialize(audioSource);
+        _pickUpItemManager = pickUpItemManager;
+        ResetPoints();
+
+        levelManager.SubscribeToRoundStart(RoundStart);
     }
 
-    private void OnEnable()
+    private void RoundStart(LevelManager levelManager)
+    {
+        levelManager.SubscribeToRoundEnd(RoundEnd);
+    }
+
+    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
+    {
+        levelManager.SubscribeToRoundStart(RoundStart);
+
+        _pickUpItemManager.IncreasePoints(_points);
+        ResetPoints();
+    }
+
+    private void ResetPoints()
     {
         _points = 0;
         UpdateText();
@@ -24,7 +45,7 @@ public class RewardCounter : MonoBehaviour
 
     public void IncreasePointsPerRound(int increaseValue)
     {
-        _points += increaseValue;
+        _points = _points + (int)(increaseValue * _pickUpRewardMultiplier);
 
         _soundPlayer.PlaySound();
 

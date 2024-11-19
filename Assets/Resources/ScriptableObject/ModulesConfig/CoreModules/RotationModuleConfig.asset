@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8eb55280ed53e4cae45e77f2c6587b, type: 3}
+  m_Name: RotationModuleConfig
+  m_EditorClassIdentifier: 
+  _resetThePriceAfterPurchase: 0
+  _characteristics:
+  - updateType: 0
+    currentLevel: 0
+    characteristicsPerLevel:
+    - 100
+    - 200
+    - 333
+    - 444
+    - 555
+    - 666
+    - 777
+    levelCost: 00000000000000000000000000000000000000000000000000000000

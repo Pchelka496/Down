@@ -3,12 +3,33 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EmergencyBrakeModuleConfig", menuName = "Scriptable Objects/EmergencyBrakeModuleConfig")]
 public class EmergencyBrakeModuleConfig : BaseModuleConfig
 {
+    [Header("SensingDistance is y collider offset(from -0.1 to the lower value)")]
+    [Header("MaxCharges is int")]
     [SerializeField] UpdateCharacteristicsInfo<EnumCharacteristics, float>[] _characteristics;
 
-    public override bool ActivityCheck()
-    {
-        return true;
-    }
+    public int MaxCharges => (int)GetCharacteristicForLevel(_characteristics,
+                                                             EnumCharacteristics.MaxCharges,
+                                                             GetLevel(EnumCharacteristics.MaxCharges)
+                                                             );
+
+    public float ChargeCooldown => GetCharacteristicForLevel(_characteristics,
+                                                             EnumCharacteristics.ChargeCooldown,
+                                                             GetLevel(EnumCharacteristics.ChargeCooldown)
+                                                             );
+
+    public float StopRate => GetCharacteristicForLevel(_characteristics,
+                                                             EnumCharacteristics.StopRate,
+                                                             GetLevel(EnumCharacteristics.StopRate)
+                                                             );
+
+    public float SensingDistance => GetCharacteristicForLevel(_characteristics,
+                                                             EnumCharacteristics.SensingDistance,
+                                                             GetLevel(EnumCharacteristics.SensingDistance)
+                                                             );
+
+    public override bool ActivityCheck() => true;
+
+    public override System.Type GetModuleType() => typeof(EmergencyBrakeModule);
 
     public int GetLevel(EnumCharacteristics characteristic)
     {
@@ -53,7 +74,7 @@ public class EmergencyBrakeModuleConfig : BaseModuleConfig
 
     public enum EnumCharacteristics
     {
-        ChargeQuantity,
+        MaxCharges,
         ChargeCooldown,
         StopRate,
         SensingDistance,

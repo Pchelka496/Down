@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Zenject;
 
 public class AirTrailController : MonoBehaviour
@@ -35,7 +36,8 @@ public class AirTrailController : MonoBehaviour
     CancellationTokenSource _cts;
 
     [Inject]
-    private void Construct(CharacterController player, LevelManager levelManager, Controls controls)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    private void Construct(CharacterController player)
     {
         _rb = player.Rb;
         player.MultiTargetRotationFollower.RegisterRotationObject(transform, Z_ROTATION_OFFSET);
@@ -67,16 +69,16 @@ public class AirTrailController : MonoBehaviour
                 _spriteRenderer.enabled = true;
             }
 
-            float velocityY = _rb.velocity.y;
+            var velocityY = _rb.velocity.y;
 
-            float normalizedSpeed = Mathf.InverseLerp(_minVelocityThreshold, _maxVelocityThreshold, velocityY);
-            float targetSpeedValue = Mathf.Lerp(_minSpeedValue, _maxSpeedValue, normalizedSpeed);
+            var normalizedSpeed = Mathf.InverseLerp(_minVelocityThreshold, _maxVelocityThreshold, velocityY);
+            var targetSpeedValue = Mathf.Lerp(_minSpeedValue, _maxSpeedValue, normalizedSpeed);
             _airTrailMaterial.SetFloat("Speed", targetSpeedValue);
 
-            float normalizedAlpha = Mathf.InverseLerp(_minVelocityThreshold, _maxVelocityThreshold, velocityY);
-            float targetAlpha = Mathf.Lerp(_minAlpha, _maxAlpha, normalizedAlpha);
+            var normalizedAlpha = Mathf.InverseLerp(_minVelocityThreshold, _maxVelocityThreshold, velocityY);
+            var targetAlpha = Mathf.Lerp(_minAlpha, _maxAlpha, normalizedAlpha);
 
-            Color spriteColor = _spriteRenderer.color;
+            var spriteColor = _spriteRenderer.color;
             spriteColor.a = targetAlpha;
             _spriteRenderer.color = spriteColor;
 
@@ -84,7 +86,22 @@ public class AirTrailController : MonoBehaviour
         }
     }
 
-    public void SwitchAirBrake()
+    public void SetAirBrakeStatus(bool isAirBrakeActive)
+    {
+        _isAirBrakeActive = isAirBrakeActive;
+
+        if (_isAirBrakeActive)
+        {
+            AirBrakeEnabled();
+        }
+        else
+        {
+            AirBrakeDisabled();
+
+        }
+    }
+
+    public void SwitchAirBrake(InputAction.CallbackContext ctx)
     {
         if (_isAirBrakeActive)
         {
@@ -112,12 +129,6 @@ public class AirTrailController : MonoBehaviour
         transform.localScale = _defaultScale;
         _minVelocityThreshold = _minDefaultModeVelocityThreshold;
         _maxVelocityThreshold = _maxDefaultModeVelocityThreshold;
-    }
-
-    private void OnDestroy()
-    {
-        GameplaySceneInstaller.DiContainer.Resolve<Controls>().Player.AirBreake.performed -= ctx => SwitchAirBrake();
-
     }
 
 }

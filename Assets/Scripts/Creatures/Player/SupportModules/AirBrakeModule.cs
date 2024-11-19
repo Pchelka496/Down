@@ -1,6 +1,9 @@
 using UnityEngine;
 using Zenject;
 using DG.Tweening;
+using UnityEngine.InputSystem;
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 
 public class AirBrakeModule : BaseModule
 {
@@ -10,13 +13,13 @@ public class AirBrakeModule : BaseModule
     [SerializeField] Transform _rightAirBrake;
 
     [SerializeField] float _defaultDrag = 0.2f;
-    float _airBrakeDrag = 10f;
 
     [SerializeField] Vector3 _leftAirBrakeOpenPosition;
     [SerializeField] Vector3 _leftAirBrakeClosePosition;
     [SerializeField] Vector3 _rightAirBrakeOpenPosition;
     [SerializeField] Vector3 _rightAirBrakeClosePosition;
 
+    float _airBrakeDrag = 10f;
     float _airBrakeReleaseRate = 0.5f;
 
     Controls _controls;
@@ -26,7 +29,8 @@ public class AirBrakeModule : BaseModule
     Tween _currentTween;
 
     [Inject]
-    private void Construct(AirBrakeModuleConfig config, CharacterController player, Controls controls, AirTrailController airTrailController, LevelManager levelManager)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    private void Construct(AirBrakeModuleConfig config, CharacterController player, Controls controls, AirTrailController airTrailController)
     {
         _rb = player.Rb;
 
@@ -39,34 +43,34 @@ public class AirBrakeModule : BaseModule
         _airTrailController = airTrailController;
         _controls = controls;
 
-        levelManager.SubscribeToRoundStart(RoundStart);
+        UpdateCharacteristics(config);
     }
 
-    private void RoundStart(LevelManager levelManager)
+    public override void EnableModule()
     {
-        levelManager.SubscribeToRoundEnd(RoundEnd);
+        _controls.Player.AirBreake.performed += SwitchAirBrake;
+        _controls.Player.AirBreake.performed += _airTrailController.SwitchAirBrake;
 
-        _controls.Player.AirBreake.performed += ctx => SwitchAirBrake();
-        _controls.Player.AirBreake.performed += ctx => _airTrailController.SwitchAirBrake();
+        _airTrailController.SetAirBrakeStatus(_isAirBrakeActive);
     }
 
-    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
+    public override void DisableModule()
     {
-        levelManager.SubscribeToRoundStart(RoundStart);
+        _controls.Player.AirBreake.performed -= SwitchAirBrake;
+        _controls.Player.AirBreake.performed -= _airTrailController.SwitchAirBrake;
 
-        _controls.Player.AirBreake.performed -= ctx => SwitchAirBrake();
-        _controls.Player.AirBreake.performed -= ctx => _airTrailController.SwitchAirBrake();
+        _airTrailController.SetAirBrakeStatus(_isAirBrakeActive);
     }
 
-    private void UpdateCharacteristics() => UpdateCharacteristics(GameplaySceneInstaller.DiContainer.Resolve<AirBrakeModuleConfig>());
+    public void UpdateCharacteristics() => UpdateCharacteristics(GameplaySceneInstaller.DiContainer.Resolve<AirBrakeModuleConfig>());
 
-    private void UpdateCharacteristics(AirBrakeModuleConfig config)
+    public void UpdateCharacteristics(AirBrakeModuleConfig config)
     {
         _airBrakeDrag = config.AirMaxBrakeDrag;
         _airBrakeReleaseRate = config.AirBrakeReleaseRate;
     }
 
-    private void SwitchAirBrake()
+    private void SwitchAirBrake(InputAction.CallbackContext ctx)
     {
         _currentTween?.Kill();
 
@@ -74,50 +78,61 @@ public class AirBrakeModule : BaseModule
 
         if (_isAirBrakeActive)
         {
-            sequence.Append(DOTween.To(() => _rightAirBrake.localPosition,
-                                       x => _rightAirBrake.localPosition = x,
-                                       _rightAirBrakeClosePosition,
-                                       _airBrakeReleaseRate).SetEase(Ease.OutQuad));
-
-            sequence.Join(DOTween.To(() => _leftAirBrake.localPosition,
-                                     x => _leftAirBrake.localPosition = x,
-                                     _leftAirBrakeClosePosition,
-                                     _airBrakeReleaseRate).SetEase(Ease.OutQuad));
-
-            sequence.Join(DOTween.To(() => _rb.drag,
-                                     x => _rb.drag = x,
-                                     _defaultDrag,
-                                     _airBrakeReleaseRate).SetEase(Ease.OutQuad));
-
+            AirBrakeDisabled(sequence);
             _isAirBrakeActive = false;
         }
         else
         {
-            sequence.Append(DOTween.To(() => _rightAirBrake.localPosition,
-                                       x => _rightAirBrake.localPosition = x,
-                                       _rightAirBrakeOpenPosition,
-                                       _airBrakeReleaseRate).SetEase(Ease.OutQuad));
-
-            sequence.Join(DOTween.To(() => _leftAirBrake.localPosition,
-                                     x => _leftAirBrake.localPosition = x,
-                                     _leftAirBrakeOpenPosition,
-                                     _airBrakeReleaseRate).SetEase(Ease.OutQuad));
-
-            sequence.Join(DOTween.To(() => _rb.drag,
-                                     x => _rb.drag = x,
-                                     _airBrakeDrag,
-                                     _airBrakeReleaseRate).SetEase(Ease.OutQuad));
-
+            AirBrakeEnabled(sequence);
             _isAirBrakeActive = true;
         }
 
         _currentTween = sequence;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void AirBrakeEnabled(DG.Tweening.Sequence sequence)
+    {
+        sequence.Append(DOTween.To(() => _rightAirBrake.localPosition,
+                                        x => _rightAirBrake.localPosition = x,
+                                        _rightAirBrakeOpenPosition,
+                                        _airBrakeReleaseRate).SetEase(Ease.OutQuad));
+
+        sequence.Join(DOTween.To(() => _leftAirBrake.localPosition,
+                                 x => _leftAirBrake.localPosition = x,
+                                 _leftAirBrakeOpenPosition,
+                                 _airBrakeReleaseRate).SetEase(Ease.OutQuad));
+
+        sequence.Join(DOTween.To(() => _rb.drag,
+                                 x => _rb.drag = x,
+                                 _airBrakeDrag,
+                                 _airBrakeReleaseRate).SetEase(Ease.OutQuad));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void AirBrakeDisabled(DG.Tweening.Sequence sequence)
+    {
+        sequence.Append(DOTween.To(() => _rightAirBrake.localPosition,
+                                       x => _rightAirBrake.localPosition = x,
+                                       _rightAirBrakeClosePosition,
+                                       _airBrakeReleaseRate).SetEase(Ease.OutQuad));
+
+        sequence.Join(DOTween.To(() => _leftAirBrake.localPosition,
+                                 x => _leftAirBrake.localPosition = x,
+                                 _leftAirBrakeClosePosition,
+                                 _airBrakeReleaseRate).SetEase(Ease.OutQuad));
+
+        sequence.Join(DOTween.To(() => _rb.drag,
+                                 x => _rb.drag = x,
+                                 _defaultDrag,
+                                 _airBrakeReleaseRate).SetEase(Ease.OutQuad));
+    }
+
     private void OnDestroy()
     {
-        GameplaySceneInstaller.DiContainer.Resolve<Controls>().Player.AirBreake.performed -= ctx => SwitchAirBrake();
-        GameplaySceneInstaller.DiContainer.Resolve<Controls>().Player.AirBreake.performed -= ctx => _airTrailController.SwitchAirBrake();
+        DisableModule();
+        _airTrailController.SetAirBrakeStatus(false);
+        GameplaySceneInstaller.DiContainer.Resolve<CharacterController>().MultiTargetRotationFollower.UnregisterRotationObject(transform);
     }
 
 }

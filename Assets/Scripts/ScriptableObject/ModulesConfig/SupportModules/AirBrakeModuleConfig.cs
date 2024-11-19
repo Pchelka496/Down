@@ -14,10 +14,9 @@ public class AirBrakeModuleConfig : BaseModuleConfig
                                                              GetLevel(EnumCharacteristics.AirBrakeReleaseRate)
                                                              );
 
-    public override bool ActivityCheck()
-    {
-        return true;
-    }
+    public override bool ActivityCheck() => GetLevel(EnumCharacteristics.AirBrakeDrag) > 0;
+
+    public override System.Type GetModuleType() => typeof(AirBrakeModule);
 
     public int GetLevel(EnumCharacteristics characteristic)
     {

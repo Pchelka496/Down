@@ -1,30 +1,62 @@
 using UnityEngine;
+using Zenject;
+using static Unity.VisualScripting.Icons;
 
 public class HealthModuleUpdater : MonoBehaviour
 {
+    [Header("UpgradeInfo")]
     [SerializeField] UpgradeInfo _maxHealth;
-    [SerializeField] UpgradeInfo _numberOfPartsRequiredForRepair;
+    [SerializeField] UpgradeInfo _repairKitNumberForRepair;
+
+    [Header("Description text")]
+    [SerializeField] TextContainer _maxHealthDescription;
+    [SerializeField] TextContainer _repairKitNumberForRepairDescription;
 
     HealthModuleConfig _moduleConfig;
     PlayerUpgradePanel _playerUpgradePanel;
+    EnumLanguage _language;
+
+    [Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    private void Construct(EnumLanguage language)
+    {
+        _language = language;
+    }
 
     public void Initialize(HealthModuleConfig moduleConfig, PlayerUpgradePanel playerUpgradePanel)
     {
         _moduleConfig = moduleConfig;
         _playerUpgradePanel = playerUpgradePanel;
 
-        InitializeUpgradeInfo(_maxHealth, HealthModuleConfig.EnumCharacteristics.MaximumHealth, UpgradeMaxHealthLevel, DowngradeMaxHealthLevel);
-        InitializeUpgradeInfo(_numberOfPartsRequiredForRepair, HealthModuleConfig.EnumCharacteristics.NumberOfPartsRequiredForRepair, UpgradeNumberOfPartsRequiredForRepairLevel, DowngradeNumberOfPartsRequiredForRepairLevel);
+        InitializeUpgradeInfo(_maxHealth,
+                              HealthModuleConfig.EnumCharacteristics.MaxHealth,
+                              UpgradeMaxHealthLevel,
+                              DowngradeMaxHealthLevel,
+                              DetailedInformationMaxHealthDescription
+                              );
+
+        InitializeUpgradeInfo(_repairKitNumberForRepair,
+                              HealthModuleConfig.EnumCharacteristics.RepairKitNumberForRepair,
+                              UpgradeNumberOfPartsRequiredForRepairLevel,
+                              DowngradeNumberOfPartsRequiredForRepairLevel,
+                              DetailedInformationRepairKitNumberForRepairDescription
+                              );
     }
 
-    private void InitializeUpgradeInfo(UpgradeInfo upgradeInfo, HealthModuleConfig.EnumCharacteristics characteristics, System.Action upgradeAction, System.Action downgradeAction)
+    private void InitializeUpgradeInfo(UpgradeInfo upgradeInfo,
+                                       HealthModuleConfig.EnumCharacteristics characteristics,
+                                       System.Action upgradeAction,
+                                       System.Action downgradeAction,
+                                       System.Action<UpgradeInfo> detailedInformationAction
+                                       )
     {
         upgradeInfo.Initialize(_moduleConfig.GetLevel(characteristics),
                                    _moduleConfig.GetMaxLevel(characteristics),
                                    GetCost(characteristics,
                                    _moduleConfig.GetLevel(characteristics) + 1),
                                    upgradeAction,
-                                   downgradeAction
+                                   downgradeAction,
+                                   detailedInformationAction
                                    );
     }
 
@@ -48,12 +80,12 @@ public class HealthModuleUpdater : MonoBehaviour
     //_________________________________ Upgrade Button _________________________________
     public void UpgradeMaxHealthLevel()
     {
-        UpgradeLevel(HealthModuleConfig.EnumCharacteristics.MaximumHealth, _maxHealth);
+        UpgradeLevel(HealthModuleConfig.EnumCharacteristics.MaxHealth, _maxHealth);
     }
 
     public void UpgradeNumberOfPartsRequiredForRepairLevel()
     {
-        UpgradeLevel(HealthModuleConfig.EnumCharacteristics.NumberOfPartsRequiredForRepair, _numberOfPartsRequiredForRepair);
+        UpgradeLevel(HealthModuleConfig.EnumCharacteristics.RepairKitNumberForRepair, _repairKitNumberForRepair);
     }
 
     public void UpgradeLevel(HealthModuleConfig.EnumCharacteristics characteristics, UpgradeInfo upgradeInfo)
@@ -76,12 +108,12 @@ public class HealthModuleUpdater : MonoBehaviour
     //_________________________________ Downgrade Button _________________________________
     public void DowngradeMaxHealthLevel()
     {
-        DowngradeLevel(HealthModuleConfig.EnumCharacteristics.MaximumHealth, _maxHealth);
+        DowngradeLevel(HealthModuleConfig.EnumCharacteristics.MaxHealth, _maxHealth);
     }
 
     public void DowngradeNumberOfPartsRequiredForRepairLevel()
     {
-        DowngradeLevel(HealthModuleConfig.EnumCharacteristics.NumberOfPartsRequiredForRepair, _numberOfPartsRequiredForRepair);
+        DowngradeLevel(HealthModuleConfig.EnumCharacteristics.RepairKitNumberForRepair, _repairKitNumberForRepair);
     }
 
     public void DowngradeLevel(HealthModuleConfig.EnumCharacteristics characteristics, UpgradeInfo upgradeInfo)
@@ -96,6 +128,20 @@ public class HealthModuleUpdater : MonoBehaviour
 
         upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _moduleConfig.SetLevel(characteristics, nextLevel);
+        _playerUpgradePanel.Player.HealthModule.UpdateCharacteristics(_moduleConfig);
+    }
+
+    //_________________________________ Detailed Information Button _________________________________
+    private void DetailedInformationMaxHealthDescription(UpgradeInfo upgradeInfo)
+    {
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _maxHealthDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.TestModule<HealthModule>();
+    }
+
+    private void DetailedInformationRepairKitNumberForRepairDescription(UpgradeInfo upgradeInfo)
+    {
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _repairKitNumberForRepairDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.TestModule<HealthModule>();
     }
 
 }

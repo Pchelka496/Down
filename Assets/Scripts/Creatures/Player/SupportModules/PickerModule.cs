@@ -4,14 +4,46 @@ using Zenject;
 public class PickerModule : BaseModule
 {
     [SerializeField] CircleCollider2D _circleCollider;
-    PickerModuleConfig _config;
 
     [Inject]
-    private void Construct(CharacterController player, PickerModuleConfig config)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    private void Construct(CharacterController player, PickerModuleConfig config, RewardCounter rewardCounter)
     {
         SnapToPlayer(player.transform);
 
-        _config = config;
+        UpdateCharacteristics(config, rewardCounter);
+    }
+
+    public void UpdateCharacteristics()
+    {
+        UpdateCharacteristics(GameplaySceneInstaller.DiContainer.Resolve<PickerModuleConfig>(),
+                              GameplaySceneInstaller.DiContainer.Resolve<RewardCounter>()
+                             );
+    }
+
+    public void UpdateCharacteristics(PickerModuleConfig config, RewardCounter rewardCounter)
+    {
+        _circleCollider.radius = config.PickUpRadius;
+
+        var rewardMultiplier = config.PickUpRewardMultiplier;
+
+        if (rewardMultiplier < 1)
+        {
+            Debug.LogWarning($"rewardMultiplier < 1, rewardMultiplier = {rewardMultiplier}");
+            rewardMultiplier = 1;
+        }
+
+        rewardCounter.PickUpRewardMultiplier = rewardMultiplier;
+    }
+
+    public override void EnableModule()
+    {
+        _circleCollider.enabled = true;
+    }
+
+    public override void DisableModule()
+    {
+        _circleCollider.enabled = false;
     }
 
 }

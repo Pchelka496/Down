@@ -15,14 +15,14 @@ public class DisplayController : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI _displayText;
     [SerializeField] TextConfigLanguageAddresses _textConfigLanguageAddresses;
-    RewardManager _rewardManager;
+    PickUpItemManager _rewardManager;
     DisplayControllerConfig _config;
     string _targetText;
     CancellationTokenSource _cts;
     bool _cursorVisible = true;
 
     [Inject]
-    private async void Construct(EnumLanguage language, RewardManager rewardManager)
+    private async void Construct(EnumLanguage language, PickUpItemManager rewardManager)
     {
         switch (language)
         {

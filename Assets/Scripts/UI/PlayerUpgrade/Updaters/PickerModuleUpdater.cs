@@ -1,30 +1,65 @@
 using UnityEngine;
+using Zenject;
+using static RadiusDisplay;
 
 public class PickerModuleUpdater : MonoBehaviour
 {
+    [Header("UpgradeInfo")]
     [SerializeField] UpgradeInfo _pickUpRadius;
     [SerializeField] UpgradeInfo _pickUpMultiplier;
 
+    [Header("Description text")]
+    [SerializeField] TextContainer _pickUpRadiusDescription;
+    [SerializeField] TextContainer _pickUpMultiplierDescription;
+
+    [SerializeField] RadiusDisplayData _firstRadiusData;
+    [SerializeField] RadiusDisplayData _secondRadiusData;
+
     PickerModuleConfig _moduleConfig;
     PlayerUpgradePanel _playerUpgradePanel;
+    EnumLanguage _language;
+
+    [Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    private void Construct(EnumLanguage language)
+    {
+        _language = language;
+    }
 
     public void Initialize(PickerModuleConfig moduleConfig, PlayerUpgradePanel playerUpgradePanel)
     {
         _moduleConfig = moduleConfig;
         _playerUpgradePanel = playerUpgradePanel;
 
-        InitializeUpgradeInfo(_pickUpRadius, PickerModuleConfig.EnumCharacteristics.PickUpRadius, UpgradePickUpRadius, DowngradePickUpRadius);
-        InitializeUpgradeInfo(_pickUpMultiplier, PickerModuleConfig.EnumCharacteristics.PickUpMultiplier, UpgradePickUpMultiplier, DowngradePickUpMultiplier);
+        InitializeUpgradeInfo(_pickUpRadius,
+                              PickerModuleConfig.EnumCharacteristics.PickUpRadius,
+                              UpgradePickUpRadius,
+                              DowngradePickUpRadius,
+                              DetailedInformationPickUpRadiusDescriptionDescription
+                              );
+
+        InitializeUpgradeInfo(_pickUpMultiplier,
+                              PickerModuleConfig.EnumCharacteristics.PickUpRewardMultiplier,
+                              UpgradePickUpMultiplier,
+                              DowngradePickUpMultiplier,
+                              DetailedInformationPickUpMultiplierDescriptionDescription
+                              );
     }
 
-    private void InitializeUpgradeInfo(UpgradeInfo upgradeInfo, PickerModuleConfig.EnumCharacteristics characteristics, System.Action upgradeAction, System.Action downgradeAction)
+    private void InitializeUpgradeInfo(UpgradeInfo upgradeInfo,
+                                       PickerModuleConfig.EnumCharacteristics characteristics,
+                                       System.Action upgradeAction,
+                                       System.Action downgradeAction,
+                                       System.Action<UpgradeInfo> detailedInformationAction
+                                       )
     {
         upgradeInfo.Initialize(_moduleConfig.GetLevel(characteristics),
                                    _moduleConfig.GetMaxLevel(characteristics),
                                    GetCost(characteristics,
                                    _moduleConfig.GetLevel(characteristics) + 1),
                                    upgradeAction,
-                                   downgradeAction
+                                   downgradeAction,
+                                   detailedInformationAction
                                    );
     }
 
@@ -49,11 +84,14 @@ public class PickerModuleUpdater : MonoBehaviour
     public void UpgradePickUpRadius()
     {
         UpgradeLevel(PickerModuleConfig.EnumCharacteristics.PickUpRadius, _pickUpRadius);
+
+        RadiusDisplayDataSetting();
+        _playerUpgradePanel.VisualController.UpdateDetailedInformation(_firstRadiusData, _secondRadiusData);
     }
 
     public void UpgradePickUpMultiplier()
     {
-        UpgradeLevel(PickerModuleConfig.EnumCharacteristics.PickUpMultiplier, _pickUpMultiplier);
+        UpgradeLevel(PickerModuleConfig.EnumCharacteristics.PickUpRewardMultiplier, _pickUpMultiplier);
     }
 
     public void UpgradeLevel(PickerModuleConfig.EnumCharacteristics characteristics, UpgradeInfo upgradeInfo)
@@ -71,17 +109,21 @@ public class PickerModuleUpdater : MonoBehaviour
 
         upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _moduleConfig.SetLevel(characteristics, nextLevel);
+        _playerUpgradePanel.Player.PickerModule.UpdateCharacteristics(_moduleConfig, GameplaySceneInstaller.DiContainer.Resolve<RewardCounter>());
     }
 
     //_________________________________ Downgrade Button _________________________________
     public void DowngradePickUpRadius()
     {
         DowngradeLevel(PickerModuleConfig.EnumCharacteristics.PickUpRadius, _pickUpRadius);
+
+        RadiusDisplayDataSetting();
+        _playerUpgradePanel.VisualController.UpdateDetailedInformation(_firstRadiusData, _secondRadiusData);
     }
 
     public void DowngradePickUpMultiplier()
     {
-        DowngradeLevel(PickerModuleConfig.EnumCharacteristics.PickUpMultiplier, _pickUpMultiplier);
+        DowngradeLevel(PickerModuleConfig.EnumCharacteristics.PickUpRewardMultiplier, _pickUpMultiplier);
     }
 
     public void DowngradeLevel(PickerModuleConfig.EnumCharacteristics characteristics, UpgradeInfo upgradeInfo)
@@ -96,6 +138,35 @@ public class PickerModuleUpdater : MonoBehaviour
 
         upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _moduleConfig.SetLevel(characteristics, nextLevel);
+        _playerUpgradePanel.Player.PickerModule.UpdateCharacteristics(_moduleConfig, GameplaySceneInstaller.DiContainer.Resolve<RewardCounter>());
+    }
+
+    //_________________________________ Detailed Information Button _________________________________
+    private void DetailedInformationPickUpRadiusDescriptionDescription(UpgradeInfo upgradeInfo)
+    {
+        RadiusDisplayDataSetting();
+
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _firstRadiusData,
+                                                                     _secondRadiusData,
+                                                                     _pickUpRadiusDescription.GetText(_language)
+                                                                     );
+    }
+
+    private void RadiusDisplayDataSetting()
+    {
+        var characteristics = PickerModuleConfig.EnumCharacteristics.PickUpRadius;
+
+        var currentLevel = _moduleConfig.GetLevel(characteristics);
+
+        _firstRadiusData.Radius = _moduleConfig.GetCharacteristicForLevel(currentLevel, characteristics);
+        _secondRadiusData.Radius = _moduleConfig.GetCharacteristicForLevel(currentLevel, characteristics);
+    }
+
+    private void DetailedInformationPickUpMultiplierDescriptionDescription(UpgradeInfo upgradeInfo)
+    {
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _pickUpMultiplierDescription.GetText(_language));
+
     }
 
 }

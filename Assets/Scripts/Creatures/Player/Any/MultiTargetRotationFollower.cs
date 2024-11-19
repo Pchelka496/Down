@@ -54,19 +54,27 @@ public class MultiTargetRotationFollower : MonoBehaviour
     {
         while (!token.IsCancellationRequested)
         {
-            Vector2 velocity = _targetRb.velocity;
+            var velocity = _targetRb.velocity;
 
             if (velocity.sqrMagnitude > 0.01f)
             {
-                float targetAngle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+                var targetAngle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
 
-                foreach (var rotationObject in _rotationObjects)
+                for (int i = _rotationObjects.Count - 1; i >= 0; i--)
                 {
-                    float currentRotation = rotationObject.TargetTransform.eulerAngles.z;
-
-                    if (Mathf.Abs(Mathf.DeltaAngle(currentRotation, targetAngle + rotationObject.InitialRotation)) > ROTATION_THRESHOLD)
+                    var rotationObject = _rotationObjects[i];
+                    try
                     {
-                        rotationObject.TargetTransform.rotation = Quaternion.Euler(0, 0, targetAngle + rotationObject.InitialRotation);
+                        var currentRotation = rotationObject.TargetTransform.eulerAngles.z;
+
+                        if (Mathf.Abs(Mathf.DeltaAngle(currentRotation, targetAngle + rotationObject.InitialRotation)) > ROTATION_THRESHOLD)
+                        {
+                            rotationObject.TargetTransform.rotation = Quaternion.Euler(0, 0, targetAngle + rotationObject.InitialRotation);
+                        }
+                    }
+                    catch (MissingReferenceException)
+                    {
+                        UnregisterRotationObject(rotationObject.TargetTransform);
                     }
                 }
             }

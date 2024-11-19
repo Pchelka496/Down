@@ -105,6 +105,8 @@ public struct EnemyMoverJob : IJobParallelForTransform
         var newPosition = _initialPosition[index];
 
         transform.position = newPosition;
+        transform.rotation = Quaternion.identity;
+
         _currentPosition[index] = newPosition;
     }
 

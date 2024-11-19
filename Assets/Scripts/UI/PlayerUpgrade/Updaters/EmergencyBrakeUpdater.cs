@@ -1,34 +1,76 @@
 using UnityEngine;
+using Zenject;
 
 public class EmergencyBrakeUpdater : MonoBehaviour
 {
+    [Header("UpgradeInfo")]
     [SerializeField] UpgradeInfo _chargeQuantity;
     [SerializeField] UpgradeInfo _chargeCooldown;
     [SerializeField] UpgradeInfo _stopRate;
     [SerializeField] UpgradeInfo _sensingDistance;
 
+    [Header("Description text")]
+    [SerializeField] TextContainer _chargeQuantityDescription;
+    [SerializeField] TextContainer _chargeCooldownDescription;
+    [SerializeField] TextContainer _stopRateDescription;
+    [SerializeField] TextContainer _sensingDistanceDescription;
+
     EmergencyBrakeModuleConfig _moduleConfig;
     PlayerUpgradePanel _playerUpgradePanel;
+    EnumLanguage _language;
+
+    [Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    private void Construct(EnumLanguage language)
+    {
+        _language = language;
+    }
+
 
     public void Initialize(EmergencyBrakeModuleConfig moduleConfig, PlayerUpgradePanel playerUpgradePanel)
     {
         _moduleConfig = moduleConfig;
         _playerUpgradePanel = playerUpgradePanel;
 
-        InitializeUpgradeInfo(_chargeQuantity, EmergencyBrakeModuleConfig.EnumCharacteristics.ChargeQuantity, UpgradeChargeQuantity, DowngradeChargeQuantity);
-        InitializeUpgradeInfo(_chargeCooldown, EmergencyBrakeModuleConfig.EnumCharacteristics.ChargeCooldown, UpgradeChargeCooldown, DowngradeChargeCooldown);
-        InitializeUpgradeInfo(_stopRate, EmergencyBrakeModuleConfig.EnumCharacteristics.StopRate, UpgradeStopRate, DowngradeStopRate);
-        InitializeUpgradeInfo(_sensingDistance, EmergencyBrakeModuleConfig.EnumCharacteristics.SensingDistance, UpgradeSensingDistance, DowngradeSensingDistance);
+        InitializeUpgradeInfo(_chargeQuantity,
+                              EmergencyBrakeModuleConfig.EnumCharacteristics.MaxCharges,
+                              UpgradeChargeQuantity,
+                              DowngradeChargeQuantity,
+                              DetailedInformationChargeQuantityDescription);
+
+        InitializeUpgradeInfo(_chargeCooldown,
+                              EmergencyBrakeModuleConfig.EnumCharacteristics.ChargeCooldown,
+                              UpgradeChargeCooldown,
+                              DowngradeChargeCooldown,
+                              DetailedInformationChargeCooldownDescription);
+
+        InitializeUpgradeInfo(_stopRate,
+                              EmergencyBrakeModuleConfig.EnumCharacteristics.StopRate,
+                              UpgradeStopRate,
+                              DowngradeStopRate,
+                              DetailedInformationStopRateDescription);
+
+        InitializeUpgradeInfo(_sensingDistance,
+                              EmergencyBrakeModuleConfig.EnumCharacteristics.SensingDistance,
+                              UpgradeSensingDistance,
+                              DowngradeSensingDistance,
+                              DetailedInformationSensingDistanceDescription);
     }
 
-    private void InitializeUpgradeInfo(UpgradeInfo upgradeInfo, EmergencyBrakeModuleConfig.EnumCharacteristics characteristics, System.Action upgradeAction, System.Action downgradeAction)
+    private void InitializeUpgradeInfo(UpgradeInfo upgradeInfo,
+                                       EmergencyBrakeModuleConfig.EnumCharacteristics characteristics,
+                                       System.Action upgradeAction,
+                                       System.Action downgradeAction,
+                                       System.Action<UpgradeInfo> detailedInformationAction
+                                       )
     {
         upgradeInfo.Initialize(_moduleConfig.GetLevel(characteristics),
                                    _moduleConfig.GetMaxLevel(characteristics),
                                    GetCost(characteristics,
                                    _moduleConfig.GetLevel(characteristics) + 1),
                                    upgradeAction,
-                                   downgradeAction
+                                   downgradeAction,
+                                   detailedInformationAction
                                    );
     }
 
@@ -52,7 +94,7 @@ public class EmergencyBrakeUpdater : MonoBehaviour
     //_________________________________ Upgrade Button _________________________________
     public void UpgradeChargeQuantity()
     {
-        UpgradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics.ChargeQuantity, _chargeQuantity);
+        UpgradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics.MaxCharges, _chargeQuantity);
     }
 
     public void UpgradeChargeCooldown()
@@ -85,12 +127,13 @@ public class EmergencyBrakeUpdater : MonoBehaviour
 
         upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _moduleConfig.SetLevel(characteristics, nextLevel);
+        _playerUpgradePanel.Player.GetModule<EmergencyBrakeModule>().UpdateCharacteristics(_moduleConfig);
     }
 
     //_________________________________ Downgrade Button _________________________________
     public void DowngradeChargeQuantity()
     {
-        DowngradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics.ChargeQuantity, _chargeQuantity);
+        DowngradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics.MaxCharges, _chargeQuantity);
     }
 
     public void DowngradeChargeCooldown()
@@ -120,6 +163,28 @@ public class EmergencyBrakeUpdater : MonoBehaviour
 
         upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _moduleConfig.SetLevel(characteristics, nextLevel);
+        _playerUpgradePanel.Player.GetModule<EmergencyBrakeModule>().UpdateCharacteristics(_moduleConfig);
+    }
+
+    //_________________________________ Detailed Information Button _________________________________
+    private void DetailedInformationChargeCooldownDescription(UpgradeInfo upgradeInfo)
+    {
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _chargeCooldownDescription.GetText(_language));
+    }
+
+    private void DetailedInformationChargeQuantityDescription(UpgradeInfo upgradeInfo)
+    {
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _chargeQuantityDescription.GetText(_language));
+    }
+
+    private void DetailedInformationStopRateDescription(UpgradeInfo upgradeInfo)
+    {
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _stopRateDescription.GetText(_language));
+    }
+
+    private void DetailedInformationSensingDistanceDescription(UpgradeInfo upgradeInfo)
+    {
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _sensingDistanceDescription.GetText(_language));
     }
 
 }

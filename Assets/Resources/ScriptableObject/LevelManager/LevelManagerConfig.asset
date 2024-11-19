@@ -15,5 +15,4 @@ MonoBehaviour:
   _enemyManagerConfig: {fileID: 11400000, guid: 1c4b8d5fb7c36e34aa73047ae8c45e52, type: 2}
   _mapControllerConfig: {fileID: 11400000, guid: 69c079b5360608043b395dd6666131ef, type: 2}
   _backgroundControllerConfig: {fileID: 11400000, guid: ab4c7439801651b419279e97cbd79e71, type: 2}
-  _rewardManagerConfig: {fileID: 11400000, guid: 562df54612019214daa92915b2d68b56, type: 2}
-  _playerSavedHeight: NaN
+  _pickUpItemManagerConfig: {fileID: 11400000, guid: 3e467613592f64440ba6d1668288f22c, type: 2}

@@ -25,6 +25,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a00f62b4a48da64d9082b6902c66b55
+    m_Address: Assets/Resources_moved/Prefab/Creatures/Meteorite.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 829770f3e2975b54aa57a6d12d3067dc
+    m_Address: Prefab/UI/HUD/RepairKit/RepairKitIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8da0d59512cebd74e8db647504418b60
     m_Address: Material_Shaders/Material/StandartSpriteUnlitMaterial
     m_ReadOnly: 0
@@ -37,6 +47,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ad34472246b673149ab1aa701880c768
     m_Address: Prefab/Creatures/EnemyCore
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c562a8c1a668d404d8d7d1a21f22a0de
+    m_Address: Assets/Resources_moved/Prefab/PickUpItem/RepairKit/RapairKit.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
