@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 
@@ -15,6 +16,13 @@ public class EmergencyBrakeUpdater : MonoBehaviour
     [SerializeField] TextContainer _stopRateDescription;
     [SerializeField] TextContainer _sensingDistanceDescription;
 
+    [Header("Visualize sensing distance")]
+    [SerializeField] Color _firstCircleColor;
+    [SerializeField] float _firstThicknessCircle;
+
+    [SerializeField] Color _secondCircleColor;
+    [SerializeField] float _secondThicknessCircle;
+
     EmergencyBrakeModuleConfig _moduleConfig;
     PlayerUpgradePanel _playerUpgradePanel;
     EnumLanguage _language;
@@ -25,7 +33,6 @@ public class EmergencyBrakeUpdater : MonoBehaviour
     {
         _language = language;
     }
-
 
     public void Initialize(EmergencyBrakeModuleConfig moduleConfig, PlayerUpgradePanel playerUpgradePanel)
     {
@@ -110,6 +117,37 @@ public class EmergencyBrakeUpdater : MonoBehaviour
     public void UpgradeSensingDistance()
     {
         UpgradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics.SensingDistance, _sensingDistance);
+        _playerUpgradePanel.VisualController.UpdateDetailedInformation(GetFirstCircleData(), GetSecondCircleData());
+    }
+
+    private RadiusDisplay.RadiusDisplayData GetSecondCircleData()
+    {
+        var playerPosition = _playerUpgradePanel.PlayerViewUpgradePosition;
+
+        var distance = _moduleConfig.SensingDistance;
+
+        return new RadiusDisplay.RadiusDisplayData
+        {
+            GlobalPosition = new(playerPosition.x, playerPosition.y + distance),
+            Radius = EmergencyBrakeModule.COLLIDER_RADIUS,
+            Color = _secondCircleColor,
+            Thickness = _secondThicknessCircle
+        };
+    }
+
+    private RadiusDisplay.RadiusDisplayData GetFirstCircleData()
+    {
+        var playerPosition = _playerUpgradePanel.PlayerViewUpgradePosition;
+
+        var distance = _moduleConfig.SensingDistance;
+
+        return new RadiusDisplay.RadiusDisplayData
+        {
+            GlobalPosition = new(playerPosition.x, playerPosition.y + distance),
+            Radius = EmergencyBrakeModule.COLLIDER_RADIUS,
+            Color = _firstCircleColor,
+            Thickness = _firstThicknessCircle
+        };
     }
 
     public void UpgradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics characteristics, UpgradeInfo upgradeInfo)
@@ -149,6 +187,7 @@ public class EmergencyBrakeUpdater : MonoBehaviour
     public void DowngradeSensingDistance()
     {
         DowngradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics.SensingDistance, _sensingDistance);
+        _playerUpgradePanel.VisualController.UpdateDetailedInformation(GetFirstCircleData(), GetSecondCircleData());
     }
 
     public void DowngradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics characteristics, UpgradeInfo upgradeInfo)
@@ -184,7 +223,12 @@ public class EmergencyBrakeUpdater : MonoBehaviour
 
     private void DetailedInformationSensingDistanceDescription(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _sensingDistanceDescription.GetText(_language));
+        SensingDistanceVisualize(upgradeInfo);
+    }
+
+    private void SensingDistanceVisualize(UpgradeInfo upgradeInfo)
+    {
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, GetFirstCircleData(), GetSecondCircleData(), _sensingDistanceDescription.GetText(_language));
     }
 
 }

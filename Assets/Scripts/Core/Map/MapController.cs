@@ -1,20 +1,16 @@
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 using Zenject;
 
-public class MapController : MonoBehaviour
+public class MapController
 {
-    LevelManager _levelManager;
-    MapControllerConfig _config;
-
     CheckpointPlatformController _checkpointPlatformController;
 
     public float FullMapHeight { get => LevelManager.PLAYER_START_Y_POSITION; }
 
     [Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
     private void Construct(LevelManager levelManager)
     {
-        _levelManager = levelManager;
         levelManager.SubscribeToRoundStart(RoundStart);
 
         _checkpointPlatformController = GameplaySceneInstaller.DiContainer.Instantiate<CheckpointPlatformController>();
@@ -22,9 +18,7 @@ public class MapController : MonoBehaviour
 
     public void Initialize(MapControllerConfig config)
     {
-        _config = config;
-
-        _checkpointPlatformController.Initialize(this, config);
+        _checkpointPlatformController.Initialize(config);
 
         _checkpointPlatformController.CreatePlatforms(LevelManager.PLAYER_START_Y_POSITION).Forget();
     }

@@ -26,8 +26,9 @@ public class PlayerUpgradePanel : MonoBehaviour
     PlayerModuleConfigs _configs;
     PickUpItemManager _rewardManager;
 
-    public UpgradePanelVisualController VisualController { get => _visualController; }
+    public UpgradePanelVisualController VisualController => _visualController;
     public CharacterController Player => _player;
+    public Vector2 PlayerViewUpgradePosition => _playerViewUpgradePosition.position;
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]

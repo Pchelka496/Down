@@ -1,15 +1,23 @@
 using UnityEngine;
 using Zenject;
 
-public class PickUpItemManager : MonoBehaviour
+public class PickUpItemManager
 {
     public const int REWARD_LAYER_INDEX = 11;
+    readonly Transform _transform;
+
     PickUpItemManagerConfig _config;
     RewardController _rewardController;
     RepairKitController _repairKitController;
 
+    public PickUpItemManager(Transform transform)
+    {
+        _transform = transform;
+    }
+
     [Inject]
-    private void Construct(LevelManager levelManager, CharacterController player, RewardCounter rewardCounter)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    private void Construct(CharacterController player, RewardCounter rewardCounter)
     {
         Reward.Initialize(player, rewardCounter);
 
@@ -20,8 +28,8 @@ public class PickUpItemManager : MonoBehaviour
     public void Initialize(PickUpItemManagerConfig config)
     {
         _config = config;
-        _rewardController.Initialize(config.RewardControllerConfig, transform);
-        _repairKitController.Initialize(config.RepairKitControllerConfig, transform);
+        _rewardController.Initialize(config.RewardControllerConfig, _transform);
+        _repairKitController.Initialize(config.RepairKitControllerConfig, _transform);
     }
 
     public int GetPoints() => _config.GetPoints();

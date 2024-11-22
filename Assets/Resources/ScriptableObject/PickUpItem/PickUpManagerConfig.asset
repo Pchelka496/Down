@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rewardControllerConfig: {fileID: 11400000, guid: ddefa030c7bd37b42b5c9c28ee4076c7, type: 2}
   _repairKitControllerConfig: {fileID: 11400000, guid: 76e12eeaa9a839546beaaf330c5f517f, type: 2}
-  _points: 1222
+  _points: 2147483647

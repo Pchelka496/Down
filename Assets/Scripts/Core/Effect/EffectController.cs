@@ -4,20 +4,27 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class EffectController : MonoBehaviour
+public class EffectController
 {
-    [SerializeField] string _impactEffectPrefabAddress;
-    [Header("Pool size = _initialPoolSize + 1 prefab")]
-    [SerializeField] int _initialPoolSize;
-    Queue<ParticleSystem> _impactEffectPool = new();
+    const int INITIAL_POOL_SIZE = 3;
+    readonly static string _impactEffectPrefabAddress = "Prefab/Effects/ImpactEffect";
+    readonly Queue<ParticleSystem> _impactEffectPool = new();
+    readonly Transform _transform;
+
     ParticleSystem _impactEffectPrefab;
+
+    public EffectController(Transform transform)
+    {
+        _transform = transform;
+        Start();
+    }
 
     private async void Start()
     {
         _impactEffectPrefab = await LoadEffectPrefab(_impactEffectPrefabAddress);
         _impactEffectPool.Enqueue(_impactEffectPrefab);
 
-        for (int i = 0; i < _initialPoolSize; i++)
+        for (int i = 0; i < INITIAL_POOL_SIZE; i++)
         {
             _impactEffectPool.Enqueue(CreateNewEffect());
         }
@@ -25,32 +32,23 @@ public class EffectController : MonoBehaviour
 
     private async UniTask<ParticleSystem> LoadEffectPrefab(string address)
     {
-        AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(address);
+        var loadData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(address);
 
-        await handle;
-
-        if (handle.Status == AsyncOperationStatus.Succeeded)
+        if (loadData.LoadAsset.TryGetComponent(out ParticleSystem effectPrefab))
         {
-            if (handle.Result.TryGetComponent(out ParticleSystem effectPrefab))
-            {
-                return Instantiate(effectPrefab, transform);
-            }
-            else
-            {
-                Debug.LogError("Error TryGetComponent ParticleSystem effectPrefab.");
-                return default;
-            }
+            return MonoBehaviour.Instantiate(effectPrefab, _transform);
         }
         else
         {
-            Debug.LogError("Error loading via Addressables.");
+            Debug.LogError("Error TryGetComponent ParticleSystem effectPrefab.");
             return default;
         }
     }
 
+
     private ParticleSystem CreateNewEffect()
     {
-        return Instantiate(_impactEffectPrefab, transform);
+        return MonoBehaviour.Instantiate(_impactEffectPrefab, _transform);
     }
 
     public void PlayImpactEffect(Vector2 position)

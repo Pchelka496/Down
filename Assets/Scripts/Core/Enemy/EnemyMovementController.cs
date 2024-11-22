@@ -19,6 +19,7 @@ public class EnemyMovementController : IDisposable
     NativeArray<float> _speeds;
     NativeArray<bool> _needToChangeInitialPosition;
     NativeArray<Vector2> _initialPosition;
+    NativeArray<Unity.Mathematics.Random> _randoms;
     TransformAccessArray _enemyTransforms;
 
     public void Initialize(int enemyCount, Transform[] enemyTransforms, float[] speeds, EnumMotionPattern[] motionPatterns, float2[] motionCharacteristic, Vector2[] isolationDistance)
@@ -46,6 +47,20 @@ public class EnemyMovementController : IDisposable
         _initialPosition = new(_enemyCount, Allocator.Persistent);
         _needToChangeInitialPosition = new(_enemyCount, Allocator.Persistent);
         _enemyTransforms = new(transforms);
+
+        _randoms = new(_enemyCount, Allocator.Persistent);
+
+        FillRandomsArray();
+    }
+
+    private void FillRandomsArray()
+    {
+        uint seed = (uint)UnityEngine.Random.Range(1, int.MaxValue);
+
+        for (int i = 0; i < _enemyCount; i++)
+        {
+            _randoms[i] = new(seed + (uint)i);
+        }
     }
 
     private async UniTask EnemyInitialPlacement()
@@ -53,17 +68,23 @@ public class EnemyMovementController : IDisposable
         var initialPlacementJob = new InitialPlacementJob(positionProcessingMethods: ref _positionProcessingMethods,
                                                           currentPosition: ref _currentEnemyPosition,
                                                           targetPosition: ref _initialPosition,
-                                                          isolateStaticElementDistance: ref _isolateStaticElementDistance,
-                                                          needToChange: ref _needToChangeInitialPosition
+                                                          needToChange: ref _needToChangeInitialPosition,
+                                                          randoms: ref _randoms
                                                           );
 
         var batchSize = 1;
+
+        initialPlacementJob.PlayerYPosition = CharacterPositionMeter.YPosition;
+        initialPlacementJob.PlayerXPosition = CharacterPositionMeter.XPosition;
 
         _enemyInitialPlacement = initialPlacementJob.Schedule(_enemyCount, batchSize, _enemyMoverHandler);
 
         while (true)
         {
             _enemyInitialPlacement.Complete();
+
+            initialPlacementJob.PlayerYPosition = CharacterPositionMeter.YPosition;
+            initialPlacementJob.PlayerXPosition = CharacterPositionMeter.XPosition;
 
             _enemyInitialPlacement = initialPlacementJob.Schedule(_enemyCount, batchSize, _enemyMoverHandler);
 
@@ -130,6 +151,7 @@ public class EnemyMovementController : IDisposable
         _initialPosition.Dispose();
         _needToChangeInitialPosition.Dispose();
         _enemyTransforms.Dispose();
+        _randoms.Dispose();
     }
 
 }

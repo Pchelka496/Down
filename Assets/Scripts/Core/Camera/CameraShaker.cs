@@ -2,7 +2,6 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
 using System.Threading;
-using System;
 
 [System.Serializable]
 public class CameraShaker : System.IDisposable
@@ -14,15 +13,7 @@ public class CameraShaker : System.IDisposable
 
     CancellationTokenSource _cts;
 
-    private void Start()
-    {
-        if (_cameraNoise == null)
-        {
-            Debug.LogError("CinemachineBasicMultiChannelPerlin == null");
-        }
-    }
-
-    public async UniTask StartShake(float? duration = null)
+    public async UniTaskVoid StartShake(float? duration = null)
     {
         if (_cameraNoise == null) return;
 
@@ -36,9 +27,8 @@ public class CameraShaker : System.IDisposable
         {
             await UniTask.WaitForSeconds(duration ?? _defaultShakeDuration, cancellationToken: _cts.Token);
         }
-        catch (Exception ex)
+        catch (System.OperationCanceledException)
         {
-            Debug.LogWarning($"Exception caught in StartShake WaitForSeconds : {ex}");
         }
 
         StopShake();

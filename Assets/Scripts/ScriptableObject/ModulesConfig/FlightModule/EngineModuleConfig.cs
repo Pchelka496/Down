@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EngineModuleConfig", menuName = "Scriptable Objects/EngineModuleConfig")]
 public class EngineModuleConfig : BaseModuleConfig
 {
+    [Header("The InterpolateForceApplyRateValue level is bound to the EngineForceIncreaseDuration level")]
     [SerializeField] UpdateCharacteristicsInfo<EnumCharacteristics, float>[] _characteristics;
 
     public float EngineMaxForce => GetCharacteristicForLevel(_characteristics,

@@ -66,14 +66,17 @@ public class HealthIndicator : MonoBehaviour
         ClearToken();
         _cts = new CancellationTokenSource();
 
-        var displayedHealth = int.Parse(_healthText.text.Replace(PERCENT_SYMBOL, string.Empty));
+        var displayedPercentage = int.Parse(_healthText.text.Replace(PERCENT_SYMBOL, string.Empty));
 
-        while (displayedHealth != targetHealth)
+        var targetPercentage = Mathf.RoundToInt((float)targetHealth / _maxHealth * 100);
+
+        while (displayedPercentage != targetPercentage)
         {
-            displayedHealth += displayedHealth > targetHealth ? -1 : 1;
-            _healthText.text = displayedHealth + PERCENT_SYMBOL;
+            displayedPercentage += displayedPercentage > targetPercentage ? -1 : 1;
 
-            UpdateHealthTextColor(displayedHealth);
+            _healthText.text = displayedPercentage + PERCENT_SYMBOL;
+
+            UpdateHealthTextColor(displayedPercentage);
 
             await UniTask.WaitForSeconds(TEXT_UPDATE_DELAY, cancellationToken: _cts.Token);
         }
@@ -92,6 +95,7 @@ public class HealthIndicator : MonoBehaviour
     {
         ClearToken();
     }
+
 }
 
 

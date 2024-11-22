@@ -12,4 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f91dbf3f1d636241a17e40b9c7453c3, type: 3}
   m_Name: BackgroundControllerConfig
   m_EditorClassIdentifier: 
-  _backgroundPrefabAddress: 
+  _backgroundGradient:
+    serializedVersion: 2
+    key0: {r: 0, g: 0.019607844, b: 0.11372549, a: 1}
+    key1: {r: 0.16862746, g: 0.11372549, b: 0.5176471, a: 1}
+    key2: {r: 0.07289071, g: 0.3068762, b: 0.735849, a: 0}
+    key3: {r: 0.2747864, g: 0.48193318, b: 0.8962264, a: 0}
+    key4: {r: 0.051486313, g: 0.6879311, b: 0.8396226, a: 0}
+    key5: {r: 0.3445621, g: 0.7108641, b: 0.8207547, a: 0}
+    key6: {r: 0.5208259, g: 0.7664025, b: 0.8301887, a: 0}
+    key7: {r: 0.5208259, g: 0.7664025, b: 0.8301887, a: 0}
+    ctime0: 0
+    ctime1: 11372
+    ctime2: 22745
+    ctime3: 34502
+    ctime4: 46646
+    ctime5: 56669
+    ctime6: 65535
+    ctime7: 65535
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: 0
+    m_NumColorKeys: 7
+    m_NumAlphaKeys: 2

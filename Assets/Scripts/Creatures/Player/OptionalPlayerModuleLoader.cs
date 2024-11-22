@@ -4,9 +4,11 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
 
-public class OptionalPlayerModuleLoader : MonoBehaviour
+public class OptionalPlayerModuleLoader
 {
-    [SerializeField] OptionalPlayerModuleLoaderConfig _config;
+    const string CONFIG_ADDRESS = "ScriptableObject/ModulesConfig/PlayerModuleLoaderConfig";
+
+    OptionalPlayerModuleLoaderConfig _config;
     CharacterController _player;
 
     [Inject]
@@ -16,13 +18,18 @@ public class OptionalPlayerModuleLoader : MonoBehaviour
         levelManager.SubscribeToRoundStart(RoundStart);
         _player = player;
 
-        LoadModules();
+        LoadConfiguration().Forget();
     }
 
     private void RoundStart(LevelManager levelManager)
     {
-        LoadModules();
+        if (_config == null)
+        {
+            Debug.LogError("Configuration is not loaded!");
+            return;
+        }
 
+        LoadModules();
         levelManager.SubscribeToRoundEnd(RoundEnd);
     }
 
@@ -31,8 +38,23 @@ public class OptionalPlayerModuleLoader : MonoBehaviour
         levelManager.SubscribeToRoundStart(RoundStart);
     }
 
+    private async UniTask LoadConfiguration()
+    {
+        var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<OptionalPlayerModuleLoaderConfig>(CONFIG_ADDRESS);
+
+        _config = loadOperationData.LoadAsset;
+
+        LoadModules();
+    }
+
     public async UniTask<BaseModule> LoadModuleForTest<T>()
     {
+        if (_config == null)
+        {
+            Debug.LogError("Configuration is not loaded!");
+            return null;
+        }
+
         var modulesInfo = _config.ModuleInfoArray;
 
         foreach (var moduleInfo in modulesInfo)
@@ -41,7 +63,7 @@ public class OptionalPlayerModuleLoader : MonoBehaviour
             {
                 if (moduleInfo.CreatedModule == null)
                 {
-                    return await ModuleLoud(moduleInfo);
+                    return await ModuleLoad(moduleInfo);
                 }
                 else
                 {
@@ -51,19 +73,24 @@ public class OptionalPlayerModuleLoader : MonoBehaviour
         }
 
         Debug.LogWarning($"Module of this type is not found in the array: {typeof(T).Name}");
-
         return null;
     }
 
     private void LoadModules()
     {
+        if (_config == null)
+        {
+            Debug.LogError("Configuration is not loaded!");
+            return;
+        }
+
         var modulesInfo = _config.ModuleInfoArray;
 
         foreach (var moduleInfo in modulesInfo)
         {
             if (moduleInfo.ActivityCheck && moduleInfo.CreatedModule == null)
             {
-                ModuleLoud(moduleInfo).Forget();
+                ModuleLoad(moduleInfo).Forget();
             }
             else if (!moduleInfo.ActivityCheck && moduleInfo.CreatedModule != null)
             {
@@ -72,7 +99,7 @@ public class OptionalPlayerModuleLoader : MonoBehaviour
         }
     }
 
-    private async UniTask<BaseModule> ModuleLoud(OptionalPlayerModuleLoaderConfig.ModuleInfo moduleInfo)
+    private async UniTask<BaseModule> ModuleLoad(OptionalPlayerModuleLoaderConfig.ModuleInfo moduleInfo)
     {
         var newModule = await GetModuleObject(moduleInfo.ModulePrefabReference);
 
@@ -84,9 +111,10 @@ public class OptionalPlayerModuleLoader : MonoBehaviour
 
     private void ReleaseOldModule(AsyncOperationHandle<GameObject> handle, GameObject module)
     {
-        Destroy(module);
+        MonoBehaviour.Destroy(module);
 
-        if (handle.IsValid())
+        if (handle.IsValid() && 
+            handle.Status == AsyncOperationStatus.Succeeded)
         {
             Addressables.Release(handle);
         }
@@ -94,19 +122,9 @@ public class OptionalPlayerModuleLoader : MonoBehaviour
 
     private async UniTask<BaseModule> GetModuleObject(AssetReference moduleReference)
     {
-        var handle = Addressables.LoadAssetAsync<GameObject>(moduleReference);
+        var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(moduleReference);
 
-        await handle;
-
-        if (handle.Status == AsyncOperationStatus.Succeeded)
-        {
-            return GameplaySceneInstaller.DiContainer.InstantiatePrefabForComponent<BaseModule>(handle.Result);
-        }
-        else
-        {
-            Debug.LogError("Error loading via Addressable.");
-            return default;
-        }
+        return GameplaySceneInstaller.DiContainer.InstantiatePrefabForComponent<BaseModule>(loadOperationData.LoadAsset);
     }
 
 }

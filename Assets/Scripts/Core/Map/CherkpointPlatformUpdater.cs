@@ -2,18 +2,17 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine;
+using System.Net;
 
 public class CheckpointPlatformController
 {
-    MapController _mapController;
     MapControllerConfig _config;
     CheckpointPlatform _currentPlatform;
 
     AsyncOperationHandle<GameObject> _currentPlatformHandle;
 
-    public void Initialize(MapController mapController, MapControllerConfig config)
+    public void Initialize(MapControllerConfig config)
     {
-        _mapController = mapController;
         _config = config;
     }
 
@@ -26,7 +25,13 @@ public class CheckpointPlatformController
     public void ClearPlatform()
     {
         MonoBehaviour.Destroy(_currentPlatform.gameObject);
-        Addressables.Release(_currentPlatformHandle);
+
+        if (_currentPlatformHandle.IsValid() &&
+            _currentPlatformHandle.Status == AsyncOperationStatus.Succeeded)
+        {
+            Addressables.Release(_currentPlatformHandle);
+            _currentPlatformHandle = default;
+        }
     }
 
     public async UniTask<CheckpointPlatform> CreatePlatform(AssetReference platformReference, float height)
@@ -49,25 +54,17 @@ public class CheckpointPlatformController
 
     private void InitializePlatform(CheckpointPlatform checkpointPlatform, CheckpointPlatform.Initializer initializer)
     {
-        checkpointPlatform.Initialize(initializer, this);
+        checkpointPlatform.Initialize(initializer);
         _currentPlatform = checkpointPlatform;
     }
 
     private async UniTask<GameObject> LoadPrefabs(AssetReference platformReference)
     {
-        _currentPlatformHandle = Addressables.LoadAssetAsync<GameObject>(platformReference);
+        var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(platformReference);
 
-        await _currentPlatformHandle;
+        _currentPlatformHandle = loadOperationData.Handle;
 
-        if (_currentPlatformHandle.Status == AsyncOperationStatus.Succeeded)
-        {
-            return _currentPlatformHandle.Result;
-        }
-        else
-        {
-            Debug.LogError("Error loading via Addressables.");
-            return default;
-        }
+        return loadOperationData.LoadAsset;
     }
 
 }

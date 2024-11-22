@@ -84,19 +84,9 @@ public class DisplayController : MonoBehaviour
 
     private async UniTask<DisplayControllerConfig> LoadConfig(string address)
     {
-        AsyncOperationHandle<DisplayControllerConfig> handle = Addressables.LoadAssetAsync<DisplayControllerConfig>(address);
+        var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<DisplayControllerConfig>(address);
 
-        await handle;
-
-        if (handle.Status == AsyncOperationStatus.Succeeded)
-        {
-            return handle.Result;
-        }
-        else
-        {
-            Debug.LogError("Error loading via Addressables.");
-            return default;
-        }
+        return loadOperationData.Handle.Result;
     }
 
     private async UniTask StartTypingTextAsync(string targetText, float displayTime)
@@ -120,7 +110,7 @@ public class DisplayController : MonoBehaviour
             }
             else
             {
-                _displayText.text = _displayText.text.Substring(0, _displayText.text.Length - 2) + CURSOR_CHAR;// 2 = 1 element + 1 cursor
+                _displayText.text = _displayText.text[..^2] + CURSOR_CHAR;// 2 = 1 element + 1 cursor
             }
 
             await UniTask.WaitForSeconds(ERASE_SPEED);
@@ -136,7 +126,7 @@ public class DisplayController : MonoBehaviour
                 return;
             }
 
-            _displayText.text = text.Substring(0, i) + CURSOR_CHAR;
+            _displayText.text = text[..i] + CURSOR_CHAR;
             await UniTask.WaitForSeconds(TYPING_SPEED);
         }
 

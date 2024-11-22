@@ -4,15 +4,17 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
 
-public class UpgradePanelController : MonoBehaviour
+public class LobbyUIElementLoader : MonoBehaviour
 {
-    [SerializeField] string _upgradePanelPrefabAddress;
+    [SerializeField] AssetReference _upgradePanelPrefabReference;
+
     PlayerUpgradePanel _upgradePanel;
-    AsyncOperationHandle<GameObject> _upgradePanelHandle;
+    AddressableLouderHelper.LoadOperationData<GameObject> _upgradePanelData;
 
     public PlayerUpgradePanel UpgradePanel => _upgradePanel;
 
     [Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
     private void Construct(LevelManager levelManager)
     {
         levelManager.SubscribeToRoundStart(RoundStart);
@@ -33,31 +35,26 @@ public class UpgradePanelController : MonoBehaviour
 
     private async void CreatePanel()
     {
-        _upgradePanel = GameplaySceneInstaller.DiContainer.InstantiatePrefabForComponent<PlayerUpgradePanel>(await LoadPrefabs(_upgradePanelPrefabAddress));
+        _upgradePanel = GameplaySceneInstaller.DiContainer.InstantiatePrefabForComponent<PlayerUpgradePanel>(await LoadPrefabs(_upgradePanelPrefabReference));
         _upgradePanel.transform.SetParent(transform, false);
     }
 
     private void ClearPanel()
     {
         Destroy(_upgradePanel.gameObject);
-        Addressables.Release(_upgradePanelHandle);
+
+        if (_upgradePanelData.Handle.IsValid() &&
+            _upgradePanelData.Handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            Addressables.Release(_upgradePanelData.Handle);
+        }
     }
 
-    private async UniTask<GameObject> LoadPrefabs(string address)
+    private async UniTask<GameObject> LoadPrefabs(AssetReference reference)
     {
-        _upgradePanelHandle = Addressables.LoadAssetAsync<GameObject>(address);
+        _upgradePanelData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(reference);
 
-        await _upgradePanelHandle;
-
-        if (_upgradePanelHandle.Status == AsyncOperationStatus.Succeeded)
-        {
-            return _upgradePanelHandle.Result;
-        }
-        else
-        {
-            Debug.LogError("Error loading via Addressables.");
-            return default;
-        }
+        return _upgradePanelData.LoadAsset;
     }
 
 }

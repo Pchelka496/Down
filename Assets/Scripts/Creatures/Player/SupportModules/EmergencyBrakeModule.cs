@@ -1,13 +1,10 @@
-using Cysharp.Threading.Tasks;
-using System.Collections;
 using UnityEngine;
 using Zenject;
-using DG.Tweening;
 
 public class EmergencyBrakeModule : BaseModule
 {
     const float Z_ROTATION_OFFSET = 90f;
-
+    public const float COLLIDER_RADIUS = 0.8f;
     [SerializeField] Collider2D _collider;
     [SerializeField] ParticleSystem _particleSystem;
 

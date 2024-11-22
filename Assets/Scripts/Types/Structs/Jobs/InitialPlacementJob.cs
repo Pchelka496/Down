@@ -1,8 +1,10 @@
+using Unity.Mathematics;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 
+[BurstCompile]
 public struct InitialPlacementJob : IJobParallelFor
 {
     const float UPDATE_POSITION_Y_DISTANCE_TO_PLAYER = 250f;
@@ -12,81 +14,74 @@ public struct InitialPlacementJob : IJobParallelFor
     const float MAX_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 50f;
     const float MIN_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 0f;
 
-    const float MAX_Y_TRAVEL_DISTANCE_TO_PLAYER = 200f;
-    const float MIN_Y_TRAVEL_DISTANCE_TO_PLAYER = 80f;
+    const float MAX_Y_TRAVEL_DISTANCE_TO_PLAYER = 300f;
+    const float MIN_Y_TRAVEL_DISTANCE_TO_PLAYER = 120f;
 
     [ReadOnly] readonly NativeArray<EnumMotionPattern> _positionProcessingMethods;
-    [ReadOnly] NativeArray<Vector2> _isolateStaticElementDistance;
     [WriteOnly] NativeArray<bool> _needToChange;
 
-    [ReadOnly] public readonly NativeArray<Vector2> CurrentPosition;
+    [ReadOnly] public NativeArray<Vector2> CurrentPosition;
     public NativeArray<Vector2> TargetPosition;
+
+    public float PlayerYPosition;
+    public float PlayerXPosition;
+
+    NativeArray<Unity.Mathematics.Random> Randoms;
 
     public InitialPlacementJob(ref NativeArray<EnumMotionPattern> positionProcessingMethods,
                                ref NativeArray<Vector2> currentPosition,
                                ref NativeArray<Vector2> targetPosition,
-                               ref NativeArray<Vector2> isolateStaticElementDistance,
-                               ref NativeArray<bool> needToChange) : this()
+                               ref NativeArray<bool> needToChange,
+                               ref NativeArray<Unity.Mathematics.Random> randoms
+                               ) : this()
     {
         _positionProcessingMethods = positionProcessingMethods;
-        _isolateStaticElementDistance = isolateStaticElementDistance;
         CurrentPosition = currentPosition;
         TargetPosition = targetPosition;
         _needToChange = needToChange;
+        Randoms = randoms;
     }
 
     public void Execute(int index)
     {
-        if (Mathf.Abs(CharacterPositionMeter.YPosition - CurrentPosition[index].y) > UPDATE_POSITION_Y_DISTANCE_TO_PLAYER
-            || Mathf.Abs(CharacterPositionMeter.XPosition - CurrentPosition[index].x) > UPDATE_POSITION_X_DISTANCE_TO_PLAYER)
+        if (math.abs(PlayerYPosition - CurrentPosition[index].y) > UPDATE_POSITION_Y_DISTANCE_TO_PLAYER
+            || math.abs(PlayerXPosition - CurrentPosition[index].x) > UPDATE_POSITION_X_DISTANCE_TO_PLAYER)
         {
-            var newXPosition = GlobalXCalculation(index);
-            var newYPosition = GlobalYCalculation(index);
+            var random = Randoms[index];
+            var newXPosition = GlobalXCalculation(index, ref random);
+            var newYPosition = GlobalYCalculation(ref random);
 
-            Vector2 newPosition = new Vector2(newXPosition, newYPosition);
-
-            //for (int i = 0; i < CurrentPosition.Length; i++)
-            //{
-            //    if (i == index) continue; 
-
-            //    float distance = Vector2.Distance(newPosition, CurrentPosition[i]);
-            //    float requiredDistance = Mathf.Max(_isolateStaticElementDistance[index].x, _isolateStaticElementDistance[i].x);
-
-            //    if (distance < requiredDistance)
-            //    {
-            //        Vector2 direction = (newPosition - CurrentPosition[i]).normalized;
-            //        newPosition = CurrentPosition[i] + direction * requiredDistance;
-            //    }
-            //}
-
-            TargetPosition[index] = newPosition;
+            TargetPosition[index] = new Vector2(newXPosition, newYPosition);
             _needToChange[index] = true;
+
+            Randoms[index] = random;
         }
     }
 
-    private float GlobalXCalculation(int index)
+    private readonly float GlobalXCalculation(int index, ref Unity.Mathematics.Random random)
     {
         if (_positionProcessingMethods[index] == EnumMotionPattern.LinearHorizontalRight ||
             _positionProcessingMethods[index] == EnumMotionPattern.WavyRight ||
             _positionProcessingMethods[index] == EnumMotionPattern.JerkyRight)
         {
-            return CharacterPositionMeter.XPosition - RandomHelper.GetRandomFloat(MIN_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER, MAX_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER);
+            return PlayerXPosition - random.NextFloat(MIN_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER, MAX_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER);
         }
         else if (_positionProcessingMethods[index] == EnumMotionPattern.LinearHorizontalLeft ||
                  _positionProcessingMethods[index] == EnumMotionPattern.WavyLeft ||
                  _positionProcessingMethods[index] == EnumMotionPattern.JerkyLeft)
         {
-            return CharacterPositionMeter.XPosition + RandomHelper.GetRandomFloat(MIN_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER, MAX_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER);
+            return PlayerXPosition + random.NextFloat(MIN_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER, MAX_X_MOVEBLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER);
         }
         else
         {
-            return CharacterPositionMeter.XPosition + RandomHelper.GetRandomFloat(-MAX_X_STATIC_ENEMY_DISTANCE_TO_PLAYER, MAX_X_STATIC_ENEMY_DISTANCE_TO_PLAYER);
+            return PlayerXPosition + random.NextFloat(-MAX_X_STATIC_ENEMY_DISTANCE_TO_PLAYER, MAX_X_STATIC_ENEMY_DISTANCE_TO_PLAYER);
         }
     }
 
-    private float GlobalYCalculation(int index)
+    private readonly float GlobalYCalculation(ref Unity.Mathematics.Random random)
     {
-        return CharacterPositionMeter.YPosition - RandomHelper.GetRandomFloat(MIN_Y_TRAVEL_DISTANCE_TO_PLAYER, MAX_Y_TRAVEL_DISTANCE_TO_PLAYER);
+        return PlayerYPosition - random.NextFloat(MIN_Y_TRAVEL_DISTANCE_TO_PLAYER, MAX_Y_TRAVEL_DISTANCE_TO_PLAYER);
     }
 
 }
+

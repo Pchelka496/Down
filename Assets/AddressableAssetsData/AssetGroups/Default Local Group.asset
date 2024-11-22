@@ -65,6 +65,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: efb96763b58bbb144a731a727b964835
+    m_Address: Assets/Resources_moved/Prefab/UI/HUD/BoosterIndicator/BoosterIcon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e5f7e05cf874f8d4cb4029f4ef8d0723, type: 2}
   m_SchemaSet:

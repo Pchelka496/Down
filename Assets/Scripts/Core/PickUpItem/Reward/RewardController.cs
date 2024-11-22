@@ -14,7 +14,7 @@ public class RewardController
     const float CHECK_BOUNDARY_Y = 140f;
     const float CHECK_INTERVAL = 1f;
 
-    static readonly Vector3 _rewardSpawnPosition = new Vector3(float.MaxValue / 5, float.MaxValue / 5, 0f);
+    static readonly Vector3 _rewardSpawnPosition = new(float.MaxValue / 5, float.MaxValue / 5, 0f);
 
     int _currentPresetIndex = 0;
 
@@ -61,19 +61,9 @@ public class RewardController
 
     private async UniTask<GameObject> LoadPrefabs(AssetReference assetReference)
     {
-        AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(assetReference);
+        var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(assetReference);
 
-        await handle;
-
-        if (handle.Status == AsyncOperationStatus.Succeeded)
-        {
-            return handle.Result;
-        }
-        else
-        {
-            Debug.LogError("Error loading via Addressables.");
-            return default;
-        }
+        return loadOperationData.LoadAsset;
     }
 
     private async UniTaskVoid StartRewardCheckLoop()

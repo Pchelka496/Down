@@ -56,19 +56,9 @@ public class RepairKitController
 
     private async UniTask<GameObject> LoadPrefabs(AssetReference assetReference)
     {
-        AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(assetReference);
+        var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(assetReference);
 
-        await handle;
-
-        if (handle.Status == AsyncOperationStatus.Succeeded)
-        {
-            return handle.Result;
-        }
-        else
-        {
-            Debug.LogError("Error loading via Addressables.");
-            return default;
-        }
+        return loadOperationData.LoadAsset;
     }
 
     private async UniTaskVoid StartRepairKitCheckLoop()

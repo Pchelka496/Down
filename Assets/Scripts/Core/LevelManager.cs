@@ -1,15 +1,17 @@
 using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Zenject;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager
 {
     public const float PLAYER_START_Y_POSITION = 99989.1f;
     public const float PLAYER_START_X_POSITION = 0;
 
-    [SerializeField] int _targetFrameRate = 90;
-    [SerializeField] LevelManagerConfig _config;
+    public const string CONFIG_ADDRESS = "ScriptableObject/LevelManager/LevelManagerConfig";
+    int _targetFrameRate = 90;
+    LevelManagerConfig _config;
 
     EnemyManager _enemyManager;
     CharacterController _player;
@@ -27,7 +29,13 @@ public class LevelManager : MonoBehaviour
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(MapController mapController, EnemyManager enemyManager, BackgroundController backgroundController, CharacterController player, PickUpItemManager rewardManager, ScreenFader screenFader)
+    private void Construct(MapController mapController,
+                           EnemyManager enemyManager,
+                           BackgroundController backgroundController,
+                           CharacterController player,
+                           PickUpItemManager rewardManager,
+                           ScreenFader screenFader
+                           )
     {
         _mapController = mapController;
         _enemyManager = enemyManager;
@@ -35,22 +43,41 @@ public class LevelManager : MonoBehaviour
         _rewardManager = rewardManager;
         _screenFader = screenFader;
         _player = player;
+
+        LoadConfig().Forget();
     }
 
-    private void Awake()
+    private async UniTask LoadConfig()
+    {
+        var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<LevelManagerConfig>(CONFIG_ADDRESS);
+
+        _config = loadOperationData.Handle.Result;
+
+        if (_config == null)
+        {
+            Debug.LogError("Failed to load OptionalPlayerModuleLoaderConfig.");
+            return;
+        }
+
+        InitializeAnyComponents();
+        FirstSettings();
+    }
+
+    private void FirstSettings()
+    {
+        ResetPlayerPosition();
+        _screenFader.FadeToClear().Forget();
+        _targetFrameRate = _config.TargetFrameRate;
+
+        Application.targetFrameRate = _targetFrameRate;
+    }
+
+    private void InitializeAnyComponents()
     {
         _mapController.Initialize(_config.MapControllerConfig);
         _backgroundController.Initialize(_config.BackgroundControllerConfig);
         _enemyManager.Initialize(_config.EnemyManagerConfig);
         _rewardManager.Initialize(_config.RewardManagerConfig);
-    }
-
-    private void Start()
-    {
-        ResetPlayerPosition();
-        _screenFader.FadeToClear().Forget();
-
-        Application.targetFrameRate = _targetFrameRate;
     }
 
     private void ResetPlayerPosition()

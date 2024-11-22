@@ -4,11 +4,10 @@ using System.Threading;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
 using static EnemyConfig;
 
-public class EnemyManager : MonoBehaviour
+public class EnemyManager : System.IDisposable
 {
     public const int ENEMY_LAYER_INDEX = 8;
     public const float ENEMY_SPAWN_X_POSITION = LevelManager.PLAYER_START_X_POSITION + 99000f;
@@ -16,21 +15,25 @@ public class EnemyManager : MonoBehaviour
     public const float DELAY_BEFORE_START_CHALLENGE_SPAWNING = 3f;
     public const float DELAY_BEFORE_CHALLENGE_RESPAWN = 2f;
 
+    readonly Transform _enemyParent;
     EnemyManagerConfig _config;
     EnemyCoreFactory _enemyCoreFactory;
     EnemyVisualPartController _enemyVisualPartFactory;
     EnemyVisualPartController _challengeVisualPartFactory;
     EnemyMovementController _enemyController;
     EnemyCore[] _enemyCore;
-    CharacterController _player;
 
-    AsyncOperationHandle<GameObject>[] _visualPartsLoadedHandles;
     CancellationTokenSource _enemyRegionUpdaterCts;
 
-    [Inject]
-    private void Construct(CharacterController player, LevelManager levelManager)
+    public EnemyManager(Transform enemyParent)
     {
-        _player = player;
+        _enemyParent = enemyParent;
+    }
+
+    [Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    private void Construct(LevelManager levelManager)
+    {
         levelManager.SubscribeToRoundStart(RoundStart);
     }
 
@@ -42,13 +45,13 @@ public class EnemyManager : MonoBehaviour
         var diContainer = GameplaySceneInstaller.DiContainer;
 
         _enemyCoreFactory = diContainer.Instantiate<EnemyCoreFactory>();
-        _enemyCoreFactory.Initialize(this, config, _enemyCore);
+        _enemyCoreFactory.Initialize(config, _enemyCore, _enemyParent);
 
         _challengeVisualPartFactory = diContainer.Instantiate<EnemyVisualPartController>();
-        _challengeVisualPartFactory.Initialize(this, _config.ChallengeCount);
+        _challengeVisualPartFactory.Initialize(_config.ChallengeCount);
 
         _enemyVisualPartFactory = diContainer.Instantiate<EnemyVisualPartController>();
-        _enemyVisualPartFactory.Initialize(this, _config.EnemyCount);
+        _enemyVisualPartFactory.Initialize(_config.EnemyCount);
 
         _enemyController = diContainer.Instantiate<EnemyMovementController>();
 
@@ -80,8 +83,6 @@ public class EnemyManager : MonoBehaviour
 
         _challengeVisualPartFactory.SetEnemies(_config.ChallengeEnemies);
 
-        var enemyVisualParts = await _challengeVisualPartFactory.LoadAllEnemyVisualParts();
-
         for (int i = 0; i < _challengeVisualPartFactory.EnemyCount; i++)
         {
             var enemyInfo = await _challengeVisualPartFactory.UpdateVisualPart(i);
@@ -107,7 +108,7 @@ public class EnemyManager : MonoBehaviour
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void ResetAllEnemyPosition()
     {
-        Vector2 spawnPosition = new Vector2(ENEMY_SPAWN_X_POSITION, ENEMY_SPAWN_Y_POSITION);
+        Vector2 spawnPosition = new(ENEMY_SPAWN_X_POSITION, ENEMY_SPAWN_Y_POSITION);
 
         foreach (var enemyCore in _enemyCore)
         {
@@ -178,7 +179,7 @@ public class EnemyManager : MonoBehaviour
 #if UNITY_EDITOR
         if (!EditorApplication.isPlaying)
         {
-            DestroyImmediate(visualPart);
+            MonoBehaviour.DestroyImmediate(visualPart);
             return;
         }
 #endif
@@ -232,7 +233,7 @@ public class EnemyManager : MonoBehaviour
         cts = null;
     }
 
-    private void OnDestroy()
+    public void Dispose()
     {
         _enemyController.Dispose();
 

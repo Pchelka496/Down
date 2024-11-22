@@ -17,14 +17,22 @@ public class ScreenTouchController : OnScreenButton, IPointerDownHandler, IPoint
     public Vector2 TouchCurrentPosition => _currentTouchPosition;
 
     [Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
     private void Construct(Camera mainCamera)
     {
         _mainCamera = mainCamera;
     }
 
+    private void Start()
+    {
+        ClearLineRenderer();
+    }
+
     public new void OnPointerDown(PointerEventData eventData)
     {
         _touchStartPosition = eventData.position;
+        _currentTouchPosition = eventData.position;
+
         UpdateLineRendererStartPosition();
         base.OnPointerDown(eventData);
     }
@@ -32,6 +40,8 @@ public class ScreenTouchController : OnScreenButton, IPointerDownHandler, IPoint
     public new void OnPointerUp(PointerEventData eventData)
     {
         _touchEndPosition = eventData.position;
+        _currentTouchPosition = eventData.position;
+
         ClearLineRenderer();
         base.OnPointerUp(eventData);
     }
@@ -44,8 +54,8 @@ public class ScreenTouchController : OnScreenButton, IPointerDownHandler, IPoint
 
     private void UpdateLineRendererStartPosition()
     {
-        Vector3 worldStart = _mainCamera.ScreenToWorldPoint(new Vector3(_touchStartPosition.x, _touchStartPosition.y, 10f));
-        Vector3 localStart = lineRenderer.transform.InverseTransformPoint(worldStart);
+        var worldStart = _mainCamera.ScreenToWorldPoint(new(_touchStartPosition.x, _touchStartPosition.y, 10f));
+        var localStart = lineRenderer.transform.InverseTransformPoint(worldStart);
 
         lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, localStart);
@@ -55,9 +65,13 @@ public class ScreenTouchController : OnScreenButton, IPointerDownHandler, IPoint
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void UpdateLineRendererEndPosition()
     {
-        Vector3 worldCurrent = _mainCamera.ScreenToWorldPoint(new Vector3(_currentTouchPosition.x, _currentTouchPosition.y, 10f));
-        Vector3 localCurrent = lineRenderer.transform.InverseTransformPoint(worldCurrent);
+        var worldCurrent = _mainCamera.ScreenToWorldPoint(new(_currentTouchPosition.x, _currentTouchPosition.y, 10f));
+        var localCurrent = lineRenderer.transform.InverseTransformPoint(worldCurrent);
 
+        var worldStart = _mainCamera.ScreenToWorldPoint(new(_touchStartPosition.x, _touchStartPosition.y, 10f));
+        var localStart = lineRenderer.transform.InverseTransformPoint(worldStart);
+
+        lineRenderer.SetPosition(0, localStart);
         lineRenderer.SetPosition(1, localCurrent);
     }
 

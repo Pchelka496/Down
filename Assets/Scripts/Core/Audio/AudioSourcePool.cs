@@ -3,20 +3,22 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Runtime.CompilerServices;
 
-public class AudioSourcePool : MonoBehaviour
+public class AudioSourcePool
 {
-    [Tooltip("value + 1 Prefab = initialPoolSize")]
-    [SerializeField] int initialPoolSize = 5;
-    AudioSource _audioSourcePrefab;
+    const int INITIAL_POOL_SIZE = 5;
 
-    Queue<AudioSource> _sourcesPool = new();
+    readonly AudioSource _audioSourcePrefab;
+    readonly Transform _transform;
+    readonly Queue<AudioSource> _sourcesPool = new();
 
-    private void Start()
+    public AudioSourcePool(Transform transform)
     {
+        _transform = transform;
+
         _audioSourcePrefab = AudioSourcePrefab();
         _sourcesPool.Enqueue(_audioSourcePrefab);
 
-        for (int i = 0; i < initialPoolSize; i++)
+        for (int i = 0; i < INITIAL_POOL_SIZE; i++)
         {
             CreateNewAudioSource();
         }
@@ -24,7 +26,7 @@ public class AudioSourcePool : MonoBehaviour
 
     private AudioSource AudioSourcePrefab()
     {
-        var newGameObject = Instantiate(new GameObject("AudioSource"), transform);
+        var newGameObject = MonoBehaviour.Instantiate(new GameObject("AudioSource"), _transform);
         var audioSourcePrefab = newGameObject.AddComponent<AudioSource>();
 
         return audioSourcePrefab;
@@ -32,7 +34,7 @@ public class AudioSourcePool : MonoBehaviour
 
     private AudioSource CreateNewAudioSource()
     {
-        AudioSource newSource = Instantiate(_audioSourcePrefab, transform);
+        AudioSource newSource = MonoBehaviour.Instantiate(_audioSourcePrefab, _transform);
         return newSource;
     }
 
@@ -47,7 +49,7 @@ public class AudioSourcePool : MonoBehaviour
 
     private AudioSource GetAudioSource()
     {
-        AudioSource audioSource = null;
+        AudioSource audioSource;
 
         if (_sourcesPool.Count > 0)
         {

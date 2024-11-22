@@ -35,6 +35,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: efd9cd7daf5ff4e4197c4b33a164b93c
+    m_Address: ScriptableObject/ModulesConfig/PlayerModuleLoaderConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f14e704c90d659345a973872dc1a4cff
+    m_Address: ScriptableObject/LevelManager/LevelManagerConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e5f7e05cf874f8d4cb4029f4ef8d0723, type: 2}
   m_SchemaSet:

@@ -3,15 +3,10 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using DG.Tweening;
-using System;
 
 [System.Serializable]
 public class LensController : System.IDisposable
 {
-    const float _lensFarClipPlane = 1000f;
-    const float _lensNearClipPlane = 0.3f;
-    const bool _lensIsOrthographic = true;
-
     [SerializeField] float _lobbyModeOrthographicSize = 10f;
     [SerializeField] float _maxOrthographicSize = 10f;
     [SerializeField] float _minOrthographicSize = 5f;
@@ -47,20 +42,13 @@ public class LensController : System.IDisposable
 
     private async UniTaskVoid StartAdjustingLensSettingsAsync()
     {
-        try
-        {
-            ClearToken(ref _cts);
+        ClearToken(ref _cts);
 
-            _cts = new CancellationTokenSource();
+        _cts = new CancellationTokenSource();
 
-            await SmoothSizeIncrease();
+        await SmoothSizeIncrease();
 
-            await AdjustLensSettingsBasedOnVelocity(_cts.Token);
-        }
-        catch (Exception ex)
-        {
-            Debug.LogWarning($"Exception caught in StartAdjustingLensSettingsAsync: {ex}");
-        }
+        AdjustLensSettingsBasedOnVelocity(_cts.Token).Forget();
     }
 
     private async UniTask SmoothSizeIncrease()
@@ -79,7 +67,7 @@ public class LensController : System.IDisposable
         await tween.AsyncWaitForCompletion();
     }
 
-    private async UniTask AdjustLensSettingsBasedOnVelocity(CancellationToken token)
+    private async UniTaskVoid AdjustLensSettingsBasedOnVelocity(CancellationToken token)
     {
         float previousClampedVelocity = Mathf.FloorToInt(_minVelocityThreshold / _changeThreshold) * _changeThreshold;
 

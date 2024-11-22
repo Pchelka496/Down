@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
@@ -9,27 +10,28 @@ using Zenject;
 public class EngineModule : BaseModule
 {
     public const float ROTATION_Z_OFFSET = -90f;
-    const float MIN_VECTOR_LENGTH = 0f;
+    const float MIN_VECTOR_LENGTH_FOR_BOOST = 33f;
+    const float MIN_VECTOR_LENGTH_FOR_DEFAULT_ENGINE_WORK = 0f;
     const float START_FORCE_VALUE = 0f;
     const float START_APPLY_RATE_VALUE = 0.5f;
 
-    const float BOOST_ACTIVATION_TIME = 0.4f;
+    public const float BOOST_ACTIVATION_TIME = 0.4f;
 
     [SerializeField] Transform _engineRotationCenter;
     [SerializeField] Transform _engine;
     [SerializeField] EngineModuleVisualPart _visualPart;
 
-    //[SerializeField] float _boosterForce = 1000f;
     [SerializeField] float _maxForce = 50f;
     [SerializeField] float _interpolateForceApplyRateValue = 0.1f;
     [SerializeField] float _engineForceIncreaseDuration = 1f;
     [SerializeField] float _maxForceApplyRate = 0.02f;
     float _currentEngineForce;
     float _forceApplyRate = 0.2f;
+    bool _needRotation = false;
 
     readonly float _maxVectorLength = Screen.width * 0.25f;
 
-    EngineModuleBooster _booster = new();
+    readonly EngineModuleBooster _booster = new();
     RotationModule _rotationModule;
     Rigidbody2D _rb;
     Controls _controls;
@@ -42,13 +44,13 @@ public class EngineModule : BaseModule
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(CharacterController player, Controls controls, ScreenTouchController screenTouchController, EngineModuleConfig engineModuleConfig)
+    private void Construct(CharacterController player, Controls controls, ScreenTouchController screenTouchController, EngineModuleConfig engineModuleConfig, BoosterIndicator indicator)
     {
         _rb = player.Rb;
         _rotationModule = player.RotationModule;
         _controls = controls;
         _screenTouchController = screenTouchController;
-        _booster.Initialize(_rb, _engine, _visualPart);
+        _booster.Initialize(_rb, _engine, _visualPart, indicator);
 
         SnapToPlayer(player.transform, Vector3.zero, Quaternion.Euler(0f, 0f, ROTATION_Z_OFFSET));
 
@@ -102,17 +104,34 @@ public class EngineModule : BaseModule
     private async UniTask EngineWorkHandler(CancellationToken token)
     {
         _rotationModule.UnsubscribeToOnTargetRotationReached(_booster.ApplyBoost);
-        _rotationModule.SubscribeToOnTargetRotationReached(_booster.ApplyBoost);
-
-        await UniTask.WaitForSeconds(BOOST_ACTIVATION_TIME, cancellationToken: token);
-
-        _rotationModule.UnsubscribeToOnTargetRotationReached(_booster.ApplyBoost);
+        _needRotation = true;
 
         ClearToken(ref _defaultEngineCts);
         _defaultEngineCts = new();
 
         DefaultEngineWork(_defaultEngineCts.Token).Forget();
+
+        try
+        {
+            await UniTask.WaitForSeconds(BOOST_ACTIVATION_TIME, cancellationToken: token);
+        }
+        catch (OperationCanceledException)//Use boost
+        {
+            var startTouch = _screenTouchController.TouchStartPosition;
+            var currentTouch = _screenTouchController.TouchCurrentPosition;
+
+            var currentVectorLength = Vector2.Distance(startTouch, currentTouch);
+
+            if (MIN_VECTOR_LENGTH_FOR_BOOST <= currentVectorLength)
+            {
+                _rotationModule.SubscribeToOnTargetRotationReached(_booster.ApplyBoost);
+            }
+
+            _needRotation = false;
+        }
     }
+
+    private bool NeedRotation() => _needRotation;
 
     private void StopTouch(InputAction.CallbackContext ctx)
     {
@@ -122,18 +141,21 @@ public class EngineModule : BaseModule
 
     public async UniTask DefaultEngineWork(CancellationToken token)
     {
-        var startTouch = _screenTouchController.TouchStartPosition;
+        StopTween();
+        ResetValues();
 
         StartIncreaseForceTween();
+
+        var startTouch = _screenTouchController.TouchStartPosition;
 
         while (!token.IsCancellationRequested)
         {
             var currentTouch = _screenTouchController.TouchCurrentPosition;
             var currentVectorLength = Vector2.Distance(startTouch, currentTouch);
 
-            currentVectorLength = Mathf.Clamp(currentVectorLength, MIN_VECTOR_LENGTH, _maxVectorLength);
+            currentVectorLength = Mathf.Clamp(currentVectorLength, MIN_VECTOR_LENGTH_FOR_DEFAULT_ENGINE_WORK, _maxVectorLength);
 
-            var normalizedForce = Mathf.InverseLerp(MIN_VECTOR_LENGTH, _maxVectorLength, currentVectorLength);
+            var normalizedForce = Mathf.InverseLerp(MIN_VECTOR_LENGTH_FOR_DEFAULT_ENGINE_WORK, _maxVectorLength, currentVectorLength);
 
             var force = _currentEngineForce * normalizedForce;
 
@@ -152,7 +174,7 @@ public class EngineModule : BaseModule
             await UniTask.WaitForSeconds(_forceApplyRate);
         }
 
-        StopTween();
+        _needRotation = false;
         ResetValues();
     }
 
@@ -190,12 +212,14 @@ public class EngineModule : BaseModule
     {
         _controls.Player.TouchScreen.performed += StartTouchScreen;
         _controls.Player.TouchScreen.canceled += StopTouch;
+        _rotationModule.SubscribeToEngineNeedRotation(NeedRotation);
     }
 
     private void UnsubscribeToControlsEvent()
     {
         _controls.Player.TouchScreen.performed -= StartTouchScreen;
         _controls.Player.TouchScreen.canceled -= StopTouch;
+        _rotationModule.UnsubscribeToEngineNeedRotation(NeedRotation);
     }
 
     private void OnDestroy()
@@ -212,7 +236,7 @@ public class EngineModule : BaseModule
         if (_engine != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawRay(_engine.position, _engine.up * 2);
+            Gizmos.DrawRay(_engine.position, _engine.up * 3);
         }
     }
 #endif

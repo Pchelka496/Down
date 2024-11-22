@@ -10,7 +10,7 @@ public class RotationModule : BaseModule
     const float PLAYER_ROTATION_OFFSET = 90f;
     const float ANGLE_THRESHOLD = 2f;
 
-    float _rotationSpeed;
+    [SerializeField] float _rotationSpeed;
 
     Transform _engineRotationCenter;
     Rigidbody2D _rb;
@@ -19,6 +19,8 @@ public class RotationModule : BaseModule
     ScreenTouchController _screenTouchController;
 
     CancellationTokenSource _rotationCts;
+
+    Func<bool> EngineNeedRotation;
 
     event Action OnTargetRotationReached;
 
@@ -78,7 +80,7 @@ public class RotationModule : BaseModule
 
         await UniTask.WaitUntil(() => Vector2.Distance(startTouch, _screenTouchController.TouchCurrentPosition) > 0.1f, cancellationToken: rotationToken);
 
-        while (!rotationToken.IsCancellationRequested || OnTargetRotationReached != null)
+        while (!rotationToken.IsCancellationRequested || EngineNeedRotation.Invoke() || OnTargetRotationReached != null)
         {
             await UniTask.Yield(PlayerLoopTiming.Update);
 
@@ -105,6 +107,9 @@ public class RotationModule : BaseModule
 
     public void SubscribeToOnTargetRotationReached(Action action) => OnTargetRotationReached += action;
     public void UnsubscribeToOnTargetRotationReached(Action action) => OnTargetRotationReached -= action;
+
+    public void SubscribeToEngineNeedRotation(Func<bool> func) => EngineNeedRotation += func;
+    public void UnsubscribeToEngineNeedRotation(Func<bool> func) => EngineNeedRotation -= func;
 
     private void ClearToken(ref CancellationTokenSource cts) => ClearTokenSupport.ClearToken(ref cts);
 

@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
 using UnityEngine;
 using Zenject;
@@ -56,9 +55,11 @@ public class CamerasController : MonoBehaviour
 
     private void SetTrackingTarget(Transform transform)
     {
-        var target = new CameraTarget();
+        var target = new CameraTarget
+        {
+            TrackingTarget = transform
+        };
 
-        target.TrackingTarget = transform;
         _camera.Target = target;
     }
 

@@ -1,12 +1,11 @@
-using System.Threading;
+using Unity.Mathematics;
 
-public class RandomHelper
+public static class RandomHelper
 {
-    static ThreadLocal<System.Random> _random = new ThreadLocal<System.Random>(() => new System.Random());
-
-    public static float GetRandomFloat(float min, float max)
+    public static float GetRandomFloat(ref Random random, float min, float max)
     {
-        return (float)_random.Value.NextDouble() * (max - min) + min;
+        return random.NextFloat(min, max);
     }
 
 }
+

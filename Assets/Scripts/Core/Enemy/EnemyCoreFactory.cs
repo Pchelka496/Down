@@ -6,15 +6,15 @@ using UnityEngine;
 
 public class EnemyCoreFactory
 {
-    EnemyManager _enemyManager;
+    Transform _enemyParent;
     EnemyManagerConfig _managerConfig;
     EnemyCore[] _enemyCore;
 
-    public void Initialize(EnemyManager enemyManager, EnemyManagerConfig managerConfig, EnemyCore[] enemyCore)
+    public void Initialize(EnemyManagerConfig managerConfig, EnemyCore[] enemyCore, Transform enemyParent)
     {
         _managerConfig = managerConfig;
         _enemyCore = enemyCore;
-        _enemyManager = enemyManager;
+        _enemyParent = enemyParent;
     }
 
     public async UniTask<EnemyManager.EnemyControllerRoundStart> CreateEnemies()
@@ -39,7 +39,7 @@ public class EnemyCoreFactory
             var enemyCore = installer.InstantiatePrefabForComponent<EnemyCore>(enemyGameObjectPrefab,
                                                                                spawnPosition,
                                                                                Quaternion.identity,
-                                                                               _enemyManager.transform);
+                                                                                _enemyParent);
 
             if (enemyCore == null)
             {
@@ -56,25 +56,15 @@ public class EnemyCoreFactory
 
     private async UniTask<EnemyCore> LoadEnemyCorePrefabs(AssetReference enemyCoreReference)
     {
-        AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(enemyCoreReference);
+        var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(enemyCoreReference);
 
-        await handle;
-
-        if (handle.Status == AsyncOperationStatus.Succeeded)
+        if (loadOperationData.Handle.Result.TryGetComponent<EnemyCore>(out var enemyCore))
         {
-            if (handle.Result.TryGetComponent<EnemyCore>(out var enemyCore))
-            {
-                return enemyCore;
-            }
-            else
-            {
-                Debug.LogError("Error get component EnemyCore.");
-                return default;
-            }
+            return enemyCore;
         }
         else
         {
-            Debug.LogError("Error loading via Addressables.");
+            Debug.LogError("Error get component EnemyCore.");
             return default;
         }
     }

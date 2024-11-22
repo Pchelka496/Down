@@ -5,27 +5,21 @@ using Zenject;
 public class CheckpointPlatform : MonoBehaviour
 {
     const float BORDER_POSITION_OFFSET = 0.5f;
-    const float PLAYER_ROTATION_SPEED_AT_TOUCH_BORDER = 10f;
     [SerializeField] Canvas _canvas;
     [SerializeField] DisplayController _displayController;
     [SerializeField] BoxCollider2D _collider;
-    [SerializeField] Vector2 _offsetDistance = new(5f, 10f);
 
-    CheckpointPlatformController _platformController;
     CharacterController _player;
-    MapController _mapController;
     LevelManager _levelManager;
-    CamerasController _camerasController;
-    UpgradePanelController _upgradePanelController;
+    LobbyUIElementLoader _upgradePanelController;
 
     [Inject]
-    private void Construct(MapController mapController, LevelManager levelManager, CharacterController player, Camera camera, CamerasController camerasController, UpgradePanelController upgradePanelController)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    private void Construct(LevelManager levelManager, CharacterController player, Camera camera, LobbyUIElementLoader upgradePanelController)
     {
-        _mapController = mapController;
         _levelManager = levelManager;
         _player = player;
         _canvas.worldCamera = camera;
-        _camerasController = camerasController;
         _upgradePanelController = upgradePanelController;
 
         ResizeToCamera(camera);
@@ -64,10 +58,9 @@ public class CheckpointPlatform : MonoBehaviour
         topBorder.size = new(width, borderThickness);
     }
 
-    public void Initialize(Initializer initializer, CheckpointPlatformController platformController)
+    public void Initialize(Initializer initializer)
     {
         transform.position = new(0f, initializer.PlatformHeight);
-        _platformController = platformController;
     }
 
     public void OnTriggerExit2D(Collider2D collision)
@@ -75,14 +68,6 @@ public class CheckpointPlatform : MonoBehaviour
         if (collision.gameObject == _player.gameObject)
         {
             _levelManager.RoundStart().Forget();
-        }
-    }
-
-    public void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject == _player.gameObject)
-        {
-            _player.transform.Rotate(0, 0, PLAYER_ROTATION_SPEED_AT_TOUCH_BORDER * Time.deltaTime);
         }
     }
 

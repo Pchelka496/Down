@@ -3,6 +3,7 @@ using DG.Tweening;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using System;
 
 public class RadiusDisplay : MonoBehaviour, IDisplayInfo
 {
@@ -15,40 +16,58 @@ public class RadiusDisplay : MonoBehaviour, IDisplayInfo
 
     RectTransform _playerPosition;
 
-    CancellationTokenSource _flashCts;
-
-    private void Start()
-    {
-        gameObject.SetActive(false);
-    }
+    CancellationTokenSource _animationCts;
 
     public void Initialize(RectTransform playerViewUpgradePosition)
     {
         _playerPosition = playerViewUpgradePosition;
-
-        _currentRadius.RectTransform.position = playerViewUpgradePosition.position;
-        _targetRadius.RectTransform.position = playerViewUpgradePosition.position;
     }
 
     public void DisplayRadius(RadiusDisplayData currentCircleData, RadiusDisplayData targetCircleData)
     {
+        CirclePositionSetting(currentCircleData, targetCircleData);
         gameObject.SetActive(true);
 
         AnimateCircle(_currentRadius, currentCircleData);
         AnimateCircle(_targetRadius, targetCircleData);
 
         ClearToken();
-        _flashCts = new();
+        _animationCts = new();
 
-        Flashing(_flashCts.Token, _targetRadius.Image, targetCircleData.Color).Forget();
+        Flashing(_animationCts.Token, _targetRadius.Image, targetCircleData.Color).Forget();
+    }
+
+    private void CirclePositionSetting(RadiusDisplayData currentCircleData, RadiusDisplayData targetCircleData)
+    {
+        if (currentCircleData.GlobalPosition == null)
+        {
+            _currentRadius.RectTransform.position = _playerPosition.position;
+        }
+        else
+        {
+            _currentRadius.RectTransform.position = currentCircleData.GlobalPosition.Value;
+        }
+
+        if (targetCircleData.GlobalPosition == null)
+        {
+            _targetRadius.RectTransform.position = _playerPosition.position;
+        }
+        else
+        {
+            _targetRadius.RectTransform.position = targetCircleData.GlobalPosition.Value;
+        }
     }
 
     public void StopDisplaying()
     {
-        gameObject.SetActive(false);
+        DOTween.Kill(_currentRadius.Circle);
+        DOTween.Kill(_currentRadius.CircleMask);
+        DOTween.Kill(_targetRadius.Circle);
+        DOTween.Kill(_targetRadius.CircleMask);
 
-       
+        gameObject.SetActive(false);
     }
+
 
     private async UniTask Flashing(CancellationToken token, Image image, Color defaultColor)
     {
@@ -64,15 +83,44 @@ public class RadiusDisplay : MonoBehaviour, IDisplayInfo
 
     private async UniTask AnimateFade(Image image, float targetAlpha, float duration, CancellationToken token)
     {
-        var tcs = new UniTaskCompletionSource();
-
-        image.DOFade(targetAlpha, duration)
-            .SetEase(Ease.Linear)
-            .OnComplete(() => tcs.TrySetResult());
-
-        using (token.Register(() => tcs.TrySetCanceled()))
+        if (image == null || image.gameObject == null)
         {
-            await tcs.Task;
+            Debug.LogWarning("Trying to animate a destroyed object");
+            return;
+        }
+
+        var startAlpha = image.color.a;
+        var elapsed = 0f;
+
+        try
+        {
+            while (elapsed < duration)
+            {
+                token.ThrowIfCancellationRequested();
+
+                elapsed += Time.deltaTime;
+                float t = elapsed / duration;
+                float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, t);
+
+                if (image != null)
+                {
+                    var color = image.color;
+                    color.a = newAlpha;
+                    image.color = color;
+                }
+
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+            }
+
+            if (image != null)
+            {
+                var color = image.color;
+                color.a = targetAlpha;
+                image.color = color;
+            }
+        }
+        catch (OperationCanceledException)
+        {
         }
     }
 
@@ -103,35 +151,45 @@ public class RadiusDisplay : MonoBehaviour, IDisplayInfo
 
     private float WorldRadiusToCanvasRadius(float worldRadius)
     {
-        Canvas canvas = GetComponentInParent<Canvas>();
+        var canvas = GetComponentInParent<Canvas>();
+
         if (canvas == null)
         {
-            Debug.LogError("Canvas не найден!");
+            Debug.LogError("Canvas is no found!");
             return 0f;
         }
 
-        Camera camera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+        var camera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
 
-        Vector3 worldPosition = _playerPosition.position + Vector3.right * worldRadius;
+        var worldPosition = _playerPosition.position + Vector3.right * worldRadius;
 
-        Vector2 screenCenter = RectTransformUtility.WorldToScreenPoint(camera, _playerPosition.position);
-        Vector2 screenEdge = RectTransformUtility.WorldToScreenPoint(camera, worldPosition);
+        var screenCenter = RectTransformUtility.WorldToScreenPoint(camera, _playerPosition.position);
+        var screenEdge = RectTransformUtility.WorldToScreenPoint(camera, worldPosition);
 
         return Vector2.Distance(screenCenter, screenEdge);
     }
 
     private void ShrinkCircle(DisplayObject displayObject)
     {
+        DOTween.Kill(displayObject.Circle);
+        DOTween.Kill(displayObject.CircleMask);
+
         displayObject.Circle.DOScale(0f, _animationDuration).SetEase(Ease.InBack).OnComplete(() =>
         {
-            gameObject.SetActive(false);
+            if (gameObject != null)
+            {
+                gameObject.SetActive(false);
+            }
         });
+
+        displayObject.CircleMask.DOScale(0f, _animationDuration).SetEase(Ease.InBack);
     }
 
-    private void ClearToken() => ClearTokenSupport.ClearToken(ref _flashCts);
+    private void ClearToken() => ClearTokenSupport.ClearToken(ref _animationCts);
 
     private void OnDestroy()
     {
+        StopDisplaying();
         ClearToken();
     }
 
@@ -153,6 +211,7 @@ public class RadiusDisplay : MonoBehaviour, IDisplayInfo
     [System.Serializable]
     public struct RadiusDisplayData
     {
+        public Vector2? GlobalPosition;//If null, the circles will be at the character's position
         public float Radius;
         public float Thickness;
         public Color Color;

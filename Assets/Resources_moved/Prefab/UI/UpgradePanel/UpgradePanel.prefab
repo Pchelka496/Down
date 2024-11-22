@@ -240,24 +240,27 @@ MonoBehaviour:
   _boosterChargeCount: {fileID: 8999615837827316034}
   _boosterChargeCooldown: {fileID: 2610742951567792127}
   _engineMaxForceDescription:
-    _defaultText: 
-    _texts:
-    - _language: 0
-      _text: "\u0410\u0440\u0431\u0443\u0437 \u0430\u0440\u0431\u0443\u0437 \u043F\u0440\u0438\u0432\u0435\u0442"
+    _defaultText: "\u041C\u0430\u043A\u0441\u0438\u043C\u0430\u043B\u044C\u043D\u0430\u044F
+      \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u044C \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F"
+    _texts: []
   _applyForceRateDescription:
-    _defaultText: 
+    _defaultText: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u0432\u044B\u0431\u0440\u043E\u0441\u0430
+      \u044D\u043D\u0435\u0440\u0433\u0438\u0438 \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F"
     _texts: []
   _boostPowerDescription:
-    _defaultText: 
+    _defaultText: "\u0421\u0438\u043B\u0430 \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F"
     _texts: []
   _engineInterpolateForceValueDescription:
-    _defaultText: 
+    _defaultText: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u0440\u0430\u0437\u0433\u043E\u043D\u0430
+      \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F"
     _texts: []
   _boosterChargeCountDescription:
-    _defaultText: 
+    _defaultText: "\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0437\u0430\u0440\u044F\u0434\u043E\u0432
+      \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F"
     _texts: []
   _boosterChargeCooldownDescription:
-    _defaultText: 
+    _defaultText: "\u041F\u0435\u0440\u0435\u0437\u0430\u0440\u044F\u0434\u043A\u0430
+      \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F"
     _texts: []
 --- !u!1 &1500626880936254474
 GameObject:
@@ -321,10 +324,13 @@ MonoBehaviour:
   _maxHealth: {fileID: 8782190647006627336}
   _repairKitNumberForRepair: {fileID: 4385064712302906574}
   _maxHealthDescription:
-    _defaultText: 
+    _defaultText: "\u041C\u0430\u043A\u0441\u0438\u043C\u0430\u043B\u044C\u043D\u0430\u044F
+      \u043F\u0440\u043E\u0447\u043D\u043E\u0441\u0442\u044C \u0432\u043D\u0435\u0448\u043D\u0435\u0439
+      \u043E\u0431\u0448\u0438\u0432\u043A\u0438"
     _texts: []
   _repairKitNumberForRepairDescription:
-    _defaultText: 
+    _defaultText: "\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0437\u0430\u043F\u0447\u0430\u0441\u0442\u0435\u0439
+      \u0442\u0440\u0435\u0431\u0443\u0435\u043C\u044B\u0445 \u0434\u043B\u044F \u0440\u0435\u043C\u043E\u043D\u0442\u0430"
     _texts: []
 --- !u!1 &1911483313020345063
 GameObject:
@@ -581,6 +587,8 @@ MonoBehaviour:
   - {fileID: 7543911715199942043}
   - {fileID: 1594245915062430094}
   - {fileID: 7912204975167827525}
+  - {fileID: 8999615837827316034}
+  - {fileID: 2610742951567792127}
   - {fileID: 2019207037950301782}
   - {fileID: 8782190647006627336}
   - {fileID: 4385064712302906574}
@@ -624,10 +632,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 215573624303510304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -58.73001, y: 72}
-  m_SizeDelta: {x: -127.45, y: 134}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -73.73001, y: 0}
+  m_SizeDelta: {x: -157.45, y: 134}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7243158684660524484
 CanvasRenderer:
@@ -688,8 +696,8 @@ MonoBehaviour:
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMin: 10
+  m_fontSizeMax: 1000
   m_fontStyle: 0
   m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
@@ -788,7 +796,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rotationSpeed: {fileID: 2019207037950301782}
   _rotationSpeedDescription:
-    _defaultText: 
+    _defaultText: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u043F\u043E\u0432\u043E\u0440\u043E\u0442\u0430 "
     _texts: []
 --- !u!1 &3704164496152276837
 GameObject:
@@ -955,10 +963,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 215573624303510304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -61, y: 72}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -78.5285, y: 0}
+  m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7511293339496919470
 CanvasRenderer:
@@ -1318,7 +1326,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -402.2511, y: 95}
+  m_AnchoredPosition: {x: -402.2511, y: 88.382935}
   m_SizeDelta: {x: 781.5592, y: 143.78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6345320355812849723
@@ -1844,10 +1852,12 @@ MonoBehaviour:
   _airBrakeDrag: {fileID: 5947601768338825075}
   _airBrakeReleaseRate: {fileID: 3353366385961557803}
   _airBrakeDragDescription:
-    _defaultText: 
+    _defaultText: "\u0421\u0438\u043B\u0430 \u0432\u043E\u0437\u0434\u0443\u0448\u043D\u043E\u0433\u043E
+      \u0442\u043E\u0440\u043E\u043C\u043E\u0437\u0430"
     _texts: []
   _airBrakeReleaseRateDescription:
-    _defaultText: 
+    _defaultText: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u0440\u0430\u0441\u043A\u0440\u044B\u0442\u0438\u044F
+      \u0432\u043E\u0437\u0434\u0443\u0448\u043D\u043E\u0433\u043E \u0442\u043E\u0440\u043C\u043E\u0437\u0430"
     _texts: []
 --- !u!1 &7426936190171623220
 GameObject:
@@ -2013,17 +2023,27 @@ MonoBehaviour:
   _stopRate: {fileID: 812881520049026812}
   _sensingDistance: {fileID: 6053283021073307619}
   _chargeQuantityDescription:
-    _defaultText: 
+    _defaultText: "\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0437\u0430\u0440\u044F\u0434\u043E\u0432
+      \u0441\u0438\u0441\u0442\u0435\u043C\u044B \u044D\u043A\u0441\u0442\u0440\u0435\u043D\u043E\u0439
+      \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438"
     _texts: []
   _chargeCooldownDescription:
-    _defaultText: 
+    _defaultText: "\u041F\u0435\u0440\u0435\u0437\u0430\u0440\u044F\u0434\u043A\u0430
+      \u043E\u0434\u043D\u043E\u0433\u043E \u0437\u0430\u0440\u044F\u0434\u0430 \u0441\u0438\u0441\u0442\u0435\u043C\u044B
+      \u044D\u043A\u0441\u0442\u0440\u0435\u043D\u043E\u0439 \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438"
     _texts: []
   _stopRateDescription:
-    _defaultText: 
+    _defaultText: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438"
     _texts: []
   _sensingDistanceDescription:
-    _defaultText: 
+    _defaultText: "\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F \u0430\u043A\u0442\u0438\u0432\u0430\u0446\u0438\u0438
+      \u0441\u0438\u0441\u0442\u0435\u043C\u044B \u044D\u043A\u0441\u0442\u0440\u0435\u043D\u043E\u0439
+      \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438"
     _texts: []
+  _firstCircleColor: {r: 1, g: 0.9746906, b: 0.16509432, a: 1}
+  _firstThicknessCircle: 21
+  _secondCircleColor: {r: 0.6857491, g: 0.39101997, b: 0.9528302, a: 1}
+  _secondThicknessCircle: 21
 --- !u!1 &7983486006978526539
 GameObject:
   m_ObjectHideFlags: 0
@@ -2225,10 +2245,11 @@ MonoBehaviour:
   _pickUpMultiplier: {fileID: 6827891413553107523}
   _pickUpRadiusDescription:
     _defaultText: "\u0420\u0430\u0434\u0438\u0443\u0441 \u043F\u043E\u0434\u0431\u043E\u0440\u0430
-      \u043C\u043E\u043D\u0435\u0442 \u0438 \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u043E\u0432 "
+      \u043C\u043E\u043D\u0435\u0442"
     _texts: []
   _pickUpMultiplierDescription:
-    _defaultText: 
+    _defaultText: "\u041C\u043D\u043E\u0436\u0438\u0442\u0435\u043B\u044C \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u044B\u0445
+      \u043C\u043E\u043D\u0435\u0442 "
     _texts: []
   _firstRadiusData:
     Radius: 0
@@ -2373,7 +2394,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 88, y: 95}
+  m_AnchoredPosition: {x: 88, y: 87.382935}
   m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &618664760669630398

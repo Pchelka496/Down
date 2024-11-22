@@ -3,24 +3,22 @@ using Zenject;
 using DG.Tweening;
 using UnityEngine.InputSystem;
 using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 
 public class AirBrakeModule : BaseModule
 {
     const float Z_ROTATION_OFFSET = 90f;
+    const float DEFAULT_DRAG = 0.2f;
 
     [SerializeField] Transform _leftAirBrake;
     [SerializeField] Transform _rightAirBrake;
-
-    [SerializeField] float _defaultDrag = 0.2f;
 
     [SerializeField] Vector3 _leftAirBrakeOpenPosition;
     [SerializeField] Vector3 _leftAirBrakeClosePosition;
     [SerializeField] Vector3 _rightAirBrakeOpenPosition;
     [SerializeField] Vector3 _rightAirBrakeClosePosition;
 
-    float _airBrakeDrag = 10f;
-    float _airBrakeReleaseRate = 0.5f;
+    [SerializeField] float _airBrakeDrag = 10f;
+    [SerializeField] float _airBrakeReleaseRate = 0.5f;
 
     Controls _controls;
     AirTrailController _airTrailController;
@@ -124,7 +122,7 @@ public class AirBrakeModule : BaseModule
 
         sequence.Join(DOTween.To(() => _rb.drag,
                                  x => _rb.drag = x,
-                                 _defaultDrag,
+                                 DEFAULT_DRAG,
                                  _airBrakeReleaseRate).SetEase(Ease.OutQuad));
     }
 

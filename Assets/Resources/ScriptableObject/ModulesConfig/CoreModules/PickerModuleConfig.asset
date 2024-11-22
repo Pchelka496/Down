@@ -15,19 +15,27 @@ MonoBehaviour:
   _resetThePriceAfterPurchase: 0
   _characteristics:
   - updateType: 0
-    currentLevel: 4
+    currentLevel: 0
     characteristicsPerLevel:
     - 1
-    - 1.5
+    - 1.4
+    - 1.7
     - 2
-    - 2.5
+    - 2.4
+    - 2.7
     - 3
-    levelCost: 0000000000000000000000000000000000000000
+    - 3.4
+    - 3.7
+    - 4
+    - 4.4
+    - 4.7
+    - 5
+    levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d000000
   - updateType: 1
-    currentLevel: 3
+    currentLevel: 0
     characteristicsPerLevel:
     - 1
     - 2
     - 3
     - 4
-    levelCost: 00000000000000000000000000000000
+    levelCost: 01000000020000000300000004000000

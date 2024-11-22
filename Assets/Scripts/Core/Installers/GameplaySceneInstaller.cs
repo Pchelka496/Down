@@ -4,42 +4,46 @@ using Zenject;
 public class GameplaySceneInstaller : MonoInstaller
 {
     [SerializeField] CharacterController _playerController;
-    [SerializeField] OptionalPlayerModuleLoader _optionalPlayerModuleLoader;
-    [SerializeField] LevelManager _levelManager;
-    [SerializeField] EnemyManager _enemyManager;
-    [SerializeField] MapController _mapController;
-    [SerializeField] BackgroundController _backgroundController;
-    [SerializeField] PickUpItemManager _rewardManager;
     [SerializeField] CamerasController _camerasController;
     [SerializeField] AirTrailController _airTrailController;
     [SerializeField] Camera _mainCamera;
-    [SerializeField] RewardCounter _rewardCounter;
-    [SerializeField] UpgradePanelController _upgradePanelController;
-    [SerializeField] AudioSourcePool _audioSourcePool;
-    [SerializeField] EffectController _effectController;
-    [SerializeField] ScreenFader _screenFader;
-    [SerializeField] RepairKitIndicator _repairKitIndicator;
-    [SerializeField] HealthIndicator _healthIndicator;
-    [SerializeField] ScreenTouchController _screenTouchController;
+    [SerializeField] LobbyUIElementLoader _upgradePanelController;
     [SerializeField] EnumLanguage _enumLanguage;
     [SerializeField] PlayerModuleConfigs _playerModulesConfig;
+    [Header("UI")]
+    [SerializeField] RewardCounter _rewardCounter;
+    [SerializeField] ScreenFader _screenFader;
+    [SerializeField] ScreenTouchController _screenTouchController;
+    [SerializeField] RepairKitIndicator _repairKitIndicator;
+    [SerializeField] HealthIndicator _healthIndicator;
+    [SerializeField] BoosterIndicator _boosterIndicator;
+
+    LevelManager _levelManager;
+    OptionalPlayerModuleLoader _optionalPlayerModuleLoader;
+    MapController _mapController;
+    BackgroundController _backgroundController;
+    EnemyManager _enemyManager;
+    PickUpItemManager _pickUpItemManager;
+    AudioSourcePool _audioSourcePool;
+    EffectController _effectController;
 
     public static DiContainer DiContainer { get; private set; }
 
     public override void InstallBindings()
     {
         InitializeOrCleanInstaller();
+        InitializeDependencies();
+
         Container.Bind<Controls>().FromNew().AsSingle().NonLazy();
 
         Container.Bind<CharacterController>().FromInstance(_playerController).AsSingle().NonLazy();
-        Container.Bind<OptionalPlayerModuleLoader>().FromInstance(_optionalPlayerModuleLoader).AsSingle().NonLazy();
         Container.Bind<MapController>().FromInstance(_mapController).AsSingle().NonLazy();
         Container.Bind<BackgroundController>().FromInstance(_backgroundController).AsSingle().NonLazy();
         Container.Bind<EnemyManager>().FromInstance(_enemyManager).AsSingle().NonLazy();
-        Container.Bind<PickUpItemManager>().FromInstance(_rewardManager).AsSingle().NonLazy();
+        Container.Bind<PickUpItemManager>().FromInstance(_pickUpItemManager).AsSingle().NonLazy();
         Container.Bind<CamerasController>().FromInstance(_camerasController).AsSingle().NonLazy();
         Container.Bind<RewardCounter>().FromInstance(_rewardCounter).AsSingle().NonLazy();
-        Container.Bind<UpgradePanelController>().FromInstance(_upgradePanelController).AsSingle().NonLazy();
+        Container.Bind<LobbyUIElementLoader>().FromInstance(_upgradePanelController).AsSingle().NonLazy();
         Container.Bind<AudioSourcePool>().FromInstance(_audioSourcePool).AsSingle().NonLazy();
         Container.Bind<EffectController>().FromInstance(_effectController).AsSingle().NonLazy();
         Container.Bind<AirTrailController>().FromInstance(_airTrailController).AsSingle().NonLazy();
@@ -48,9 +52,11 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<ScreenFader>().FromInstance(_screenFader).AsSingle().NonLazy();
         Container.Bind<RepairKitIndicator>().FromInstance(_repairKitIndicator).AsSingle().NonLazy();
         Container.Bind<HealthIndicator>().FromInstance(_healthIndicator).AsSingle().NonLazy();
+        Container.Bind<BoosterIndicator>().FromInstance(_boosterIndicator).AsSingle().NonLazy();
         Container.Bind<ScreenTouchController>().FromInstance(_screenTouchController).AsSingle().NonLazy();
         Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle().NonLazy();
         Container.Bind<PlayerModuleConfigs>().FromInstance(_playerModulesConfig).AsSingle().NonLazy();
+        Container.Bind<OptionalPlayerModuleLoader>().FromInstance(_optionalPlayerModuleLoader).AsSingle().NonLazy();
 
         BindPlayerModuleConfigs();
     }
@@ -95,6 +101,46 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<AirBrakeModuleConfig>()
             .FromInstance(ScriptableObject.Instantiate(_playerModulesConfig.AirBrakeModuleConfig))
             .AsSingle().NonLazy();
+    }
+
+    private void InitializeDependencies()
+    {
+        var dependenciesObject = new GameObject("Dependencies");
+
+        _optionalPlayerModuleLoader = new();
+        _mapController = new();
+        _backgroundController = new();
+        _enemyManager = new(AttachToGameObject(dependenciesObject, "++Enemies++").transform);
+        _levelManager = new();
+        _pickUpItemManager = new(AttachToGameObject(dependenciesObject, "++PickUpItems++").transform);
+        _audioSourcePool = new(AttachToGameObject(dependenciesObject, "++Audio++").transform);
+        _effectController = new(AttachToGameObject(dependenciesObject, "++Effects++").transform);
+    }
+
+    private GameObject AttachToGameObject(GameObject parent, string name)
+    {
+        var instanceGameObject = new GameObject(name);
+        instanceGameObject.transform.SetParent(parent.transform);
+
+        return instanceGameObject;
+    }
+
+    private void Awake()
+    {
+        Container.Inject(_levelManager);
+        Container.Inject(_optionalPlayerModuleLoader);
+        Container.Inject(_mapController);
+        Container.Inject(_backgroundController);
+        Container.Inject(_enemyManager);
+        Container.Inject(_pickUpItemManager);
+        Container.Inject(_audioSourcePool);
+        Container.Inject(_effectController);
+    }
+
+    private void OnDestroy()
+    {
+        _backgroundController.Dispose();
+        _enemyManager.Dispose();
     }
 
     [System.Serializable]

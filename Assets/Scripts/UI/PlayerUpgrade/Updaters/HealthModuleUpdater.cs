@@ -1,6 +1,5 @@
 using UnityEngine;
 using Zenject;
-using static Unity.VisualScripting.Icons;
 
 public class HealthModuleUpdater : MonoBehaviour
 {
@@ -81,11 +80,13 @@ public class HealthModuleUpdater : MonoBehaviour
     public void UpgradeMaxHealthLevel()
     {
         UpgradeLevel(HealthModuleConfig.EnumCharacteristics.MaxHealth, _maxHealth);
+        _playerUpgradePanel.VisualController.TestModule<HealthModule>();
     }
 
     public void UpgradeNumberOfPartsRequiredForRepairLevel()
     {
         UpgradeLevel(HealthModuleConfig.EnumCharacteristics.RepairKitNumberForRepair, _repairKitNumberForRepair);
+        _playerUpgradePanel.VisualController.TestModule<HealthModule>();
     }
 
     public void UpgradeLevel(HealthModuleConfig.EnumCharacteristics characteristics, UpgradeInfo upgradeInfo)
@@ -109,11 +110,13 @@ public class HealthModuleUpdater : MonoBehaviour
     public void DowngradeMaxHealthLevel()
     {
         DowngradeLevel(HealthModuleConfig.EnumCharacteristics.MaxHealth, _maxHealth);
+        _playerUpgradePanel.VisualController.TestModule<HealthModule>();
     }
 
     public void DowngradeNumberOfPartsRequiredForRepairLevel()
     {
         DowngradeLevel(HealthModuleConfig.EnumCharacteristics.RepairKitNumberForRepair, _repairKitNumberForRepair);
+        _playerUpgradePanel.VisualController.TestModule<HealthModule>();
     }
 
     public void DowngradeLevel(HealthModuleConfig.EnumCharacteristics characteristics, UpgradeInfo upgradeInfo)

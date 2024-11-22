@@ -37,6 +37,9 @@ public class ModulesTester : MonoBehaviour
     RepairKitIndicator _repairKitIndicator;
     HealthIndicator _healthIndicator;
 
+    AddressableLouderHelper.LoadOperationData<GameObject> _loadRepairKitOperationData;
+    AddressableLouderHelper.LoadOperationData<GameObject> _loadMeteoriteOperationData;
+
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
     private void Construct(CharacterController player, RepairKitIndicator repairKitIndicator, HealthIndicator healthIndicator)
@@ -107,32 +110,22 @@ public class ModulesTester : MonoBehaviour
     {
         if (!_meteoritePool.IsObjectAvailable)
         {
-            var prefab = await LoadAssetPrefab(_meteoriteReference);
+            var prefab = await LoadAssetPrefab(_loadMeteoriteOperationData, _meteoriteReference);
             _meteoritePool.InitializePool(prefab, _meteoritePoolSize);
         }
 
         if (!_repairKitPool.IsObjectAvailable)
         {
-            var prefab = await LoadAssetPrefab(_repairKitReference);
+            var prefab = await LoadAssetPrefab(_loadRepairKitOperationData, _repairKitReference);
             _repairKitPool.InitializePool(prefab, _repairKitPoolSize);
         }
     }
 
-    private async UniTask<GameObject> LoadAssetPrefab(AssetReference reference)
+    private async UniTask<GameObject> LoadAssetPrefab(AddressableLouderHelper.LoadOperationData<GameObject> loadOperationData, AssetReference reference)
     {
-        var handle = reference.LoadAssetAsync<GameObject>();
+        loadOperationData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(reference);
 
-        await handle;
-
-        if (handle.Status == AsyncOperationStatus.Succeeded)
-        {
-            return handle.Result;
-        }
-        else
-        {
-            Debug.LogError("Error loading via Addressable.");
-            return default;
-        }
+        return loadOperationData.LoadAsset;
     }
 
     private async UniTaskVoid UnloadTestAssets()
@@ -142,14 +135,18 @@ public class ModulesTester : MonoBehaviour
 
         await UniTask.WaitForEndOfFrame();
 
-        if (_meteoriteReference.OperationHandle.IsValid())
+        if (_loadRepairKitOperationData.Handle.IsValid() &&
+            _loadRepairKitOperationData.Handle.Status == AsyncOperationStatus.Succeeded)
         {
-            _meteoriteReference.ReleaseAsset();
+            Addressables.Release(_loadRepairKitOperationData.Handle);
         }
-        if (_meteoriteReference.OperationHandle.IsValid())
+
+        if (_loadMeteoriteOperationData.Handle.IsValid() &&
+            _loadMeteoriteOperationData.Handle.Status == AsyncOperationStatus.Succeeded)
         {
-            _repairKitReference.ReleaseAsset();
+            Addressables.Release(_loadMeteoriteOperationData.Handle);
         }
+
     }
 
     public void LaunchRepairKit()
@@ -260,6 +257,7 @@ public class ModulesTester : MonoBehaviour
                 Object.Destroy(obj.gameObject);
             }
         }
+
     }
 
 }
