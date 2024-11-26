@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -11,11 +10,11 @@ public class CheckpointPlatform : MonoBehaviour
 
     CharacterController _player;
     LevelManager _levelManager;
-    LobbyUIElementLoader _upgradePanelController;
+    LobbyUIPanelFacade _upgradePanelController;
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(LevelManager levelManager, CharacterController player, Camera camera, LobbyUIElementLoader upgradePanelController)
+    private void Construct(LevelManager levelManager, CharacterController player, Camera camera, LobbyUIPanelFacade upgradePanelController)
     {
         _levelManager = levelManager;
         _player = player;
@@ -71,11 +70,14 @@ public class CheckpointPlatform : MonoBehaviour
         }
     }
 
-    public async void OpenUpgradePanel()
+    public void OpenUpgradePanel()
     {
-        await UniTask.WaitForSeconds(0.5f);
+        _upgradePanelController.OpenUpgradePanel();
+    }
 
-        _upgradePanelController.UpgradePanel.OpenPanel();
+    public void OpenCustomizationPanel()
+    {
+        _upgradePanelController.OpenCustomizationPanel();
     }
 
     public readonly struct Initializer

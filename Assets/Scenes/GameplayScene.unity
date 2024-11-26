@@ -334,7 +334,6 @@ GameObject:
   - component: {fileID: 28845619}
   - component: {fileID: 28845618}
   - component: {fileID: 28845617}
-  - component: {fileID: 28845620}
   m_Layer: 5
   m_Name: ScreenFader
   m_TagString: Untagged
@@ -438,27 +437,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 28845614}
   m_CullTransparentMesh: 1
---- !u!114 &28845620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 28845614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1719d037e50bce84cb48a6cae6e3f9f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _boosterIconReference:
-    m_AssetGUID: 
-    m_SubObjectName: 
-    m_SubObjectGUID: 
-    m_SubObjectType: 
-    m_EditorAssetChanged: 0
-  _boosterStartPosition: {fileID: 0}
-  _iconDirection: {x: 0, y: 0}
-  _iconDistance: 0
 --- !u!1 &88098075 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3775566047323157918, guid: 0a25f2363cf74df41bcb66633ee16365, type: 3}
@@ -561,7 +539,7 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -999,7 +977,7 @@ GameObject:
   - component: {fileID: 260862635}
   - component: {fileID: 260862634}
   m_Layer: 5
-  m_Name: UpgradePanelController
+  m_Name: LobbyUIElements
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1017,7 +995,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 692e3f1f9258bb54c9ecf028dc1bae68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _upgradePanelPrefabAddress: Prefab/UI/UpgradePanel/UpgradePanel
+  _upgradePanelPrefabReference:
+    m_AssetGUID: cb62f25311e4fe64da9bd49b359e7d7b
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  _customizationPanelPrefabReference:
+    m_AssetGUID: b8a19b7697715a74b89ec97c2e5c76b1
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
 --- !u!224 &260862635
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3489,6 +3478,7 @@ MonoBehaviour:
   _repairKitIndicator: {fileID: 1133832255}
   _healthIndicator: {fileID: 505922307}
   _boosterIndicator: {fileID: 1346758598}
+  _customizerConfig: {fileID: 11400000, guid: c0fed8188dff0f9498e708b3eca52cbd, type: 2}
 --- !u!114 &1752465424
 MonoBehaviour:
   m_ObjectHideFlags: 0

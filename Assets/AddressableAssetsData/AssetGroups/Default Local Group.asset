@@ -50,6 +50,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8a19b7697715a74b89ec97c2e5c76b1
+    m_Address: Assets/Resources_moved/Prefab/UI/CustomizationPanel/CustomizationPanel.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c562a8c1a668d404d8d7d1a21f22a0de
     m_Address: Assets/Resources_moved/Prefab/PickUpItem/RepairKit/RapairKit.prefab
     m_ReadOnly: 0

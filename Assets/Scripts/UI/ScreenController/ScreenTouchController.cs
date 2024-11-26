@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.OnScreen;
 using Zenject;
 
-public class ScreenTouchController : OnScreenButton, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class ScreenTouchController : OnScreenButton, IPointerDownHandler, IPointerUpHandler, IDragHandler, IHaveControllerGradient
 {
     [SerializeField] LineRenderer lineRenderer;
     Camera _mainCamera;
@@ -15,6 +15,8 @@ public class ScreenTouchController : OnScreenButton, IPointerDownHandler, IPoint
     public Vector2 TouchStartPosition => _touchStartPosition;
     public Vector2 TouchEndPosition => _touchEndPosition;
     public Vector2 TouchCurrentPosition => _currentTouchPosition;
+
+    Gradient IHaveControllerGradient.ControllerGradient { get => lineRenderer.colorGradient; set => lineRenderer.colorGradient = value; }
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]

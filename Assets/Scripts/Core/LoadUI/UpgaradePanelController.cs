@@ -1,60 +1,45 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
 
-public class LobbyUIElementLoader : MonoBehaviour
+public class LobbyUIPanelFacade : MonoBehaviour
 {
+    const string UPGRADE_PANEL_ID = "UpgradePanel";
+    const string CUSTOMIZATION_PANEL_ID = "CustomizationPanel";
+
     [SerializeField] AssetReference _upgradePanelPrefabReference;
+    [SerializeField] AssetReference _customizationPanelPrefabReference;
 
-    PlayerUpgradePanel _upgradePanel;
-    AddressableLouderHelper.LoadOperationData<GameObject> _upgradePanelData;
-
-    public PlayerUpgradePanel UpgradePanel => _upgradePanel;
+    UIPanelManager _panelManager;
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(LevelManager levelManager)
+    private void Construct(DiContainer diContainer, LevelManager levelManager)
     {
+        var factory = new UIPanelFactory(diContainer);
+        _panelManager = new UIPanelManager(factory, transform);
+
         levelManager.SubscribeToRoundStart(RoundStart);
-        CreatePanel();
     }
 
     private void RoundStart(LevelManager levelManager)
     {
+        ClearPanels();
         levelManager.SubscribeToRoundEnd(RoundEnd);
-        ClearPanel();
     }
 
     private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
     {
         levelManager.SubscribeToRoundStart(RoundStart);
-        CreatePanel();
     }
 
-    private async void CreatePanel()
+    public void OpenUpgradePanel() => _panelManager.OpenPanelAsync(UPGRADE_PANEL_ID, _upgradePanelPrefabReference).Forget();
+    public void OpenCustomizationPanel() => _panelManager.OpenPanelAsync(CUSTOMIZATION_PANEL_ID, _customizationPanelPrefabReference).Forget();
+
+    private void ClearPanels()
     {
-        _upgradePanel = GameplaySceneInstaller.DiContainer.InstantiatePrefabForComponent<PlayerUpgradePanel>(await LoadPrefabs(_upgradePanelPrefabReference));
-        _upgradePanel.transform.SetParent(transform, false);
-    }
-
-    private void ClearPanel()
-    {
-        Destroy(_upgradePanel.gameObject);
-
-        if (_upgradePanelData.Handle.IsValid() &&
-            _upgradePanelData.Handle.Status == AsyncOperationStatus.Succeeded)
-        {
-            Addressables.Release(_upgradePanelData.Handle);
-        }
-    }
-
-    private async UniTask<GameObject> LoadPrefabs(AssetReference reference)
-    {
-        _upgradePanelData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(reference);
-
-        return _upgradePanelData.LoadAsset;
+        _panelManager.CloseAllPanels();
     }
 
 }

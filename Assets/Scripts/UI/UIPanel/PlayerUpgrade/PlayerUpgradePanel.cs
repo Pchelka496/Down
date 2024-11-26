@@ -4,7 +4,7 @@ using Zenject;
 using static GameplaySceneInstaller;
 
 [RequireComponent(typeof(UpgradePanelVisualController))]
-public class PlayerUpgradePanel : MonoBehaviour
+public class PlayerUpgradePanel : MonoBehaviour, IUIPanel
 {
     [SerializeField] RectTransform _baseRectTransform;
     [SerializeField] UpgradePanelVisualController _visualController;
@@ -45,7 +45,6 @@ public class PlayerUpgradePanel : MonoBehaviour
     private void Start()
     {
         UpdateCurrentPoints();
-        ClosePanel();
 
         _engineUpdater.Initialize(_configs.EngineModuleConfig, this);
         _healthModuleUpdater.Initialize(_configs.HealthModuleConfig, this);
@@ -76,12 +75,18 @@ public class PlayerUpgradePanel : MonoBehaviour
         rectTransform.offsetMax = offsetMax;
     }
 
-    public void OpenPanel()
+    void IUIPanel.Open()
     {
         gameObject.SetActive(true);
-        _player.OpenUpgradePanel();
+        _player.OpenPanel();
 
         MovePlayerToUpgradeView();
+    }
+
+    void IUIPanel.Close()
+    {
+        gameObject.SetActive(false);
+        _player.ClosePanel();
     }
 
     public void MovePlayerToUpgradeView()
@@ -97,7 +102,7 @@ public class PlayerUpgradePanel : MonoBehaviour
         {
             case UpgradePanelVisualController.ViewMode.Basic:
                 {
-                    ClosePanel();
+                    ((IUIPanel)this).Close();
 
                     break;
                 }
@@ -108,12 +113,6 @@ public class PlayerUpgradePanel : MonoBehaviour
                     break;
                 }
         }
-    }
-
-    public void ClosePanel()
-    {
-        gameObject.SetActive(false);
-        _player.CloseUpgradePanel();
     }
 
     private void UpdateCurrentPoints()

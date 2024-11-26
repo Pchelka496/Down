@@ -82,13 +82,13 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    public void OpenUpgradePanel()
+    public void OpenPanel()
     {
         _rb.constraints = RigidbodyConstraints2D.FreezeAll;
         DisableModulesInLobbyMode();
     }
 
-    public void CloseUpgradePanel()
+    public void ClosePanel()
     {
         _rb.constraints = RigidbodyConstraints2D.None;
         EnableModulesInLobbyMode();

@@ -7,7 +7,7 @@ public class GameplaySceneInstaller : MonoInstaller
     [SerializeField] CamerasController _camerasController;
     [SerializeField] AirTrailController _airTrailController;
     [SerializeField] Camera _mainCamera;
-    [SerializeField] LobbyUIElementLoader _upgradePanelController;
+    [SerializeField] LobbyUIPanelFacade _upgradePanelController;
     [SerializeField] EnumLanguage _enumLanguage;
     [SerializeField] PlayerModuleConfigs _playerModulesConfig;
     [Header("UI")]
@@ -17,7 +17,9 @@ public class GameplaySceneInstaller : MonoInstaller
     [SerializeField] RepairKitIndicator _repairKitIndicator;
     [SerializeField] HealthIndicator _healthIndicator;
     [SerializeField] BoosterIndicator _boosterIndicator;
+    [SerializeField] CustomizerConfig _customizerConfig;
 
+    Customizer _customizer;
     LevelManager _levelManager;
     OptionalPlayerModuleLoader _optionalPlayerModuleLoader;
     MapController _mapController;
@@ -43,7 +45,7 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<PickUpItemManager>().FromInstance(_pickUpItemManager).AsSingle().NonLazy();
         Container.Bind<CamerasController>().FromInstance(_camerasController).AsSingle().NonLazy();
         Container.Bind<RewardCounter>().FromInstance(_rewardCounter).AsSingle().NonLazy();
-        Container.Bind<LobbyUIElementLoader>().FromInstance(_upgradePanelController).AsSingle().NonLazy();
+        Container.Bind<LobbyUIPanelFacade>().FromInstance(_upgradePanelController).AsSingle().NonLazy();
         Container.Bind<AudioSourcePool>().FromInstance(_audioSourcePool).AsSingle().NonLazy();
         Container.Bind<EffectController>().FromInstance(_effectController).AsSingle().NonLazy();
         Container.Bind<AirTrailController>().FromInstance(_airTrailController).AsSingle().NonLazy();
@@ -57,6 +59,8 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle().NonLazy();
         Container.Bind<PlayerModuleConfigs>().FromInstance(_playerModulesConfig).AsSingle().NonLazy();
         Container.Bind<OptionalPlayerModuleLoader>().FromInstance(_optionalPlayerModuleLoader).AsSingle().NonLazy();
+        Container.Bind<CustomizerConfig>().FromInstance(_customizerConfig).AsSingle().NonLazy();
+        Container.Bind<Customizer>().FromInstance(_customizer).AsSingle().NonLazy();
 
         BindPlayerModuleConfigs();
     }
@@ -115,6 +119,7 @@ public class GameplaySceneInstaller : MonoInstaller
         _pickUpItemManager = new(AttachToGameObject(dependenciesObject, "++PickUpItems++").transform);
         _audioSourcePool = new(AttachToGameObject(dependenciesObject, "++Audio++").transform);
         _effectController = new(AttachToGameObject(dependenciesObject, "++Effects++").transform);
+        _customizer = new();
     }
 
     private GameObject AttachToGameObject(GameObject parent, string name)
