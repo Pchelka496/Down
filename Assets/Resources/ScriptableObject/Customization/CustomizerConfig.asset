@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CustomizerConfig
   m_EditorClassIdentifier: 
   _currentPlayerSprite:
-    m_AssetGUID: 
+    m_AssetGUID: 37a3de5ac2491624896551f2d5cf8695
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 
@@ -48,4 +48,49 @@ MonoBehaviour:
     m_ColorSpace: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  _playerSprites: []
+  _playerSkinData:
+  - _skinObjectPrefab:
+      m_AssetGUID: 37a3de5ac2491624896551f2d5cf8695
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _skinSprite:
+      m_AssetGUID: d017444e96f1fcc408d3f0347ca0197e
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 1
+    _isUnlocked: 0
+    _unlockMethod: 0
+    _cost: 0
+  - _skinObjectPrefab:
+      m_AssetGUID: a49d2031a076df949818b42b562aea42
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _skinSprite:
+      m_AssetGUID: 1efa718894d9c3f4bab3cbebe10467b5
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _isUnlocked: 0
+    _unlockMethod: 0
+    _cost: 0
+  - _skinObjectPrefab:
+      m_AssetGUID: 19f0c5eab7bd84f40a75cfe775284b4b
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _skinSprite:
+      m_AssetGUID: affa0852357047248908b1686a5f8f39
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _isUnlocked: 0
+    _unlockMethod: 1
+    _cost: 100

@@ -5,6 +5,8 @@ using Cysharp.Threading.Tasks;
 using Zenject;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using static Unity.VisualScripting.Icons;
+using System;
 
 public class DisplayController : MonoBehaviour
 {
@@ -15,14 +17,19 @@ public class DisplayController : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI _displayText;
     [SerializeField] TextConfigLanguageAddresses _textConfigLanguageAddresses;
-    PickUpItemManager _rewardManager;
+    RewardKeeper _rewardKeeper;
     DisplayControllerConfig _config;
     string _targetText;
     CancellationTokenSource _cts;
     bool _cursorVisible = true;
 
     [Inject]
-    private async void Construct(EnumLanguage language, PickUpItemManager rewardManager)
+    private void Construct(EnumLanguage language, RewardKeeper rewardKeeper)
+    {
+        Initialize(language, rewardKeeper).Forget();
+    }
+
+    private async UniTaskVoid Initialize(EnumLanguage language, RewardKeeper rewardKeeper)
     {
         switch (language)
         {
@@ -48,12 +55,12 @@ public class DisplayController : MonoBehaviour
                 }
             default:
                 {
-                    Construct(EnumLanguage.English, rewardManager);
+                    Construct(EnumLanguage.English, rewardKeeper);
                     return;
                 }
         }
 
-        _rewardManager = rewardManager;
+        _rewardKeeper = rewardKeeper;
         TargetText(DefaultText()).Forget();
     }
 
@@ -141,7 +148,7 @@ public class DisplayController : MonoBehaviour
 
     private string DefaultText()
     {
-        return ConvertText(_config.StartPointsInformation, _rewardManager.GetPoints(), _config.EndPointsInformation);
+        return ConvertText(_config.StartPointsInformation, _rewardKeeper.GetPoints(), _config.EndPointsInformation);
     }
 
     private async UniTask StartCursorBlinkingAsync(CancellationToken token)

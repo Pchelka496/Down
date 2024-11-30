@@ -9,11 +9,11 @@ public class OptionalPlayerModuleLoader
     const string CONFIG_ADDRESS = "ScriptableObject/ModulesConfig/PlayerModuleLoaderConfig";
 
     OptionalPlayerModuleLoaderConfig _config;
-    CharacterController _player;
+    PlayerController _player;
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(LevelManager levelManager, CharacterController player)
+    private void Construct(LevelManager levelManager, PlayerController player)
     {
         levelManager.SubscribeToRoundStart(RoundStart);
         _player = player;

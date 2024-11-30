@@ -29,10 +29,10 @@ public class ModulesTester : MonoBehaviour
     [SerializeField] RectTransform _repairKitIndicatorPosition;
 
     readonly Queue<BaseModule> _testModulesQueue = new();
-    CharacterController _player;
+    PlayerController _player;
 
     readonly ObjectPool<Meteorite> _meteoritePool = new();
-    readonly ObjectPool<RepairKit> _repairKitPool = new();
+    readonly ObjectPool<RepairItem> _repairKitPool = new();
 
     RepairKitIndicator _repairKitIndicator;
     HealthIndicator _healthIndicator;
@@ -42,7 +42,7 @@ public class ModulesTester : MonoBehaviour
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(CharacterController player, RepairKitIndicator repairKitIndicator, HealthIndicator healthIndicator)
+    private void Construct(PlayerController player, RepairKitIndicator repairKitIndicator, HealthIndicator healthIndicator)
     {
         _player = player;
         _healthIndicator = healthIndicator;

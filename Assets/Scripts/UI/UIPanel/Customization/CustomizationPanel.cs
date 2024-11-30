@@ -5,13 +5,18 @@ public class CustomizationPanel : MonoBehaviour, IUIPanel
     [SerializeField] RectTransform _playerPosition;
     [SerializeField] ControllerCustomizer _controllerCustomizer;
     [SerializeField] SkinsCustomizer _skinsCustomizer;
-    CharacterController _player;
+    [SerializeField] GameObject _mainMenu;
+
+    PlayerController _player;
+    EnumCustomizationPanelState _currentState;
 
     [Zenject.Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(CustomizerConfig config, CharacterController player)
+    private void Construct(CustomizerConfig config, PlayerController player)
     {
         _controllerCustomizer.Initialize(config);
+        _skinsCustomizer.Initialize(config, config);
+
         _player = player;
 
         _skinsCustomizer.gameObject.SetActive(false);
@@ -20,8 +25,10 @@ public class CustomizationPanel : MonoBehaviour, IUIPanel
 
     public void Open()
     {
-        gameObject.SetActive(true);
+        ChangeState(EnumCustomizationPanelState.MainMenu);
         _player.OpenPanel();
+        _player.transform.position = _playerPosition.position;
+        gameObject.SetActive(true);
     }
 
     public void Close()
@@ -30,16 +37,70 @@ public class CustomizationPanel : MonoBehaviour, IUIPanel
         _player.ClosePanel();
     }
 
-    public void OpenControllerCustomizer()
+    public void OpenControllerCustomizer() => ChangeState(EnumCustomizationPanelState.ControllerCustomization);
+
+    public void OpenSkinsCustomizer() => ChangeState(EnumCustomizationPanelState.SkinCustomization);
+
+    public void BackButton()
     {
-        _skinsCustomizer.gameObject.SetActive(false);
-        _controllerCustomizer.gameObject.SetActive(true);
+        switch (_currentState)
+        {
+            case EnumCustomizationPanelState.MainMenu:
+                {
+                    Close();
+                    break;
+                }
+            default:
+                {
+                    ChangeState(EnumCustomizationPanelState.MainMenu);
+                    break;
+                }
+        }
     }
 
-    public void OpenSkinsCustomizer()
+    private void ChangeState(EnumCustomizationPanelState newState)
     {
-        _controllerCustomizer.gameObject.SetActive(false);
-        _skinsCustomizer.gameObject.SetActive(true);
+        _currentState = newState;
+
+        switch (_currentState)
+        {
+            case EnumCustomizationPanelState.MainMenu:
+                {
+                    _mainMenu.SetActive(true);
+                    _controllerCustomizer.gameObject.SetActive(false);
+                    _skinsCustomizer.gameObject.SetActive(false);
+
+                    break;
+                }
+            case EnumCustomizationPanelState.SkinCustomization:
+                {
+                    _skinsCustomizer.gameObject.SetActive(true);
+                    _controllerCustomizer.gameObject.SetActive(false);
+                    _mainMenu.SetActive(false);
+
+                    break;
+                }
+            case EnumCustomizationPanelState.ControllerCustomization:
+                {
+                    _controllerCustomizer.gameObject.SetActive(true);
+                    _skinsCustomizer.gameObject.SetActive(false);
+                    _mainMenu.SetActive(false);
+
+                    break;
+                }
+            default:
+                {
+                    Debug.LogError("Unknown state");
+                    break;
+                }
+        }
+    }
+
+    public enum EnumCustomizationPanelState
+    {
+        SkinCustomization,
+        ControllerCustomization,
+        MainMenu
     }
 
 }

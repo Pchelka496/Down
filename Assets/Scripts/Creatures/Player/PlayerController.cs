@@ -1,14 +1,14 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Zenject;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(HealthModule))]
-public class CharacterController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public const float PLAYER_RADIUS = 0.7f;
 
-    [SerializeField] Transform _bodySprite;
     [SerializeField] Rigidbody2D _rb;
     [SerializeField] CircleCollider2D _collider;
     [SerializeField] MultiTargetRotationFollower _follower;
@@ -17,6 +17,7 @@ public class CharacterController : MonoBehaviour
     [SerializeField] RotationModule _rotationModule;
     [SerializeField] EngineModule _engineModule;
     [SerializeField] PickerModule _pickerModule;
+    [SerializeField] PlayerVisualPart _playerVisualPart;
 
     readonly List<BaseModule> _modules = new(3);
 
@@ -28,6 +29,7 @@ public class CharacterController : MonoBehaviour
     public RotationModule RotationModule { get => _rotationModule; }
     public EngineModule EngineModule { get => _engineModule; }
     public PickerModule PickerModule { get => _pickerModule; }
+    public PlayerVisualPart PlayerVisualPart { get => _playerVisualPart; }
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:”далите неиспользуемые закрытые члены", Justification = "<ќжидание>")]
@@ -97,9 +99,7 @@ public class CharacterController : MonoBehaviour
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Correctness", "UNT0008:Null propagation on Unity objects", Justification = "<ќжидание>")]
     public async UniTask<T> GetModuleForTest<T>() where T : BaseModule
     {
-        var moduleForTest = GetModule<T>();
-
-        if (moduleForTest == null)
+        if (GetModule<T>(out var moduleForTest))
         {
             var loadedModule = await GameplaySceneInstaller.DiContainer
                                     .Resolve<OptionalPlayerModuleLoader>()
@@ -125,16 +125,19 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    public T GetModule<T>() where T : BaseModule
+    public bool GetModule<T>(out T module) where T : BaseModule
     {
-        foreach (var module in _modules)
+        foreach (var playerModule in _modules)
         {
-            if (module is T typedModule)
+            if (playerModule is T typedModule)
             {
-                return typedModule;
+                module = typedModule;
+                return true;
             }
         }
-        return null;
+
+        module = null;
+        return false;
     }
 
     private void EnableModulesInLobbyMode()
@@ -157,6 +160,11 @@ public class CharacterController : MonoBehaviour
                 module.DisableModule();
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        _playerVisualPart.Dispose();
     }
 
 }

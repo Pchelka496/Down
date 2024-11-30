@@ -10,7 +10,7 @@ public class EnemyCore : MonoBehaviour
     EnemyVisualPart _visualPart;
 
     [Inject]
-    private void Construct(CharacterController player)
+    private void Construct(PlayerController player)
     {
         _playerHealthModule = player.HealthModule;
     }

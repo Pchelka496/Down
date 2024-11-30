@@ -14,14 +14,14 @@ public class BackgroundController : IDisposable
     Camera _camera;
     MapController _mapController;
     BackgroundControllerConfig _config;
-    CharacterController _player;
+    PlayerController _player;
     float _maxLevelHeight;
 
     CancellationTokenSource _cts;
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(CharacterController player, MapController mapController, Camera camera)
+    private void Construct(PlayerController player, MapController mapController, Camera camera)
     {
         _player = player;
         _camera = camera;

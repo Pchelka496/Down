@@ -19,7 +19,7 @@ public class HealthModule : BaseModule
     HealthIndicator _healthIndicator;
 
     EffectController _effectController;
-    CamerasController _camerasController;
+    CameraFacade _camerasController;
 
     private int MaxHealth
     {
@@ -66,11 +66,11 @@ public class HealthModule : BaseModule
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
     private void Construct(HealthModuleConfig config,
                            EffectController effectController,
-                           CamerasController camerasController,
+                           CameraFacade camerasController,
                            AudioSourcePool audioSourcePool,
                            RepairKitIndicator repairKitIndicator,
                            HealthIndicator healthIndicator,
-                           CharacterController player,
+                           PlayerController player,
                            LevelManager levelManager
                            )
     {

@@ -11,7 +11,7 @@ public class ChargeSystem : IDisposable
 
     CancellationTokenSource _cts;
 
-    event Action<int> _onChargeChanged;
+    event Action<int> OnChargeChanged;
 
     public void Initialize(int maxCharges, float chargeCooldown, bool charged = true)
     {
@@ -36,7 +36,7 @@ public class ChargeSystem : IDisposable
         if (_currentCharges > 0)
         {
             _currentCharges--;
-            _onChargeChanged?.Invoke(_currentCharges);
+            OnChargeChanged?.Invoke(_currentCharges);
 
             if (_currentCharges < _maxCharges && !_isRecharging)
             {
@@ -55,7 +55,7 @@ public class ChargeSystem : IDisposable
         {
             await UniTask.Delay(TimeSpan.FromSeconds(_chargeCooldown));
             _currentCharges++;
-            _onChargeChanged?.Invoke(_currentCharges);
+            OnChargeChanged?.Invoke(_currentCharges);
         }
 
         _isRecharging = false;
@@ -70,12 +70,12 @@ public class ChargeSystem : IDisposable
 
     public void SubscribeToChargeChange(Action<int> listener)
     {
-        _onChargeChanged += listener;
+        OnChargeChanged += listener;
     }
 
     public void UnsubscribeFromChargeChange(Action<int> listener)
     {
-        _onChargeChanged -= listener;
+        OnChargeChanged -= listener;
     }
 
     private void ClearToken() => ClearTokenSupport.ClearToken(ref _cts);

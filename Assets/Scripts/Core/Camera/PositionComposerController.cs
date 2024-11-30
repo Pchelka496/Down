@@ -2,6 +2,7 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
 using System.Threading;
+using System;
 
 [System.Serializable]
 public class PositionComposerController : System.IDisposable
@@ -19,7 +20,6 @@ public class PositionComposerController : System.IDisposable
     [SerializeField] AnimationCurve _transitionCurve;
 
     float _currentYScreenPosition;
-    float _velocityYRef;
 
     Rigidbody2D _playerRb;
     CancellationTokenSource _cts;

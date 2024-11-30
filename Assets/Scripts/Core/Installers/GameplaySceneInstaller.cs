@@ -3,13 +3,14 @@ using Zenject;
 
 public class GameplaySceneInstaller : MonoInstaller
 {
-    [SerializeField] CharacterController _playerController;
-    [SerializeField] CamerasController _camerasController;
+    [SerializeField] PlayerController _playerController;
+    [SerializeField] CameraFacade _camerasController;
     [SerializeField] AirTrailController _airTrailController;
     [SerializeField] Camera _mainCamera;
     [SerializeField] LobbyUIPanelFacade _upgradePanelController;
     [SerializeField] EnumLanguage _enumLanguage;
     [SerializeField] PlayerModuleConfigs _playerModulesConfig;
+    [SerializeField] RewardKeeperConfig _rewardKeeperConfig;
     [Header("UI")]
     [SerializeField] RewardCounter _rewardCounter;
     [SerializeField] ScreenFader _screenFader;
@@ -28,6 +29,8 @@ public class GameplaySceneInstaller : MonoInstaller
     PickUpItemManager _pickUpItemManager;
     AudioSourcePool _audioSourcePool;
     EffectController _effectController;
+    CharacterPositionMeter _characterPositionMeter;
+    RewardKeeper _rewardKeeper;
 
     public static DiContainer DiContainer { get; private set; }
 
@@ -38,12 +41,12 @@ public class GameplaySceneInstaller : MonoInstaller
 
         Container.Bind<Controls>().FromNew().AsSingle().NonLazy();
 
-        Container.Bind<CharacterController>().FromInstance(_playerController).AsSingle().NonLazy();
+        Container.Bind<PlayerController>().FromInstance(_playerController).AsSingle().NonLazy();
         Container.Bind<MapController>().FromInstance(_mapController).AsSingle().NonLazy();
         Container.Bind<BackgroundController>().FromInstance(_backgroundController).AsSingle().NonLazy();
         Container.Bind<EnemyManager>().FromInstance(_enemyManager).AsSingle().NonLazy();
         Container.Bind<PickUpItemManager>().FromInstance(_pickUpItemManager).AsSingle().NonLazy();
-        Container.Bind<CamerasController>().FromInstance(_camerasController).AsSingle().NonLazy();
+        Container.Bind<CameraFacade>().FromInstance(_camerasController).AsSingle().NonLazy();
         Container.Bind<RewardCounter>().FromInstance(_rewardCounter).AsSingle().NonLazy();
         Container.Bind<LobbyUIPanelFacade>().FromInstance(_upgradePanelController).AsSingle().NonLazy();
         Container.Bind<AudioSourcePool>().FromInstance(_audioSourcePool).AsSingle().NonLazy();
@@ -61,6 +64,8 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<OptionalPlayerModuleLoader>().FromInstance(_optionalPlayerModuleLoader).AsSingle().NonLazy();
         Container.Bind<CustomizerConfig>().FromInstance(_customizerConfig).AsSingle().NonLazy();
         Container.Bind<Customizer>().FromInstance(_customizer).AsSingle().NonLazy();
+        Container.Bind<CharacterPositionMeter>().FromInstance(_characterPositionMeter).AsSingle().NonLazy();
+        Container.Bind<RewardKeeper>().FromInstance(_rewardKeeper).AsSingle().NonLazy();
 
         BindPlayerModuleConfigs();
     }
@@ -120,6 +125,8 @@ public class GameplaySceneInstaller : MonoInstaller
         _audioSourcePool = new(AttachToGameObject(dependenciesObject, "++Audio++").transform);
         _effectController = new(AttachToGameObject(dependenciesObject, "++Effects++").transform);
         _customizer = new();
+        _characterPositionMeter = new();
+        _rewardKeeper = new(_rewardKeeperConfig);
     }
 
     private GameObject AttachToGameObject(GameObject parent, string name)
@@ -140,12 +147,16 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Inject(_pickUpItemManager);
         Container.Inject(_audioSourcePool);
         Container.Inject(_effectController);
+        Container.Inject(_characterPositionMeter);
+        Container.Inject(_customizer);
+        Container.Inject(_rewardKeeper);
     }
 
     private void OnDestroy()
     {
         _backgroundController.Dispose();
         _enemyManager.Dispose();
+        _customizer.Dispose();
     }
 
     [System.Serializable]

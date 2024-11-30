@@ -8,13 +8,13 @@ public class CheckpointPlatform : MonoBehaviour
     [SerializeField] DisplayController _displayController;
     [SerializeField] BoxCollider2D _collider;
 
-    CharacterController _player;
+    PlayerController _player;
     LevelManager _levelManager;
     LobbyUIPanelFacade _upgradePanelController;
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(LevelManager levelManager, CharacterController player, Camera camera, LobbyUIPanelFacade upgradePanelController)
+    private void Construct(LevelManager levelManager, PlayerController player, Camera camera, LobbyUIPanelFacade upgradePanelController)
     {
         _levelManager = levelManager;
         _player = player;

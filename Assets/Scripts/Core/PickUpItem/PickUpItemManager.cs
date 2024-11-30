@@ -6,9 +6,8 @@ public class PickUpItemManager
     public const int REWARD_LAYER_INDEX = 11;
     readonly Transform _transform;
 
-    PickUpItemManagerConfig _config;
-    RewardController _rewardController;
-    RepairKitController _repairKitController;
+    RewardSpawner _rewardController;
+    RepairItemSpawner _repairKitController;
 
     public PickUpItemManager(Transform transform)
     {
@@ -17,25 +16,18 @@ public class PickUpItemManager
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(CharacterController player, RewardCounter rewardCounter)
+    private void Construct(RewardCounter rewardCounter, DiContainer diContainer)
     {
-        Reward.Initialize(player, rewardCounter);
+        PickUpReward.Initialize(rewardCounter);
 
-        _rewardController = GameplaySceneInstaller.DiContainer.Instantiate<RewardController>();
-        _repairKitController = GameplaySceneInstaller.DiContainer.Instantiate<RepairKitController>();
+        _rewardController = diContainer.Instantiate<RewardSpawner>();
+        _repairKitController = diContainer.Instantiate<RepairItemSpawner>();
     }
 
     public void Initialize(PickUpItemManagerConfig config)
     {
-        _config = config;
         _rewardController.Initialize(config.RewardControllerConfig, _transform);
         _repairKitController.Initialize(config.RepairKitControllerConfig, _transform);
     }
-
-    public int GetPoints() => _config.GetPoints();
-
-    public void IncreasePoints(int increaseValue) => _config.IncreasePoints(increaseValue);
-
-    public void DecreasePoints(int decreaseValue) => _config.DecreasePoints(decreaseValue);
 
 }

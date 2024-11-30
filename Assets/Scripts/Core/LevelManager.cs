@@ -14,7 +14,7 @@ public class LevelManager
     LevelManagerConfig _config;
 
     EnemyManager _enemyManager;
-    CharacterController _player;
+    PlayerController _player;
     MapController _mapController;
     BackgroundController _backgroundController;
     PickUpItemManager _rewardManager;
@@ -32,7 +32,7 @@ public class LevelManager
     private void Construct(MapController mapController,
                            EnemyManager enemyManager,
                            BackgroundController backgroundController,
-                           CharacterController player,
+                           PlayerController player,
                            PickUpItemManager rewardManager,
                            ScreenFader screenFader
                            )
@@ -111,7 +111,10 @@ public class LevelManager
 
     public async UniTaskVoid RoundEnd()
     {
-        await UniTask.WaitForSeconds(1f);
+        await UniTask.WaitForEndOfFrame();
+
+        await _screenFader.FadeToBlack();
+
         _isRoundActive = false;
 
         if (RoundEndAction != null)
@@ -131,10 +134,12 @@ public class LevelManager
 
         RoundEndAction = null;
 
-        await _screenFader.FadeToBlack();
-
         ResetPlayerPosition();
-        await UniTask.WaitForSeconds(1f);
+
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+
+        await UniTask.WaitForEndOfFrame();
 
         await _screenFader.FadeToClear();
     }

@@ -6,12 +6,7 @@ using Unity.Mathematics;
 [BurstCompile]
 public struct MechanicalCounterJob : IJob
 {
-    const float MinSpeed = 20f;
-    const float MaxSpeed = 50f;
-    const float SpeedAdjustmentFactor = 0.3f;
-
     [ReadOnly] readonly NativeArray<float> _targetYPositions;
-    [ReadOnly] readonly NativeArray<float> _textSpeeds;
     NativeArray<float> _textYPositions;
     NativeArray<int> _currentDigits;
     NativeArray<int> _targetDigits;
@@ -21,16 +16,13 @@ public struct MechanicalCounterJob : IJob
 
     public MechanicalCounterJob(ref NativeArray<float> targetYPositions,
                                 ref NativeArray<float> textYPositions,
-                                ref NativeArray<float> textSpeeds,
                                 ref NativeArray<int> currentDigits,
-                                 ref NativeArray<int> targetDigits
-
+                                ref NativeArray<int> targetDigits
         ) : this()
     {
         _targetYPositions = targetYPositions;
         _targetDigits = targetDigits;
         _textYPositions = textYPositions;
-        _textSpeeds = textSpeeds;
         _currentDigits = currentDigits;
     }
 
@@ -76,16 +68,16 @@ public struct MechanicalCounterJob : IJob
 
         int delta = targetDigit - currentDigit;
 
-        int pathUp = (delta + CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS) % CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS;
-        int pathDown = (currentDigit - targetDigit + CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS) % CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS;
+        int pathUp = (delta + CharacterHeightIndicator.DRUM_NUMBER_OF_NUMBERS) % CharacterHeightIndicator.DRUM_NUMBER_OF_NUMBERS;
+        int pathDown = (currentDigit - targetDigit + CharacterHeightIndicator.DRUM_NUMBER_OF_NUMBERS) % CharacterHeightIndicator.DRUM_NUMBER_OF_NUMBERS;
 
         if (pathUp <= pathDown)
         {
-            _currentDigits[index] = (currentDigit + 1) % CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS;
+            _currentDigits[index] = (currentDigit + 1) % CharacterHeightIndicator.DRUM_NUMBER_OF_NUMBERS;
         }
         else
         {
-            _currentDigits[index] = (currentDigit - 1 + CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS) % CharacterPositionMeter.DRUM_NUMBER_OF_NUMBERS;
+            _currentDigits[index] = (currentDigit - 1 + CharacterHeightIndicator.DRUM_NUMBER_OF_NUMBERS) % CharacterHeightIndicator.DRUM_NUMBER_OF_NUMBERS;
         }
     }
 

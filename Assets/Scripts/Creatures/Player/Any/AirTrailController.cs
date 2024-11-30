@@ -37,7 +37,7 @@ public class AirTrailController : MonoBehaviour
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(CharacterController player)
+    private void Construct(PlayerController player)
     {
         _rb = player.Rb;
         player.MultiTargetRotationFollower.RegisterRotationObject(transform, Z_ROTATION_OFFSET);

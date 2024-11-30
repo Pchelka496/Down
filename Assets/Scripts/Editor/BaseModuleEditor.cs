@@ -10,7 +10,7 @@ public class BaseModuleEditor : Editor
         Handles.color = Color.green;
 
         // Рисуем незаполненный круг в точке (0, 0) с радиусом 1
-        Handles.DrawWireDisc(Vector3.zero, Vector3.forward, CharacterController.PLAYER_RADIUS);
+        Handles.DrawWireDisc(Vector3.zero, Vector3.forward, PlayerController.PLAYER_RADIUS);
 
         // Обновляем сцену
         SceneView.RepaintAll();

@@ -15,32 +15,29 @@ public class UIPanelManager
         _parentTransform = parentTransform;
     }
 
-    public async UniTask<IUIPanel> CreatePanelAsync(string panelId, AssetReference assetReference)
+    public async UniTask CreatePanelAsync(string panelId, AssetReference assetReference)
     {
         if (_activePanels.ContainsKey(panelId))
         {
-            return _activePanels[panelId];
+            return;
         }
 
         var panel = await _factory.CreatePanelAsync(assetReference, _parentTransform);
         _activePanels[panelId] = panel;
-
-        return panel;
     }
 
-    public async UniTask<IUIPanel> OpenPanelAsync(string panelId, AssetReference assetReference)
+    public async UniTask OpenPanelAsync(string panelId, AssetReference assetReference)
     {
         if (_activePanels.ContainsKey(panelId))
         {
-            return _activePanels[panelId];
+            _activePanels[panelId].Open();
+            return;
         }
 
         var panel = await _factory.CreatePanelAsync(assetReference, _parentTransform);
 
         panel.Open();
         _activePanels[panelId] = panel;
-
-        return panel;
     }
 
     public void ClosePanel(string panelId)

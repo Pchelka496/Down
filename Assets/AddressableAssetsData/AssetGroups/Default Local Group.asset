@@ -25,6 +25,21 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 19f0c5eab7bd84f40a75cfe775284b4b
+    m_Address: Assets/Resources_moved/Prefab/PlayerSkins/Sputnik3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1efa718894d9c3f4bab3cbebe10467b5
+    m_Address: Assets/Resources_moved/Prefab/UI/CustomizationPanel/UISkinsIcon/Sputnik2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 37a3de5ac2491624896551f2d5cf8695
+    m_Address: Assets/Resources_moved/Prefab/PlayerSkins/Sputnik1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4a00f62b4a48da64d9082b6902c66b55
     m_Address: Assets/Resources_moved/Prefab/Creatures/Meteorite.prefab
     m_ReadOnly: 0
@@ -45,8 +60,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a49d2031a076df949818b42b562aea42
+    m_Address: Assets/Resources_moved/Prefab/PlayerSkins/Sputnik2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ad34472246b673149ab1aa701880c768
     m_Address: Prefab/Creatures/EnemyCore
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: affa0852357047248908b1686a5f8f39
+    m_Address: Assets/Resources_moved/Prefab/UI/CustomizationPanel/UISkinsIcon/Sputnik3.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -62,6 +87,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cb62f25311e4fe64da9bd49b359e7d7b
     m_Address: Prefab/UI/UpgradePanel/UpgradePanel
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d017444e96f1fcc408d3f0347ca0197e
+    m_Address: Assets/Resources_moved/Prefab/UI/CustomizationPanel/UISkinsIcon/Sputnik1.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -8,6 +8,7 @@ using Unity.Jobs;
 
 public class EnemyMovementController : IDisposable
 {
+    readonly float _initialPositionCheckDaley = 0.5f;
     int _enemyCount = 50;
     JobHandle _enemyMoverHandler;
     JobHandle _enemyInitialPlacement;
@@ -22,7 +23,13 @@ public class EnemyMovementController : IDisposable
     NativeArray<Unity.Mathematics.Random> _randoms;
     TransformAccessArray _enemyTransforms;
 
-    public void Initialize(int enemyCount, Transform[] enemyTransforms, float[] speeds, EnumMotionPattern[] motionPatterns, float2[] motionCharacteristic, Vector2[] isolationDistance)
+    public void Initialize(int enemyCount,
+                           Transform[] enemyTransforms,
+                           float[] speeds,
+                           EnumMotionPattern[] motionPatterns,
+                           float2[] motionCharacteristic,
+                           Vector2[] isolationDistance
+                           )
     {
         _enemyCount = enemyCount;
 
@@ -79,6 +86,8 @@ public class EnemyMovementController : IDisposable
 
         _enemyInitialPlacement = initialPlacementJob.Schedule(_enemyCount, batchSize, _enemyMoverHandler);
 
+        var delaySpan = TimeSpan.FromSeconds(_initialPositionCheckDaley);
+
         while (true)
         {
             _enemyInitialPlacement.Complete();
@@ -88,37 +97,42 @@ public class EnemyMovementController : IDisposable
 
             _enemyInitialPlacement = initialPlacementJob.Schedule(_enemyCount, batchSize, _enemyMoverHandler);
 
-            await UniTask.WaitForSeconds(0.5f);
+            await UniTask.Delay(delaySpan);
         }
     }
 
     private async UniTask EnemyMoving()
     {
-        var enemyMoverJobs = new EnemyMoverJob(ref _speeds,
-                                               ref _positionProcessingMethods,
-                                               ref _motionCharacteristic,
-                                               ref _currentEnemyPosition,
-                                               ref _initialPosition,
-                                               ref _needToChangeInitialPosition
-                                               );
-        var deltaTime = Time.deltaTime;
-
-        enemyMoverJobs.DeltaTime = deltaTime;
+        var enemyMoverJobs = new EnemyMoverJob(speeds: ref _speeds,
+                                               initialPosition: ref _initialPosition,
+                                               currentPosition: ref _currentEnemyPosition,
+                                               motionCharacteristic: ref _motionCharacteristic,
+                                               positionProcessingMethods: ref _positionProcessingMethods,
+                                               needToChangeInitialPosition: ref _needToChangeInitialPosition
+                                               )
+        {
+            DeltaTime = Time.deltaTime
+        };
 
         _enemyMoverHandler = enemyMoverJobs.Schedule(_enemyTransforms, _enemyInitialPlacement);
 
         while (true)
         {
-            deltaTime = Time.deltaTime;
-
-            enemyMoverJobs.Time = deltaTime;
-            enemyMoverJobs.DeltaTime = deltaTime;
+            enemyMoverJobs.DeltaTime = Time.deltaTime;
 
             _enemyMoverHandler.Complete();
 
-            _enemyMoverHandler = enemyMoverJobs.Schedule(_enemyTransforms, _enemyInitialPlacement);
+            try
+            {
+                _enemyMoverHandler = enemyMoverJobs.Schedule(_enemyTransforms, _enemyInitialPlacement);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                Debug.LogWarning($"ObjectDisposedException caught: {ex.Message}\n{ex.StackTrace}");
+                return;
+            }
 
-            await UniTask.WaitForSeconds(deltaTime);
+            await UniTask.Yield(PlayerLoopTiming.Update);
         }
     }
 

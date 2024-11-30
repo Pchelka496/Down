@@ -44,7 +44,7 @@ public class EngineModule : BaseModule
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(CharacterController player, Controls controls, ScreenTouchController screenTouchController, EngineModuleConfig engineModuleConfig, BoosterIndicator indicator)
+    private void Construct(PlayerController player, Controls controls, ScreenTouchController screenTouchController, EngineModuleConfig engineModuleConfig, BoosterIndicator indicator)
     {
         _rb = player.Rb;
         _rotationModule = player.RotationModule;
@@ -90,6 +90,8 @@ public class EngineModule : BaseModule
     public override void DisableModule()
     {
         UnsubscribeToControlsEvent();
+        ClearToken(ref _boostCts);
+        ClearToken(ref _defaultEngineCts);
     }
 
     private void StartTouchScreen(InputAction.CallbackContext ctx)
@@ -103,7 +105,7 @@ public class EngineModule : BaseModule
 
     private async UniTask EngineWorkHandler(CancellationToken token)
     {
-        _rotationModule.UnsubscribeToOnTargetRotationReached(_booster.ApplyBoost);
+        _rotationModule.ClearOnTargetRotationReached();
         _needRotation = true;
 
         ClearToken(ref _defaultEngineCts);
@@ -124,7 +126,7 @@ public class EngineModule : BaseModule
 
             if (MIN_VECTOR_LENGTH_FOR_BOOST <= currentVectorLength)
             {
-                _rotationModule.SubscribeToOnTargetRotationReached(_booster.ApplyBoost);
+                _rotationModule.SetOnTargetRotationReached(_booster.ApplyBoost);
             }
 
             _needRotation = false;
@@ -212,20 +214,21 @@ public class EngineModule : BaseModule
     {
         _controls.Player.TouchScreen.performed += StartTouchScreen;
         _controls.Player.TouchScreen.canceled += StopTouch;
-        _rotationModule.SubscribeToEngineNeedRotation(NeedRotation);
+        _rotationModule.SetToEngineNeedRotation(NeedRotation);
     }
 
     private void UnsubscribeToControlsEvent()
     {
         _controls.Player.TouchScreen.performed -= StartTouchScreen;
         _controls.Player.TouchScreen.canceled -= StopTouch;
-        _rotationModule.UnsubscribeToEngineNeedRotation(NeedRotation);
+        _rotationModule.ClearEngineNeedRotation();
     }
 
     private void OnDestroy()
     {
         ClearToken(ref _boostCts);
         ClearToken(ref _defaultEngineCts);
+
         _booster.Dispose();
         UnsubscribeToControlsEvent();
     }

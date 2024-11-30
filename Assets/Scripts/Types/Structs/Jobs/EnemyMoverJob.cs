@@ -13,18 +13,17 @@ public struct EnemyMoverJob : IJobParallelForTransform
     [ReadOnly] readonly NativeArray<Vector2> _initialPosition;
     NativeArray<bool> _needToChangeInitialPosition;
 
-    [ReadOnly] public float Time;
     [ReadOnly] public float DeltaTime;
 
     [WriteOnly] NativeArray<Vector2> _currentPosition;
 
     public EnemyMoverJob(ref NativeArray<float> speeds,
-                          ref NativeArray<EnumMotionPattern> positionProcessingMethods,
-                          ref NativeArray<float2> motionCharacteristic,
-                          ref NativeArray<Vector2> currentPosition,
-                          ref NativeArray<Vector2> initialPosition,
-                          ref NativeArray<bool> needToChangeInitialPosition
-                          ) : this()
+                         ref NativeArray<EnumMotionPattern> positionProcessingMethods,
+                         ref NativeArray<float2> motionCharacteristic,
+                         ref NativeArray<Vector2> currentPosition,
+                         ref NativeArray<Vector2> initialPosition,
+                         ref NativeArray<bool> needToChangeInitialPosition
+                         ) : this()
     {
         _speeds = speeds;
         _positionProcessingMethods = positionProcessingMethods;
@@ -104,8 +103,7 @@ public struct EnemyMoverJob : IJobParallelForTransform
     {
         var newPosition = _initialPosition[index];
 
-        transform.position = newPosition;
-        transform.rotation = Quaternion.identity;
+        transform.SetPositionAndRotation(newPosition, Quaternion.identity);
 
         _currentPosition[index] = newPosition;
     }
@@ -127,7 +125,7 @@ public struct EnemyMoverJob : IJobParallelForTransform
 
         var horizontalMovement = DeltaTime * speed * direction;
 
-        var waveOffsetY = Mathf.Sin(Time * frequency) * amplitude;
+        var waveOffsetY = Mathf.Sin(DeltaTime * frequency) * amplitude;
 
         var newPosition = transform.position + new Vector3(horizontalMovement.x, waveOffsetY, 0);
 
@@ -135,13 +133,12 @@ public struct EnemyMoverJob : IJobParallelForTransform
         _currentPosition[index] = newPosition;
     }
 
-    private void JerkyMoving(TransformAccess transform, int index, Vector2 direction)
+    private readonly void JerkyMoving(TransformAccess transform, int index, Vector2 direction)
     {
         //_speeds[index]
-
     }
 
-    private void RotateOnTheSpot(TransformAccess transform, int index)
+    private readonly void RotateOnTheSpot(TransformAccess transform, int index)
     {
         float rotationSpeed = _speeds[index];
         float newRotation = transform.rotation.eulerAngles.z + rotationSpeed * DeltaTime;

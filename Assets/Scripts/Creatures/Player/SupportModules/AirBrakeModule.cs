@@ -28,7 +28,7 @@ public class AirBrakeModule : BaseModule
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(AirBrakeModuleConfig config, CharacterController player, Controls controls, AirTrailController airTrailController)
+    private void Construct(AirBrakeModuleConfig config, PlayerController player, Controls controls, AirTrailController airTrailController)
     {
         _rb = player.Rb;
 
@@ -49,7 +49,7 @@ public class AirBrakeModule : BaseModule
         _controls.Player.AirBreake.performed += SwitchAirBrake;
         _controls.Player.AirBreake.performed += _airTrailController.SwitchAirBrake;
 
-        _airTrailController.SetAirBrakeStatus(_isAirBrakeActive);
+        _airTrailController.SetAirBrakeStatus(false);
     }
 
     public override void DisableModule()
@@ -57,7 +57,7 @@ public class AirBrakeModule : BaseModule
         _controls.Player.AirBreake.performed -= SwitchAirBrake;
         _controls.Player.AirBreake.performed -= _airTrailController.SwitchAirBrake;
 
-        _airTrailController.SetAirBrakeStatus(_isAirBrakeActive);
+        _airTrailController.SetAirBrakeStatus(false);
     }
 
     public void UpdateCharacteristics() => UpdateCharacteristics(GameplaySceneInstaller.DiContainer.Resolve<AirBrakeModuleConfig>());
@@ -130,7 +130,7 @@ public class AirBrakeModule : BaseModule
     {
         DisableModule();
         _airTrailController.SetAirBrakeStatus(false);
-        GameplaySceneInstaller.DiContainer.Resolve<CharacterController>().MultiTargetRotationFollower.UnregisterRotationObject(transform);
+        GameplaySceneInstaller.DiContainer.Resolve<PlayerController>().MultiTargetRotationFollower.UnregisterRotationObject(transform);
     }
 
 }

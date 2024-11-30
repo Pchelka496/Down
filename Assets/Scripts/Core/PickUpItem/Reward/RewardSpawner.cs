@@ -2,9 +2,8 @@ using Cysharp.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class RewardController
+public class RewardSpawner
 {
     const float MIN_DISTANCE_X = -30f;
     const float MAX_DISTANCE_X = 30f;
@@ -19,7 +18,7 @@ public class RewardController
     int _currentPresetIndex = 0;
 
     RewardControllerConfig _config;
-    Reward[] _rewards;
+    PickUpReward[] _rewards;
 
     private Vector2 DistanceCheckRewardPosition { get; set; }
 
@@ -40,11 +39,11 @@ public class RewardController
         if (rewardPrefab != null)
         {
             var diContainer = GameplaySceneInstaller.DiContainer;
-            _rewards = new Reward[count];
+            _rewards = new PickUpReward[count];
 
             for (int i = 0; i < count; i++)
             {
-                var reward = diContainer.InstantiatePrefabForComponent<Reward>(rewardPrefab, _rewardSpawnPosition, Quaternion.identity, rewardParentTransform);
+                var reward = diContainer.InstantiatePrefabForComponent<PickUpReward>(rewardPrefab, _rewardSpawnPosition, Quaternion.identity, rewardParentTransform);
 
                 reward.gameObject.SetActive(false);
 

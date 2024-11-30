@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-public class RepairKit : MonoBehaviour
+public class RepairItem : MonoBehaviour
 {
     const string APPLY_KIT_ANIMATION_STATE_NAME = "ApplyKit";
 
@@ -16,7 +16,7 @@ public class RepairKit : MonoBehaviour
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(CharacterController player, AudioSourcePool audioSourcePool)
+    private void Construct(PlayerController player, AudioSourcePool audioSourcePool)
     {
         _player = player.gameObject;
         _healthModule = player.HealthModule;

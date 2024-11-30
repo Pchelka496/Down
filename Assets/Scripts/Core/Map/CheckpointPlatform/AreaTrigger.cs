@@ -7,10 +7,10 @@ public class AreaTrigger : MonoBehaviour
 {
     [Header("Called when the player enters the trigger area")]
     [SerializeField] UnityEvent onPlayerEnter;
-    CharacterController _player;
+    PlayerController _player;
 
     [Inject]
-    private void Construct(CharacterController player)
+    private void Construct(PlayerController player)
     {
         _player = player;
     }

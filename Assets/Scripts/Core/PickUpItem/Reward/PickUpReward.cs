@@ -1,16 +1,13 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using Zenject;
 
-public class Reward : MonoBehaviour
+public class PickUpReward : MonoBehaviour
 {
     [SerializeField] int _rewardAmount = 1;
-    static CharacterController _player;
     static RewardCounter _rewardCounter;
 
-    public static void Initialize(CharacterController player, RewardCounter rewardCounter)
+    public static void Initialize(RewardCounter rewardCounter)
     {
-        _player = player;
         _rewardCounter = rewardCounter;
     }
 

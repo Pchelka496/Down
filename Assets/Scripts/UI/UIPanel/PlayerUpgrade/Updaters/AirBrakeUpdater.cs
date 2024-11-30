@@ -103,7 +103,10 @@ public class AirBrakeUpdater : MonoBehaviour
         upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _moduleConfig.SetLevel(characteristics, nextLevel);
 
-        _playerUpgradePanel.Player.GetModule<AirBrakeModule>()?.UpdateCharacteristics(_moduleConfig);
+        if (_playerUpgradePanel.Player.GetModule<AirBrakeModule>(out var module))
+        {
+            module.UpdateCharacteristics(_moduleConfig);
+        }
     }
 
     //_________________________________ Downgrade Button _________________________________
@@ -129,7 +132,11 @@ public class AirBrakeUpdater : MonoBehaviour
 
         upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _moduleConfig.SetLevel(characteristics, nextLevel);
-        _playerUpgradePanel.Player.GetModule<AirBrakeModule>().UpdateCharacteristics(_moduleConfig);
+
+        if (_playerUpgradePanel.Player.GetModule<AirBrakeModule>(out var module))
+        {
+            module.UpdateCharacteristics(_moduleConfig);
+        }
     }
 
     //_________________________________ Detailed Information Button _________________________________

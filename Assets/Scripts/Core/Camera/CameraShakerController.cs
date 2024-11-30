@@ -2,9 +2,10 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
 using System.Threading;
+using System;
 
 [System.Serializable]
-public class CameraShaker : System.IDisposable
+public class CameraShakerController : System.IDisposable
 {
     [SerializeField] CinemachineBasicMultiChannelPerlin _cameraNoise;
     [SerializeField] float _defaultShakeDuration = 0.5f;

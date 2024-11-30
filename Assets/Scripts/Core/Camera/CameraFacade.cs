@@ -2,17 +2,19 @@ using Unity.Cinemachine;
 using UnityEngine;
 using Zenject;
 
-public class CamerasController : MonoBehaviour
+public class CameraFacade : MonoBehaviour
 {
     [SerializeField] CinemachineCamera _camera;
-    [SerializeField] CameraShaker _cameraShaker;
+
+    [SerializeField] CameraShakerController _cameraShaker;
     [SerializeField] LensController _lensController;
     [SerializeField] PositionComposerController _positionComposerController;
+
     [SerializeField] Transform _cameraDefaultTrackingTarget;
-    CharacterController _player;
+    PlayerController _player;
 
     [Inject]
-    public void Construct(LevelManager levelManager, CharacterController player)
+    public void Construct(LevelManager levelManager, PlayerController player)
     {
         _player = player;
 
@@ -84,6 +86,7 @@ public class CamerasController : MonoBehaviour
     {
         _lensController?.Dispose();
         _positionComposerController?.Dispose();
+        _cameraShaker?.Dispose();
     }
 
 }

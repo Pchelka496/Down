@@ -15,7 +15,7 @@ public class EmergencyBrakeModule : BaseModule
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(EmergencyBrakeModuleConfig config, CharacterController player)
+    private void Construct(EmergencyBrakeModuleConfig config, PlayerController player)
     {
         _rb = player.Rb;
 

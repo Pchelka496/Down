@@ -1,9 +1,9 @@
 using Cysharp.Threading.Tasks;
-using UnityEngine;
-using Zenject;
-using System.Threading;
 using System;
+using System.Threading;
+using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 
 public class RotationModule : BaseModule
 {
@@ -20,13 +20,13 @@ public class RotationModule : BaseModule
 
     CancellationTokenSource _rotationCts;
 
-    Func<bool> EngineNeedRotation;
+    Func<bool> EngineNeedRotation = () => false;
 
-    event Action OnTargetRotationReached;
+    Action OnTargetRotationReached;
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(CharacterController player, Controls controls, ScreenTouchController screenTouchController, RotationModuleConfig config)
+    private void Construct(PlayerController player, Controls controls, ScreenTouchController screenTouchController, RotationModuleConfig config)
     {
         _rb = player.Rb;
         _engineRotationCenter = _rb.transform;
@@ -55,6 +55,7 @@ public class RotationModule : BaseModule
     public override void DisableModule()
     {
         UnsubscribeToControlsEvent();
+        ClearToken(ref _rotationCts);
     }
 
     private void StartTouchScreen(InputAction.CallbackContext ctx)
@@ -105,11 +106,11 @@ public class RotationModule : BaseModule
         }
     }
 
-    public void SubscribeToOnTargetRotationReached(Action action) => OnTargetRotationReached += action;
-    public void UnsubscribeToOnTargetRotationReached(Action action) => OnTargetRotationReached -= action;
+    public void SetOnTargetRotationReached(Action action) => OnTargetRotationReached = action;
+    public void ClearOnTargetRotationReached() => OnTargetRotationReached = null;
 
-    public void SubscribeToEngineNeedRotation(Func<bool> func) => EngineNeedRotation += func;
-    public void UnsubscribeToEngineNeedRotation(Func<bool> func) => EngineNeedRotation -= func;
+    public void SetToEngineNeedRotation(Func<bool> func) => EngineNeedRotation = func;
+    public void ClearEngineNeedRotation() => EngineNeedRotation = () => false;
 
     private void ClearToken(ref CancellationTokenSource cts) => ClearTokenSupport.ClearToken(ref cts);
 

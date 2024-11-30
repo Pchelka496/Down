@@ -7,7 +7,7 @@ public class RewardCounter : MonoBehaviour
 {
     [SerializeField] SoundPlayerIncreasePitch _soundPlayer;
     [SerializeField] TextMeshProUGUI _text;
-    PickUpItemManager _pickUpItemManager;
+    RewardKeeper _rewardKeeper;
 
     float _pickUpRewardMultiplier = 1f;
     int _points;
@@ -15,10 +15,11 @@ public class RewardCounter : MonoBehaviour
     public float PickUpRewardMultiplier { set => _pickUpRewardMultiplier = value; }
 
     [Inject]
-    private void Construct(LevelManager levelManager, PickUpItemManager pickUpItemManager, AudioSourcePool audioSource)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    private void Construct(LevelManager levelManager, RewardKeeper rewardKeeper, AudioSourcePool audioSource)
     {
         _soundPlayer.Initialize(audioSource);
-        _pickUpItemManager = pickUpItemManager;
+        _rewardKeeper = rewardKeeper;
         ResetPoints();
 
         levelManager.SubscribeToRoundStart(RoundStart);
@@ -33,7 +34,7 @@ public class RewardCounter : MonoBehaviour
     {
         levelManager.SubscribeToRoundStart(RoundStart);
 
-        _pickUpItemManager.IncreasePoints(_points);
+        _rewardKeeper.IncreasePoints(_points);
         ResetPoints();
     }
 
@@ -45,7 +46,7 @@ public class RewardCounter : MonoBehaviour
 
     public void IncreasePointsPerRound(int increaseValue)
     {
-        _points = _points + (int)(increaseValue * _pickUpRewardMultiplier);
+        _points += (int)(increaseValue * _pickUpRewardMultiplier);
 
         _soundPlayer.PlaySound();
 

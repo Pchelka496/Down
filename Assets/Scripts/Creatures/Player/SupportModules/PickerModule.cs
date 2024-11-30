@@ -7,7 +7,7 @@ public class PickerModule : BaseModule
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(CharacterController player, PickerModuleConfig config, RewardCounter rewardCounter)
+    private void Construct(PlayerController player, PickerModuleConfig config, RewardCounter rewardCounter)
     {
         SnapToPlayer(player.transform);
 

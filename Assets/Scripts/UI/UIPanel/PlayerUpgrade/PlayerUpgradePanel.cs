@@ -22,22 +22,22 @@ public class PlayerUpgradePanel : MonoBehaviour, IUIPanel
 
     [SerializeField] RectTransform _playerViewUpgradePosition;
 
-    CharacterController _player;
+    PlayerController _player;
     PlayerModuleConfigs _configs;
-    PickUpItemManager _rewardManager;
+    RewardKeeper _rewardKeeper;
 
     public UpgradePanelVisualController VisualController => _visualController;
-    public CharacterController Player => _player;
+    public PlayerController Player => _player;
     public Vector2 PlayerViewUpgradePosition => _playerViewUpgradePosition.position;
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(PickUpItemManager rewardManager, PlayerModuleConfigs configs, AudioSourcePool audioSourcePool, CharacterController player)
+    private void Construct(RewardKeeper rewardKeeper, PlayerModuleConfigs configs, AudioSourcePool audioSourcePool, PlayerController player)
     {
         _unsuccessfulSoundPlayer.Initialize(audioSourcePool);
         _successfulSoundPlayer.Initialize(audioSourcePool);
 
-        _rewardManager = rewardManager;
+        _rewardKeeper = rewardKeeper;
         _configs = configs;
         _player = player;
     }
@@ -117,14 +117,14 @@ public class PlayerUpgradePanel : MonoBehaviour, IUIPanel
 
     private void UpdateCurrentPoints()
     {
-        var points = _rewardManager.GetPoints();
+        var points = _rewardKeeper.GetPoints();
 
         _currentPointsText.text = points.ToString();
     }
 
     public bool UpgradeLevelCheck(int pointsNeeded, int currentLevel, int maxLevel)
     {
-        if (_rewardManager.GetPoints() >= pointsNeeded && currentLevel < maxLevel)
+        if (_rewardKeeper.GetPoints() >= pointsNeeded && currentLevel < maxLevel)
         {
             HandleSuccessfulUpgrade(pointsNeeded);
             return true;
@@ -154,7 +154,7 @@ public class PlayerUpgradePanel : MonoBehaviour, IUIPanel
     {
         _successfulSoundPlayer.PlayNextSound();
 
-        _rewardManager.DecreasePoints(pointsNeeded);
+        _rewardKeeper.DecreasePoints(pointsNeeded);
 
         UpdateCurrentPoints();
     }

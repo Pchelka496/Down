@@ -1,12 +1,11 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class RepairKitController
+public class RepairItemSpawner
 {
-    const float REPAIR_KIT_X_SPAWN_POSITION = LevelManager.PLAYER_START_X_POSITION;
-    const float REPAIR_KIT_Y_SPAWN_POSITION = LevelManager.PLAYER_START_Y_POSITION + 1000f;
+    const float REPAIR_ITEM_X_SPAWN_POSITION = LevelManager.PLAYER_START_X_POSITION;
+    const float REPAIR_ITEM_Y_SPAWN_POSITION = LevelManager.PLAYER_START_Y_POSITION + 1000f;
 
     const float X_MIN_BOUND = -50f;
     const float X_MAX_BOUND = 50f;
@@ -14,36 +13,36 @@ public class RepairKitController
     const float Y_MAX_BOUND = -200f;
     const float MIN_PLAYER_DISTANCE = 220f;
 
-    float _lowestRepairKitHeight = REPAIR_KIT_Y_SPAWN_POSITION;
+    float _lowestRepairItemHeight = REPAIR_ITEM_Y_SPAWN_POSITION;
     RepairKitControllerConfig _config;
-    RepairKit[] _repairKit;
+    RepairItem[] _repairItem;
 
     public async void Initialize(RepairKitControllerConfig config, Transform repairKitParentTransform)
     {
         _config = config;
         var repairKitCount = _config.MaxRepairKitCount;
 
-        await CreateRewards(repairKitCount, repairKitParentTransform);
+        await CreateNewRepairItem(repairKitCount, repairKitParentTransform);
 
-        StartRepairKitCheckLoop().Forget();
+        StartRepairItemCheckLoop().Forget();
     }
 
-    private async UniTask CreateRewards(int count, Transform repairKitParentTransform)
+    private async UniTask CreateNewRepairItem(int count, Transform repairKitParentTransform)
     {
         var rewardPrefab = await LoadPrefabs(_config.RewardPrefabAddress);
 
         if (rewardPrefab != null)
         {
             var diContainer = GameplaySceneInstaller.DiContainer;
-            _repairKit = new RepairKit[count];
+            _repairItem = new RepairItem[count];
 
             for (int i = 0; i < count; i++)
             {
-                var repairKit = diContainer.InstantiatePrefabForComponent<RepairKit>(rewardPrefab, new(REPAIR_KIT_X_SPAWN_POSITION, REPAIR_KIT_Y_SPAWN_POSITION), Quaternion.identity, repairKitParentTransform);
+                var repairKit = diContainer.InstantiatePrefabForComponent<RepairItem>(rewardPrefab, new(REPAIR_ITEM_X_SPAWN_POSITION, REPAIR_ITEM_Y_SPAWN_POSITION), Quaternion.identity, repairKitParentTransform);
 
                 repairKit.gameObject.SetActive(false);
 
-                _repairKit[i] = repairKit;
+                _repairItem[i] = repairKit;
             }
         }
         else
@@ -61,32 +60,33 @@ public class RepairKitController
         return loadOperationData.LoadAsset;
     }
 
-    private async UniTaskVoid StartRepairKitCheckLoop()
+    private async UniTaskVoid StartRepairItemCheckLoop()
     {
         while (true)
         {
-            RelocateRepairKit();
+            RelocateRepairItem();
 
-            await UniTask.WaitUntil(() => Mathf.Abs(CharacterPositionMeter.YPosition - _lowestRepairKitHeight) > MIN_PLAYER_DISTANCE);
+            await UniTask.WaitUntil(() => Mathf.Abs(CharacterPositionMeter.YPosition - _lowestRepairItemHeight) > MIN_PLAYER_DISTANCE);
         }
     }
 
-    private void RelocateRepairKit()
+    private void RelocateRepairItem()
     {
         var playerXPosition = CharacterPositionMeter.XPosition;
         var playerYPosition = CharacterPositionMeter.YPosition;
-        _lowestRepairKitHeight = float.MaxValue;
 
-        for (int i = 0; i < _repairKit.Length; i++)
+        _lowestRepairItemHeight = float.MaxValue;
+
+        for (int i = 0; i < _repairItem.Length; i++)
         {
-            var xPosition = playerXPosition + Mathf.Lerp(X_MIN_BOUND, X_MAX_BOUND, (float)i / (_repairKit.Length - 1));
+            var xPosition = playerXPosition + Mathf.Lerp(X_MIN_BOUND, X_MAX_BOUND, (float)i / (_repairItem.Length - 1));
             var yPosition = playerYPosition + Random.Range(Y_MIN_BOUND, Y_MAX_BOUND);
 
-            _repairKit[i].Relocate(new Vector2(xPosition, yPosition));
+            _repairItem[i].Relocate(new Vector2(xPosition, yPosition));
 
-            if (yPosition < _lowestRepairKitHeight)
+            if (yPosition < _lowestRepairItemHeight)
             {
-                _lowestRepairKitHeight = yPosition;
+                _lowestRepairItemHeight = yPosition;
             }
         }
     }

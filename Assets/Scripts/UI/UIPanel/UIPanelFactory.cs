@@ -14,8 +14,9 @@ public class UIPanelFactory
 
     public async UniTask<IUIPanel> CreatePanelAsync(AssetReference assetReference, Transform parent)
     {
-        var prefab = await assetReference.LoadAssetAsync<GameObject>();
-        var panel = _diContainer.InstantiatePrefabForComponent<IUIPanel>(prefab, parent);
+        var loadAssetData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(assetReference);
+        var panel = _diContainer.InstantiatePrefabForComponent<IUIPanel>(loadAssetData.LoadAsset, parent);
+
         return panel;
     }
 

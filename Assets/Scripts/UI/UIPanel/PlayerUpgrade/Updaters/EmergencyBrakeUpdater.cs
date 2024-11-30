@@ -165,7 +165,11 @@ public class EmergencyBrakeUpdater : MonoBehaviour
 
         upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _moduleConfig.SetLevel(characteristics, nextLevel);
-        _playerUpgradePanel.Player.GetModule<EmergencyBrakeModule>().UpdateCharacteristics(_moduleConfig);
+
+        if (_playerUpgradePanel.Player.GetModule<EmergencyBrakeModule>(out var module))
+        {
+            module.UpdateCharacteristics(_moduleConfig);
+        }
     }
 
     //_________________________________ Downgrade Button _________________________________
@@ -202,7 +206,11 @@ public class EmergencyBrakeUpdater : MonoBehaviour
 
         upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _moduleConfig.SetLevel(characteristics, nextLevel);
-        _playerUpgradePanel.Player.GetModule<EmergencyBrakeModule>().UpdateCharacteristics(_moduleConfig);
+
+        if (_playerUpgradePanel.Player.GetModule<EmergencyBrakeModule>(out var module))
+        {
+            module.UpdateCharacteristics(_moduleConfig);
+        }
     }
 
     //_________________________________ Detailed Information Button _________________________________
