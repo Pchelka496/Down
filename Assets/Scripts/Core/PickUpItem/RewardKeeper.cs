@@ -1,3 +1,5 @@
+using System;
+
 public class RewardKeeper
 {
     readonly RewardKeeperConfig _config;
@@ -23,8 +25,14 @@ public class RewardKeeper
         }
     }
 
-    public void IncreasePoints(int increaseValue) => _config.IncreasePoints(increaseValue);
+    public void IncreasePoints(int increaseValue)
+    {
+        _config.IncreasePoints(increaseValue);
+    }
 
-    public void DecreasePoints(int decreaseValue) => _config.DecreasePoints(decreaseValue);
+    public void DecreasePoints(int decreaseValue)
+    {
+        _config.DecreasePoints(decreaseValue);
+    }
 
 }

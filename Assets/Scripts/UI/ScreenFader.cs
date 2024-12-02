@@ -10,7 +10,7 @@ public class ScreenFader : MonoBehaviour
     [SerializeField] CanvasGroup _canvasGroup;
     [SerializeField] float _fadeDuration = 1f;
     [SerializeField] AnimationCurve _fadeCurve;
-    [SerializeField] Vector2 _startSize = new Vector2(0, 0);
+    [SerializeField] Vector2 _startSize = new(0, 0);
     Vector2 _endSize = GetCircleBoundingSquareSize();
 
     RectTransform _imageRectTransform;

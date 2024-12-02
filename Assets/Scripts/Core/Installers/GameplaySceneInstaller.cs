@@ -8,7 +8,7 @@ public class GameplaySceneInstaller : MonoInstaller
     [SerializeField] AirTrailController _airTrailController;
     [SerializeField] Camera _mainCamera;
     [SerializeField] LobbyUIPanelFacade _upgradePanelController;
-    [SerializeField] EnumLanguage _enumLanguage;
+    [SerializeField] EnumLanguage _language;
     [SerializeField] PlayerModuleConfigs _playerModulesConfig;
     [SerializeField] RewardKeeperConfig _rewardKeeperConfig;
     [Header("UI")]
@@ -31,6 +31,7 @@ public class GameplaySceneInstaller : MonoInstaller
     EffectController _effectController;
     CharacterPositionMeter _characterPositionMeter;
     RewardKeeper _rewardKeeper;
+    SaveSystemController _saveSystemController;
 
     public static DiContainer DiContainer { get; private set; }
 
@@ -53,7 +54,7 @@ public class GameplaySceneInstaller : MonoInstaller
         Container.Bind<EffectController>().FromInstance(_effectController).AsSingle().NonLazy();
         Container.Bind<AirTrailController>().FromInstance(_airTrailController).AsSingle().NonLazy();
         Container.Bind<Camera>().FromInstance(_mainCamera).AsSingle().NonLazy();
-        Container.Bind<EnumLanguage>().FromInstance(_enumLanguage).AsSingle().NonLazy();
+        Container.Bind<EnumLanguage>().FromInstance(_language).AsSingle().NonLazy();
         Container.Bind<ScreenFader>().FromInstance(_screenFader).AsSingle().NonLazy();
         Container.Bind<RepairKitIndicator>().FromInstance(_repairKitIndicator).AsSingle().NonLazy();
         Container.Bind<HealthIndicator>().FromInstance(_healthIndicator).AsSingle().NonLazy();
@@ -127,6 +128,7 @@ public class GameplaySceneInstaller : MonoInstaller
         _customizer = new();
         _characterPositionMeter = new();
         _rewardKeeper = new(_rewardKeeperConfig);
+        _saveSystemController = new(_rewardKeeperConfig, _customizerConfig);
     }
 
     private GameObject AttachToGameObject(GameObject parent, string name)
@@ -157,6 +159,7 @@ public class GameplaySceneInstaller : MonoInstaller
         _backgroundController.Dispose();
         _enemyManager.Dispose();
         _customizer.Dispose();
+        _saveSystemController.Dispose();
     }
 
     [System.Serializable]

@@ -10,12 +10,29 @@ public record PlayerSkinData
     [SerializeField] bool _isUnlocked;
     [SerializeField] EnumUnlockMethod _unlockMethod;
     [SerializeField] int _cost;
+    [SerializeField] string _skinId;
+    Action<string, bool> SkinOpenStatusChanged;
 
     public AssetReference SkinObjectPrefab { get => _skinObjectPrefab; }
     public AssetReference UISkinIcon { get => _skinSprite; }
-    public bool IsUnlocked { get => _isUnlocked; }
+    public bool IsUnlocked
+    {
+        get
+        {
+            return _isUnlocked;
+        }
+        set
+        {
+            if (_isUnlocked == value) return;
+
+            _isUnlocked = value;
+
+            SkinOpenStatusChanged?.Invoke(_skinId, _isUnlocked);
+        }
+    }
     public EnumUnlockMethod UnlockMethod { get => _unlockMethod; }
     public int Cost { get => _cost; }
+    public string SkinId { get => _skinId; }
 
     public Func<bool> UnlockMethods()
     {
@@ -25,7 +42,7 @@ public record PlayerSkinData
                 {
                     return () =>
                     {
-                        _isUnlocked = true;
+                        IsUnlocked = true;
                         return true;
                     };
                 }
@@ -36,7 +53,7 @@ public record PlayerSkinData
                         var rewardKeeper = GameplaySceneInstaller.DiContainer.Resolve<RewardKeeper>();
 
                         var unlockStatus = rewardKeeper.TryDecreasePoints(_cost);
-                        _isUnlocked = unlockStatus;
+                        IsUnlocked = unlockStatus;
 
                         return unlockStatus;
                     };
@@ -47,6 +64,8 @@ public record PlayerSkinData
                 }
         }
     }
+
+    public void SetSkinOpenStatusChangedAction(Action<string, bool> action) => SkinOpenStatusChanged = action;
 
     public enum EnumUnlockMethod
     {
