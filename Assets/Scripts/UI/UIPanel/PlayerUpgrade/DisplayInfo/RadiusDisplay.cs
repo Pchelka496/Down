@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
+using Additional;
 
 public class RadiusDisplay : MonoBehaviour, IDisplayInfo
 {

@@ -1,5 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System.Runtime.CompilerServices;
+using Core.Installers;
+using ScriptableObject.PickUpItem;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -13,7 +15,7 @@ public class RewardSpawner
     const float CHECK_BOUNDARY_Y = 140f;
     const float CHECK_INTERVAL = 1f;
 
-    static readonly Vector3 _rewardSpawnPosition = new(float.MaxValue / 5, float.MaxValue / 5, 0f);
+    static readonly Vector3 rewardSpawnPosition = new(float.MaxValue / 5, float.MaxValue / 5, 0f);
 
     int _currentPresetIndex = 0;
 
@@ -43,7 +45,7 @@ public class RewardSpawner
 
             for (int i = 0; i < count; i++)
             {
-                var reward = diContainer.InstantiatePrefabForComponent<PickUpReward>(rewardPrefab, _rewardSpawnPosition, Quaternion.identity, rewardParentTransform);
+                var reward = diContainer.InstantiatePrefabForComponent<PickUpReward>(rewardPrefab, rewardSpawnPosition, Quaternion.identity, rewardParentTransform);
 
                 reward.gameObject.SetActive(false);
 

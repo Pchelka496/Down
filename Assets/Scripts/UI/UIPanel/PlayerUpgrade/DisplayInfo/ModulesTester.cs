@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Core.Installers;
+using Creatures.Player;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -41,7 +43,7 @@ public class ModulesTester : MonoBehaviour
     AddressableLouderHelper.LoadOperationData<GameObject> _loadMeteoriteOperationData;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
     private void Construct(PlayerController player, RepairKitIndicator repairKitIndicator, HealthIndicator healthIndicator)
     {
         _player = player;

@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CharacterHeightIndicator : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class CharacterHeightIndicator : MonoBehaviour
     [SerializeField] float[] _drumTargetYPosition = new float[11];
     [SerializeField] RectTransform[] _drumTransform;
     [SerializeField] float _spareDrumNonVisiblePosition;
-    [SerializeField] int value;
+    [FormerlySerializedAs("value")] [SerializeField] int _value;
 
     int _drumCount;
     NativeArray<float> _targetYPositions;

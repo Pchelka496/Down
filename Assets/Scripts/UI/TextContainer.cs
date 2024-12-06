@@ -9,10 +9,36 @@ public class TextContainer
 
     public string GetText(EnumLanguage language)
     {
+#if UNITY_EDITOR
+
+        CheckForDuplicateLanguages();
+#endif
         var textForLanguage = _texts.FirstOrDefault(t => t.Language == language);
 
         return textForLanguage?.Text ?? _defaultText;
     }
+
+#if UNITY_EDITOR
+    private void CheckForDuplicateLanguages()
+    {
+        var duplicates = _texts
+            .GroupBy(t => t.Language)
+            .Where(g => g.Count() > 1)
+            .Select(g => g.Key)
+            .ToArray();
+
+        if (duplicates.Length > 0)
+        {
+            Debug.LogWarning("Duplicate EnumLanguage values found in TextContainer! Languages: "
+                + string.Join(", ", duplicates.Select(lang => lang.ToString()))
+                + ". Please ensure each language appears only once in the list.");
+        }
+        else
+        {
+            Debug.Log("No duplicate EnumLanguage values found.");
+        }
+    }
+#endif
 
     [System.Serializable]
     private record TextForLanguage
@@ -20,8 +46,7 @@ public class TextContainer
         [SerializeField] EnumLanguage _language;
         [SerializeField] string _text;
 
-        public EnumLanguage Language { get => _language; }
-        public string Text { get => _text; }
+        public EnumLanguage Language => _language;
+        public string Text => _text;
     }
-
 }

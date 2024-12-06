@@ -1,10 +1,12 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BackgroundControllerConfig", menuName = "Scriptable Objects/BackgroundControllerConfig")]
-public class BackgroundControllerConfig : ScriptableObject
+namespace ScriptableObject
 {
-    [SerializeField] Gradient _backgroundGradient;
+    [CreateAssetMenu(fileName = "BackgroundControllerConfig", menuName = "Scriptable Objects/BackgroundControllerConfig")]
+    public class BackgroundControllerConfig : UnityEngine.ScriptableObject
+    {
+        [SerializeField] Gradient _backgroundGradient;
 
-    public Gradient BackgroundGradient { get => _backgroundGradient; }
-
+        public Gradient BackgroundGradient => _backgroundGradient;
+    }
 }

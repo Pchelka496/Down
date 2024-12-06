@@ -1,3 +1,4 @@
+using ScriptableObject.PickUpItem;
 using UnityEngine;
 using Zenject;
 
@@ -15,7 +16,7 @@ public class PickUpItemManager
     }
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
     private void Construct(RewardCounter rewardCounter, DiContainer diContainer)
     {
         PickUpReward.Initialize(rewardCounter);

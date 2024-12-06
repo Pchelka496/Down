@@ -1,3 +1,4 @@
+using Core;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -7,14 +8,16 @@ public class LobbyUIPanelFacade : MonoBehaviour
 {
     const string UPGRADE_PANEL_ID = "UpgradePanel";
     const string CUSTOMIZATION_PANEL_ID = "CustomizationPanel";
+    const string WARP_ENGINE_CONTROLLER_ID = "WarpEngineController";
 
     [SerializeField] AssetReference _upgradePanelPrefabReference;
     [SerializeField] AssetReference _customizationPanelPrefabReference;
+    [SerializeField] AssetReference _warpEngineController;
 
     UIPanelManager _panelManager;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
     private void Construct(DiContainer diContainer, LevelManager levelManager)
     {
         var factory = new UIPanelFactory(diContainer);
@@ -36,6 +39,7 @@ public class LobbyUIPanelFacade : MonoBehaviour
 
     public void OpenUpgradePanel() => _panelManager.OpenPanelAsync(UPGRADE_PANEL_ID, _upgradePanelPrefabReference).Forget();
     public void OpenCustomizationPanel() => _panelManager.OpenPanelAsync(CUSTOMIZATION_PANEL_ID, _customizationPanelPrefabReference).Forget();
+    public void OpenWarpEngineController()=> _panelManager.OpenPanelAsync(WARP_ENGINE_CONTROLLER_ID, _warpEngineController).Forget();
 
     private void ClearPanels()
     {

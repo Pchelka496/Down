@@ -1,3 +1,4 @@
+using Creatures.Player;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;

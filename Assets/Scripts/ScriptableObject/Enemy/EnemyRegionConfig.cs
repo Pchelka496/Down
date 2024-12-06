@@ -1,27 +1,28 @@
 using UnityEngine;
-using static EnemyConfig;
 
-[CreateAssetMenu(fileName = "EnemyRegionConfig", menuName = "Scriptable Objects/EnemyRegionConfig")]
-public class EnemyRegionConfig : ScriptableObject
+namespace ScriptableObject.Enemy
 {
-    [SerializeField] EnemyConfig[] _enemies;
-    [SerializeField] float _startHeight;
-
-    public Enemy[] Enemies
+    [CreateAssetMenu(fileName = "EnemyRegionConfig", menuName = "Scriptable Objects/EnemyRegionConfig")]
+    public class EnemyRegionConfig : UnityEngine.ScriptableObject
     {
-        get
+        [SerializeField] EnemyConfig[] _enemies;
+        [SerializeField] float _startHeight;
+
+        public EnemyConfig.Enemy[] Enemies
         {
-            Enemy[] enemiesArray = new Enemy[_enemies.Length];
-
-            for (int i = 0; i < _enemies.Length; i++)
+            get
             {
-                enemiesArray[i] = _enemies[i].GetEnemy;
+                EnemyConfig.Enemy[] enemiesArray = new EnemyConfig.Enemy[_enemies.Length];
+
+                for (int i = 0; i < _enemies.Length; i++)
+                {
+                    enemiesArray[i] = _enemies[i].GetEnemy;
+                }
+
+                return enemiesArray;
             }
-
-            return enemiesArray;
         }
+
+        public float StartHeight => _startHeight;
     }
-
-    public float StartHeight { get => _startHeight; }
-
 }

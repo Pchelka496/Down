@@ -7,7 +7,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class EffectController
 {
     const int INITIAL_POOL_SIZE = 3;
-    readonly static string _impactEffectPrefabAddress = "Prefab/Effects/ImpactEffect";
+    readonly static string impactEffectPrefabAddress = "Prefab/Effects/ImpactEffect";
     readonly Queue<ParticleSystem> _impactEffectPool = new();
     readonly Transform _transform;
 
@@ -21,7 +21,7 @@ public class EffectController
 
     private async void Start()
     {
-        _impactEffectPrefab = await LoadEffectPrefab(_impactEffectPrefabAddress);
+        _impactEffectPrefab = await LoadEffectPrefab(impactEffectPrefabAddress);
         _impactEffectPool.Enqueue(_impactEffectPrefab);
 
         for (int i = 0; i < INITIAL_POOL_SIZE; i++)

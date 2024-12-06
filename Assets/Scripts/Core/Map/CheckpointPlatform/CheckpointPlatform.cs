@@ -1,3 +1,5 @@
+using Core;
+using Creatures.Player;
 using UnityEngine;
 using Zenject;
 
@@ -13,7 +15,7 @@ public class CheckpointPlatform : MonoBehaviour
     LobbyUIPanelFacade _upgradePanelController;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
     private void Construct(LevelManager levelManager, PlayerController player, Camera camera, LobbyUIPanelFacade upgradePanelController)
     {
         _levelManager = levelManager;

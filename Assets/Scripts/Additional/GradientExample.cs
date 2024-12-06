@@ -44,8 +44,8 @@ public static class GradientExample
 
     public static void ApplyTextureToImage(Image image, Texture2D texture)
     {
-        Rect spriteRect = new Rect(0, 0, texture.width, texture.height);
-        Vector2 pivot = new Vector2(0.5f, 0.5f);
+        var spriteRect = new Rect(0, 0, texture.width, texture.height);
+        var pivot = new Vector2(0.5f, 0.5f);
 
         var sprite = Sprite.Create(texture, spriteRect, pivot);
         image.sprite = sprite;

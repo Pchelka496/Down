@@ -1,4 +1,7 @@
+using Core;
+using Core.Installers;
 using Cysharp.Threading.Tasks;
+using ScriptableObject.PickUpItem;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 

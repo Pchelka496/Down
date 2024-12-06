@@ -1,3 +1,6 @@
+using Creatures.Player;
+using ScriptableObject;
+using UI.UIPanel.Customization.Skins;
 using UnityEngine;
 
 public class CustomizationPanel : MonoBehaviour, IUIPanel
@@ -11,7 +14,7 @@ public class CustomizationPanel : MonoBehaviour, IUIPanel
     EnumCustomizationPanelState _currentState;
 
     [Zenject.Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
     private void Construct(CustomizerConfig config, PlayerController player)
     {
         _controllerCustomizer.Initialize(config);

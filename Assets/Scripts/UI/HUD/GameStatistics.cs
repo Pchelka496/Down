@@ -16,7 +16,7 @@ public class GameStatistics : MonoBehaviour
     int _fpsBufferIndex;
 
     public int AverageFPS { get; private set; }
-    public int HighestPFS { get; private set; }
+    public int HighestPfs { get; private set; }
     public int LowersFPS { get; private set; }
 
     private void Update()
@@ -72,7 +72,7 @@ public class GameStatistics : MonoBehaviour
             }
         }
 
-        HighestPFS = highest;
+        HighestPfs = highest;
         LowersFPS = lowest;
         AverageFPS = sum / _frameRange;
     }

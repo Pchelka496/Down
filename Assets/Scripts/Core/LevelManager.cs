@@ -1,150 +1,156 @@
-using Cysharp.Threading.Tasks;
 using System;
+using Core.Enemy;
+using Creatures.Player;
+using Cysharp.Threading.Tasks;
+using ScriptableObject;
+using UI;
 using UnityEngine;
 using Zenject;
 
-public class LevelManager
+namespace Core
 {
-    public const float PLAYER_START_Y_POSITION = 99989.1f;
-    public const float PLAYER_START_X_POSITION = 0;
-
-    public const string CONFIG_ADDRESS = "ScriptableObject/LevelManager/LevelManagerConfig";
-    int _targetFrameRate = 90;
-    LevelManagerConfig _config;
-
-    EnemyManager _enemyManager;
-    PlayerController _player;
-    MapController _mapController;
-    BackgroundController _backgroundController;
-    PickUpItemManager _rewardManager;
-    ScreenFader _screenFader;
-
-    event Action<LevelManager> RoundStartAction;
-    event Action<LevelManager, EnumRoundResults> RoundEndAction;
-
-    bool _isRoundActive = false;
-
-    public bool IsRoundActive => _isRoundActive;
-
-    [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(MapController mapController,
-                           EnemyManager enemyManager,
-                           BackgroundController backgroundController,
-                           PlayerController player,
-                           PickUpItemManager rewardManager,
-                           ScreenFader screenFader
-                           )
+    public class LevelManager
     {
-        _mapController = mapController;
-        _enemyManager = enemyManager;
-        _backgroundController = backgroundController;
-        _rewardManager = rewardManager;
-        _screenFader = screenFader;
-        _player = player;
+        public const float PLAYER_START_Y_POSITION = 99989.1f;
+        public const float PLAYER_START_X_POSITION = 0;
 
-        LoadConfig().Forget();
-    }
+        public const string CONFIG_ADDRESS = "ScriptableObject/LevelManager/LevelManagerConfig";
+        int _targetFrameRate = 90;
+        LevelManagerConfig _config;
 
-    private async UniTask LoadConfig()
-    {
-        var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<LevelManagerConfig>(CONFIG_ADDRESS);
+        EnemyManager _enemyManager;
+        PlayerController _player;
+        MapController _mapController;
+        BackgroundController _backgroundController;
+        PickUpItemManager _rewardManager;
+        ScreenFader _screenFader;
 
-        _config = loadOperationData.Handle.Result;
+        event Action<LevelManager> RoundStartAction;
+        event Action<LevelManager, EnumRoundResults> RoundEndAction;
 
-        if (_config == null)
+        bool _isRoundActive;
+
+        public bool IsRoundActive => _isRoundActive;
+
+        [Inject]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
+            Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
+        private void Construct(MapController mapController,
+            EnemyManager enemyManager,
+            BackgroundController backgroundController,
+            PlayerController player,
+            PickUpItemManager rewardManager,
+            ScreenFader screenFader
+        )
         {
-            Debug.LogError("Failed to load OptionalPlayerModuleLoaderConfig.");
-            return;
+            _mapController = mapController;
+            _enemyManager = enemyManager;
+            _backgroundController = backgroundController;
+            _rewardManager = rewardManager;
+            _screenFader = screenFader;
+            _player = player;
+
+            LoadConfig().Forget();
         }
 
-        InitializeAnyComponents();
-        FirstSettings();
-    }
-
-    private void FirstSettings()
-    {
-        ResetPlayerPosition();
-        _screenFader.FadeToClear().Forget();
-        _targetFrameRate = _config.TargetFrameRate;
-
-        Application.targetFrameRate = _targetFrameRate;
-    }
-
-    private void InitializeAnyComponents()
-    {
-        _mapController.Initialize(_config.MapControllerConfig);
-        _backgroundController.Initialize(_config.BackgroundControllerConfig);
-        _enemyManager.Initialize(_config.EnemyManagerConfig);
-        _rewardManager.Initialize(_config.RewardManagerConfig);
-    }
-
-    private void ResetPlayerPosition()
-    {
-        _player.transform.position = new Vector2(PLAYER_START_X_POSITION, PLAYER_START_Y_POSITION);
-        _player.Rb.velocity = Vector2.zero;
-    }
-
-    public async UniTaskVoid RoundStart()
-    {
-        await UniTask.WaitForSeconds(1f);
-        _isRoundActive = true;
-
-        if (RoundStartAction != null)
+        private async UniTask LoadConfig()
         {
-            foreach (var handler in RoundStartAction.GetInvocationList())
+            var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<LevelManagerConfig>(CONFIG_ADDRESS);
+
+            _config = loadOperationData.Handle.Result;
+
+            if (_config == null)
             {
-                try
+                Debug.LogError("Failed to load OptionalPlayerModuleLoaderConfig.");
+                return;
+            }
+
+            InitializeAnyComponents();
+            FirstSettings();
+        }
+
+        private void FirstSettings()
+        {
+            ResetPlayerPosition();
+            _screenFader.FadeToClear().Forget();
+            _targetFrameRate = _config.TargetFrameRate;
+
+            Application.targetFrameRate = _targetFrameRate;
+        }
+
+        private void InitializeAnyComponents()
+        {
+            _mapController.Initialize(_config.MapControllerConfig);
+            _backgroundController.Initialize(_config.BackgroundControllerConfig);
+            _enemyManager.Initialize(_config.EnemyManagerConfig).Forget();
+            _rewardManager.Initialize(_config.RewardManagerConfig);
+        }
+
+        private void ResetPlayerPosition()
+        {
+            _player.transform.position = new Vector2(PLAYER_START_X_POSITION, PLAYER_START_Y_POSITION);
+            _player.Rb.velocity = Vector2.zero;
+        }
+
+        public async UniTaskVoid RoundStart()
+        {
+            await UniTask.WaitForSeconds(1f);
+            _isRoundActive = true;
+
+            if (RoundStartAction != null)
+            {
+                foreach (var handler in RoundStartAction.GetInvocationList())
                 {
-                    ((Action<LevelManager>)handler)?.Invoke(this);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError($"Error in RoundStartAction handler: {ex.Message}\n{ex.StackTrace}");
+                    try
+                    {
+                        ((Action<LevelManager>)handler)?.Invoke(this);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"Error in RoundStartAction handler: {ex.Message}\n{ex.StackTrace}");
+                    }
                 }
             }
+
+            RoundStartAction = null;
         }
 
-        RoundStartAction = null;
-    }
-
-    public async UniTaskVoid RoundEnd()
-    {
-        await UniTask.WaitForEndOfFrame();
-
-        await _screenFader.FadeToBlack();
-
-        _isRoundActive = false;
-
-        if (RoundEndAction != null)
+        public async UniTaskVoid RoundEnd()
         {
-            foreach (var handler in RoundEndAction.GetInvocationList())
+            await UniTask.WaitForEndOfFrame();
+
+            await _screenFader.FadeToBlack();
+            _isRoundActive = false;
+
+            if (RoundEndAction != null)
             {
-                try
+                foreach (var handler in RoundEndAction.GetInvocationList())
                 {
-                    ((Action<LevelManager, EnumRoundResults>)handler)?.Invoke(this, EnumRoundResults.Positive);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError($"Error in RoundEndAction handler: {ex.Message}\n{ex.StackTrace}");
+                    try
+                    {
+                        ((Action<LevelManager, EnumRoundResults>)handler)?.Invoke(this, EnumRoundResults.Positive);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"Error in RoundEndAction handler: {ex.Message}\n{ex.StackTrace}");
+                    }
                 }
             }
+
+            RoundEndAction = null;
+
+            ResetPlayerPosition();
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            await UniTask.WaitForEndOfFrame();
+        
+            await _screenFader.FadeToClear();
         }
 
-        RoundEndAction = null;
 
-        ResetPlayerPosition();
-
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-
-        await UniTask.WaitForEndOfFrame();
-
-        await _screenFader.FadeToClear();
+        public void SubscribeToRoundStart(Action<LevelManager> action) => RoundStartAction += action;
+        public void SubscribeToRoundEnd(Action<LevelManager, EnumRoundResults> action) => RoundEndAction += action;
     }
-
-
-    public void SubscribeToRoundStart(Action<LevelManager> action) => RoundStartAction += action;
-    public void SubscribeToRoundEnd(Action<LevelManager, EnumRoundResults> action) => RoundEndAction += action;
-
 }

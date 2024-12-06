@@ -1,6 +1,9 @@
+using Core.Enemy;
+using Core.Installers;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.AddressableAssets;
 using Cysharp.Threading.Tasks;
+using ScriptableObject.Enemy;
 using Unity.Mathematics;
 using UnityEngine;
 

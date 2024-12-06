@@ -1,13 +1,14 @@
 using TMPro;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
 using System.Threading;
 using System.Runtime.CompilerServices;
+using Additional;
+using Core;
 using Zenject;
 
 public class HealthIndicator : MonoBehaviour
 {
-    const string PERCENT_SYMBOL = "%";
+    const string SUFFIX = "%";
     const float TEXT_UPDATE_DELAY = 0.05f;
 
     [SerializeField] RectTransform _defaultIconPosition;
@@ -20,7 +21,7 @@ public class HealthIndicator : MonoBehaviour
     CancellationTokenSource _cts;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
     private void Construct(LevelManager levelManager)
     {
         levelManager.SubscribeToRoundStart(RoundStart);
@@ -48,7 +49,7 @@ public class HealthIndicator : MonoBehaviour
     public void UpdateHealth(int currentHealth)
     {
         _currentHealth = Mathf.Clamp(currentHealth, 0, _maxHealth);
-        UpdateHealthTextSmooth(_currentHealth).Forget();
+        UpdateHealthTextSmooth(_currentHealth);
     }
 
     public void SetNewIndicatorPosition(Vector2 position)
@@ -61,25 +62,19 @@ public class HealthIndicator : MonoBehaviour
         _healthText.transform.position = _defaultIconPosition.position;
     }
 
-    private async UniTaskVoid UpdateHealthTextSmooth(int targetHealth)
+    private void UpdateHealthTextSmooth(int targetHealth)
     {
         ClearToken();
         _cts = new CancellationTokenSource();
 
-        var displayedPercentage = int.Parse(_healthText.text.Replace(PERCENT_SYMBOL, string.Empty));
-
         var targetPercentage = Mathf.RoundToInt((float)targetHealth / _maxHealth * 100);
 
-        while (displayedPercentage != targetPercentage)
-        {
-            displayedPercentage += displayedPercentage > targetPercentage ? -1 : 1;
-
-            _healthText.text = displayedPercentage + PERCENT_SYMBOL;
-
-            UpdateHealthTextColor(displayedPercentage);
-
-            await UniTask.WaitForSeconds(TEXT_UPDATE_DELAY, cancellationToken: _cts.Token);
-        }
+        _healthText.SmoothUpdateText(targetValue: targetPercentage,
+                                     token: _cts.Token,
+                                     textUpdateDelay: TEXT_UPDATE_DELAY,
+                                     suffix: SUFFIX,
+                                     onValueUpdate: UpdateHealthTextColor
+                                     ).Forget();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

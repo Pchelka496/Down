@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _resetThePriceAfterPurchase: 0
   _characteristics:
-  - updateType: 0
-    currentLevel: 0
-    characteristicsPerLevel:
+  - _updateType: 0
+    _currentLevel: 0
+    _characteristicsPerLevel:
     - 100
     - 110
     - 120
@@ -28,19 +28,19 @@ MonoBehaviour:
     - 180
     - 190
     - 200
-    levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b000000
-  - updateType: 1
-    currentLevel: 0
-    characteristicsPerLevel:
+    _levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b000000
+  - _updateType: 1
+    _currentLevel: 0
+    _characteristicsPerLevel:
     - 0.03
     - 0.027
     - 0.025
     - 0.023
     - 0.02
-    levelCost: 0100000002000000030000000400000005000000
-  - updateType: 2
-    currentLevel: 0
-    characteristicsPerLevel:
+    _levelCost: 0100000002000000030000000400000005000000
+  - _updateType: 2
+    _currentLevel: 0
+    _characteristicsPerLevel:
     - 6000
     - 7000
     - 8000
@@ -51,10 +51,10 @@ MonoBehaviour:
     - 13000
     - 14000
     - 15000
-    levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a000000
-  - updateType: 3
-    currentLevel: 0
-    characteristicsPerLevel:
+    _levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a000000
+  - _updateType: 3
+    _currentLevel: 0
+    _characteristicsPerLevel:
     - 2
     - 1.8
     - 1.6
@@ -65,10 +65,10 @@ MonoBehaviour:
     - 0.6
     - 0.4
     - 0.3
-    levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a000000
-  - updateType: 4
-    currentLevel: 0
-    characteristicsPerLevel:
+    _levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a000000
+  - _updateType: 4
+    _currentLevel: 0
+    _characteristicsPerLevel:
     - 0.15
     - 0.18
     - 0.216
@@ -79,18 +79,18 @@ MonoBehaviour:
     - 0.4
     - 0.44
     - 0.5
-    levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a000000
-  - updateType: 5
-    currentLevel: 0
-    characteristicsPerLevel:
+    _levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a000000
+  - _updateType: 5
+    _currentLevel: 0
+    _characteristicsPerLevel:
     - 0
     - 1
     - 2
     - 3
-    levelCost: 01000000020000000300000004000000
-  - updateType: 6
-    currentLevel: 0
-    characteristicsPerLevel:
+    _levelCost: 01000000020000000300000004000000
+  - _updateType: 6
+    _currentLevel: 0
+    _characteristicsPerLevel:
     - 10
     - 9
     - 8
@@ -98,4 +98,4 @@ MonoBehaviour:
     - 6
     - 5
     - 4
-    levelCost: 01000000020000000300000004000000050000000600000007000000
+    _levelCost: 01000000020000000300000004000000050000000600000007000000

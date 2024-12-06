@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using System.Threading;
+using Additional;
 
 public class TextDisplay : MonoBehaviour, IDisplayInfo
 {

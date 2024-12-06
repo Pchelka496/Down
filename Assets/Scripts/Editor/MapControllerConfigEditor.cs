@@ -1,5 +1,6 @@
 using UnityEditor;
 using System.Linq;
+using ScriptableObject.Map;
 using UnityEngine;
 
 [CustomEditor(typeof(MapControllerConfig))]

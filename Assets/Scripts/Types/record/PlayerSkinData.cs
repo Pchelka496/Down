@@ -1,44 +1,45 @@
 using System;
+using Core.Installers;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-[System.Serializable]
-public record PlayerSkinData
+namespace Types.record
 {
-    [SerializeField] AssetReference _skinObjectPrefab;
-    [SerializeField] AssetReference _skinSprite;
-    [SerializeField] bool _isUnlocked;
-    [SerializeField] EnumUnlockMethod _unlockMethod;
-    [SerializeField] int _cost;
-    [SerializeField] string _skinId;
-    Action<string, bool> SkinOpenStatusChanged;
-
-    public AssetReference SkinObjectPrefab { get => _skinObjectPrefab; }
-    public AssetReference UISkinIcon { get => _skinSprite; }
-    public bool IsUnlocked
+    [Serializable]
+    public record PlayerSkinData
     {
-        get
+        [SerializeField] AssetReference _skinObjectPrefab;
+        [SerializeField] AssetReference _skinSprite;
+        [SerializeField] bool _isUnlocked;
+        [SerializeField] EnumUnlockMethod _unlockMethod;
+        [SerializeField] int _cost;
+        [SerializeField] string _skinId;
+        Action<string, bool> _skinOpenStatusChanged;
+
+        public AssetReference SkinObjectPrefab => _skinObjectPrefab;
+        public AssetReference UISkinIcon => _skinSprite;
+
+        public bool IsUnlocked
         {
-            return _isUnlocked;
+            get => _isUnlocked;
+            set
+            {
+                if (_isUnlocked == value) return;
+
+                _isUnlocked = value;
+
+                _skinOpenStatusChanged?.Invoke(_skinId, _isUnlocked);
+            }
         }
-        set
+        public EnumUnlockMethod UnlockMethod => _unlockMethod;
+        public int Cost => _cost;
+        public string SkinId => _skinId;
+
+        public Func<bool> UnlockMethods()
         {
-            if (_isUnlocked == value) return;
-
-            _isUnlocked = value;
-
-            SkinOpenStatusChanged?.Invoke(_skinId, _isUnlocked);
-        }
-    }
-    public EnumUnlockMethod UnlockMethod { get => _unlockMethod; }
-    public int Cost { get => _cost; }
-    public string SkinId { get => _skinId; }
-
-    public Func<bool> UnlockMethods()
-    {
-        switch (_unlockMethod)
-        {
-            case EnumUnlockMethod.Free:
+            switch (_unlockMethod)
+            {
+                case EnumUnlockMethod.Free:
                 {
                     return () =>
                     {
@@ -46,31 +47,32 @@ public record PlayerSkinData
                         return true;
                     };
                 }
-            case EnumUnlockMethod.BuyForMoney:
+                case EnumUnlockMethod.BuyForMoney:
                 {
                     return () =>
                     {
                         var rewardKeeper = GameplaySceneInstaller.DiContainer.Resolve<RewardKeeper>();
 
-                        var unlockStatus = rewardKeeper.TryDecreasePoints(_cost);
+                        var unlockStatus = rewardKeeper.TryDecreaseMoney(_cost);
                         IsUnlocked = unlockStatus;
 
                         return unlockStatus;
                     };
                 }
-            default:
+                default:
                 {
                     return () => false;
                 }
+            }
         }
+
+        public void SetSkinOpenStatusChangedAction(Action<string, bool> action) => _skinOpenStatusChanged = action;
+
+        public enum EnumUnlockMethod
+        {
+            Free,
+            BuyForMoney
+        }
+
     }
-
-    public void SetSkinOpenStatusChangedAction(Action<string, bool> action) => SkinOpenStatusChanged = action;
-
-    public enum EnumUnlockMethod
-    {
-        Free,
-        BuyForMoney
-    }
-
 }

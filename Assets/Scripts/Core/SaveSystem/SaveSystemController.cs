@@ -1,104 +1,113 @@
-using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using Cysharp.Threading.Tasks;
+using Types.record;
 
-public class SaveSystemController
+namespace Core.SaveSystem
 {
-    readonly RewardKeeperConfig _rewardKeeperConfig;
-    readonly CustomizerConfig _customizerConfig;
-    readonly SaveSystem _saveSystem = new();
-    readonly object _lock = new();
-
-    readonly SaveData _saveData;
-    volatile bool _needToSave;
-
-    public SaveSystemController(RewardKeeperConfig rewardKeeperConfig, CustomizerConfig customizerConfig)
+    public class SaveSystemController
     {
-        _saveData = _saveSystem.Load();
+        const float SAVE_DELAY = 1.0f;
+        readonly JsonSaveSystem _saveSystem = new();
+        readonly object _lock = new();
 
-        _rewardKeeperConfig = rewardKeeperConfig;
-        _customizerConfig = customizerConfig;
+        readonly SaveData _saveData;
+        volatile bool _needToSave;
+        readonly List<Action> _unsubscribeToChangeDataEventActions = new();
 
-        _rewardKeeperConfig.LoadSaveData(_saveData);
-        _customizerConfig.LoadSaveData(_saveData);
-
-        _rewardKeeperConfig.SubscribeToOnPointChangedEvent(ChangePoints);
-        _customizerConfig.SubscribeToOnSkinOpenStatusChanged(ChangeSkinOpenStatus);
-
-        UniTask.RunOnThreadPool(BackgroundSaveTask, true).Forget();
-    }
-
-    [Zenject.Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(LevelManager levelManager)
-    {
-        levelManager.SubscribeToRoundStart(RoundStart);
-
-    }
-
-    private void RoundStart(LevelManager levelManager) => levelManager.SubscribeToRoundEnd(RoundEnd);
-
-    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
-    {
-        levelManager.SubscribeToRoundStart(RoundStart);
-
-    }
-
-    private void ChangePoints(int newPoints)
-    {
-        lock (_lock)
+        public SaveSystemController(IHaveDataForSave[] haveDataForSaveArray)
         {
-            _saveData.Points = newPoints;
-            _needToSave = true;
+            _saveData = _saveSystem.Load();
+
+            HaveDataForSaveProcessing(haveDataForSaveArray, _saveData);
+            FullSaving(haveDataForSaveArray);
+
+            UniTask.RunOnThreadPool(BackgroundSaveTask).Forget();
         }
-    }
 
-    private void ChangeSkinOpenStatus(Dictionary<string, bool> skinOpenStatus)
-    {
-        lock (_lock)
+        private void HaveDataForSaveProcessing(IHaveDataForSave[] haveDataForSaveArray, SaveData saveData)
         {
-            _saveData.SkinOpenStatus = skinOpenStatus;
-            _needToSave = true;
-        }
-    }
-
-    public void OnApplicationQuit()
-    {
-        Save();
-    }
-
-    private async UniTaskVoid BackgroundSaveTask()
-    {
-        while (true)
-        {
-            if (_needToSave)
+            foreach (var haveData in haveDataForSaveArray)
             {
-                Save();
+                haveData.LoadSaveData(saveData);
+
+                var unsubscribeAction = haveData.SubscribeWithUnsubscribe(SaveForSaveData);
+                _unsubscribeToChangeDataEventActions.Add(unsubscribeAction);
+            }
+        }
+
+        [Zenject.Inject]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
+            Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
+        private void Construct(LevelManager levelManager)
+        {
+            levelManager.SubscribeToRoundStart(RoundStart);
+        }
+
+        // ReSharper disable Unity.PerformanceAnalysis
+        private void FullSaving(IHaveDataForSave[] haveDataForSaveArray)
+        {
+            lock (_lock)
+            {
+                foreach (var haveDataForSave in haveDataForSaveArray)
+                {
+                    haveDataForSave.SaveToSaveData(_saveData);
+                }
             }
 
-            await UniTask.WaitForSeconds(1);
+            Save();
         }
-    }
 
-    private void Save()
-    {
-        lock (_lock)
+        private void RoundStart(LevelManager levelManager) => levelManager.SubscribeToRoundEnd(RoundEnd);
+
+        private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
         {
-            UnityEngine.Debug.Log("save");
-            _saveSystem.Save(_saveData);
-            _needToSave = false;
+            levelManager.SubscribeToRoundStart(RoundStart);
         }
-    }
 
-    public void Dispose()
-    {
-        Save();
-
-        lock (_lock)
+        private void SaveForSaveData(IHaveDataForSave needDataSaveObject)
         {
-            _rewardKeeperConfig.UnsubscribeToOnPointChangedEvent(ChangePoints);
-            _customizerConfig.UnsubscribeToOnSkinOpenStatusChanged(ChangeSkinOpenStatus);
+            lock (_lock)
+            {
+                needDataSaveObject.SaveToSaveData(_saveData);
+                _needToSave = true;
+            }
+        }
+
+        private async UniTaskVoid BackgroundSaveTask()
+        {
+            while (true)
+            {
+                if (_needToSave)
+                {
+                    Save();
+                }
+
+                await UniTask.WaitForSeconds(SAVE_DELAY);
+            }
+            // ReSharper disable once FunctionNeverReturns
+        }
+
+        private void Save()
+        {
+            lock (_lock)
+            {
+                _saveSystem.Save(_saveData);
+                _needToSave = false;
+            }
+        }
+
+        public void Dispose()
+        {
+            Save();
+
+            lock (_lock)
+            {
+                foreach (var action in _unsubscribeToChangeDataEventActions)
+                {
+                    action?.Invoke();
+                }
+            }
         }
     }
-
 }

@@ -1,68 +1,145 @@
+using System.Linq;
+using Types.record;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "AirBrakeConfig", menuName = "Scriptable Objects/AirBrakeConfig")]
-public class AirBrakeModuleConfig : BaseModuleConfig
+namespace ScriptableObject.ModulesConfig.SupportModules
 {
-    [SerializeField] UpdateCharacteristicsInfo<EnumCharacteristics, float>[] _characteristics;
-
-    public float AirMaxBrakeDrag => GetCharacteristicForLevel(_characteristics,
-                                                             EnumCharacteristics.AirBrakeDrag,
-                                                             GetLevel(EnumCharacteristics.AirBrakeDrag)
-                                                             );
-    public float AirBrakeReleaseRate => GetCharacteristicForLevel(_characteristics,
-                                                             EnumCharacteristics.AirBrakeReleaseRate,
-                                                             GetLevel(EnumCharacteristics.AirBrakeReleaseRate)
-                                                             );
-
-    public override bool ActivityCheck() => GetLevel(EnumCharacteristics.AirBrakeDrag) > 0;
-
-    public override System.Type GetModuleType() => typeof(AirBrakeModule);
-
-    public int GetLevel(EnumCharacteristics characteristic)
+    [CreateAssetMenu(fileName = "AirBrakeConfig", menuName = "Scriptable Objects/AirBrakeConfig")]
+    public class AirBrakeModuleConfig : BaseModuleConfig
     {
-        var level = base.GetLevel<EnumCharacteristics, float>(_characteristics, characteristic);
+        [SerializeField] UpdateCharacteristicsInfo<EnumCharacteristics, float>[] _characteristics;
+        protected UpdateCharacteristicsInfo<EnumCharacteristics, float>[] Characteristics => _characteristics;
 
-        if (level == null)
+        public float AirMaxBrakeDrag => GetCharacteristicForLevel(_characteristics,
+            EnumCharacteristics.AirBrakeDrag,
+            GetLevel(EnumCharacteristics.AirBrakeDrag)
+        );
+
+        public float AirBrakeReleaseRate => GetCharacteristicForLevel(_characteristics,
+            EnumCharacteristics.AirBrakeReleaseRate,
+            GetLevel(EnumCharacteristics.AirBrakeReleaseRate)
+        );
+
+        public override bool ActivityCheck() => GetLevel(EnumCharacteristics.AirBrakeDrag) > 0;
+
+        public override System.Type GetModuleType() => typeof(AirBrakeModule);
+
+        public override void SaveToSaveData(SaveData saveData)
         {
-            return 0;
+            var saveDataRecord = new AirBrakeModuleSaveData()
+            {
+                SavedData = _characteristics.Select(c => new DefaultModuleSaveData
+                {
+                    CurrentLevel = c.CurrentLevel,
+                    LevelCost = c.LevelCost?.Clone() as int[]
+                }).ToArray()
+            };
+
+            saveData.AirBrakeModuleSaveData = saveDataRecord;
         }
 
-        return level.Value;
-    }
-
-    public void SetLevel(EnumCharacteristics characteristic, int newLevel)
-    {
-        base.SetLevel<EnumCharacteristics, float>(_characteristics, characteristic, newLevel);
-    }
-
-    public int GetMaxLevel(EnumCharacteristics characteristic)
-    {
-        var maxLevel = base.GetMaxLevel<EnumCharacteristics, float>(_characteristics, characteristic);
-
-        if (maxLevel == null)
+        public override void LoadSaveData(SaveData saveData)
         {
-            return 0;
+            var loadedData = saveData.AirBrakeModuleSaveData;
+            if (loadedData == null)
+            {
+                Debug.LogWarning("EngineModuleSaveData is null.");
+                return;
+            }
+
+            var savedData = loadedData.SavedData;
+            if (savedData == null)
+            {
+                Debug.LogWarning("SavedData is null.");
+                return;
+            }
+
+            if (savedData.Length != _characteristics.Length)
+            {
+                Debug.LogWarning(
+                    $"Mismatched data lengths: savedData length = {savedData.Length}, _characteristics length = {_characteristics.Length}");
+            }
+
+            for (int i = 0; i < _characteristics.Length; i++)
+            {
+                if (i >= savedData.Length)
+                {
+                    Debug.LogWarning($"No saved data available for index {i}. Skipping...");
+                    continue;
+                }
+
+                var savedCharacteristic = savedData[i];
+
+                if (savedCharacteristic == null)
+                {
+                    Debug.LogWarning($"Saved characteristic at index {i} is null. Skipping...");
+                    continue;
+                }
+
+                _characteristics[i] = new UpdateCharacteristicsInfo<EnumCharacteristics, float>
+                {
+                    UpdateType = _characteristics[i].UpdateType,
+                    CurrentLevel = savedCharacteristic.CurrentLevel,
+                    LevelCost = savedCharacteristic.LevelCost
+                        ?.Clone() as int[],
+                    CharacteristicsPerLevel =
+                        _characteristics[i].CharacteristicsPerLevel
+                            ?.Clone() as float[]
+                };
+            }
         }
 
-        return maxLevel.Value;
-    }
-
-    public int GetLevelCost(EnumCharacteristics characteristic, int level)
-    {
-        var levelCost = base.GetLevelCost<EnumCharacteristics, float>(_characteristics, characteristic, level);
-
-        if (levelCost == null)
+        public int GetLevel(EnumCharacteristics characteristic)
         {
-            return 0;
+            var level = base.GetLevel(_characteristics, characteristic);
+
+            if (level == null)
+            {
+                return 0;
+            }
+
+            return level.Value;
         }
 
-        return levelCost.Value;
-    }
+        public void SetLevel(EnumCharacteristics characteristic, int newLevel)
+        {
+            base.SetLevel(_characteristics, characteristic, newLevel);
+        }
 
-    public enum EnumCharacteristics
-    {
-        AirBrakeDrag,
-        AirBrakeReleaseRate,
-    }
+        public int GetMaxLevel(EnumCharacteristics characteristic)
+        {
+            var maxLevel = base.GetMaxLevel(_characteristics, characteristic);
 
+            if (maxLevel == null)
+            {
+                return 0;
+            }
+
+            return maxLevel.Value;
+        }
+
+        public int GetLevelCost(EnumCharacteristics characteristic, int level)
+        {
+            var levelCost = base.GetLevelCost(_characteristics, characteristic, level);
+
+            if (levelCost == null)
+            {
+                return 0;
+            }
+
+            return levelCost.Value;
+        }
+
+        public enum EnumCharacteristics
+        {
+            AirBrakeDrag,
+            AirBrakeReleaseRate,
+        }
+
+        [System.Serializable]
+        public record AirBrakeModuleSaveData
+        {
+            [field: SerializeField] public DefaultModuleSaveData[] SavedData { get; set; }
+        }
+    }
 }

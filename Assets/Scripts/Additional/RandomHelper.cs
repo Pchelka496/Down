@@ -6,6 +6,5 @@ public static class RandomHelper
     {
         return random.NextFloat(min, max);
     }
-
 }
 

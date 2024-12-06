@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 922335f8ea292f04db64e99f720bad18, type: 3}
   m_Name: RewardKeeperConfig
   m_EditorClassIdentifier: 
-  _points: 1101
+  _points: 2007

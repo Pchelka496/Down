@@ -1,3 +1,4 @@
+using Creatures.Player;
 using UnityEngine;
 using UnityEditor;
 
@@ -6,13 +7,13 @@ public class BaseModuleEditor : Editor
 {
     private void OnSceneGUI()
     {
-        // Указываем цвет круга
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         Handles.color = Color.green;
 
-        // Рисуем незаполненный круг в точке (0, 0) с радиусом 1
+        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ (0, 0) пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1
         Handles.DrawWireDisc(Vector3.zero, Vector3.forward, PlayerController.PLAYER_RADIUS);
 
-        // Обновляем сцену
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         SceneView.RepaintAll();
     }
 

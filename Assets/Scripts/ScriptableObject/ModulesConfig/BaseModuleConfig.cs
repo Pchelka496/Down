@@ -1,210 +1,252 @@
 using System;
 using System.Collections.Generic;
+using Types.record;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public abstract class BaseModuleConfig : ScriptableObject
+namespace ScriptableObject.ModulesConfig
 {
-    [SerializeField] bool _resetThePriceAfterPurchase;
-
-    public abstract bool ActivityCheck();
-    public abstract System.Type GetModuleType();
-
-    protected Characteristics GetCharacteristicForLevel<EnumCharacteristics, Characteristics>(
-        UpdateCharacteristicsInfo<EnumCharacteristics, Characteristics>[] allCharacteristicsInfo,
-        EnumCharacteristics enumValue,
-        int level
-        ) where EnumCharacteristics : struct, Enum
+    public abstract class BaseModuleConfig : UnityEngine.ScriptableObject, IHaveDataForSave
     {
-        if (!LevelCheck(allCharacteristicsInfo, enumValue, level))
+        [SerializeField] bool _resetThePriceAfterPurchase;
+        Action<BaseModuleConfig> _saveAction;
+
+        public abstract bool ActivityCheck();
+        public abstract Type GetModuleType();
+
+        public abstract void SaveToSaveData(SaveData saveData);
+        public abstract void LoadSaveData(SaveData saveData);
+
+        Action IHaveDataForSave.SubscribeWithUnsubscribe(Action<IHaveDataForSave> saveAction)
         {
-            var maxLevel = GetMaxLevel(allCharacteristicsInfo, enumValue);
-
-            if (maxLevel == null)
-            {
-                maxLevel = 0;
-            }
-
-            level = Mathf.Clamp(level, 0, maxLevel.Value);
+            _saveAction = saveAction;
+            return () => { _saveAction = null; };
         }
 
-        foreach (var info in allCharacteristicsInfo)
+        protected TCharacteristics GetCharacteristicForLevel<TEnumCharacteristics, TCharacteristics>(
+            UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
+            TEnumCharacteristics enumValue,
+            int level
+        ) where TEnumCharacteristics : struct, Enum
         {
-            if (EqualityComparer<EnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
+            if (!LevelCheck(allCharacteristicsInfo, enumValue, level))
             {
-                if (level >= 0 && level < info.CharacteristicsPerLevel.Length)
-                {
-                    return info.CharacteristicsPerLevel[level];
-                }
-                else
-                {
-                    Debug.LogWarning($"Level {level} is out of bounds for characteristic {enumValue}.");
-                    return default;
-                }
+                var maxLevel = GetMaxLevel(allCharacteristicsInfo, enumValue) ?? 0;
+
+                level = Mathf.Clamp(level, 0, maxLevel);
             }
-        }
 
-        Debug.LogWarning($"Characteristic {enumValue} not found.");
-        return default;
-    }
-
-    protected int? GetLevel<EnumCharacteristics, Characteristics>(
-        UpdateCharacteristicsInfo<EnumCharacteristics, Characteristics>[] allCharacteristicsInfo,
-        EnumCharacteristics enumValue
-        ) where EnumCharacteristics : struct, Enum
-    {
-        foreach (var info in allCharacteristicsInfo)
-        {
-            if (EqualityComparer<EnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
+            foreach (var info in allCharacteristicsInfo)
             {
-                return info.CurrentLevel;
-            }
-        }
-
-        Debug.LogWarning($"Characteristic {enumValue} not found.");
-        return null;
-    }
-
-    protected void SetLevel<EnumCharacteristics, Characteristics>(
-        UpdateCharacteristicsInfo<EnumCharacteristics, Characteristics>[] allCharacteristicsInfo,
-        EnumCharacteristics enumValue,
-        int newLevel
-        ) where EnumCharacteristics : struct, Enum
-    {
-        foreach (var info in allCharacteristicsInfo)
-        {
-            if (EqualityComparer<EnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
-            {
-                if (!LevelCheck(allCharacteristicsInfo, enumValue, newLevel))
+                if (EqualityComparer<TEnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
                 {
-                    Debug.LogWarning($"{this.GetType()} level {newLevel} is out of bounds! Array length: {GetMaxLevel(allCharacteristicsInfo, enumValue) + 1}");
-
-                    var maxLevel = GetMaxLevel(allCharacteristicsInfo, enumValue);
-
-                    if (maxLevel == null)
+                    if (level >= 0 && level < info.CharacteristicsPerLevel.Length)
                     {
-                        maxLevel = 0;
+                        return info.CharacteristicsPerLevel[level];
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Level {level} is out of bounds for characteristic {enumValue}.");
+                        return default;
+                    }
+                }
+            }
+
+            Debug.LogWarning($"Characteristic {enumValue} not found.");
+            return default;
+        }
+
+        protected int? GetLevel<TEnumCharacteristics, TCharacteristics>(
+            UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
+            TEnumCharacteristics enumValue
+        ) where TEnumCharacteristics : struct, Enum
+        {
+            foreach (var info in allCharacteristicsInfo)
+            {
+                if (EqualityComparer<TEnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
+                {
+                    return info.CurrentLevel;
+                }
+            }
+
+            Debug.LogWarning($"Characteristic {enumValue} not found.");
+            return null;
+        }
+
+        protected void SetLevel<TEnumCharacteristics, TCharacteristics>(
+            UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
+            TEnumCharacteristics enumValue,
+            int newLevel
+        ) where TEnumCharacteristics : struct, Enum
+        {
+            foreach (var info in allCharacteristicsInfo)
+            {
+                if (EqualityComparer<TEnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
+                {
+                    if (!LevelCheck(allCharacteristicsInfo, enumValue, newLevel))
+                    {
+                        Debug.LogWarning(
+                            $"{GetType()} level {newLevel} is out of bounds! Array length: {GetMaxLevel(allCharacteristicsInfo, enumValue) + 1}");
+
+                        var maxLevel = GetMaxLevel(allCharacteristicsInfo, enumValue) ?? 0;
+
+                        newLevel = Mathf.Clamp(newLevel, 0, maxLevel);
                     }
 
-                    newLevel = Mathf.Clamp(newLevel, 0, maxLevel.Value);
+                    info.CurrentLevel = newLevel;
+
+                    if (_resetThePriceAfterPurchase)
+                    {
+                        SetLevelCostToZero(allCharacteristicsInfo, enumValue, newLevel);
+                    }
+
+                    _saveAction?.Invoke(this);
+                    return;
                 }
+            }
 
-                info.CurrentLevel = newLevel;
+            Debug.LogWarning($"Characteristic {enumValue} not found.");
+        }
 
-                if (_resetThePriceAfterPurchase)
+        protected int? GetMaxLevel<TEnumCharacteristics, TCharacteristics>(
+            UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
+            TEnumCharacteristics enumValue
+        ) where TEnumCharacteristics : struct, Enum
+        {
+            foreach (var info in allCharacteristicsInfo)
+            {
+                if (EqualityComparer<TEnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
                 {
-                    SetLevelCostToZero(allCharacteristicsInfo, enumValue, newLevel);
+                    return info.CharacteristicsPerLevel.Length - 1;
                 }
-                return;
-            }
-        }
-        Debug.LogWarning($"Characteristic {enumValue} not found.");
-    }
-
-    protected int? GetMaxLevel<EnumCharacteristics, Characteristics>(
-        UpdateCharacteristicsInfo<EnumCharacteristics, Characteristics>[] allCharacteristicsInfo,
-        EnumCharacteristics enumValue
-        ) where EnumCharacteristics : struct, Enum
-    {
-        foreach (var info in allCharacteristicsInfo)
-        {
-            if (EqualityComparer<EnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
-            {
-                return info.CharacteristicsPerLevel.Length - 1;
-            }
-        }
-        Debug.LogWarning($"Characteristic {enumValue} not found.");
-        return null;
-    }
-
-    protected int? GetLevelCost<EnumCharacteristics, Characteristics>(
-        UpdateCharacteristicsInfo<EnumCharacteristics, Characteristics>[] allCharacteristicsInfo,
-        EnumCharacteristics enumValue,
-        int level
-        ) where EnumCharacteristics : struct, Enum
-    {
-        if (!LevelCheck(allCharacteristicsInfo, enumValue, level))
-        {
-            var maxLevel = GetMaxLevel(allCharacteristicsInfo, enumValue);
-
-            if (maxLevel == null)
-            {
-                maxLevel = 0;
             }
 
-            level = Mathf.Clamp(level, 0, maxLevel.Value);
+            Debug.LogWarning($"Characteristic {enumValue} not found.");
+            return null;
         }
 
-        foreach (var info in allCharacteristicsInfo)
+        protected int? GetLevelCost<TEnumCharacteristics, TCharacteristics>(
+            UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
+            TEnumCharacteristics enumValue,
+            int level
+        ) where TEnumCharacteristics : struct, Enum
         {
-            if (EqualityComparer<EnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
+            if (!LevelCheck(allCharacteristicsInfo, enumValue, level))
             {
-                return info.LevelCost[level];
+                var maxLevel = GetMaxLevel(allCharacteristicsInfo, enumValue) ?? 0;
+
+                level = Mathf.Clamp(level, 0, maxLevel);
             }
-        }
 
-        Debug.LogWarning($"Characteristic {enumValue} not found.");
-        return null;
-    }
-
-    protected void SetLevelCostToZero<EnumCharacteristics, Characteristics>(
-        UpdateCharacteristicsInfo<EnumCharacteristics, Characteristics>[] allCharacteristicsInfo,
-        EnumCharacteristics enumValue,
-        int level
-        ) where EnumCharacteristics : struct, Enum
-    {
-        foreach (var info in allCharacteristicsInfo)
-        {
-            if (EqualityComparer<EnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
+            foreach (var info in allCharacteristicsInfo)
             {
-                if (LevelCheck(allCharacteristicsInfo, enumValue, level))
+                if (EqualityComparer<TEnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
                 {
-                    info.LevelCost[level] = 0;
+                    return info.LevelCost[level];
                 }
-                else
-                {
-                    Debug.LogWarning($"Level {level} is out of bounds for characteristic {enumValue}.");
-                }
-                return;
             }
-        }
-        Debug.LogWarning($"Characteristic {enumValue} not found.");
-    }
 
-    protected bool LevelCheck<EnumCharacteristics, Characteristics>(
-        UpdateCharacteristicsInfo<EnumCharacteristics, Characteristics>[] allCharacteristicsInfo,
-        EnumCharacteristics enumValue,
-        int level
-        ) where EnumCharacteristics : struct, Enum
-    {
-        if (level < 0)
+            Debug.LogWarning($"Characteristic {enumValue} not found.");
+            return null;
+        }
+
+        protected void SetLevelCostToZero<TEnumCharacteristics, TCharacteristics>(
+            UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
+            TEnumCharacteristics enumValue,
+            int level
+        ) where TEnumCharacteristics : struct, Enum
+        {
+            foreach (var info in allCharacteristicsInfo)
+            {
+                if (EqualityComparer<TEnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
+                {
+                    if (LevelCheck(allCharacteristicsInfo, enumValue, level))
+                    {
+                        info.LevelCost[level] = 0;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Level {level} is out of bounds for characteristic {enumValue}.");
+                    }
+
+                    return;
+                }
+            }
+
+            Debug.LogWarning($"Characteristic {enumValue} not found.");
+        }
+
+        protected bool LevelCheck<TEnumCharacteristics, TCharacteristics>(
+            UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
+            TEnumCharacteristics enumValue,
+            int level
+        ) where TEnumCharacteristics : struct, Enum
+        {
+            if (level < 0)
+                return false;
+
+            foreach (var info in allCharacteristicsInfo)
+            {
+                if (EqualityComparer<TEnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
+                {
+                    return level <= info.CharacteristicsPerLevel.Length - 1;
+                }
+            }
+
+            Debug.LogWarning($"Characteristic {enumValue} not found.");
             return false;
+        }
 
-        foreach (var info in allCharacteristicsInfo)
+        [Serializable]
+        public class UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>
+            where TEnumCharacteristics : struct, Enum
         {
-            if (EqualityComparer<EnumCharacteristics>.Default.Equals(info.UpdateType, enumValue))
+            [FormerlySerializedAs("updateType")]
+            [SerializeField]
+            TEnumCharacteristics _updateType;
+
+            [FormerlySerializedAs("currentLevel")]
+            [SerializeField]
+            int _currentLevel;
+
+            [FormerlySerializedAs("characteristicsPerLevel")]
+            [SerializeField]
+            TCharacteristics[] _characteristicsPerLevel;
+
+            [FormerlySerializedAs("levelCost")]
+            [SerializeField]
+            int[] _levelCost;
+
+            public TEnumCharacteristics UpdateType
             {
-                return level <= info.CharacteristicsPerLevel.Length - 1;
+                get => _updateType;
+                set => _updateType = value;
+            }
+
+            public int CurrentLevel
+            {
+                get => _currentLevel;
+                set => _currentLevel = value;
+            }
+
+            public TCharacteristics[] CharacteristicsPerLevel
+            {
+                get => _characteristicsPerLevel;
+                set => _characteristicsPerLevel = value;
+            }
+
+            public int[] LevelCost
+            {
+                get => _levelCost;
+                set => _levelCost = value;
             }
         }
 
-        Debug.LogWarning($"Characteristic {enumValue} not found.");
-        return false;
+        [Serializable]
+        public record DefaultModuleSaveData
+        {
+            [field: SerializeField] public int CurrentLevel { get; set; }
+            [field: SerializeField] public int[] LevelCost { get; set; }
+        }
     }
-
-    [Serializable]
-    protected class UpdateCharacteristicsInfo<EnumCharacteristics, Characteristics> where EnumCharacteristics : struct, Enum
-    {
-        [SerializeField] EnumCharacteristics updateType;
-        [SerializeField] int currentLevel;
-        [SerializeField] Characteristics[] characteristicsPerLevel;
-        [SerializeField] int[] levelCost;
-
-        public EnumCharacteristics UpdateType { get => updateType; set => updateType = value; }
-        public int CurrentLevel { get => currentLevel; set => currentLevel = value; }
-        public Characteristics[] CharacteristicsPerLevel { get => characteristicsPerLevel; set => characteristicsPerLevel = value; }
-        public int[] LevelCost { get => levelCost; set => levelCost = value; }
-
-    }
-
 }
-

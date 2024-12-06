@@ -2,11 +2,12 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.OnScreen;
+using UnityEngine.Serialization;
 using Zenject;
 
 public class ScreenTouchController : OnScreenButton, IPointerDownHandler, IPointerUpHandler, IDragHandler, IHaveControllerGradient
 {
-    [SerializeField] LineRenderer lineRenderer;
+    [FormerlySerializedAs("lineRenderer")] [SerializeField] LineRenderer _lineRenderer;
     Camera _mainCamera;
     Vector2 _touchStartPosition;
     Vector2 _touchEndPosition;
@@ -16,10 +17,10 @@ public class ScreenTouchController : OnScreenButton, IPointerDownHandler, IPoint
     public Vector2 TouchEndPosition => _touchEndPosition;
     public Vector2 TouchCurrentPosition => _currentTouchPosition;
 
-    Gradient IHaveControllerGradient.ControllerGradient { get => lineRenderer.colorGradient; set => lineRenderer.colorGradient = value; }
+    Gradient IHaveControllerGradient.ControllerGradient { get => _lineRenderer.colorGradient; set => _lineRenderer.colorGradient = value; }
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
     private void Construct(Camera mainCamera)
     {
         _mainCamera = mainCamera;
@@ -57,29 +58,29 @@ public class ScreenTouchController : OnScreenButton, IPointerDownHandler, IPoint
     private void UpdateLineRendererStartPosition()
     {
         var worldStart = _mainCamera.ScreenToWorldPoint(new(_touchStartPosition.x, _touchStartPosition.y, 10f));
-        var localStart = lineRenderer.transform.InverseTransformPoint(worldStart);
+        var localStart = _lineRenderer.transform.InverseTransformPoint(worldStart);
 
-        lineRenderer.positionCount = 2;
-        lineRenderer.SetPosition(0, localStart);
-        lineRenderer.SetPosition(1, localStart);
+        _lineRenderer.positionCount = 2;
+        _lineRenderer.SetPosition(0, localStart);
+        _lineRenderer.SetPosition(1, localStart);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void UpdateLineRendererEndPosition()
     {
         var worldCurrent = _mainCamera.ScreenToWorldPoint(new(_currentTouchPosition.x, _currentTouchPosition.y, 10f));
-        var localCurrent = lineRenderer.transform.InverseTransformPoint(worldCurrent);
+        var localCurrent = _lineRenderer.transform.InverseTransformPoint(worldCurrent);
 
         var worldStart = _mainCamera.ScreenToWorldPoint(new(_touchStartPosition.x, _touchStartPosition.y, 10f));
-        var localStart = lineRenderer.transform.InverseTransformPoint(worldStart);
+        var localStart = _lineRenderer.transform.InverseTransformPoint(worldStart);
 
-        lineRenderer.SetPosition(0, localStart);
-        lineRenderer.SetPosition(1, localCurrent);
+        _lineRenderer.SetPosition(0, localStart);
+        _lineRenderer.SetPosition(1, localCurrent);
     }
 
     private void ClearLineRenderer()
     {
-        lineRenderer.positionCount = 0;
+        _lineRenderer.positionCount = 0;
     }
 
 }

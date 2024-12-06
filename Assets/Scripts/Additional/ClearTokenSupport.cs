@@ -1,19 +1,20 @@
 using System.Threading;
 
-public static class ClearTokenSupport
+namespace Additional
 {
-
-    public static void ClearToken(ref CancellationTokenSource cts)
+    public static class ClearTokenSupport
     {
-        if (cts == null) return;
-
-        if (!cts.IsCancellationRequested)
+        public static void ClearToken(ref CancellationTokenSource cts)
         {
-            cts.Cancel();
+            if (cts == null) return;
+
+            if (!cts.IsCancellationRequested)
+            {
+                cts.Cancel();
+            }
+
+            cts.Dispose();
+            cts = null;
         }
-
-        cts.Dispose();
-        cts = null;
     }
-
 }

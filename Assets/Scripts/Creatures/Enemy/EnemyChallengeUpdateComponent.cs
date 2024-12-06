@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System.Runtime.CompilerServices;
 using System;
+using Core.Enemy;
 
 public class EnemyChallengeUpdateComponent : MonoBehaviour
 {
@@ -16,7 +17,11 @@ public class EnemyChallengeUpdateComponent : MonoBehaviour
     CancellationTokenSource _cancellationTokenSource;
 
 #if UNITY_EDITOR
-    public bool[] VisibilityStatuses { get => _visibilityStatuses; set => _visibilityStatuses = value; }
+    public bool[] VisibilityStatuses
+    {
+        get => _visibilityStatuses;
+        set => _visibilityStatuses = value;
+    }
 #endif
 
     [Inject]
@@ -33,7 +38,7 @@ public class EnemyChallengeUpdateComponent : MonoBehaviour
 
             if (_isSeen && !cancellationToken.IsCancellationRequested)
             {
-                _enemyManager.UpdateChallenge(_visualPart);
+                _enemyManager.UpdateChallenge(_visualPart).Forget();
             }
         }
         catch (OperationCanceledException)
@@ -92,6 +97,4 @@ public class EnemyChallengeUpdateComponent : MonoBehaviour
     {
         ClearToken(ref _cancellationTokenSource);
     }
-
 }
-

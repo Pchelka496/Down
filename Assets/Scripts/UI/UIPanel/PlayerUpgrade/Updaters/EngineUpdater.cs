@@ -1,3 +1,7 @@
+using Creatures.Player.FlightModule.EngineModule;
+using Creatures.Player.PlayerModule.CoreModules.EngineModule;
+using ScriptableObject.ModulesConfig.FlightModule;
+using UI.UIPanel.PlayerUpgrade;
 using UnityEngine;
 using Zenject;
 
@@ -24,7 +28,7 @@ public class EngineUpdater : MonoBehaviour
     EnumLanguage _language;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
     private void Construct(EnumLanguage language)
     {
         _language = language;

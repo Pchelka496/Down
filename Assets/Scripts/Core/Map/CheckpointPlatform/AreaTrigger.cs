@@ -1,12 +1,15 @@
+using Creatures.Player;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using Zenject;
 
 [RequireComponent(typeof(Collider2D))]
 public class AreaTrigger : MonoBehaviour
 {
+    [FormerlySerializedAs("onPlayerEnter")]
     [Header("Called when the player enters the trigger area")]
-    [SerializeField] UnityEvent onPlayerEnter;
+    [SerializeField] UnityEvent _onPlayerEnter;
     PlayerController _player;
 
     [Inject]
@@ -19,7 +22,7 @@ public class AreaTrigger : MonoBehaviour
     {
         if (collision.gameObject == _player.gameObject)
         {
-            onPlayerEnter?.Invoke();
+            _onPlayerEnter?.Invoke();
         }
     }
 

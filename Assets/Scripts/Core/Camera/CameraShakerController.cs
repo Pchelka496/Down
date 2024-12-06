@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
 using System.Threading;
 using System;
+using Additional;
 
 [System.Serializable]
 public class CameraShakerController : System.IDisposable

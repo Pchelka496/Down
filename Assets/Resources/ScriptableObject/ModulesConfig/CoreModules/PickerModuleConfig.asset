@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _resetThePriceAfterPurchase: 0
   _characteristics:
-  - updateType: 0
-    currentLevel: 0
-    characteristicsPerLevel:
+  - _updateType: 0
+    _currentLevel: 0
+    _characteristicsPerLevel:
     - 1
     - 1.4
     - 1.7
@@ -30,12 +30,12 @@ MonoBehaviour:
     - 4.4
     - 4.7
     - 5
-    levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d000000
-  - updateType: 1
-    currentLevel: 0
-    characteristicsPerLevel:
+    _levelCost: 01000000020000000300000004000000040000000400000004000000040000000400000004000000040000000400000004000000
+  - _updateType: 1
+    _currentLevel: 0
+    _characteristicsPerLevel:
     - 1
     - 2
     - 3
     - 4
-    levelCost: 01000000020000000300000004000000
+    _levelCost: 01000000010000000200000003000000

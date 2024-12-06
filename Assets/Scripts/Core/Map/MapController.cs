@@ -1,14 +1,17 @@
+using Core;
+using Core.Installers;
 using Cysharp.Threading.Tasks;
+using ScriptableObject.Map;
 using Zenject;
 
 public class MapController
 {
     CheckpointPlatformController _checkpointPlatformController;
 
-    public float FullMapHeight { get => LevelManager.PLAYER_START_Y_POSITION; }
+    public float FullMapHeight => LevelManager.PLAYER_START_Y_POSITION;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
     private void Construct(LevelManager levelManager)
     {
         levelManager.SubscribeToRoundStart(RoundStart);

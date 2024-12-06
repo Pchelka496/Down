@@ -1,12 +1,14 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PickUpItemManagerConfig", menuName = "Scriptable Objects/PickUpItemManagerConfig")]
-public class PickUpItemManagerConfig : ScriptableObject
+namespace ScriptableObject.PickUpItem
 {
-    [SerializeField] RewardControllerConfig _rewardControllerConfig;
-    [SerializeField] RepairKitControllerConfig _repairKitControllerConfig;
+    [CreateAssetMenu(fileName = "PickUpItemManagerConfig", menuName = "Scriptable Objects/PickUpItemManagerConfig")]
+    public class PickUpItemManagerConfig : UnityEngine.ScriptableObject
+    {
+        [SerializeField] RewardControllerConfig _rewardControllerConfig;
+        [SerializeField] RepairKitControllerConfig _repairKitControllerConfig;
 
-    public RewardControllerConfig RewardControllerConfig { get => _rewardControllerConfig; }
-    public RepairKitControllerConfig RepairKitControllerConfig { get => _repairKitControllerConfig; }
-
+        public RewardControllerConfig RewardControllerConfig => _rewardControllerConfig;
+        public RepairKitControllerConfig RepairKitControllerConfig => _repairKitControllerConfig;
+    }
 }

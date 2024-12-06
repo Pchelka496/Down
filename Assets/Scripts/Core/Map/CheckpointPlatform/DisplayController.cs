@@ -7,6 +7,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using static Unity.VisualScripting.Icons;
 using System;
+using ScriptableObject;
 
 public class DisplayController : MonoBehaviour
 {
@@ -148,7 +149,7 @@ public class DisplayController : MonoBehaviour
 
     private string DefaultText()
     {
-        return ConvertText(_config.StartPointsInformation, _rewardKeeper.GetPoints(), _config.EndPointsInformation);
+        return ConvertText(_config.StartPointsInformation, _rewardKeeper.GetMoney(), _config.EndPointsInformation);
     }
 
     private async UniTask StartCursorBlinkingAsync(CancellationToken token)
@@ -169,11 +170,10 @@ public class DisplayController : MonoBehaviour
         [SerializeField] string _ukrainianTextConfigAddress;
         [SerializeField] string _chineseTextConfigAddress;
 
-        public string RussianTextConfigAddress { get => _russianTextConfigAddress; }
-        public string EnglishTextConfigAddress { get => _englishTextConfigAddress; }
-        public string UkrainianTextConfigAddress { get => _ukrainianTextConfigAddress; }
-        public string ChineseTextConfigAddress { get => _chineseTextConfigAddress; }
-
+        public string RussianTextConfigAddress => _russianTextConfigAddress;
+        public string EnglishTextConfigAddress => _englishTextConfigAddress;
+        public string UkrainianTextConfigAddress => _ukrainianTextConfigAddress;
+        public string ChineseTextConfigAddress => _chineseTextConfigAddress;
     }
 
 }

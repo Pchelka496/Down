@@ -1,3 +1,4 @@
+using ScriptableObject.PickUpItem;
 using UnityEngine;
 
 [ExecuteInEditMode]

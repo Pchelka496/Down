@@ -1,130 +1,138 @@
+using Core;
+using Core.Installers;
 using Cysharp.Threading.Tasks;
+using ScriptableObject;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Zenject;
 
-public class OptionalPlayerModuleLoader
+namespace Creatures.Player
 {
-    const string CONFIG_ADDRESS = "ScriptableObject/ModulesConfig/PlayerModuleLoaderConfig";
-
-    OptionalPlayerModuleLoaderConfig _config;
-    PlayerController _player;
-
-    [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(LevelManager levelManager, PlayerController player)
+    public class OptionalPlayerModuleLoader
     {
-        levelManager.SubscribeToRoundStart(RoundStart);
-        _player = player;
+        const string CONFIG_ADDRESS = "ScriptableObject/ModulesConfig/PlayerModuleLoaderConfig";
 
-        LoadConfiguration().Forget();
-    }
+        OptionalPlayerModuleLoaderConfig _config;
+        PlayerController _player;
 
-    private void RoundStart(LevelManager levelManager)
-    {
-        if (_config == null)
+        [Inject]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
+            Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
+        private void Construct(LevelManager levelManager, PlayerController player)
         {
-            Debug.LogError("Configuration is not loaded!");
-            return;
+            levelManager.SubscribeToRoundStart(RoundStart);
+            _player = player;
+
+            LoadConfiguration().Forget();
         }
 
-        LoadModules();
-        levelManager.SubscribeToRoundEnd(RoundEnd);
-    }
-
-    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
-    {
-        levelManager.SubscribeToRoundStart(RoundStart);
-    }
-
-    private async UniTask LoadConfiguration()
-    {
-        var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<OptionalPlayerModuleLoaderConfig>(CONFIG_ADDRESS);
-
-        _config = loadOperationData.LoadAsset;
-
-        LoadModules();
-    }
-
-    public async UniTask<BaseModule> LoadModuleForTest<T>()
-    {
-        if (_config == null)
+        private void RoundStart(LevelManager levelManager)
         {
-            Debug.LogError("Configuration is not loaded!");
+            if (_config == null)
+            {
+                Debug.LogError("Configuration is not loaded!");
+                return;
+            }
+
+            LoadModules();
+            levelManager.SubscribeToRoundEnd(RoundEnd);
+        }
+
+        private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
+        {
+            levelManager.SubscribeToRoundStart(RoundStart);
+        }
+
+        private async UniTask LoadConfiguration()
+        {
+            var loadOperationData =
+                await AddressableLouderHelper.LoadAssetAsync<OptionalPlayerModuleLoaderConfig>(CONFIG_ADDRESS);
+
+            _config = loadOperationData.LoadAsset;
+
+            LoadModules();
+        }
+
+        public async UniTask<BaseModule> LoadModuleForTest<T>()
+        {
+            if (_config == null)
+            {
+                Debug.LogError("Configuration is not loaded!");
+                return null;
+            }
+
+            var modulesInfo = _config.ModuleInfoArray;
+
+            foreach (var moduleInfo in modulesInfo)
+            {
+                if (moduleInfo.ModuleType == typeof(T))
+                {
+                    if (moduleInfo.CreatedModule == null)
+                    {
+                        return await ModuleLoad(moduleInfo);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Module created but not registered: {typeof(T).Name}");
+                    }
+                }
+            }
+
+            Debug.LogWarning($"Module of this type is not found in the array: {typeof(T).Name}");
             return null;
         }
 
-        var modulesInfo = _config.ModuleInfoArray;
-
-        foreach (var moduleInfo in modulesInfo)
+        private void LoadModules()
         {
-            if (moduleInfo.ModuleType == typeof(T))
+            if (_config == null)
             {
-                if (moduleInfo.CreatedModule == null)
+                Debug.LogError("Configuration is not loaded!");
+                return;
+            }
+
+            var modulesInfo = _config.ModuleInfoArray;
+
+            foreach (var moduleInfo in modulesInfo)
+            {
+                if (moduleInfo.ActivityCheck && moduleInfo.CreatedModule == null)
                 {
-                    return await ModuleLoad(moduleInfo);
+                    ModuleLoad(moduleInfo).Forget();
                 }
-                else
+                else if (!moduleInfo.ActivityCheck && moduleInfo.CreatedModule != null)
                 {
-                    Debug.LogWarning($"Module created but not registered: {typeof(T).Name}");
+                    ReleaseOldModule(moduleInfo.CreatedModuleHandler, moduleInfo.CreatedModule.gameObject);
                 }
             }
         }
 
-        Debug.LogWarning($"Module of this type is not found in the array: {typeof(T).Name}");
-        return null;
-    }
-
-    private void LoadModules()
-    {
-        if (_config == null)
+        private async UniTask<BaseModule> ModuleLoad(OptionalPlayerModuleLoaderConfig.ModuleInfo moduleInfo)
         {
-            Debug.LogError("Configuration is not loaded!");
-            return;
+            var newModule = await GetModuleObject(moduleInfo.ModulePrefabReference);
+
+            moduleInfo.CreatedModule = newModule;
+            _player.RegisterModule(newModule);
+
+            return newModule;
         }
 
-        var modulesInfo = _config.ModuleInfoArray;
-
-        foreach (var moduleInfo in modulesInfo)
+        private void ReleaseOldModule(AsyncOperationHandle<GameObject> handle, GameObject module)
         {
-            if (moduleInfo.ActivityCheck && moduleInfo.CreatedModule == null)
+            Object.Destroy(module);
+
+            if (handle.IsValid() &&
+                handle.Status == AsyncOperationStatus.Succeeded)
             {
-                ModuleLoad(moduleInfo).Forget();
-            }
-            else if (!moduleInfo.ActivityCheck && moduleInfo.CreatedModule != null)
-            {
-                ReleaseOldModule(moduleInfo.CreatedModuleHandler, moduleInfo.CreatedModule.gameObject);
+                Addressables.Release(handle);
             }
         }
-    }
 
-    private async UniTask<BaseModule> ModuleLoad(OptionalPlayerModuleLoaderConfig.ModuleInfo moduleInfo)
-    {
-        var newModule = await GetModuleObject(moduleInfo.ModulePrefabReference);
-
-        moduleInfo.CreatedModule = newModule;
-        _player.RegisterModule(newModule);
-
-        return newModule;
-    }
-
-    private void ReleaseOldModule(AsyncOperationHandle<GameObject> handle, GameObject module)
-    {
-        MonoBehaviour.Destroy(module);
-
-        if (handle.IsValid() && 
-            handle.Status == AsyncOperationStatus.Succeeded)
+        private async UniTask<BaseModule> GetModuleObject(AssetReference moduleReference)
         {
-            Addressables.Release(handle);
+            var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(moduleReference);
+
+            return GameplaySceneInstaller.DiContainer.InstantiatePrefabForComponent<BaseModule>(loadOperationData
+                .LoadAsset);
         }
     }
-
-    private async UniTask<BaseModule> GetModuleObject(AssetReference moduleReference)
-    {
-        var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(moduleReference);
-
-        return GameplaySceneInstaller.DiContainer.InstantiatePrefabForComponent<BaseModule>(loadOperationData.LoadAsset);
-    }
-
 }

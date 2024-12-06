@@ -1,39 +1,44 @@
-public class Customizer : System.IDisposable
+using Creatures.Player;
+using ScriptableObject;
+
+namespace Customization
 {
-    CustomizerConfig _config;
-    IHaveControllerGradient _controllerGradient;
-    IHaveSkin _player;
-
-    [Zenject.Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(ScreenTouchController screenTouchController, PlayerController player, CustomizerConfig config)
+    public class Customizer : System.IDisposable
     {
-        _config = config;
-        _controllerGradient = screenTouchController;
-        _player = player.PlayerVisualPart;
+        CustomizerConfig _config;
+        IHaveControllerGradient _controllerGradient;
+        IHaveSkin _player;
 
-        UpdateSkin();
-        ChangeControllerGradient();
+        [Zenject.Inject]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
+        private void Construct(ScreenTouchController screenTouchController, PlayerController player, CustomizerConfig config)
+        {
+            _config = config;
+            _controllerGradient = screenTouchController;
+            _player = player.PlayerVisualPart;
 
-        _config.SubscribeToOnSkinChangedEvent(UpdateSkin);
-        _config.SubscribeToOnControllerGradientChangedEvent(ChangeControllerGradient);
+            UpdateSkin();
+            ChangeControllerGradient();
+
+            _config.SubscribeToOnSkinChangedEvent(UpdateSkin);
+            _config.SubscribeToOnControllerGradientChangedEvent(ChangeControllerGradient);
+        }
+
+        private void UpdateSkin()
+        {
+            _player.Skin = _config.Skin;
+        }
+
+        private void ChangeControllerGradient()
+        {
+            _controllerGradient.ControllerGradient = _config.ControllerGradient;
+        }
+
+        public void Dispose()
+        {
+            _config.UnsubscribeToOnSkinChangedEvent(UpdateSkin);
+            _config.UnsubscribeToControllerGradientChangedEvent(ChangeControllerGradient);
+        }
+
     }
-
-    public void UpdateSkin()
-    {
-        _player.Skin = _config.Skin;
-    }
-
-    public void ChangeControllerGradient()
-    {
-        UnityEngine.Debug.Log(1);
-        _controllerGradient.ControllerGradient = _config.ControllerGradient;
-    }
-
-    public void Dispose()
-    {
-        _config.UnsubscribeToOnSkinChangedEvent(UpdateSkin);
-        _config.UnsubscribeToControllerGradientChangedEvent(ChangeControllerGradient);
-    }
-
 }

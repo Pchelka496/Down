@@ -2,9 +2,11 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.AddressableAssets;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using static EnemyConfig;
+using static ScriptableObject.Enemy.EnemyConfig;
 using UnityEngine;
 using System.Linq;
+using Core.Enemy;
+using Core.Installers;
 using Zenject;
 
 public class EnemyVisualPartController

@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Core;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -15,7 +16,7 @@ public class RewardCounter : MonoBehaviour
     public float PickUpRewardMultiplier { set => _pickUpRewardMultiplier = value; }
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
     private void Construct(LevelManager levelManager, RewardKeeper rewardKeeper, AudioSourcePool audioSource)
     {
         _soundPlayer.Initialize(audioSource);
@@ -34,7 +35,7 @@ public class RewardCounter : MonoBehaviour
     {
         levelManager.SubscribeToRoundStart(RoundStart);
 
-        _rewardKeeper.IncreasePoints(_points);
+        _rewardKeeper.IncreaseMoney(_points);
         ResetPoints();
     }
 

@@ -1,7 +1,10 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using Additional;
+using Creatures.Player;
 using Cysharp.Threading.Tasks;
+using ScriptableObject;
 using UnityEngine;
 using Zenject;
 
@@ -20,7 +23,7 @@ public class BackgroundController : IDisposable
     CancellationTokenSource _cts;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", Justification = "<пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ>")]
     private void Construct(PlayerController player, MapController mapController, Camera camera)
     {
         _player = player;

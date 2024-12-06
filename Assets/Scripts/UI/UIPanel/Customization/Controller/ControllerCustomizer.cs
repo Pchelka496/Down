@@ -11,6 +11,7 @@ public class ControllerCustomizer : MonoBehaviour
 
     IHaveControllerGradient _controllerGradient;
     Gradient _gradient = new();
+    Texture2D _gradientTexture;
     bool _isPickingStartColor = true;
 
     public Gradient Gradient
@@ -102,11 +103,17 @@ public class ControllerCustomizer : MonoBehaviour
         var width = (int)_viewControllerGradient.rectTransform.rect.width;
         var height = (int)_viewControllerGradient.rectTransform.rect.height;
 
+        if (_gradientTexture != null) Destroy(_gradientTexture);
+
+        _gradientTexture = GradientExample.GenerateGradientTexture(gradient,
+                                                                   width,
+                                                                   height,
+                                                                   GradientExample.GradientDirection.Horizontal
+                                                                   );
+
         GradientExample.ApplyTextureToImage(_viewControllerGradient,
-                                            GradientExample.GenerateGradientTexture(gradient,
-                                                                                    width,
-                                                                                    height,
-                                                                                    GradientExample.GradientDirection.Horizontal));
+                                            _gradientTexture
+                                            );
     }
 
 }

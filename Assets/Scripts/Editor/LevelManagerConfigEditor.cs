@@ -1,3 +1,4 @@
+using ScriptableObject;
 using UnityEditor;
 using UnityEngine;
 
