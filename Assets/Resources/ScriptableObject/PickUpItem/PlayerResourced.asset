@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 922335f8ea292f04db64e99f720bad18, type: 3}
-  m_Name: RewardKeeperConfig
+  m_Script: {fileID: 11500000, guid: b624904c5dfa21645af4ace267821fc2, type: 3}
+  m_Name: PlayerResourced
   m_EditorClassIdentifier: 
-  _points: 2007
+  _money: 1000
+  _diamond: 12
+  _energy: 20

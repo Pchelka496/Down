@@ -4,6 +4,7 @@ using Additional;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ExchangePanel : MonoBehaviour, IUIPanel
@@ -12,11 +13,11 @@ public class ExchangePanel : MonoBehaviour, IUIPanel
     [SerializeField] ExchangeButtonContainer[] _buttons;
 
     [Header("Exchange Rates")]
-    [SerializeField] float _moneyToDiamondsRate = 10f;
-    [SerializeField] float _moneyToEnergyRate = 5f;
-    [SerializeField] float _diamondsToMoneyRate = 0.1f;
-    [SerializeField] float _diamondsToEnergyRate = 0.2f;
     [SerializeField] int _adRewardDiamonds = 5;
+    [SerializeField] float _diamondsToMoneyRate = 100f;
+    [SerializeField] float _diamondsToEnergyRate = 5f;
+    [SerializeField] float _moneyToDiamondsRate = 0.005f;
+    [SerializeField] float _moneyToEnergyRate = 0.02f;
 
     [Header("Sounds")]
     [SerializeField] SoundPlayerRandomPitch _successSoundPlayer;
@@ -25,24 +26,16 @@ public class ExchangePanel : MonoBehaviour, IUIPanel
     [Header("Task Settings")]
     [SerializeField] float _buttonCheckFrequency = 0.2f;
 
-    RewardKeeper _rewardKeeper;
+    PlayerResourcedKeeper _playerResourcedKeeper;
     CancellationTokenSource _cts;
 
     [Zenject.Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
-    private void Construct(RewardKeeper rewardKeeper, AudioSourcePool audioSourcePool)
+    private void Construct(PlayerResourcedKeeper resourcedKeeper, AudioSourcePool audioSourcePool)
     {
-        _rewardKeeper = rewardKeeper;
+        _playerResourcedKeeper = resourcedKeeper;
         _successSoundPlayer.Initialize(audioSourcePool);
         _unsuccessfulSoundPlayer.Initialize(audioSourcePool);
-    }
-
-    private void Start()
-    {
-        foreach (var buttonContainer in _buttons)
-        {
-            buttonContainer.SetOnClickAction();
-        }
     }
 
     public void Open()
@@ -74,16 +67,16 @@ public class ExchangePanel : MonoBehaviour, IUIPanel
         }
     }
 
-    public void ExchangeMoneyToDiamonds() => Exchange(_rewardKeeper.TryDecreaseMoney, _rewardKeeper.IncreaseDiamonds, _moneyToDiamondsRate);
-    public void ExchangeMoneyToEnergy() => Exchange(_rewardKeeper.TryDecreaseMoney, _rewardKeeper.IncreaseEnergy, _moneyToEnergyRate);
-    public void ExchangeDiamondsToMoney() => Exchange(_rewardKeeper.TryDecreaseDiamonds, _rewardKeeper.IncreaseMoney, _diamondsToMoneyRate);
-    public void ExchangeDiamondsToEnergy() => Exchange(_rewardKeeper.TryDecreaseDiamonds, _rewardKeeper.IncreaseEnergy, _diamondsToEnergyRate);
+    public void ExchangeMoneyToDiamonds() => Exchange(_playerResourcedKeeper.TryDecreaseMoney, _playerResourcedKeeper.IncreaseDiamonds, _moneyToDiamondsRate);
+    public void ExchangeMoneyToEnergy() => Exchange(_playerResourcedKeeper.TryDecreaseMoney, _playerResourcedKeeper.IncreaseEnergy, _moneyToEnergyRate);
+    public void ExchangeDiamondsToMoney() => Exchange(_playerResourcedKeeper.TryDecreaseDiamonds, _playerResourcedKeeper.IncreaseMoney, _diamondsToMoneyRate);
+    public void ExchangeDiamondsToEnergy() => Exchange(_playerResourcedKeeper.TryDecreaseDiamonds, _playerResourcedKeeper.IncreaseEnergy, _diamondsToEnergyRate);
 
-    private void Exchange(Func<int, bool> tryDecreaseFunc, Action<int> increaseAction, float exchangeRate)
+    private void Exchange(Func<int, bool, bool> tryDecreaseFunc, Action<int> increaseAction, float exchangeRate)
     {
         int minDecreaseAmount = Mathf.CeilToInt(1 / exchangeRate);
 
-        if (tryDecreaseFunc.Invoke(minDecreaseAmount))
+        if (tryDecreaseFunc.Invoke(minDecreaseAmount, true))
         {
             int increaseAmount = Mathf.FloorToInt(minDecreaseAmount * exchangeRate);
             increaseAction.Invoke(increaseAmount);
@@ -103,7 +96,7 @@ public class ExchangePanel : MonoBehaviour, IUIPanel
 
     private void OnAdWatchedSuccessfully()
     {
-        _rewardKeeper.IncreaseDiamonds(_adRewardDiamonds);
+        _playerResourcedKeeper.IncreaseDiamonds(_adRewardDiamonds);
         _successSoundPlayer.PlayNextSound();
     }
 
@@ -112,26 +105,5 @@ public class ExchangePanel : MonoBehaviour, IUIPanel
     private void OnDestroy()
     {
         ClearToken();
-    }
-
-    [System.Serializable]
-    private class ExchangeButtonContainer
-    {
-        [SerializeField] Button _button;
-        [Header("This action will be added in onClick")]
-        [SerializeField] UnityEvent _onClickEvent;
-
-        public void SetOnClickAction()
-        {
-            _button.onClick.AddListener(() => _onClickEvent.Invoke());
-        }
-
-        public void CheckAndClick()
-        {
-            if (_button != null && _button.interactable)
-            {
-                _onClickEvent.Invoke();
-            }
-        }
     }
 }

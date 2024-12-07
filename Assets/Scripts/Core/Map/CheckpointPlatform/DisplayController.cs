@@ -18,19 +18,19 @@ public class DisplayController : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI _displayText;
     [SerializeField] TextConfigLanguageAddresses _textConfigLanguageAddresses;
-    RewardKeeper _rewardKeeper;
+    PlayerResourcedKeeper _rewardKeeper;
     DisplayControllerConfig _config;
     string _targetText;
     CancellationTokenSource _cts;
     bool _cursorVisible = true;
 
     [Inject]
-    private void Construct(EnumLanguage language, RewardKeeper rewardKeeper)
+    private void Construct(EnumLanguage language, PlayerResourcedKeeper rewardKeeper)
     {
         Initialize(language, rewardKeeper).Forget();
     }
 
-    private async UniTaskVoid Initialize(EnumLanguage language, RewardKeeper rewardKeeper)
+    private async UniTaskVoid Initialize(EnumLanguage language, PlayerResourcedKeeper rewardKeeper)
     {
         switch (language)
         {

@@ -8,7 +8,7 @@ public class RewardCounter : MonoBehaviour
 {
     [SerializeField] SoundPlayerIncreasePitch _soundPlayer;
     [SerializeField] TextMeshProUGUI _text;
-    RewardKeeper _rewardKeeper;
+    PlayerResourcedKeeper _rewardKeeper;
 
     float _pickUpRewardMultiplier = 1f;
     int _points;
@@ -17,7 +17,7 @@ public class RewardCounter : MonoBehaviour
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(LevelManager levelManager, RewardKeeper rewardKeeper, AudioSourcePool audioSource)
+    private void Construct(LevelManager levelManager, PlayerResourcedKeeper rewardKeeper, AudioSourcePool audioSource)
     {
         _soundPlayer.Initialize(audioSource);
         _rewardKeeper = rewardKeeper;

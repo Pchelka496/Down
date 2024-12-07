@@ -25,7 +25,7 @@ namespace UI.UIPanel.PlayerUpgrade
 
         PlayerController _player;
         OriginalPlayerModuleConfigs _configs;
-        RewardKeeper _rewardKeeper;
+        PlayerResourcedKeeper _rewardKeeper;
 
         public UpgradePanelVisualController VisualController => _visualController;
         public PlayerController Player => _player;
@@ -34,8 +34,11 @@ namespace UI.UIPanel.PlayerUpgrade
         [Inject]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����",
             Justification = "<��������>")]
-        private void Construct(RewardKeeper rewardKeeper, OriginalPlayerModuleConfigs configs, AudioSourcePool audioSourcePool,
-            PlayerController player)
+        private void Construct(PlayerResourcedKeeper rewardKeeper,
+                               OriginalPlayerModuleConfigs configs,
+                               AudioSourcePool audioSourcePool,
+                               PlayerController player
+            )
         {
             _unsuccessfulSoundPlayer.Initialize(audioSourcePool);
             _successfulSoundPlayer.Initialize(audioSourcePool);
@@ -102,23 +105,23 @@ namespace UI.UIPanel.PlayerUpgrade
             switch (_visualController.CurrentViewMode)
             {
                 case UpgradePanelVisualController.ViewMode.Basic:
-                {
-                    ((IUIPanel)this).Close();
+                    {
+                        ((IUIPanel)this).Close();
 
-                    break;
-                }
+                        break;
+                    }
                 case UpgradePanelVisualController.ViewMode.Detailed:
-                {
-                    _visualController.EndViewDetailedInformation();
+                    {
+                        _visualController.EndViewDetailedInformation();
 
-                    break;
-                }
+                        break;
+                    }
             }
         }
 
         public bool UpgradeLevelCheck(int pointsNeeded, int currentLevel, int maxLevel)
         {
-            if (_rewardKeeper.GetMoney() >= pointsNeeded && currentLevel < maxLevel)
+            if (_rewardKeeper.TryDecreaseMoney(pointsNeeded, false) && currentLevel < maxLevel)
             {
                 HandleSuccessfulUpgrade(pointsNeeded);
                 return true;
@@ -132,7 +135,7 @@ namespace UI.UIPanel.PlayerUpgrade
 
         public bool DowngradeLevelCheck(int currentLevel)
         {
-            if (currentLevel >= 0)
+            if (currentLevel > 0)
             {
                 HandleSuccessfulUpgrade(0);
                 return true;
@@ -148,7 +151,7 @@ namespace UI.UIPanel.PlayerUpgrade
         {
             _successfulSoundPlayer.PlayNextSound();
 
-            _rewardKeeper.DecreaseMoney(pointsNeeded);
+            _rewardKeeper.TryDecreaseMoney(pointsNeeded);
         }
 
         private void HandleUnsuccessfulUpgrade()

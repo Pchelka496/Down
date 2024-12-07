@@ -40,8 +40,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43ca5ee952c92ef4e95051e0a49efea8
+    m_Address: Assets/Resources_moved/Prefab/UI/ExchangePanel/ExchangePanel.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4a00f62b4a48da64d9082b6902c66b55
     m_Address: Assets/Resources_moved/Prefab/Creatures/Meteorite.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 716694b7aacca8b44abadaa116016316
+    m_Address: Assets/Resources_moved/Prefab/UI/WarpEngineController/WarpEngineController.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

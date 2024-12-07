@@ -26,7 +26,7 @@ namespace Core.Installers
 
         [SerializeField] OriginalPlayerModuleConfigs _originalPlayerModulesConfig;
 
-        [SerializeField] RewardKeeperConfig _rewardKeeperConfig;
+        [SerializeField] PlayerResourcedKeeperConfig _playerResourcedKeeperConfig;
         [SerializeField] CustomizerConfig _customizerConfig;
         [Header("UI")]
         [SerializeField] RewardCounter _rewardCounter;
@@ -35,7 +35,7 @@ namespace Core.Installers
         [SerializeField] RepairKitIndicator _repairKitIndicator;
         [SerializeField] HealthIndicator _healthIndicator;
         [SerializeField] BoosterIndicator _boosterIndicator;
-        [SerializeField] RewardIndicator _rewardIndicator;
+        [SerializeField] PlayerResourcedIndicator _playerResourcedIndicator;
 
         Customizer _customizer;
         LevelManager _levelManager;
@@ -47,7 +47,7 @@ namespace Core.Installers
         AudioSourcePool _audioSourcePool;
         EffectController _effectController;
         CharacterPositionMeter _characterPositionMeter;
-        RewardKeeper _rewardKeeper;
+        PlayerResourcedKeeper _playerResourcedKeeper;
         SaveSystemController _saveSystemController;
 
         public static DiContainer DiContainer { get; private set; }
@@ -84,7 +84,7 @@ namespace Core.Installers
             Container.Bind<CustomizerConfig>().FromInstance(_customizerConfig).AsSingle().NonLazy();
             Container.Bind<Customizer>().FromInstance(_customizer).AsSingle().NonLazy();
             Container.Bind<CharacterPositionMeter>().FromInstance(_characterPositionMeter).AsSingle().NonLazy();
-            Container.Bind<RewardKeeper>().FromInstance(_rewardKeeper).AsSingle().NonLazy();
+            Container.Bind<PlayerResourcedKeeper>().FromInstance(_playerResourcedKeeper).AsSingle().NonLazy();
 
             BindPlayerModuleConfigs();
         }
@@ -145,7 +145,7 @@ namespace Core.Installers
             _effectController = new(AttachToGameObject(dependenciesObject, "++Effects++").transform);
             _customizer = new();
             _characterPositionMeter = new();
-            _rewardKeeper = new(_rewardKeeperConfig, _rewardIndicator);
+            _playerResourcedKeeper = new(_playerResourcedKeeperConfig, _playerResourcedIndicator);
             _saveSystemController = new(GetAllDataForSave());
         }
 
@@ -157,7 +157,7 @@ namespace Core.Installers
 
             return new IHaveDataForSave[]
             {
-            _rewardKeeperConfig,
+            _playerResourcedKeeperConfig,
              _customizerConfig
             }
             .Concat(playerModules)
@@ -185,7 +185,7 @@ namespace Core.Installers
             Container.Inject(_effectController);
             Container.Inject(_characterPositionMeter);
             Container.Inject(_customizer);
-            Container.Inject(_rewardKeeper);
+            Container.Inject(_playerResourcedKeeper);
         }
 
         private void OnDestroy()
@@ -194,7 +194,7 @@ namespace Core.Installers
             _enemyManager.Dispose();
             _customizer.Dispose();
             _saveSystemController.Dispose();
-            _rewardKeeper.Dispose();
+            _playerResourcedKeeper.Dispose();
         }
 
         [System.Serializable]

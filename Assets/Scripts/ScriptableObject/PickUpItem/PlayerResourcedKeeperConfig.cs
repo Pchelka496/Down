@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace ScriptableObject.PickUpItem
 {
-    [CreateAssetMenu(fileName = "RewardKeeperConfig", menuName = "Scriptable Objects/RewardKeeperConfig")]
-    public class RewardKeeperConfig : UnityEngine.ScriptableObject, IHaveDataForSave
+    [CreateAssetMenu(fileName = "PlayerResourced", menuName = "Scriptable Objects/PlayerResourcedKeeperConfig")]
+    public class PlayerResourcedKeeperConfig : UnityEngine.ScriptableObject, IHaveDataForSave
     {
         [SerializeField] int _money;
         [SerializeField] int _diamond;

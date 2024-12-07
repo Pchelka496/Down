@@ -51,7 +51,7 @@ namespace Types.record
                 {
                     return () =>
                     {
-                        var rewardKeeper = GameplaySceneInstaller.DiContainer.Resolve<RewardKeeper>();
+                        var rewardKeeper = GameplaySceneInstaller.DiContainer.Resolve<PlayerResourcedKeeper>();
 
                         var unlockStatus = rewardKeeper.TryDecreaseMoney(_cost);
                         IsUnlocked = unlockStatus;

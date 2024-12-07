@@ -540,7 +540,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _baseRectTransform: {fileID: 3536865845633121907}
   _visualController: {fileID: 4270216074368689084}
-  _currentPointsText: {fileID: 0}
   _unsuccessfulSoundPlayer:
     _sounds:
     - {fileID: 8300000, guid: ec62c55034b259947bfd60f8103bc63a, type: 3}
@@ -2230,7 +2229,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 72.85
+      value: 67.25
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -2402,7 +2401,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 61.75
+      value: 52.75
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -2582,7 +2581,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 61.75
+      value: 52.75
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -2754,7 +2753,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 90.4
+      value: 83.45
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -2926,7 +2925,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 66.35
+      value: 61.2
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -3097,7 +3096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 87.4
+      value: 80.65
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -3269,7 +3268,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 61.75
+      value: 53.35
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -3440,7 +3439,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 92.05
+      value: 84.95
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -3607,7 +3606,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 86.25
+      value: 79.6
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -3778,7 +3777,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 76
+      value: 70.15
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -3950,7 +3949,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 68.95
+      value: 63.65
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -4122,7 +4121,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 61.75
+      value: 52.75
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -4294,7 +4293,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 73.05
+      value: 67.4
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -4465,7 +4464,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 88.25
+      value: 81.45
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -4636,7 +4635,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 82.7
+      value: 76.3
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -4808,7 +4807,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 68.3
+      value: 63.05
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -4987,7 +4986,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 95.95
+      value: 88.55
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
