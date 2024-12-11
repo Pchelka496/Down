@@ -1,4 +1,3 @@
-using Core;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -11,34 +10,32 @@ public class RepairKitIndicator : MonoBehaviour
     [SerializeField] RectTransform _iconTransform;
     [SerializeField] Image _frontRepairKit;
     [SerializeField] Image _backRepairKit;
-    [SerializeField] Material _defaultMaterial;
-    [SerializeField] Material _flashMaterial;
 
     int _maxRepairKitNumberForRepair;
     bool _enableStatus;
+    event System.Action DisposeEvents;
 
     public int MaxRepairKitNumberForRepair
     {
-        get => _maxRepairKitNumberForRepair; set
+        get => _maxRepairKitNumberForRepair;
+        set
         {
             _maxRepairKitNumberForRepair = value;
 
-            if (_maxRepairKitNumberForRepair <= 1)
-            {
-                _enableStatus = false;
-            }
-            else
-            {
-                _enableStatus = true;
-            }
+            _enableStatus = !(_maxRepairKitNumberForRepair <= 1);
         }
     }
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(LevelManager levelManager)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(GlobalEventsManager globalEventsManager)
     {
-        levelManager.SubscribeToRoundStart(RoundStart);
+        globalEventsManager.SubscribeToRoundStarted(RoundStart);
+        globalEventsManager.SubscribeToRoundEnded(RoundEnd);
+
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
+
         gameObject.SetActive(false);
     }
 
@@ -47,6 +44,18 @@ public class RepairKitIndicator : MonoBehaviour
         MaxRepairKitNumberForRepair = repairKitNumberForRepair;
 
         UpdateCurrentRepairKit(currentRepairKit);
+    }
+
+    private void RoundStart()
+    {
+        SetDefaultIndicatorPosition();
+
+        gameObject.SetActive(_enableStatus);
+    }
+
+    private void RoundEnd()
+    {
+        gameObject.SetActive(false);
     }
 
     public void SetNewIndicatorPosition(Vector2 position)
@@ -59,22 +68,6 @@ public class RepairKitIndicator : MonoBehaviour
         _iconTransform.position = _defaultIconPosition.position;
     }
 
-    private void RoundStart(LevelManager levelManager)
-    {
-        levelManager.SubscribeToRoundEnd(RoundEnd);
-        SetDefaultIndicatorPosition();
-
-        if (_enableStatus)
-        {
-            gameObject.SetActive(true);
-        }
-    }
-
-    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
-    {
-        levelManager.SubscribeToRoundStart(RoundStart);
-        gameObject.SetActive(false);
-    }
 
     public void UpdateCurrentRepairKit(int currentRepairKit)
     {
@@ -86,18 +79,9 @@ public class RepairKitIndicator : MonoBehaviour
         _frontRepairKit.fillAmount = (float)currentRepairKit / MaxRepairKitNumberForRepair;
     }
 
-    //Animation event
-    public void SetFlashMaterial()
+    private void OnDestroy()
     {
-        //_frontRepairKit.material = _flashMaterial;
-        //_backRepairKit.material = _flashMaterial;
+        DisposeEvents?.Invoke();
     }
-
-    public void SetDefaultMaterial()
-    {
-        //_frontRepairKit.material = _defaultMaterial;
-        //_backRepairKit.material = _defaultMaterial;
-    }
-
 }
 

@@ -328,6 +328,7 @@ MonoBehaviour:
   _rotationModule: {fileID: 7604296105805818722}
   _engineModule: {fileID: 7518812171774315570}
   _pickerModule: {fileID: 2938419197482058558}
+  _warpEngineModule: {fileID: 0}
   _playerVisualPart:
     _skinParentObject: {fileID: 6664346611491071001}
 --- !u!114 &3405173535535298813
@@ -381,6 +382,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _initialRotationObjects:
   - TargetTransform: {fileID: 5915714195047636776}
+    InitialGlobalRotation: 0
+  - TargetTransform: {fileID: 0}
     InitialGlobalRotation: 0
 --- !u!1 &8068629878320631734
 GameObject:

@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Threading;
 using System.Runtime.CompilerServices;
 using Additional;
-using Core;
 using Zenject;
 
 public class HealthIndicator : MonoBehaviour
@@ -18,25 +17,22 @@ public class HealthIndicator : MonoBehaviour
     int _maxHealth;
     int _currentHealth;
 
+    event System.Action DisposeEvents;
     CancellationTokenSource _cts;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(LevelManager levelManager)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(GlobalEventsManager globalEventsManager)
     {
-        levelManager.SubscribeToRoundStart(RoundStart);
+        globalEventsManager.SubscribeToRoundStarted(RoundStart);
+
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
     }
 
-    private void RoundStart(LevelManager levelManager)
+    private void RoundStart()
     {
-        levelManager.SubscribeToRoundEnd(RoundEnd);
         SetDefaultIndicatorPosition();
         gameObject.SetActive(true);
-    }
-
-    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
-    {
-        levelManager.SubscribeToRoundStart(RoundStart);
     }
 
     public void Initialize(int maxHealth, int currentHealth)
@@ -89,8 +85,8 @@ public class HealthIndicator : MonoBehaviour
     private void OnDestroy()
     {
         ClearToken();
+        DisposeEvents?.Invoke();
     }
-
 }
 
 

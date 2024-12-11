@@ -13,11 +13,37 @@ public class PlayerResourcedIndicator : MonoBehaviour
     [SerializeField] TextIndicatorData _money;
     [SerializeField] TextIndicatorData _diamond;
     [SerializeField] TextIndicatorData _energy;
+    event System.Action DisposeEvents;
+
+    [Zenject.Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(GlobalEventsManager globalEventsManager)
+    {
+        globalEventsManager.SubscribeToRoundStarted(RoundStart);
+        globalEventsManager.SubscribeToRoundEnded(RoundEnd);
+
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
+    }
+
+    private void Start()
+    {
+        gameObject.SetActive(true);
+    }
+
+    private void RoundStart()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void RoundEnd()
+    {
+        gameObject.SetActive(true);
+    }
 
     public void UpdateMoneyText(int moneyValue) => UpdateText(_money, moneyValue);
     public void UpdateDiamondText(int diamondValue) => UpdateText(_diamond, diamondValue);
     public void UpdateEnergyText(int energyValue) => UpdateText(_energy, energyValue);
-
 
     private void UpdateText(TextIndicatorData textIndicatorData, int newValue)
     {
@@ -46,6 +72,7 @@ public class PlayerResourcedIndicator : MonoBehaviour
         _money.Dispose();
         _diamond.Dispose();
         _energy.Dispose();
+        DisposeEvents?.Invoke();
     }
 
     [System.Serializable]

@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine;
-using System.Net;
 using Core.Installers;
 using ScriptableObject.Map;
 
@@ -68,5 +67,4 @@ public class CheckpointPlatformController
 
         return loadOperationData.LoadAsset;
     }
-
 }

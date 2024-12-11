@@ -137,7 +137,7 @@ namespace Core.Enemy
                 }
                 catch (ObjectDisposedException ex)
                 {
-                    Debug.LogWarning($"ObjectDisposedException caught: {ex.Message}\n{ex.StackTrace}");
+                    Debug.Log($"ObjectDisposedException caught: {ex.Message}\n{ex.StackTrace}");
                     return;
                 }
 
@@ -145,8 +145,12 @@ namespace Core.Enemy
             }
         }
 
-        public void UpdateEnemyValues(int index, float speed, EnumMotionPattern motionPattern,
-            float2 motionCharacteristic, Vector2 spawnIsolateDistance)
+        public void UpdateEnemyValues(
+            int index,
+            float speed,
+            EnumMotionPattern motionPattern,
+            float2 motionCharacteristic,
+            Vector2 spawnIsolateDistance)
         {
             if (_enemyCount - 1 < index) return;
 

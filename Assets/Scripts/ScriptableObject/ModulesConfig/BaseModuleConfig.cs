@@ -9,7 +9,7 @@ namespace ScriptableObject.ModulesConfig
     public abstract class BaseModuleConfig : UnityEngine.ScriptableObject, IHaveDataForSave
     {
         [SerializeField] bool _resetThePriceAfterPurchase;
-        Action<BaseModuleConfig> _saveAction;
+        protected Action<BaseModuleConfig> _saveAction;
 
         public abstract bool ActivityCheck();
         public abstract Type GetModuleType();
@@ -27,7 +27,7 @@ namespace ScriptableObject.ModulesConfig
             UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
             TEnumCharacteristics enumValue,
             int level
-        ) where TEnumCharacteristics : struct, Enum
+            ) where TEnumCharacteristics : struct, Enum
         {
             if (!LevelCheck(allCharacteristicsInfo, enumValue, level))
             {
@@ -57,9 +57,10 @@ namespace ScriptableObject.ModulesConfig
         }
 
         protected int? GetLevel<TEnumCharacteristics, TCharacteristics>(
-            UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
+            UpdateCharacteristicsInfo<TEnumCharacteristics,
+            TCharacteristics>[] allCharacteristicsInfo,
             TEnumCharacteristics enumValue
-        ) where TEnumCharacteristics : struct, Enum
+            ) where TEnumCharacteristics : struct, Enum
         {
             foreach (var info in allCharacteristicsInfo)
             {
@@ -111,7 +112,7 @@ namespace ScriptableObject.ModulesConfig
         protected int? GetMaxLevel<TEnumCharacteristics, TCharacteristics>(
             UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
             TEnumCharacteristics enumValue
-        ) where TEnumCharacteristics : struct, Enum
+            ) where TEnumCharacteristics : struct, Enum
         {
             foreach (var info in allCharacteristicsInfo)
             {
@@ -129,7 +130,7 @@ namespace ScriptableObject.ModulesConfig
             UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
             TEnumCharacteristics enumValue,
             int level
-        ) where TEnumCharacteristics : struct, Enum
+            ) where TEnumCharacteristics : struct, Enum
         {
             if (!LevelCheck(allCharacteristicsInfo, enumValue, level))
             {
@@ -154,7 +155,7 @@ namespace ScriptableObject.ModulesConfig
             UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
             TEnumCharacteristics enumValue,
             int level
-        ) where TEnumCharacteristics : struct, Enum
+            ) where TEnumCharacteristics : struct, Enum
         {
             foreach (var info in allCharacteristicsInfo)
             {
@@ -180,7 +181,7 @@ namespace ScriptableObject.ModulesConfig
             UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
             TEnumCharacteristics enumValue,
             int level
-        ) where TEnumCharacteristics : struct, Enum
+            ) where TEnumCharacteristics : struct, Enum
         {
             if (level < 0)
                 return false;

@@ -19,6 +19,7 @@ public class LevelProgressDisplay
     [SerializeField] Sprite _emptySprite;
     [SerializeField] Color _filledColor = Color.green;
     [SerializeField] Color _emptyColor = Color.gray;
+    [SerializeField] Material _material;
 
     [SerializeField] float _leftPadding = 10f;
     [SerializeField] float _rightPadding = 10f;
@@ -31,7 +32,7 @@ public class LevelProgressDisplay
 
     public async UniTask Initialize(int maxLevel)
     {
-        await UniTask.DelayFrame(1);
+        await UniTask.DelayFrame(1);//Sometimes the canvas doesn't have time to adjust to the screen size and there were problems, which are solved by skipping a frame
 
         ClearContainer();
         _levelImages = new Image[maxLevel];
@@ -84,6 +85,7 @@ public class LevelProgressDisplay
         Image image = levelObject.GetComponent<Image>();
         image.sprite = _emptySprite;
         image.color = _emptyColor;
+        image.material = _material;
 
         _levelImages[index] = image;
     }
@@ -95,37 +97,36 @@ public class LevelProgressDisplay
             case FillDirection.LeftToRight:
                 rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(0, 0.5f);
                 rectTransform.anchoredPosition = new Vector2(
-                    _leftPadding + index * (elementWidth + _spacing) + elementWidth / 2,
-                    0f
+                    x: _leftPadding + index * (elementWidth + _spacing) + elementWidth / 2,
+                    y: 0f
                 );
                 break;
 
             case FillDirection.RightToLeft:
                 rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(1, 0.5f);
                 rectTransform.anchoredPosition = new Vector2(
-                    -_rightPadding - index * (elementWidth + _spacing) - elementWidth / 2,
-                    0f
+                    x: -_rightPadding - index * (elementWidth + _spacing) - elementWidth / 2,
+                    y: 0f
                 );
                 break;
 
             case FillDirection.TopToBottom:
                 rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(0.5f, 1);
                 rectTransform.anchoredPosition = new Vector2(
-                    0f,
-                    -_topPadding - index * (elementHeight + _spacing) - elementHeight / 2
+                    x: 0f,
+                    y: -_topPadding - index * (elementHeight + _spacing) - elementHeight / 2
                 );
                 break;
 
             case FillDirection.BottomToTop:
                 rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(0.5f, 0);
                 rectTransform.anchoredPosition = new Vector2(
-                    0f,
-                    _bottomPadding + index * (elementHeight + _spacing) + elementHeight / 2
+                    x: 0f,
+                    y: _bottomPadding + index * (elementHeight + _spacing) + elementHeight / 2
                 );
                 break;
         }
     }
-
 
     public void UpdateLevelProgress(int activeLevels)
     {

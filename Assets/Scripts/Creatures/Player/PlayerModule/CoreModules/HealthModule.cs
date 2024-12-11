@@ -26,6 +26,8 @@ namespace Creatures.Player
 
         EffectController _effectController;
         CameraFacade _camerasController;
+        GlobalEventsManager _globalEventsManager;
+        event System.Action DisposeEvents;
 
         private int MaxHealth
         {
@@ -45,7 +47,7 @@ namespace Creatures.Player
 
                 if (_currentHealth < 0)
                 {
-                    GameplaySceneInstaller.DiContainer.Resolve<LevelManager>().RoundEnd().Forget();
+                    _globalEventsManager.PlayerDied();
                 }
             }
         }
@@ -69,8 +71,7 @@ namespace Creatures.Player
         }
 
         [Inject]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����",
-            Justification = "<��������>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
         private void Construct(HealthModuleConfig config,
             EffectController effectController,
             CameraFacade camerasController,
@@ -78,9 +79,9 @@ namespace Creatures.Player
             RepairKitIndicator repairKitIndicator,
             HealthIndicator healthIndicator,
             PlayerController player,
-            LevelManager levelManager
-        )
+            GlobalEventsManager globalEventsManager)
         {
+            _globalEventsManager = globalEventsManager;
             _effectController = effectController;
             _camerasController = camerasController;
             _soundPlayer.Initialize(audioSourcePool);
@@ -88,21 +89,14 @@ namespace Creatures.Player
             _healthIndicator = healthIndicator;
             _rb = player.Rb;
 
-            levelManager.SubscribeToRoundStart(RoundStart);
+            globalEventsManager.SubscribeToRoundStarted(RoundStart);
+
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
 
             UpdateCharacteristics(config);
         }
 
-        private void RoundStart(LevelManager levelManager)
-        {
-            levelManager.SubscribeToRoundEnd(RoundEnd);
-            UpdateCharacteristics();
-        }
-
-        private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
-        {
-            levelManager.SubscribeToRoundStart(RoundStart);
-        }
+        private void RoundStart() => UpdateCharacteristics();
 
         private void UpdateCharacteristics() =>
             UpdateCharacteristics(GameplaySceneInstaller.DiContainer.Resolve<HealthModuleConfig>());
@@ -169,6 +163,11 @@ namespace Creatures.Player
         {
             CurrentRepairKit = 0;
             CurrentHealth = _maxHealth;
+        }
+
+        private void OnDestroy()
+        {
+            DisposeEvents?.Invoke();
         }
     }
 }

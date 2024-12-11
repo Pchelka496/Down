@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using DG.Tweening.Core.Easing;
 using System.Text;
 using System.Threading;
 using TMPro;
@@ -146,7 +147,7 @@ public static class SmoothTransitionToText
         int targetValue,
         CancellationToken token,
         float totalDuration,
-        AnimationCurve curve,
+        AnimationCurve curve = null,
         string suffix = null,
         System.Action<int> onValueUpdate = null
         )
@@ -156,6 +157,8 @@ public static class SmoothTransitionToText
             Debug.LogError("TextMeshProUGUI is null!");
             return;
         }
+
+        curve ??= AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
         suffix ??= string.Empty;
 

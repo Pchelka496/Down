@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Core;
 using Core.Installers;
 using Creatures.Player.Any;
-using Creatures.Player.FlightModule.EngineModule;
 using Creatures.Player.PlayerModule.CoreModules.EngineModule;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -13,6 +12,7 @@ namespace Creatures.Player
     [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(HealthModule))]
     public class PlayerController : MonoBehaviour
     {
+        public const float DEFAULT_DRAG = 0.2f;
         public const float PLAYER_RADIUS = 0.7f;
 
         [SerializeField] Rigidbody2D _rb;
@@ -26,7 +26,9 @@ namespace Creatures.Player
         [SerializeField] WarpEngineModule _warpEngineModule;
         [SerializeField] PlayerVisualPart _playerVisualPart;
 
+        EnumState _currentState;
         readonly List<BaseModule> _modules = new(3);
+        event System.Action DisposeEvents;
 
         public Rigidbody2D Rb => _rb;
         public CircleCollider2D Collider => _collider;
@@ -42,13 +44,27 @@ namespace Creatures.Player
         public PlayerVisualPart PlayerVisualPart => _playerVisualPart;
 
         [Inject]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����",
-            Justification = "<��������>")]
-        private void Construct(Controls controls, LevelManager levelManager)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+        private void Construct(Controls controls, GlobalEventsManager globalEventsManager)
         {
             controls.Enable();
-            SetLobbyMode();
-            levelManager.SubscribeToRoundStart(RoundStart);
+
+            globalEventsManager.SubscribeToRoundStarted(RoundStart);
+            globalEventsManager.SubscribeToRoundEnded(RoundEnd);
+            globalEventsManager.SubscribeToWarpStarted(WarpStart);
+            var taskId = globalEventsManager.AddTransitionTask(ResetPositionAndVelocity, false);
+
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
+            DisposeEvents += () => globalEventsManager?.RemoveTransitionTask(taskId);
+        }
+
+        private void Awake()
+        {
+            _currentState = EnumState.Lobby;
+            EnterLobbyMode();
+            ResetPositionAndVelocity();
 
             RegisterModule(_healthModule);
             RegisterModule(_rotationModule);
@@ -57,79 +73,9 @@ namespace Creatures.Player
             RegisterModule(_warpEngineModule);
         }
 
-        private void RoundStart(LevelManager levelManager)
-        {
-            levelManager.SubscribeToRoundEnd(RoundEnd);
-            SetGameplayMode();
-        }
-
-        private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
-        {
-            levelManager.SubscribeToRoundStart(RoundStart);
-            SetLobbyMode();
-        }
-
-        private void SetLobbyMode()
-        {
-            _rb.gravityScale = 0f;
-
-            foreach (var module in _modules)
-            {
-                if (!module.IsActiveOnLobbyMode)
-                {
-                    module.DisableModule();
-                }
-                else
-                {
-                    module.EnableModule();
-                }
-            }
-        }
-
-        private void SetGameplayMode()
-        {
-            _rb.gravityScale = 1f;
-
-            foreach (var module in _modules)
-            {
-                module.EnableModule();
-            }
-        }
-
-        public void OpenPanel()
-        {
-            _rb.constraints = RigidbodyConstraints2D.FreezeAll;
-            DisableModulesInLobbyMode();
-        }
-
-        public void ClosePanel()
-        {
-            _rb.constraints = RigidbodyConstraints2D.None;
-            EnableModulesInLobbyMode();
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Correctness", "UNT0008:Null propagation on Unity objects",
-            Justification = "<��������>")]
-        public async UniTask<T> GetModuleForTest<T>() where T : BaseModule
-        {
-            if (!GetModule<T>(out var moduleForTest))
-            {
-                var loadedModule = await GameplaySceneInstaller.DiContainer
-                    .Resolve<OptionalPlayerModuleLoader>()
-                    .LoadModuleForTest<T>();
-
-                moduleForTest = loadedModule as T;
-
-                if (moduleForTest == null)
-                {
-                    Debug.LogError(
-                        $"Loaded module is not of type {typeof(T).Name}. Actual type: {loadedModule?.GetType().Name ?? "null"}");
-                    return null;
-                }
-            }
-
-            return moduleForTest;
-        }
+        private void WarpStart() => SetState(EnumState.Warp);
+        private void RoundStart() => SetState(EnumState.Gameplay);
+        private void RoundEnd() => SetState(EnumState.Lobby);
 
         public void RegisterModule(BaseModule module)
         {
@@ -154,31 +100,158 @@ namespace Creatures.Player
             return false;
         }
 
-        private void EnableModulesInLobbyMode()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Correctness", "UNT0008:Null propagation on Unity objects", Justification = "<>")]
+        public async UniTask<T> GetModuleForTest<T>() where T : BaseModule
         {
+            if (!GetModule<T>(out var moduleForTest))
+            {
+                var loadedModule = await GameplaySceneInstaller.DiContainer
+                    .Resolve<OptionalPlayerModuleLoader>()
+                    .LoadModuleForTest<T>();
+
+                moduleForTest = loadedModule as T;
+
+                if (moduleForTest == null)
+                {
+                    Debug.LogError(
+                        $"Loaded module is not of type {typeof(T).Name}. " +
+                        $"Actual type: {loadedModule?.GetType().Name ?? "null"}");
+                    return null;
+                }
+            }
+
+            return moduleForTest;
+        }
+
+        public void OpenUIPanel() => SetState(EnumState.OpenUIPanel);
+
+        public void CloseUIPanel()
+        {
+            switch (_currentState)
+            {
+                case EnumState.OpenUIPanel:
+                    {
+                        SetState(EnumState.Lobby);
+                        break;
+                    }
+
+            }
+        }
+
+        private void SetState(EnumState newState)
+        {
+            if (_currentState == newState) return;
+
+            _currentState = newState;
+
+            switch (newState)
+            {
+                case EnumState.Lobby:
+                    {
+                        EnterLobbyMode();
+                        break;
+                    }
+                case EnumState.Gameplay:
+                    {
+                        EnterGameplayMode();
+                        break;
+                    }
+                case EnumState.Warp:
+                    {
+                        EnterWarpMode();
+                        break;
+                    }
+                case EnumState.OpenUIPanel:
+                    {
+                        EnterOpenUIPanelMode();
+                        break;
+                    }
+                default:
+                    {
+                        Debug.LogError($"Unknown player state: {newState}");
+                        break;
+                    }
+            }
+        }
+
+        private void EnterLobbyMode()
+        {
+            _rb.gravityScale = 0f;
+            _rb.constraints = RigidbodyConstraints2D.None;
+
             foreach (var module in _modules)
             {
-                if (module.IsActiveOnLobbyMode)
+                if (!module.IsActiveOnLobbyMode)
+                {
+                    module.DisableModule();
+                }
+                else
                 {
                     module.EnableModule();
                 }
             }
         }
 
-        private void DisableModulesInLobbyMode()
+        private UniTask ResetPositionAndVelocity()
         {
+            switch (_currentState)
+            {
+                case EnumState.Lobby:
+                    {
+                        transform.position = new Vector2(LevelManager.PLAYER_START_X_POSITION, LevelManager.PLAYER_START_Y_POSITION);
+                        _rb.velocity = Vector2.zero;
+
+                        break;
+                    }
+            }
+
+            return UniTask.CompletedTask;
+        }
+
+        private void EnterGameplayMode()
+        {
+            _rb.gravityScale = 1f;
+            _rb.constraints = RigidbodyConstraints2D.None;
+
             foreach (var module in _modules)
             {
-                if (module.IsActiveOnLobbyMode)
-                {
-                    module.DisableModule();
-                }
+                module.EnableModule();
+            }
+        }
+
+        private void EnterWarpMode()
+        {
+            _rb.gravityScale = 0f;
+            _rb.constraints = RigidbodyConstraints2D.None;
+
+            foreach (var module in _modules)
+            {
+                module.DisableModule();
+            }
+        }
+
+        private void EnterOpenUIPanelMode()
+        {
+            _rb.constraints = RigidbodyConstraints2D.FreezeAll;
+
+            foreach (var module in _modules)
+            {
+                module.DisableModule();
             }
         }
 
         private void OnDestroy()
         {
             _playerVisualPart.Dispose();
+            DisposeEvents?.Invoke();
+        }
+
+        public enum EnumState
+        {
+            Lobby,
+            Gameplay,
+            Warp,
+            OpenUIPanel
         }
     }
 }

@@ -11,7 +11,6 @@ using ScriptableObject.ModulesConfig.SupportModules;
 public class AirBrakeModule : BaseModule
 {
     const float Z_ROTATION_OFFSET = 90f;
-    const float DEFAULT_DRAG = 0.2f;
 
     [SerializeField] Transform _leftAirBrake;
     [SerializeField] Transform _rightAirBrake;
@@ -126,7 +125,7 @@ public class AirBrakeModule : BaseModule
 
         sequence.Join(DOTween.To(() => _rb.drag,
                                  x => _rb.drag = x,
-                                 DEFAULT_DRAG,
+                                 PlayerController.DEFAULT_DRAG,
                                  _airBrakeReleaseRate).SetEase(Ease.OutQuad));
     }
 

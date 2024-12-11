@@ -2,15 +2,16 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
 using System.Threading;
-using System;
 using Additional;
 
 [System.Serializable]
 public class PositionComposerController : System.IDisposable
 {
     [SerializeField] ScreenComposerSettings _lobbyModeComposition;
-    [SerializeField] ScreenComposerSettings _defaultFlyModeComposition;
+    [SerializeField] ScreenComposerSettings _defaultGameplayModeComposition;
+    [SerializeField] ScreenComposerSettings _warpModeComposition;
     [SerializeField] CinemachinePositionComposer _composer;
+
     [SerializeField] float _maxYScreenPosition = -1f;
     [SerializeField] float _minYScreenPosition = 0f;
 
@@ -21,34 +22,64 @@ public class PositionComposerController : System.IDisposable
     [SerializeField] AnimationCurve _transitionCurve;
 
     float _currentYScreenPosition;
-
     Rigidbody2D _playerRb;
     CancellationTokenSource _cts;
+    ComposerState _currentState;
 
     public void Initialize(Rigidbody2D playerRb)
     {
         _playerRb = playerRb;
+        _currentState = ComposerState.Lobby;
+
+        SetLobbyMode();
     }
 
-    public void SetLobbyMode()
+    public void SetState(ComposerState state)
     {
+        if (_currentState == state) return;
+
+        _currentState = state;
         ClearToken(ref _cts);
+
+        switch (state)
+        {
+            case ComposerState.Lobby:
+                {
+                    SetLobbyMode();
+                    break;
+                }
+            case ComposerState.Gameplay:
+                {
+                    SetGameplayMode();
+                    break;
+                }
+            case ComposerState.Warp:
+                {
+                    SetWarpMode();
+                    break;
+                }
+            default:
+                {
+                    Debug.LogWarning($"Unhandled state: {state}");
+                    break;
+                }
+        }
+    }
+
+    private void SetLobbyMode()
+    {
         _composer.Composition = _lobbyModeComposition;
     }
 
-    public void SetFlyMode()
+    private void SetGameplayMode()
     {
-        ClearToken(ref _cts);
-        _cts = new();
+        _cts = new CancellationTokenSource();
+        StartAdjustingPositionComposterSettings(_cts.Token).Forget();
+    }
 
-        try
-        {
-            StartAdjustingPositionComposterSettings(_cts.Token).Forget();
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogWarning($"Exception caught in StartAdjustingPositionComposterSettings: {ex}");
-        }
+    private void SetWarpMode()
+    {
+        _composer.Composition = _warpModeComposition;
     }
 
     private async UniTaskVoid StartAdjustingPositionComposterSettings(CancellationToken token)
@@ -73,7 +104,7 @@ public class PositionComposerController : System.IDisposable
         var duration = 0.5f;
         var initialYScreenPosition = _currentYScreenPosition;
 
-        var defaultComposition = _defaultFlyModeComposition;
+        var defaultComposition = _defaultGameplayModeComposition;
 
         while (timeElapsed < duration)
         {
@@ -96,9 +127,13 @@ public class PositionComposerController : System.IDisposable
 
     private void ClearToken(ref CancellationTokenSource cts) => ClearTokenSupport.ClearToken(ref cts);
 
-    public void Dispose()
-    {
-        ClearToken(ref _cts);
-    }
+    public void Dispose() => ClearToken(ref _cts);
 
+    public enum ComposerState
+    {
+        Lobby,
+        Gameplay,
+        Warp
+    }
 }
+

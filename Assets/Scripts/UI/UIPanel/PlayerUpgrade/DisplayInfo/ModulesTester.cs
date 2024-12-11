@@ -31,16 +31,17 @@ public class ModulesTester : MonoBehaviour
     [SerializeField] RectTransform _repairKitIndicatorPosition;
 
     readonly Queue<BaseModule> _testModulesQueue = new();
-    PlayerController _player;
 
     readonly ObjectPool<Meteorite> _meteoritePool = new();
     readonly ObjectPool<RepairItem> _repairKitPool = new();
 
+    AddressableLouderHelper.LoadOperationData<GameObject> _loadRepairKitOperationData;
+    AddressableLouderHelper.LoadOperationData<GameObject> _loadMeteoriteOperationData;
+
+    PlayerController _player;
     RepairKitIndicator _repairKitIndicator;
     HealthIndicator _healthIndicator;
 
-    AddressableLouderHelper.LoadOperationData<GameObject> _loadRepairKitOperationData;
-    AddressableLouderHelper.LoadOperationData<GameObject> _loadMeteoriteOperationData;
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
@@ -112,22 +113,20 @@ public class ModulesTester : MonoBehaviour
     {
         if (!_meteoritePool.IsObjectAvailable)
         {
-            var prefab = await LoadAssetPrefab(_loadMeteoriteOperationData, _meteoriteReference);
-            _meteoritePool.InitializePool(prefab, _meteoritePoolSize);
+            _loadMeteoriteOperationData = await LoadAssetPrefab(_meteoriteReference);
+            _meteoritePool.InitializePool(_loadMeteoriteOperationData.LoadAsset, _meteoritePoolSize);
         }
 
         if (!_repairKitPool.IsObjectAvailable)
         {
-            var prefab = await LoadAssetPrefab(_loadRepairKitOperationData, _repairKitReference);
-            _repairKitPool.InitializePool(prefab, _repairKitPoolSize);
+            _loadRepairKitOperationData = await LoadAssetPrefab(_repairKitReference);
+            _repairKitPool.InitializePool(_loadRepairKitOperationData.LoadAsset, _repairKitPoolSize);
         }
     }
 
-    private async UniTask<GameObject> LoadAssetPrefab(AddressableLouderHelper.LoadOperationData<GameObject> loadOperationData, AssetReference reference)
+    private async UniTask<AddressableLouderHelper.LoadOperationData<GameObject>> LoadAssetPrefab(AssetReference reference)
     {
-        loadOperationData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(reference);
-
-        return loadOperationData.LoadAsset;
+        return await AddressableLouderHelper.LoadAssetAsync<GameObject>(reference);
     }
 
     private async UniTaskVoid UnloadTestAssets()

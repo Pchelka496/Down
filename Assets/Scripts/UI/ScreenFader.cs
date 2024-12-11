@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class ScreenFader : MonoBehaviour
+    public class ScreenFader : MonoBehaviour, ITransitionAnimator
     {
         [SerializeField] Image _revealMask;
         [SerializeField] Image _backgroundOverlay;
@@ -15,7 +15,22 @@ namespace UI
         [SerializeField] Vector2 _startSize = new(0, 0);
         readonly Vector2 _endSize = GetCircleBoundingSquareSize();
 
+        EnumState _currentState;
         RectTransform _imageRectTransform;
+        event System.Action DisposeEvents;
+
+        [Zenject.Inject]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+        private void Construct(GlobalEventsManager globalEventsManager)
+        {
+            globalEventsManager.SubscribeToRoundStarted(RoundStart);
+            globalEventsManager.SubscribeToRoundEnded(RoundEnd);
+            globalEventsManager.SubscribeToWarpStarted(WarpStart);
+
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
+        }
 
         private void Awake()
         {
@@ -25,6 +40,60 @@ namespace UI
             _imageRectTransform.sizeDelta = _startSize;
             _revealMask.enabled = true;
             _revealMask.gameObject.SetActive(true);
+        }
+
+        private void WarpStart() => _currentState = EnumState.Warp;
+        private void RoundStart() => _currentState = EnumState.Gameplay;
+        private void RoundEnd() => _currentState = EnumState.Lobby;
+
+        async UniTask ITransitionAnimator.PlayStartTransitionAsync()
+        {
+            switch (_currentState)
+            {
+                case EnumState.Lobby:
+                    {
+                        await FadeToBlack();
+                        break;
+                    }
+                case EnumState.Gameplay:
+                    {
+                        break;
+                    }
+                case EnumState.Warp:
+                    {
+                        break;
+                    }
+                default:
+                    {
+                        Debug.LogError($"Unknown player state: {_currentState}");
+                        break;
+                    }
+            }
+        }
+
+        async UniTask ITransitionAnimator.PlayEndTransitionAsync()
+        {
+            switch (_currentState)
+            {
+                case EnumState.Lobby:
+                    {
+                        await FadeToClear();
+                        break;
+                    }
+                case EnumState.Gameplay:
+                    {
+                        break;
+                    }
+                case EnumState.Warp:
+                    {
+                        break;
+                    }
+                default:
+                    {
+                        Debug.LogError($"Unknown player state: {_currentState}");
+                        break;
+                    }
+            }
         }
 
         public async UniTask FadeToClear()
@@ -54,7 +123,7 @@ namespace UI
 
             var tween = _imageRectTransform.DOSizeDelta(_startSize, _fadeDuration)
                 .SetEase(_fadeCurve);
-            
+
             await tween.AsyncWaitForCompletion();
         }
 
@@ -62,6 +131,18 @@ namespace UI
         {
             float diagonal = Mathf.Sqrt(Mathf.Pow(Screen.width, 2) + Mathf.Pow(Screen.height, 2));
             return new Vector2(diagonal, diagonal);
+        }
+
+        private void OnDestroy()
+        {
+            DisposeEvents?.Invoke();
+        }
+
+        private enum EnumState
+        {
+            Lobby,
+            Gameplay,
+            Warp
         }
     }
 }

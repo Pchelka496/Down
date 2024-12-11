@@ -4,17 +4,22 @@ using Cysharp.Threading.Tasks;
 using ScriptableObject.Map;
 using Zenject;
 
-public class MapController
+public class MapController : System.IDisposable
 {
     CheckpointPlatformController _checkpointPlatformController;
 
+    event System.Action DisposeEvents;
     public float FullMapHeight => LevelManager.PLAYER_START_Y_POSITION;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(LevelManager levelManager)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(GlobalEventsManager globalEventsManager)
     {
-        levelManager.SubscribeToRoundStart(RoundStart);
+        globalEventsManager.SubscribeToRoundStarted(RoundStart);
+        globalEventsManager.SubscribeToRoundEnded(RoundEnd);
+
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
 
         _checkpointPlatformController = GameplaySceneInstaller.DiContainer.Instantiate<CheckpointPlatformController>();
     }
@@ -26,16 +31,18 @@ public class MapController
         _checkpointPlatformController.CreatePlatforms(LevelManager.PLAYER_START_Y_POSITION).Forget();
     }
 
-    private void RoundStart(LevelManager levelManager)
+    private void RoundStart()
     {
-        levelManager.SubscribeToRoundEnd(RoundEnd);
         _checkpointPlatformController.ClearPlatform();
     }
 
-    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
+    private void RoundEnd()
     {
-        levelManager.SubscribeToRoundStart(RoundStart);
         _checkpointPlatformController.CreatePlatforms(LevelManager.PLAYER_START_Y_POSITION).Forget();
     }
 
+    public void Dispose()
+    {
+        DisposeEvents?.Invoke();
+    }
 }

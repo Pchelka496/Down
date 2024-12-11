@@ -1,16 +1,12 @@
 using System;
 using System.Threading;
 using Additional;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class ExchangePanel : MonoBehaviour, IUIPanel
 {
     [Header("Exchange Buttons")]
-    [SerializeField] ExchangeButtonContainer[] _buttons;
+    [SerializeField] CustomPressButton[] _buttons;
 
     [Header("Exchange Rates")]
     [SerializeField] int _adRewardDiamonds = 5;
@@ -23,14 +19,11 @@ public class ExchangePanel : MonoBehaviour, IUIPanel
     [SerializeField] SoundPlayerRandomPitch _successSoundPlayer;
     [SerializeField] SoundPlayerRandomPitch _unsuccessfulSoundPlayer;
 
-    [Header("Task Settings")]
-    [SerializeField] float _buttonCheckFrequency = 0.2f;
-
     PlayerResourcedKeeper _playerResourcedKeeper;
     CancellationTokenSource _cts;
 
     [Zenject.Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
     private void Construct(PlayerResourcedKeeper resourcedKeeper, AudioSourcePool audioSourcePool)
     {
         _playerResourcedKeeper = resourcedKeeper;
@@ -40,10 +33,8 @@ public class ExchangePanel : MonoBehaviour, IUIPanel
 
     public void Open()
     {
+        transform.SetAsLastSibling();
         gameObject.SetActive(true);
-        ClearToken();
-        _cts = new();
-        MonitorButtonClicks(_cts.Token).Forget();
     }
 
     public void Close()
@@ -52,25 +43,17 @@ public class ExchangePanel : MonoBehaviour, IUIPanel
         ClearToken();
     }
 
-    private async UniTaskVoid MonitorButtonClicks(CancellationToken token)
-    {
-        var delaySpan = TimeSpan.FromSeconds(_buttonCheckFrequency);
+    public void ExchangeMoneyToDiamonds()
+        => Exchange(_playerResourcedKeeper.TryDecreaseMoney, _playerResourcedKeeper.IncreaseDiamonds, _moneyToDiamondsRate);
 
-        while (!token.IsCancellationRequested)
-        {
-            foreach (var buttonContainer in _buttons)
-            {
-                buttonContainer.CheckAndClick();
-            }
+    public void ExchangeMoneyToEnergy()
+        => Exchange(_playerResourcedKeeper.TryDecreaseMoney, _playerResourcedKeeper.IncreaseEnergy, _moneyToEnergyRate);
 
-            await UniTask.Delay(delaySpan, cancellationToken: token);
-        }
-    }
+    public void ExchangeDiamondsToMoney()
+        => Exchange(_playerResourcedKeeper.TryDecreaseDiamonds, _playerResourcedKeeper.IncreaseMoney, _diamondsToMoneyRate);
 
-    public void ExchangeMoneyToDiamonds() => Exchange(_playerResourcedKeeper.TryDecreaseMoney, _playerResourcedKeeper.IncreaseDiamonds, _moneyToDiamondsRate);
-    public void ExchangeMoneyToEnergy() => Exchange(_playerResourcedKeeper.TryDecreaseMoney, _playerResourcedKeeper.IncreaseEnergy, _moneyToEnergyRate);
-    public void ExchangeDiamondsToMoney() => Exchange(_playerResourcedKeeper.TryDecreaseDiamonds, _playerResourcedKeeper.IncreaseMoney, _diamondsToMoneyRate);
-    public void ExchangeDiamondsToEnergy() => Exchange(_playerResourcedKeeper.TryDecreaseDiamonds, _playerResourcedKeeper.IncreaseEnergy, _diamondsToEnergyRate);
+    public void ExchangeDiamondsToEnergy()
+        => Exchange(_playerResourcedKeeper.TryDecreaseDiamonds, _playerResourcedKeeper.IncreaseEnergy, _diamondsToEnergyRate);
 
     private void Exchange(Func<int, bool, bool> tryDecreaseFunc, Action<int> increaseAction, float exchangeRate)
     {

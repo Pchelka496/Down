@@ -7,7 +7,7 @@ public class UIPanelManager
 {
     readonly UIPanelFactory _factory;
     readonly Transform _parentTransform;
-    readonly Dictionary<string, IUIPanel> _activePanels = new();
+    readonly Dictionary<string, IUIPanel> _createdPanels = new();
 
     public UIPanelManager(UIPanelFactory factory, Transform parentTransform)
     {
@@ -17,45 +17,35 @@ public class UIPanelManager
 
     public async UniTask CreatePanelAsync(string panelId, AssetReference assetReference)
     {
-        if (_activePanels.ContainsKey(panelId))
+        if (_createdPanels.ContainsKey(panelId))
         {
             return;
         }
 
         var panel = await _factory.CreatePanelAsync(assetReference, _parentTransform);
-        _activePanels[panelId] = panel;
+        _createdPanels[panelId] = panel;
     }
 
     public async UniTask OpenPanelAsync(string panelId, AssetReference assetReference)
     {
-        if (_activePanels.ContainsKey(panelId))
+        if (_createdPanels.ContainsKey(panelId))
         {
-            _activePanels[panelId].Open();
+            _createdPanels[panelId].Open();
             return;
         }
 
         var panel = await _factory.CreatePanelAsync(assetReference, _parentTransform);
 
         panel.Open();
-        _activePanels[panelId] = panel;
-    }
-
-    public void ClosePanel(string panelId)
-    {
-        if (_activePanels.TryGetValue(panelId, out var panel))
-        {
-            panel.Close();
-            _activePanels.Remove(panelId);
-        }
+        _createdPanels[panelId] = panel;
     }
 
     public void CloseAllPanels()
     {
-        foreach (var panel in _activePanels.Values)
+        foreach (var panel in _createdPanels.Values)
         {
             panel.Close();
         }
-        _activePanels.Clear();
+        _createdPanels.Clear();
     }
-
 }

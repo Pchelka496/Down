@@ -11,28 +11,45 @@ public class CheckpointPlatform : MonoBehaviour
     [SerializeField] BoxCollider2D _collider;
 
     PlayerController _player;
-    LevelManager _levelManager;
-    LobbyUIPanelFacade _upgradePanelController;
+    GlobalEventsManager _globalEventsManager;
+    LobbyUIPanelFacade _lobbyUIPanelFacade;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(LevelManager levelManager, PlayerController player, Camera camera, LobbyUIPanelFacade upgradePanelController)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(GlobalEventsManager globalEventsManager, PlayerController player, CameraFacade cameraFacade, LobbyUIPanelFacade upgradePanelController)
     {
-        _levelManager = levelManager;
+        _globalEventsManager = globalEventsManager;
         _player = player;
-        _canvas.worldCamera = camera;
-        _upgradePanelController = upgradePanelController;
+        _canvas.worldCamera = cameraFacade.Camera;
+        _lobbyUIPanelFacade = upgradePanelController;
 
-        ResizeToCamera(camera);
+        (var width, var height) = GetCanvasSizeForCamera(cameraFacade.Camera, cameraFacade.LobbyOrthographicSize);
+
+        ResizeToCamera(width, height);
     }
 
-    private void ResizeToCamera(Camera camera)
+    private (float width, float height) GetCanvasSizeForCamera(Camera camera, float orthographicSize)
     {
-        Vector3 bottomLeft = camera.ViewportToWorldPoint(new Vector3(0, 0, camera.nearClipPlane));
-        Vector3 topRight = camera.ViewportToWorldPoint(new Vector3(1, 1, camera.nearClipPlane));
+        if (!camera.orthographic)
+        {
+            Debug.LogError("Camera is not orthographic");
+            return (0f, 0f);
+        }
 
-        float width = topRight.x - bottomLeft.x;
-        float height = topRight.y - bottomLeft.y;
+        var height = orthographicSize * 2f;
+
+        var width = height * camera.aspect;
+
+        return (width, height);
+    }
+
+    private void ResizeToCamera(float width, float height)
+    {
+        //Vector3 bottomLeft = camera.ViewportToWorldPoint(new Vector3(0, 0, camera.nearClipPlane));
+        //Vector3 topRight = camera.ViewportToWorldPoint(new Vector3(1, 1, camera.nearClipPlane));
+
+        //float width = topRight.x - bottomLeft.x;
+        //float height = topRight.y - bottomLeft.y;
 
         _collider.size = new Vector2(width, height);
 
@@ -46,13 +63,16 @@ public class CheckpointPlatform : MonoBehaviour
     private void CreateBorder(float width, float height)
     {
         var borderThickness = 0.2f;
+        var halfWidth = width * 0.5f;
+        var halfHeight = height * 0.5f;
+
         var rightBorder = gameObject.AddComponent<BoxCollider2D>();
         var leftBorder = gameObject.AddComponent<BoxCollider2D>();
         var topBorder = gameObject.AddComponent<BoxCollider2D>();
 
-        rightBorder.offset = new(width / 2 + BORDER_POSITION_OFFSET, 0f);
-        leftBorder.offset = new(-(width / 2 + BORDER_POSITION_OFFSET), 0f);
-        topBorder.offset = new(0f, height / 2 + BORDER_POSITION_OFFSET);
+        rightBorder.offset = new(halfWidth + BORDER_POSITION_OFFSET, 0f);
+        leftBorder.offset = new(-(halfWidth + BORDER_POSITION_OFFSET), 0f);
+        topBorder.offset = new(0f, halfHeight + BORDER_POSITION_OFFSET);
 
         rightBorder.size = new(borderThickness, height);
         leftBorder.size = new(borderThickness, height);
@@ -68,18 +88,23 @@ public class CheckpointPlatform : MonoBehaviour
     {
         if (collision.gameObject == _player.gameObject)
         {
-            _levelManager.RoundStart().Forget();
+            _globalEventsManager.PlayerLeftThePlatform();
         }
     }
 
     public void OpenUpgradePanel()
     {
-        _upgradePanelController.OpenUpgradePanel();
+        _lobbyUIPanelFacade.OpenUpgradePanel();
     }
 
     public void OpenCustomizationPanel()
     {
-        _upgradePanelController.OpenCustomizationPanel();
+        _lobbyUIPanelFacade.OpenCustomizationPanel();
+    }
+
+    public void OpenWarpEngineControllerPanel()
+    {
+        _lobbyUIPanelFacade.OpenWarpEngineController();
     }
 
     public readonly struct Initializer

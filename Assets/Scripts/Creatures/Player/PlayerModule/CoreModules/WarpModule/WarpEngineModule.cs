@@ -25,28 +25,38 @@ public class WarpEngineModule : BaseModule
 {
     [SerializeField] Transform _player;
     [SerializeField] WarpEngineVisualPart _visualPart;
-    [SerializeField] float _moveDuration = 7f;
     [SerializeField] AnimationCurve _speedCurve;
+
     CancellationTokenSource _movingCts;
 
-    public void StartMoving(float targetHeight)
+    [Zenject.Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct()
+    {
+        _visualPart.Initialize();
+    }
+
+    public async UniTask StartMoving(float targetHeight, float moveDuration)
     {
         ClearToken();
         _movingCts = new();
 
-        PlayerMoving(targetHeight, _movingCts.Token).Forget();
+        _visualPart.UpdateMoveDuration(moveDuration);
+        _visualPart.Play();
+
+        await PlayerMoving(targetHeight, moveDuration, _movingCts.Token);
     }
 
-    private async UniTaskVoid PlayerMoving(float targetHeight, CancellationToken token)
+    private async UniTask PlayerMoving(float targetHeight, float moveDuration, CancellationToken token)
     {
         var elapsedTime = 0f;
         var startPosition = _player.position;
         var targetPosition = new Vector3(startPosition.x, targetHeight, startPosition.z);
 
-        while (elapsedTime < _moveDuration && !token.IsCancellationRequested)
+        while (elapsedTime < moveDuration && !token.IsCancellationRequested)
         {
             elapsedTime += Time.deltaTime;
-            var t = Mathf.Clamp01(elapsedTime / _moveDuration);
+            var t = Mathf.Clamp01(elapsedTime / moveDuration);
 
             var curveValue = _speedCurve.Evaluate(t);
             _player.position = Vector3.Lerp(startPosition, targetPosition, curveValue);

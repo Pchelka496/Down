@@ -2239,6 +2239,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 3103104147618871408}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.3019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.90196085
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9921569
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -3278,6 +3294,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 1816267999451629057}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.3019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.90196085
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9921569
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -3616,6 +3648,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 7497489267414249753}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.3019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.90196085
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9921569
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -3787,6 +3835,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 7126529320690139594}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.3019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.90196085
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9921569
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -3959,6 +4023,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 7465300865251201556}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.3019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.90196085
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9921569
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -4131,6 +4211,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 8344684975773030093}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.3019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.90196085
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9921569
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

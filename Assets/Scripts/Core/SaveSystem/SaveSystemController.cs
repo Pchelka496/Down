@@ -36,14 +36,6 @@ namespace Core.SaveSystem
             }
         }
 
-        [Zenject.Inject]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����",
-            Justification = "<��������>")]
-        private void Construct(LevelManager levelManager)
-        {
-            levelManager.SubscribeToRoundStart(RoundStart);
-        }
-
         // ReSharper disable Unity.PerformanceAnalysis
         private void FullSaving(IHaveDataForSave[] haveDataForSaveArray)
         {
@@ -56,13 +48,6 @@ namespace Core.SaveSystem
             }
 
             Save();
-        }
-
-        private void RoundStart(LevelManager levelManager) => levelManager.SubscribeToRoundEnd(RoundEnd);
-
-        private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
-        {
-            levelManager.SubscribeToRoundStart(RoundStart);
         }
 
         private void SaveForSaveData(IHaveDataForSave needDataSaveObject)

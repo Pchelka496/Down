@@ -1,70 +1,155 @@
 using Core;
 using Creatures.Player;
+using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
 using UnityEngine;
-using Zenject;
+using DG.Tweening;
+using System;
 
 public class CameraFacade : MonoBehaviour
 {
-    [SerializeField] CinemachineCamera _camera;
+    [SerializeField] Camera _camera;
+    [SerializeField] CinemachineCamera _cinemachineCamera;
 
     [SerializeField] CameraShakerController _cameraShaker;
     [SerializeField] LensController _lensController;
     [SerializeField] PositionComposerController _positionComposerController;
 
     [SerializeField] Transform _cameraDefaultTrackingTarget;
-    PlayerController _player;
 
-    [Inject]
-    public void Construct(LevelManager levelManager, PlayerController player)
+    PlayerController _player;
+    CameraState _currentState;
+
+    bool _onChangeTargetAnimationEnding;
+
+    public Camera Camera => _camera;
+    public float LobbyOrthographicSize => _lensController.LobbyModeOrthographicSize;
+    public bool OnChangeTargetAnimationEnding { get => _onChangeTargetAnimationEnding; }
+
+    Func<bool> _isTransitioning = () => false;
+
+    event Action DisposeEvents;
+
+    [Zenject.Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(GlobalEventsManager globalEventsManager, PlayerController player)
     {
         _player = player;
 
-        levelManager.SubscribeToRoundStart(RoundStart);
+        globalEventsManager.SubscribeToRoundStarted(RoundStart);
+        globalEventsManager.SubscribeToRoundEnded(RoundEnd);
+        globalEventsManager.SubscribeToWarpStarted(WarpStart);
 
-        _lensController.Initialize(_camera, _player.Rb);
+        _isTransitioning = () => globalEventsManager != null && globalEventsManager.IsTransitioning;
+
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
+    }
+
+    private void Awake()
+    {
+        _cameraDefaultTrackingTarget.position = new(LevelManager.PLAYER_START_X_POSITION, LevelManager.PLAYER_START_Y_POSITION);
+
+        _lensController.Initialize(_cinemachineCamera, _player.Rb);
         _positionComposerController.Initialize(_player.Rb);
 
-        SetLobbyMod();
-        _cameraDefaultTrackingTarget.position = new(LevelManager.PLAYER_START_X_POSITION, LevelManager.PLAYER_START_Y_POSITION);
+        _currentState = CameraState.Lobby;
+
+        EnterLobbyMode().Forget();
     }
 
-    private void RoundStart(LevelManager levelManager)
+    private void WarpStart() => SetState(CameraState.Warp).Forget();
+    private void RoundStart() => SetState(CameraState.Gameplay).Forget();
+    private void RoundEnd() => SetState(CameraState.Lobby).Forget();
+
+    private async UniTask SetState(CameraState newState)
     {
-        SetFlyMode();
-        levelManager.SubscribeToRoundEnd(RoundEnd);
-    }
+        if (_currentState == newState) return;
 
-    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
-    {
-        levelManager.SubscribeToRoundStart(RoundStart);
-        SetLobbyMod();
-    }
+        _currentState = newState;
 
-    private void SetLobbyMod()
-    {
-        SetTrackingTarget(_cameraDefaultTrackingTarget);
-
-        _positionComposerController.SetLobbyMode();
-        _lensController.SetLobbyMode();
-    }
-
-    private void SetFlyMode()
-    {
-        SetTrackingTarget(_player.transform);
-
-        _lensController.SetFlyMode();
-        _positionComposerController.SetFlyMode();
-    }
-
-    private void SetTrackingTarget(Transform transform)
-    {
-        var target = new CameraTarget
+        switch (newState)
         {
-            TrackingTarget = transform
+            case CameraState.Lobby:
+                {
+                    await EnterLobbyMode();
+                    break;
+                }
+            case CameraState.Gameplay:
+                {
+                    await EnterGameplayMode();
+                    break;
+                }
+            case CameraState.Warp:
+                {
+                    await EnterWarpMode();
+                    break;
+                }
+            default:
+                {
+                    Debug.LogError($"Unknown camera state: {newState}");
+                    break;
+                }
+        }
+    }
+
+    private async UniTask EnterLobbyMode()
+    {
+        await UniTask.WaitUntil(() => !_isTransitioning.Invoke());
+        await SetTrackingTarget(_cameraDefaultTrackingTarget);
+
+        _positionComposerController.SetState(PositionComposerController.ComposerState.Lobby);
+        _lensController.SetState(LensController.LensState.Lobby);
+    }
+
+    private async UniTask EnterGameplayMode()
+    {
+        const float DURATION = 1f;
+
+        await SetTrackingTarget(_player.transform, DURATION, AnimationCurve.EaseInOut(0f, 0f, 1f, 1f));
+
+        _positionComposerController.SetState(PositionComposerController.ComposerState.Gameplay);
+        _lensController.SetState(LensController.LensState.Gameplay);
+    }
+
+    private async UniTask EnterWarpMode()
+    {
+        const float DURATION = 1f;
+
+        await SetTrackingTarget(_player.transform, DURATION, AnimationCurve.EaseInOut(0f, 0f, 1f, 1f));
+
+        _positionComposerController.SetState(PositionComposerController.ComposerState.Warp);
+        _lensController.SetState(LensController.LensState.Warp);
+    }
+
+    private async UniTask SetTrackingTarget(Transform target, float? duration = null, AnimationCurve curve = null)
+    {
+        _cinemachineCamera.Target = new CameraTarget();
+
+        if (target == null) return;
+
+        _onChangeTargetAnimationEnding = false;
+
+        if (duration.HasValue && curve != null)
+        {
+            await _cinemachineCamera.transform.DOMove(target.position, duration.Value)
+                                   .SetEase(curve)
+                                   .AsyncWaitForCompletion();
+        }
+        else
+        {
+            _cinemachineCamera.transform.position = target.position;
+        }
+
+        var cameraTarget = new CameraTarget
+        {
+            TrackingTarget = target
         };
 
-        _camera.Target = target;
+        _cinemachineCamera.Target = cameraTarget;
+
+        _onChangeTargetAnimationEnding = true;
     }
 
     public void EnableCameraShake(float? time = null)
@@ -89,6 +174,15 @@ public class CameraFacade : MonoBehaviour
         _lensController?.Dispose();
         _positionComposerController?.Dispose();
         _cameraShaker?.Dispose();
+
+        DisposeEvents?.Invoke();
+        DisposeEvents = null;
     }
 
+    public enum CameraState
+    {
+        Lobby,
+        Gameplay,
+        Warp
+    }
 }

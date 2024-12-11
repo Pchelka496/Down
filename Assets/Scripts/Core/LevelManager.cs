@@ -1,4 +1,3 @@
-using System;
 using Core.Enemy;
 using Creatures.Player;
 using Cysharp.Threading.Tasks;
@@ -9,7 +8,7 @@ using Zenject;
 
 namespace Core
 {
-    public class LevelManager
+    public class LevelManager : System.IDisposable
     {
         public const float PLAYER_START_Y_POSITION = 99989.1f;
         public const float PLAYER_START_X_POSITION = 0;
@@ -19,38 +18,39 @@ namespace Core
         LevelManagerConfig _config;
 
         EnemyManager _enemyManager;
-        PlayerController _player;
         MapController _mapController;
         BackgroundController _backgroundController;
         PickUpItemManager _rewardManager;
         ScreenFader _screenFader;
-
-        event Action<LevelManager> RoundStartAction;
-        event Action<LevelManager, EnumRoundResults> RoundEndAction;
-
-        bool _isRoundActive;
-
-        public bool IsRoundActive => _isRoundActive;
+        event System.Action DisposeEvents;
 
         [Inject]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����",
-            Justification = "<��������>")]
-        private void Construct(MapController mapController,
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+        private void Construct(
+            GlobalEventsManager globalEventsManager,
+            MapController mapController,
             EnemyManager enemyManager,
             BackgroundController backgroundController,
-            PlayerController player,
             PickUpItemManager rewardManager,
-            ScreenFader screenFader
-        )
+            ScreenFader screenFader)
         {
             _mapController = mapController;
             _enemyManager = enemyManager;
             _backgroundController = backgroundController;
             _rewardManager = rewardManager;
             _screenFader = screenFader;
-            _player = player;
 
             LoadConfig().Forget();
+
+            globalEventsManager.SubscribeToRoundStarted(RoundStart);
+            globalEventsManager.SubscribeToRoundEnded(RoundEnd);
+            globalEventsManager.SubscribeToWarpStarted(WarpStart);
+            var taskId = globalEventsManager.AddTransitionTask(CleaningAndPlayerTransition, false);
+
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
+            DisposeEvents += () => globalEventsManager?.RemoveTransitionTask(taskId);
         }
 
         private async UniTask LoadConfig()
@@ -71,7 +71,6 @@ namespace Core
 
         private void FirstSettings()
         {
-            ResetPlayerPosition();
             _screenFader.FadeToClear().Forget();
             _targetFrameRate = _config.TargetFrameRate;
 
@@ -86,71 +85,32 @@ namespace Core
             _rewardManager.Initialize(_config.RewardManagerConfig);
         }
 
-        private void ResetPlayerPosition()
+        private void RoundStart()
         {
-            _player.transform.position = new Vector2(PLAYER_START_X_POSITION, PLAYER_START_Y_POSITION);
-            _player.Rb.velocity = Vector2.zero;
+
         }
 
-        public async UniTaskVoid RoundStart()
+        private void RoundEnd()
         {
-            await UniTask.WaitForSeconds(1f);
-            _isRoundActive = true;
 
-            if (RoundStartAction != null)
-            {
-                foreach (var handler in RoundStartAction.GetInvocationList())
-                {
-                    try
-                    {
-                        ((Action<LevelManager>)handler)?.Invoke(this);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogError($"Error in RoundStartAction handler: {ex.Message}\n{ex.StackTrace}");
-                    }
-                }
-            }
-
-            RoundStartAction = null;
         }
 
-        public async UniTaskVoid RoundEnd()
+        private UniTask CleaningAndPlayerTransition()
         {
-            await UniTask.WaitForEndOfFrame();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
 
-            await _screenFader.FadeToBlack();
-            _isRoundActive = false;
-
-            if (RoundEndAction != null)
-            {
-                foreach (var handler in RoundEndAction.GetInvocationList())
-                {
-                    try
-                    {
-                        ((Action<LevelManager, EnumRoundResults>)handler)?.Invoke(this, EnumRoundResults.Positive);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogError($"Error in RoundEndAction handler: {ex.Message}\n{ex.StackTrace}");
-                    }
-                }
-            }
-
-            RoundEndAction = null;
-
-            ResetPlayerPosition();
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            await UniTask.WaitForEndOfFrame();
-        
-            await _screenFader.FadeToClear();
+            return UniTask.CompletedTask;
         }
 
+        private void WarpStart()
+        {
 
-        public void SubscribeToRoundStart(Action<LevelManager> action) => RoundStartAction += action;
-        public void SubscribeToRoundEnd(Action<LevelManager, EnumRoundResults> action) => RoundEndAction += action;
+        }
+
+        public void Dispose()
+        {
+            DisposeEvents?.Invoke();
+        }
     }
 }

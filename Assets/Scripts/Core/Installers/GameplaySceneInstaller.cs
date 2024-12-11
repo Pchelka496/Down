@@ -49,6 +49,7 @@ namespace Core.Installers
         CharacterPositionMeter _characterPositionMeter;
         PlayerResourcedKeeper _playerResourcedKeeper;
         SaveSystemController _saveSystemController;
+        GlobalEventsManager _gameEventsManager;
 
         public static DiContainer DiContainer { get; private set; }
 
@@ -78,13 +79,13 @@ namespace Core.Installers
             Container.Bind<BoosterIndicator>().FromInstance(_boosterIndicator).AsSingle().NonLazy();
             Container.Bind<ScreenTouchController>().FromInstance(_screenTouchController).AsSingle().NonLazy();
             Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle().NonLazy();
-            Container.Bind<OriginalPlayerModuleConfigs>().FromInstance(_originalPlayerModulesConfig).AsSingle()
-                .NonLazy();
+            Container.Bind<OriginalPlayerModuleConfigs>().FromInstance(_originalPlayerModulesConfig).AsSingle().NonLazy();
             Container.Bind<OptionalPlayerModuleLoader>().FromInstance(_optionalPlayerModuleLoader).AsSingle().NonLazy();
             Container.Bind<CustomizerConfig>().FromInstance(_customizerConfig).AsSingle().NonLazy();
             Container.Bind<Customizer>().FromInstance(_customizer).AsSingle().NonLazy();
             Container.Bind<CharacterPositionMeter>().FromInstance(_characterPositionMeter).AsSingle().NonLazy();
             Container.Bind<PlayerResourcedKeeper>().FromInstance(_playerResourcedKeeper).AsSingle().NonLazy();
+            Container.Bind<GlobalEventsManager>().FromInstance(_gameEventsManager).AsSingle().NonLazy();
 
             BindPlayerModuleConfigs();
         }
@@ -107,28 +108,32 @@ namespace Core.Installers
         private void BindPlayerModuleConfigs()
         {
             Container.Bind<EngineModuleConfig>()
-                .FromInstance(Instantiate(_originalPlayerModulesConfig.EngineModuleConfig))
+                .FromInstance(_originalPlayerModulesConfig.EngineModuleConfig)
                 .AsSingle().NonLazy();
 
             Container.Bind<PickerModuleConfig>()
-                .FromInstance(Instantiate(_originalPlayerModulesConfig.PickerModuleConfig))
+                .FromInstance(_originalPlayerModulesConfig.PickerModuleConfig)
                 .AsSingle().NonLazy();
 
             Container.Bind<RotationModuleConfig>()
-                .FromInstance(Instantiate(_originalPlayerModulesConfig.StabilizationModuleConfig))
+                .FromInstance(_originalPlayerModulesConfig.StabilizationModuleConfig)
                 .AsSingle().NonLazy();
 
             Container.Bind<HealthModuleConfig>()
-                .FromInstance(Instantiate(_originalPlayerModulesConfig.HealthModuleConfig))
+                .FromInstance(_originalPlayerModulesConfig.HealthModuleConfig)
                 .AsSingle().NonLazy();
 
             Container.Bind<EmergencyBrakeModuleConfig>()
-                .FromInstance(Instantiate(_originalPlayerModulesConfig.EmergencyBrakeModuleConfig))
+                .FromInstance(_originalPlayerModulesConfig.EmergencyBrakeModuleConfig)
                 .AsSingle().NonLazy();
 
             Container.Bind<AirBrakeModuleConfig>()
-                .FromInstance(Instantiate(_originalPlayerModulesConfig.AirBrakeModuleConfig))
+                .FromInstance(_originalPlayerModulesConfig.AirBrakeModuleConfig)
                 .AsSingle().NonLazy();
+
+            Container.Bind<WarpEngineModuleConfig>()
+               .FromInstance(_originalPlayerModulesConfig.WarpEngineModuleConfig)
+               .AsSingle().NonLazy();
         }
 
         private void InitializeDependencies()
@@ -147,6 +152,7 @@ namespace Core.Installers
             _characterPositionMeter = new();
             _playerResourcedKeeper = new(_playerResourcedKeeperConfig, _playerResourcedIndicator);
             _saveSystemController = new(GetAllDataForSave());
+            _gameEventsManager = new(_screenFader);
         }
 
         private IHaveDataForSave[] GetAllDataForSave()
@@ -186,15 +192,21 @@ namespace Core.Installers
             Container.Inject(_characterPositionMeter);
             Container.Inject(_customizer);
             Container.Inject(_playerResourcedKeeper);
+            Container.Inject(_saveSystemController);
+            Container.Inject(_gameEventsManager);
         }
 
         private void OnDestroy()
         {
+            _levelManager.Dispose();
+            _customizer.Dispose();
+            _optionalPlayerModuleLoader.Dispose();
+            _mapController.Dispose();
             _backgroundController.Dispose();
             _enemyManager.Dispose();
-            _customizer.Dispose();
-            _saveSystemController.Dispose();
             _playerResourcedKeeper.Dispose();
+            _saveSystemController.Dispose();
+            _pickUpItemManager.Dispose();
         }
 
         [System.Serializable]
@@ -206,6 +218,7 @@ namespace Core.Installers
             [field: SerializeField] public HealthModuleConfig HealthModuleConfig { get; private set; }
             [field: SerializeField] public EmergencyBrakeModuleConfig EmergencyBrakeModuleConfig { get; private set; }
             [field: SerializeField] public AirBrakeModuleConfig AirBrakeModuleConfig { get; private set; }
+            [field: SerializeField] public WarpEngineModuleConfig WarpEngineModuleConfig { get; private set; }
 
             public BaseModuleConfig[] GetAllConfigsAsBase()
             {
@@ -216,7 +229,8 @@ namespace Core.Installers
                     HealthModuleConfig,
                     EmergencyBrakeModuleConfig,
                     AirBrakeModuleConfig,
-                    PickerModuleConfig
+                    PickerModuleConfig,
+                    WarpEngineModuleConfig
                 };
             }
         }

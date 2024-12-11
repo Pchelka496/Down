@@ -14,7 +14,7 @@ public class CustomizationPanel : MonoBehaviour, IUIPanel
     EnumCustomizationPanelState _currentState;
 
     [Zenject.Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
     private void Construct(CustomizerConfig config, PlayerController player)
     {
         _controllerCustomizer.Initialize(config);
@@ -29,7 +29,7 @@ public class CustomizationPanel : MonoBehaviour, IUIPanel
     public void Open()
     {
         ChangeState(EnumCustomizationPanelState.MainMenu);
-        _player.OpenPanel();
+        _player.OpenUIPanel();
         _player.transform.position = _playerPosition.position;
         gameObject.SetActive(true);
     }
@@ -37,7 +37,7 @@ public class CustomizationPanel : MonoBehaviour, IUIPanel
     public void Close()
     {
         gameObject.SetActive(false);
-        _player.ClosePanel();
+        _player.CloseUIPanel();
     }
 
     public void OpenControllerCustomizer() => ChangeState(EnumCustomizationPanelState.ControllerCustomization);

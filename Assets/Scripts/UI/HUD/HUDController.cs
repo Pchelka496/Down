@@ -2,16 +2,22 @@ using Core;
 using UnityEngine;
 using Zenject;
 
-public class HUDManager : MonoBehaviour
+public class UIObjectController : MonoBehaviour
 {
     [SerializeField] GameObject[] _allHudElements;
     [SerializeField] GameObject[] _elementsOnActiveForRound;
+    event System.Action DisposeEvents;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(LevelManager levelManager)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(GlobalEventsManager globalEventsManager)
     {
-        levelManager.SubscribeToRoundStart(RoundStart);
+        globalEventsManager.SubscribeToRoundStarted(RoundStart);
+        globalEventsManager.SubscribeToRoundEnded(RoundEnd);
+
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
+
         SetHUDActive(false);
     }
 
@@ -20,15 +26,13 @@ public class HUDManager : MonoBehaviour
         AdjustForSafeArea();
     }
 
-    private void RoundStart(LevelManager levelManager)
+    private void RoundStart()
     {
-        levelManager.SubscribeToRoundEnd(RoundEnd);
         SetHUDActive(true);
     }
 
-    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
+    private void RoundEnd()
     {
-        levelManager.SubscribeToRoundStart(RoundStart);
         SetHUDActive(false);
     }
 
@@ -61,4 +65,8 @@ public class HUDManager : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        DisposeEvents?.Invoke();
+    }
 }

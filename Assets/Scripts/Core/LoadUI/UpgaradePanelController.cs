@@ -17,27 +17,22 @@ public class LobbyUIPanelFacade : MonoBehaviour
     [SerializeField] AssetReference _exchangerPanel;
 
     UIPanelManager _panelManager;
+    event System.Action DisposeEvents;
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(DiContainer diContainer, LevelManager levelManager)
+    private void Construct(DiContainer diContainer, GlobalEventsManager globalEventsManager)
     {
         var factory = new UIPanelFactory(diContainer);
         _panelManager = new UIPanelManager(factory, transform);
 
-        levelManager.SubscribeToRoundStart(RoundStart);
+
+        globalEventsManager.SubscribeToRoundStarted(RoundStart);
+
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
     }
 
-    private void RoundStart(LevelManager levelManager)
-    {
-        ClearPanels();
-        levelManager.SubscribeToRoundEnd(RoundEnd);
-    }
-
-    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
-    {
-        levelManager.SubscribeToRoundStart(RoundStart);
-    }
+    private void RoundStart() => ClearPanels();
 
     public void OpenUpgradePanel() => _panelManager.OpenPanelAsync(UPGRADE_PANEL_ID, _upgradePanelPrefabReference).Forget();
     public void OpenCustomizationPanel() => _panelManager.OpenPanelAsync(CUSTOMIZATION_PANEL_ID, _customizationPanelPrefabReference).Forget();
@@ -47,5 +42,10 @@ public class LobbyUIPanelFacade : MonoBehaviour
     private void ClearPanels()
     {
         _panelManager.CloseAllPanels();
+    }
+
+    private void OnDestroy()
+    {
+        DisposeEvents?.Invoke();
     }
 }

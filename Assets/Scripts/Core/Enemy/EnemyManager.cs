@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using System.Threading;
+using Additional;
 using Core.Installers;
 using Cysharp.Threading.Tasks;
 using ScriptableObject.Enemy;
@@ -28,6 +29,7 @@ namespace Core.Enemy
         EnemyCore[] _enemyCore;
 
         CancellationTokenSource _enemyRegionUpdaterCts;
+        event System.Action DisposeEvents;
 
         public EnemyManager(Transform enemyParent)
         {
@@ -35,11 +37,14 @@ namespace Core.Enemy
         }
 
         [Inject]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����",
-            Justification = "<��������>")]
-        private void Construct(LevelManager levelManager)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+        private void Construct(GlobalEventsManager globalEventsManager)
         {
-            levelManager.SubscribeToRoundStart(RoundStart);
+            globalEventsManager.SubscribeToRoundStarted(RoundStart);
+            globalEventsManager.SubscribeToRoundEnded(RoundEnd);
+
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
         }
 
         public async UniTaskVoid Initialize(EnemyManagerConfig config)
@@ -61,6 +66,7 @@ namespace Core.Enemy
             _enemyController = diContainer.Instantiate<EnemyMovementController>();
 
             var enemyControllerRoundStart = await _enemyCoreFactory.CreateEnemies();
+
             _enemyController.Initialize(_config.AllEnemyCount,
                 enemyControllerRoundStart.Transforms,
                 enemyControllerRoundStart.Speeds,
@@ -71,15 +77,13 @@ namespace Core.Enemy
             _enemyController.StartEnemyMoving();
         }
 
-        private void RoundStart(LevelManager levelManager)
+        private void RoundStart()
         {
             ClearToken(ref _enemyRegionUpdaterCts);
             _enemyRegionUpdaterCts = new CancellationTokenSource();
 
             EnemyRegionUpdater(_enemyRegionUpdaterCts.Token).Forget();
             CreateChallenge().Forget();
-
-            levelManager.SubscribeToRoundEnd(RoundEnd);
         }
 
         private async UniTaskVoid CreateChallenge()
@@ -101,13 +105,11 @@ namespace Core.Enemy
             }
         }
 
-        private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
+        private void RoundEnd()
         {
             _enemyRegionUpdaterCts?.Cancel();
 
             ReleaseLoadedResources();
-
-            levelManager.SubscribeToRoundStart(RoundStart);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -135,8 +137,8 @@ namespace Core.Enemy
             {
                 var currentRegion = enemyRegions.Pop();
 
-                await UniTask.WaitUntil(() => CharacterPositionMeter.YPosition <= currentRegion.StartHeight,
-                    cancellationToken: token);
+                await UniTask.WaitUntil(
+                    () => CharacterPositionMeter.YPosition <= currentRegion.StartHeight, cancellationToken: token);
 
                 if (enemyRegions.Count > 0)
                 {
@@ -167,26 +169,23 @@ namespace Core.Enemy
             {
                 var enemyCharacteristics = enemies[i];
 
-                EnemySettings(i,
-                    _enemyCore[i],
-                    enemyVisualParts[i],
-                    enemyCharacteristics
+                EnemySettings(
+                    index: i,
+                    enemyCore: _enemyCore[i],
+                    visualPart: enemyVisualParts[i],
+                    enemyCharacteristics: enemyCharacteristics
                 );
             }
 
             ResetAllEnemyPosition();
         }
 
-        private void EnemySettings(int index, EnemyCore enemyCore, EnemyVisualPart visualPart,
+        private void EnemySettings(
+            int index,
+            EnemyCore enemyCore,
+            EnemyVisualPart visualPart,
             EnemyConfig.Enemy enemyCharacteristics)
         {
-#if UNITY_EDITOR
-            if (!EditorApplication.isPlaying)
-            {
-                Object.DestroyImmediate(visualPart);
-                return;
-            }
-#endif
             if (visualPart != null)
             {
                 visualPart.IndexInManager = index;
@@ -199,8 +198,12 @@ namespace Core.Enemy
                 visualPart.Initialize(enemyCore);
             }
 
-            _enemyController.UpdateEnemyValues(index, enemyCharacteristics.Speed, enemyCharacteristics.MotionPattern,
-                enemyCharacteristics.MotionCharacteristic, enemyCharacteristics.IsolateDistance);
+            _enemyController.UpdateEnemyValues(
+                index: index,
+                speed: enemyCharacteristics.Speed,
+                motionPattern: enemyCharacteristics.MotionPattern,
+                motionCharacteristic: enemyCharacteristics.MotionCharacteristic,
+                spawnIsolateDistance: enemyCharacteristics.IsolateDistance);
         }
 
         public async UniTaskVoid UpdateChallenge(EnemyVisualPart visualPart)
@@ -213,11 +216,11 @@ namespace Core.Enemy
 
             ResetEnemyPosition(indexInManager);
 
-            EnemySettings(indexInManager,
+            EnemySettings(
+                indexInManager,
                 _enemyCore[indexInManager],
                 enemyInfo.EnemyVisualPart,
-                enemyInfo.Enemy
-            );
+                enemyInfo.Enemy);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -227,18 +230,7 @@ namespace Core.Enemy
             _challengeVisualPartFactory.ReleaseAllLoadedResources().Forget();
         }
 
-        private void ClearToken(ref CancellationTokenSource cts)
-        {
-            if (cts == null) return;
-
-            if (!cts.IsCancellationRequested)
-            {
-                cts.Cancel();
-            }
-
-            cts.Dispose();
-            cts = null;
-        }
+        private void ClearToken(ref CancellationTokenSource cts) => ClearTokenSupport.ClearToken(ref cts);
 
         public void Dispose()
         {
@@ -246,6 +238,7 @@ namespace Core.Enemy
 
             ClearToken(ref _enemyRegionUpdaterCts);
             ReleaseLoadedResources();
+            DisposeEvents?.Invoke();
         }
 
         public readonly struct EnemyControllerRoundStart
@@ -256,8 +249,10 @@ namespace Core.Enemy
             public readonly float2[] MotionCharacteristic;
             public readonly Vector2[] IsolationDistance;
 
-            public EnemyControllerRoundStart(Transform[] transforms, float[] speeds,
-                EnumMotionPattern[] enumMotionPatterns, float2[] motionCharacteristic,
+            public EnemyControllerRoundStart(
+                Transform[] transforms, float[] speeds,
+                EnumMotionPattern[] enumMotionPatterns,
+                float2[] motionCharacteristic,
                 Vector2[] isolationDistance) : this()
             {
                 Transforms = transforms;

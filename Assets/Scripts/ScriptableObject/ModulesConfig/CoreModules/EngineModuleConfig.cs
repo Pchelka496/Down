@@ -68,14 +68,14 @@ namespace ScriptableObject.ModulesConfig.FlightModule
 
         public override void LoadSaveData(SaveData saveData)
         {
-            var loadedData = saveData.EngineModuleSaveData;
-            if (loadedData == null)
+            var engineModuleSaveData = saveData.EngineModuleSaveData;
+            if (engineModuleSaveData == null)
             {
                 Debug.LogWarning("EngineModuleSaveData is null.");
                 return;
             }
 
-            var savedData = loadedData.SavedData;
+            var savedData = engineModuleSaveData.SavedData;
             if (savedData == null)
             {
                 Debug.LogWarning("SavedData is null.");

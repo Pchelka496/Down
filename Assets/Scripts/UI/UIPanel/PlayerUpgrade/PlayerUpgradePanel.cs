@@ -82,7 +82,7 @@ namespace UI.UIPanel.PlayerUpgrade
         void IUIPanel.Open()
         {
             gameObject.SetActive(true);
-            _player.OpenPanel();
+            _player.OpenUIPanel();
 
             MovePlayerToUpgradeView();
         }
@@ -90,7 +90,7 @@ namespace UI.UIPanel.PlayerUpgrade
         void IUIPanel.Close()
         {
             gameObject.SetActive(false);
-            _player.ClosePanel();
+            _player.CloseUIPanel();
         }
 
         private void MovePlayerToUpgradeView()

@@ -9,25 +9,28 @@ using Zenject;
 
 namespace Creatures.Player
 {
-    public class OptionalPlayerModuleLoader
+    public class OptionalPlayerModuleLoader : System.IDisposable
     {
         const string CONFIG_ADDRESS = "ScriptableObject/ModulesConfig/PlayerModuleLoaderConfig";
 
         OptionalPlayerModuleLoaderConfig _config;
         PlayerController _player;
+        event System.Action DisposeEvents;
 
         [Inject]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����",
-            Justification = "<��������>")]
-        private void Construct(LevelManager levelManager, PlayerController player)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+        private void Construct(GlobalEventsManager globalEventsManager, PlayerController player)
         {
-            levelManager.SubscribeToRoundStart(RoundStart);
             _player = player;
 
             LoadConfiguration().Forget();
+
+            globalEventsManager.SubscribeToRoundStarted(RoundStart);
+
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
         }
 
-        private void RoundStart(LevelManager levelManager)
+        private void RoundStart()
         {
             if (_config == null)
             {
@@ -36,12 +39,6 @@ namespace Creatures.Player
             }
 
             LoadModules();
-            levelManager.SubscribeToRoundEnd(RoundEnd);
-        }
-
-        private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
-        {
-            levelManager.SubscribeToRoundStart(RoundStart);
         }
 
         private async UniTask LoadConfiguration()
@@ -131,8 +128,12 @@ namespace Creatures.Player
         {
             var loadOperationData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(moduleReference);
 
-            return GameplaySceneInstaller.DiContainer.InstantiatePrefabForComponent<BaseModule>(loadOperationData
-                .LoadAsset);
+            return GameplaySceneInstaller.DiContainer.InstantiatePrefabForComponent<BaseModule>(loadOperationData.LoadAsset);
+        }
+
+        public void Dispose()
+        {
+            DisposeEvents?.Invoke();
         }
     }
 }

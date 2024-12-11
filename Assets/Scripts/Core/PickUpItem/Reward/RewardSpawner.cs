@@ -4,8 +4,10 @@ using Core.Installers;
 using ScriptableObject.PickUpItem;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using System.Threading;
+using Additional;
 
-public class RewardSpawner
+public class RewardSpawner : System.IDisposable
 {
     const float MIN_DISTANCE_X = -30f;
     const float MAX_DISTANCE_X = 30f;
@@ -13,25 +15,61 @@ public class RewardSpawner
     const float MAX_DISTANCE_Y = 120f;
     const float CHECK_BOUNDARY_X = 40f;
     const float CHECK_BOUNDARY_Y = 140f;
+
     const float CHECK_INTERVAL = 1f;
 
-    static readonly Vector3 rewardSpawnPosition = new(float.MaxValue / 5, float.MaxValue / 5, 0f);
+    static readonly Vector3 _rewardSpawnPosition = new(float.MaxValue / 5, float.MaxValue / 5, 0f);
 
     int _currentPresetIndex = 0;
 
     RewardControllerConfig _config;
     PickUpReward[] _rewards;
+    CancellationTokenSource _relocateCheckLoopCts;
+
+    event System.Action DisposeEvents;
 
     private Vector2 DistanceCheckRewardPosition { get; set; }
 
-    public async void Initialize(RewardControllerConfig config, Transform rewardParentTransform)
+    [Zenject.Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(GlobalEventsManager globalEventsManager)
+    {
+        globalEventsManager.SubscribeToRoundStarted(RoundStart);
+        globalEventsManager.SubscribeToRoundEnded(RoundEnd);
+
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
+    }
+
+    public void Initialize(RewardControllerConfig config, Transform rewardParentTransform)
     {
         _config = config;
         var rewardCount = _config.GetMaxRewardCount();
 
-        await CreateRewards(rewardCount, rewardParentTransform);
+        CreateRewards(rewardCount, rewardParentTransform).Forget();
+    }
 
-        StartRewardCheckLoop().Forget();
+    private void RoundStart()
+    {
+        ClearToken();
+        _relocateCheckLoopCts = new();
+
+        RewardRelocateCheckLoop(_relocateCheckLoopCts.Token).Forget();
+    }
+
+    private void RoundEnd()
+    {
+        ClearToken();
+        RelocateAllRewards();
+    }
+
+    private void RelocateAllRewards()
+    {
+        foreach (var reward in _rewards)
+        {
+            reward.SetNewPosition(_rewardSpawnPosition);
+            reward.gameObject.SetActive(false);
+        }
     }
 
     private async UniTask CreateRewards(int count, Transform rewardParentTransform)
@@ -45,7 +83,7 @@ public class RewardSpawner
 
             for (int i = 0; i < count; i++)
             {
-                var reward = diContainer.InstantiatePrefabForComponent<PickUpReward>(rewardPrefab, rewardSpawnPosition, Quaternion.identity, rewardParentTransform);
+                var reward = diContainer.InstantiatePrefabForComponent<PickUpReward>(rewardPrefab, _rewardSpawnPosition, Quaternion.identity, rewardParentTransform);
 
                 reward.gameObject.SetActive(false);
 
@@ -67,12 +105,14 @@ public class RewardSpawner
         return loadOperationData.LoadAsset;
     }
 
-    private async UniTaskVoid StartRewardCheckLoop()
+    private async UniTaskVoid RewardRelocateCheckLoop(CancellationToken token)
     {
-        while (true)
+        var timeSpanDelay = System.TimeSpan.FromSeconds(CHECK_INTERVAL);
+
+        while (!token.IsCancellationRequested)
         {
             CheckAndRelocateRewards();
-            await UniTask.WaitForSeconds(CHECK_INTERVAL);
+            await UniTask.Delay(timeSpanDelay, cancellationToken: token);
         }
     }
 
@@ -100,6 +140,7 @@ public class RewardSpawner
                 var newRewardPosition = CalculateRewardPosition(presetCenterPosition, rewardPositions[i]);
                 _rewards[i].SetNewPosition(newRewardPosition);
             }
+
             _currentPresetIndex = (_currentPresetIndex + 1) % rewardPresets.Length;
         }
     }
@@ -107,9 +148,9 @@ public class RewardSpawner
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private Vector2 CalculatePresetCenterPosition(Vector2 playerPosition)
     {
-        var randomXDistance = Random.Range(MIN_DISTANCE_X, MAX_DISTANCE_X);
+        var randomXDistance = UnityEngine.Random.Range(MIN_DISTANCE_X, MAX_DISTANCE_X);
 
-        var randomYDistance = Random.Range(MIN_DISTANCE_Y, MAX_DISTANCE_Y);
+        var randomYDistance = UnityEngine.Random.Range(MIN_DISTANCE_Y, MAX_DISTANCE_Y);
 
         var newX = playerPosition.x + randomXDistance;
         var newY = playerPosition.y - randomYDistance;
@@ -123,4 +164,11 @@ public class RewardSpawner
         return presetCenterPosition + rewardPosition;
     }
 
+    private void ClearToken() => ClearTokenSupport.ClearToken(ref _relocateCheckLoopCts);
+
+    public void Dispose()
+    {
+        ClearToken();
+        DisposeEvents?.Invoke();
+    }
 }

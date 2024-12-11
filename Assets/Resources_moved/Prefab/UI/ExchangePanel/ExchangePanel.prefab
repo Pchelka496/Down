@@ -180,7 +180,6 @@ MonoBehaviour:
     _minPitch: 0.8
     _maxPitch: 1.2
     _volume: 0.7
-  _buttonCheckFrequency: 0.2
 --- !u!1 &7888170609226342344
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,7 +299,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5574499950823305563}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4800124232467221907}
+        m_TargetAssemblyTypeName: ExchangePanel, Assembly-CSharp
+        m_MethodName: Close
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &9083906159570126319
 GameObject:
   m_ObjectHideFlags: 0
@@ -595,9 +606,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _onClickEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  _isProcessingDisabled: 0
+  _minCheckDelay: 0.3
+  _maxCheckDelay: 0.01
+  _lerpFactor: 0.2
 --- !u!1001 &2553997643843058781
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -784,9 +796,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _onClickEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  _isProcessingDisabled: 1
+  _minCheckDelay: 0.1
+  _maxCheckDelay: 0.4
+  _lerpFactor: 0.2
 --- !u!1001 &5210457485676716026
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1021,9 +1034,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _onClickEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  _isProcessingDisabled: 0
+  _minCheckDelay: 0.3
+  _maxCheckDelay: 0.01
+  _lerpFactor: 0.2
 --- !u!224 &6243369775537668275 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2228055591503028041, guid: c31723cbae8a9e2478c6a953aba5ec1d, type: 3}
@@ -1294,9 +1308,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _onClickEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  _isProcessingDisabled: 0
+  _minCheckDelay: 0.3
+  _maxCheckDelay: 0.01
+  _lerpFactor: 0.2
 --- !u!224 &5700244696293480823 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2228055591503028041, guid: c31723cbae8a9e2478c6a953aba5ec1d, type: 3}
@@ -1571,9 +1586,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _onClickEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  _isProcessingDisabled: 0
+  _minCheckDelay: 0.3
+  _maxCheckDelay: 0.01
+  _lerpFactor: 0.2
 --- !u!224 &4913911053641282039 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2228055591503028041, guid: c31723cbae8a9e2478c6a953aba5ec1d, type: 3}

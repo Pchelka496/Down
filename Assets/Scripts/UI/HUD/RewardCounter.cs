@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using Core;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -12,29 +11,25 @@ public class RewardCounter : MonoBehaviour
 
     float _pickUpRewardMultiplier = 1f;
     int _points;
+    event System.Action DisposeEvents;
 
     public float PickUpRewardMultiplier { set => _pickUpRewardMultiplier = value; }
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(LevelManager levelManager, PlayerResourcedKeeper rewardKeeper, AudioSourcePool audioSource)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(GlobalEventsManager globalEventsManager, PlayerResourcedKeeper rewardKeeper, AudioSourcePool audioSource)
     {
         _soundPlayer.Initialize(audioSource);
         _rewardKeeper = rewardKeeper;
         ResetPoints();
 
-        levelManager.SubscribeToRoundStart(RoundStart);
+        globalEventsManager.SubscribeToRoundEnded(RoundEnd);
+
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
     }
 
-    private void RoundStart(LevelManager levelManager)
+    private void RoundEnd()
     {
-        levelManager.SubscribeToRoundEnd(RoundEnd);
-    }
-
-    private void RoundEnd(LevelManager levelManager, EnumRoundResults results)
-    {
-        levelManager.SubscribeToRoundStart(RoundStart);
-
         _rewardKeeper.IncreaseMoney(_points);
         ResetPoints();
     }
@@ -63,7 +58,7 @@ public class RewardCounter : MonoBehaviour
     private void OnDestroy()
     {
         _soundPlayer.Dispose();
+        DisposeEvents?.Invoke();
     }
-
 }
 
