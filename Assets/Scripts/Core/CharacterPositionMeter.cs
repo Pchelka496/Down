@@ -11,7 +11,7 @@ public class CharacterPositionMeter
     public static float XPosition { get; private set; }
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
     private void Construct(PlayerController player)
     {
         _playerTransform = player.transform;
@@ -25,10 +25,7 @@ public class CharacterPositionMeter
             YPosition = _playerTransform.position.y;
             XPosition = _playerTransform.position.x;
 
-            var deltaTime = Time.deltaTime;
-
-            await UniTask.WaitForSeconds(deltaTime);
+            await UniTask.Yield(PlayerLoopTiming.LastFixedUpdate);
         }
     }
-
 }

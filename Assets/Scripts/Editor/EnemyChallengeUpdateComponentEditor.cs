@@ -28,8 +28,7 @@ public class EnemyChallengeUpdateComponentEditor : Editor
             var renderer = renderers[i];
             var gameObject = renderer.gameObject;
 
-            var existingNotifier = gameObject.GetComponent<VisibilityNotifier>();
-            if (existingNotifier != null)
+            if (gameObject.TryGetComponent<VisibilityNotifier>(out var existingNotifier))
             {
                 DestroyImmediate(existingNotifier);
             }
@@ -41,5 +40,4 @@ public class EnemyChallengeUpdateComponentEditor : Editor
 
         EditorUtility.SetDirty(challengeComponent);
     }
-
 }

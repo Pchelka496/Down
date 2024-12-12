@@ -19,11 +19,11 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    Speed: 2
-    MotionPattern: 0
+    Speed: 1
+    MotionPattern: 4
     MotionCharacteristic:
-      x: 0
-      y: 0
-    NeedUpdateRewards: 0
+      x: 0.3
+      y: 1
+    IsolateDistance: {x: 0, y: 0}
     RequiredAmount: 0
     RelativeAmount: 0.1

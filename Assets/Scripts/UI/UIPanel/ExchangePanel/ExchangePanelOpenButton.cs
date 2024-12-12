@@ -65,14 +65,20 @@ public class ExchangePanelOpenButton : MonoBehaviour
             switch (eventArgs.ResourceType)
             {
                 case PlayerResourcedKeeper.ResourceType.Money:
-                    animatedTransform = _money;
-                    break;
+                    {
+                        animatedTransform = _money;
+                        break;
+                    }
                 case PlayerResourcedKeeper.ResourceType.Diamonds:
-                    animatedTransform = _diamond;
-                    break;
+                    {
+                        animatedTransform = _diamond;
+                        break;
+                    }
                 case PlayerResourcedKeeper.ResourceType.Energy:
-                    animatedTransform = _energy;
-                    break;
+                    {
+                        animatedTransform = _energy;
+                        break;
+                    }
             }
         }
 
@@ -104,7 +110,7 @@ public class ExchangePanelOpenButton : MonoBehaviour
     private async UniTask AnimateButtonScale(Transform animatedTransform, float targetScale, float duration, Ease ease, CancellationToken token)
     {
         var tcs = new UniTaskCompletionSource();
-        Tweener tweener = animatedTransform.DOScale(targetScale, duration).SetEase(ease);
+        var tweener = animatedTransform.DOScale(targetScale, duration).SetEase(ease);
 
         tweener.OnComplete(() => tcs.TrySetResult());
         tweener.OnKill(() => tcs.TrySetCanceled());

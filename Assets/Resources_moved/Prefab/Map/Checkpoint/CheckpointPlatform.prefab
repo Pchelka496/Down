@@ -1606,7 +1606,6 @@ GameObject:
   - component: {fileID: 5085788769918750624}
   - component: {fileID: 4046265569928490949}
   - component: {fileID: 1652729351496365450}
-  - component: {fileID: 6748799049809958251}
   m_Layer: 11
   m_Name: CheckpointPlatform
   m_TagString: Untagged
@@ -1716,26 +1715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 5691029007023593581}
-  _displayController: {fileID: 6748799049809958251}
   _collider: {fileID: 4046265569928490949}
---- !u!114 &6748799049809958251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7297665293868185103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e092e6b8bb16c14a8c2f902541db7bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _displayText: {fileID: 8047162892306077592}
-  _textConfigLanguageAddresses:
-    _russianTextConfigAddress: ScriptableObject/Map/CheckpointPlatform/DisplayControllerConfig/RussianConfig
-    _englishTextConfigAddress: ScriptableObject/Map/CheckpointPlatform/DisplayControllerConfig/EnglishConfig
-    _ukrainianTextConfigAddress: ScriptableObject/Map/CheckpointPlatform/DisplayControllerConfig/UkrainianConfig
-    _chineseTextConfigAddress: ScriptableObject/Map/CheckpointPlatform/DisplayControllerConfig/ChineseConfig
 --- !u!1 &7478183972876270565
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,22 +17,41 @@ public class HealthIndicator : MonoBehaviour
     int _maxHealth;
     int _currentHealth;
 
-    event System.Action DisposeEvents;
     CancellationTokenSource _cts;
+    event System.Action DisposeEvents;
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
     private void Construct(GlobalEventsManager globalEventsManager)
     {
         globalEventsManager.SubscribeToRoundStarted(RoundStart);
+        globalEventsManager.SubscribeToWarpStarted(WarpStart);
+        globalEventsManager.SubscribeToRoundEnded(RoundEnd);
 
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
+    }
+
+    private void Start()
+    {
+        RoundEnd();
+    }
+
+    private void WarpStart()
+    {
+        RoundStart();
     }
 
     private void RoundStart()
     {
         SetDefaultIndicatorPosition();
         gameObject.SetActive(true);
+    }
+
+    private void RoundEnd()
+    {
+        gameObject.SetActive(false);
     }
 
     public void Initialize(int maxHealth, int currentHealth)

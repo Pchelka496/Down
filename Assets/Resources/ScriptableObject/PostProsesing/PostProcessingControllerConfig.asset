@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54451a649eae1b64b8484276671d1b9b, type: 3}
+  m_Name: PostProcessingControllerConfig
+  m_EditorClassIdentifier: 
+  _lobby:
+    _volumeProfile: {fileID: 11400000, guid: 09ee2f1013335c24e92d508965d1fc7e, type: 2}
+    _transitionToDuration: 1
+    _transitionFromDuration: 1
+  _gameplay:
+    _volumeProfile: {fileID: 11400000, guid: 7f3be5bbd7cdabb4c8e78c0efaf16ff6, type: 2}
+    _transitionToDuration: 0.5
+    _transitionFromDuration: 1
+  _warp:
+    _volumeProfile: {fileID: 11400000, guid: 9541901ad7342044e9290ce6d716d836, type: 2}
+    _transitionToDuration: 2
+    _transitionFromDuration: 0.5
+  _playerTakeImpact:
+    _volumeProfile: {fileID: 11400000, guid: ffc5af3de5182a24b9a76e0fae147795, type: 2}
+    _transitionToDuration: 1
+    _transitionFromDuration: 1
+  _takeImpactVolumeDuration: 1

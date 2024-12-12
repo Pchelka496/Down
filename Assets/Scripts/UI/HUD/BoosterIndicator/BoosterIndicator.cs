@@ -12,11 +12,35 @@ public class BoosterIndicator : MonoBehaviour
     [SerializeField] Vector2 _iconDirection;
     [SerializeField] float _iconDistance;
 
+    int _maxCharges;
+    readonly List<BoosterIcon> _boosterIcons = new();
     AddressableLouderHelper.LoadOperationData<GameObject> _loadOperationData;
 
-    List<BoosterIcon> _boosterIcons = new List<BoosterIcon>();
+    System.Action DisposeEvents;
 
-    public async void UpdateMaxChargeAmount(int maxCharges)
+    [Zenject.Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(GlobalEventsManager globalEventsManager)
+    {
+        globalEventsManager.SubscribeToRoundStarted(RoundStart);
+        globalEventsManager.SubscribeToWarpStarted(WarpStart);
+        globalEventsManager.SubscribeToRoundEnded(RoundEnd);
+
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
+    }
+
+    private void Start()
+    {
+        RoundEnd();
+    }
+
+    private void RoundStart() => ActiveSetting(_maxCharges);
+    private void WarpStart() => ActiveSetting(_maxCharges);
+    private void RoundEnd() => gameObject.SetActive(false);
+
+    private void ActiveSetting(int maxCharges)
     {
         if (maxCharges <= 0)
         {
@@ -29,6 +53,13 @@ public class BoosterIndicator : MonoBehaviour
         {
             gameObject.SetActive(true);
         }
+    }
+
+    public async UniTaskVoid UpdateMaxChargeAmount(int maxCharges)
+    {
+        _maxCharges = maxCharges;
+
+        ActiveSetting(_maxCharges);
 
         while (_boosterIcons.Count < maxCharges)
         {
@@ -41,7 +72,7 @@ public class BoosterIndicator : MonoBehaviour
 
         while (_boosterIcons.Count > maxCharges)
         {
-            var lastIcon = _boosterIcons[_boosterIcons.Count - 1];
+            var lastIcon = _boosterIcons[^1];
             _boosterIcons.RemoveAt(_boosterIcons.Count - 1);
             Destroy(lastIcon.gameObject);
         }
@@ -89,13 +120,13 @@ public class BoosterIndicator : MonoBehaviour
 
     private void PositionIcon(BoosterIcon icon, int index)
     {
-        var localPosition = _iconDirection.normalized * _iconDistance * index;
+        var localPosition = _iconDistance * index * _iconDirection.normalized;
         icon.RectTransform.localPosition = localPosition;
     }
 
     private void OnDestroy()
     {
         ClearIcons();
+        DisposeEvents?.Invoke();
     }
-
 }

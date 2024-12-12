@@ -11,8 +11,8 @@ public struct MechanicalCounterJob : IJob
     NativeArray<int> _currentDigits;
     NativeArray<int> _targetDigits;
 
-    public float DeltaTime;
     public int Value;
+  //  public float DeltaTime;
 
     public MechanicalCounterJob(ref NativeArray<float> targetYPositions,
                                 ref NativeArray<float> textYPositions,
@@ -42,7 +42,6 @@ public struct MechanicalCounterJob : IJob
             }
 
             _textYPositions[i] = _targetYPositions[_currentDigits[i]];
-
         }
     }
 

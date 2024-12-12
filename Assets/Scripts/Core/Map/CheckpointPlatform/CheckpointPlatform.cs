@@ -7,7 +7,6 @@ public class CheckpointPlatform : MonoBehaviour
 {
     const float BORDER_POSITION_OFFSET = 0.5f;
     [SerializeField] Canvas _canvas;
-    [SerializeField] DisplayController _displayController;
     [SerializeField] BoxCollider2D _collider;
 
     PlayerController _player;

@@ -1,4 +1,3 @@
-using Core;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -20,12 +19,11 @@ public class LobbyUIPanelFacade : MonoBehaviour
     event System.Action DisposeEvents;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
     private void Construct(DiContainer diContainer, GlobalEventsManager globalEventsManager)
     {
         var factory = new UIPanelFactory(diContainer);
         _panelManager = new UIPanelManager(factory, transform);
-
 
         globalEventsManager.SubscribeToRoundStarted(RoundStart);
 

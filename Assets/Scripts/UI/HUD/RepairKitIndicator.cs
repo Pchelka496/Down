@@ -35,8 +35,11 @@ public class RepairKitIndicator : MonoBehaviour
 
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
+    }
 
-        gameObject.SetActive(false);
+    private void Start()
+    {
+        RoundEnd();
     }
 
     public void Initialize(int repairKitNumberForRepair, int currentRepairKit = 0)

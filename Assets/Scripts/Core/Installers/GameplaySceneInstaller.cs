@@ -25,9 +25,11 @@ namespace Core.Installers
         [SerializeField] EnumLanguage _language;
 
         [SerializeField] OriginalPlayerModuleConfigs _originalPlayerModulesConfig;
-
         [SerializeField] PlayerResourcedKeeperConfig _playerResourcedKeeperConfig;
         [SerializeField] CustomizerConfig _customizerConfig;
+
+        [SerializeField] PostProcessingController.Initializer _postProcessingControllerInitializer;
+
         [Header("UI")]
         [SerializeField] RewardCounter _rewardCounter;
         [SerializeField] ScreenFader _screenFader;
@@ -50,6 +52,7 @@ namespace Core.Installers
         PlayerResourcedKeeper _playerResourcedKeeper;
         SaveSystemController _saveSystemController;
         GlobalEventsManager _gameEventsManager;
+        PostProcessingController _postProcessingController;
 
         public static DiContainer DiContainer { get; private set; }
 
@@ -153,6 +156,7 @@ namespace Core.Installers
             _playerResourcedKeeper = new(_playerResourcedKeeperConfig, _playerResourcedIndicator);
             _saveSystemController = new(GetAllDataForSave());
             _gameEventsManager = new(_screenFader);
+            _postProcessingController = new(_postProcessingControllerInitializer);
         }
 
         private IHaveDataForSave[] GetAllDataForSave()
@@ -194,6 +198,7 @@ namespace Core.Installers
             Container.Inject(_playerResourcedKeeper);
             Container.Inject(_saveSystemController);
             Container.Inject(_gameEventsManager);
+            Container.Inject(_postProcessingController);
         }
 
         private void OnDestroy()
@@ -207,6 +212,7 @@ namespace Core.Installers
             _playerResourcedKeeper.Dispose();
             _saveSystemController.Dispose();
             _pickUpItemManager.Dispose();
+            _postProcessingController.Dispose();
         }
 
         [System.Serializable]

@@ -23,13 +23,28 @@ public class RewardCounter : MonoBehaviour
         _rewardKeeper = rewardKeeper;
         ResetPoints();
 
+        globalEventsManager.SubscribeToRoundStarted(RoundStart);
+        globalEventsManager.SubscribeToWarpStarted(WarpStart);
         globalEventsManager.SubscribeToRoundEnded(RoundEnd);
 
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
     }
 
+    private void Start()
+    {
+        RoundEnd();
+    }
+
+    private void WarpStart() => gameObject.SetActive(true);
+
+    private void RoundStart() => gameObject.SetActive(true);
+
     private void RoundEnd()
     {
+        gameObject.SetActive(false);
+
         _rewardKeeper.IncreaseMoney(_points);
         ResetPoints();
     }
