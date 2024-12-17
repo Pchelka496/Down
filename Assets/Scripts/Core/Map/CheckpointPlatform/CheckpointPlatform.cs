@@ -1,4 +1,3 @@
-using Core;
 using Creatures.Player;
 using UnityEngine;
 using Zenject;
@@ -6,8 +5,8 @@ using Zenject;
 public class CheckpointPlatform : MonoBehaviour
 {
     const float BORDER_POSITION_OFFSET = 0.5f;
-    [SerializeField] Canvas _canvas;
     [SerializeField] BoxCollider2D _collider;
+    [SerializeField] LayerMask _bottomBorderExcludeLayers;
 
     PlayerController _player;
     GlobalEventsManager _globalEventsManager;
@@ -19,7 +18,6 @@ public class CheckpointPlatform : MonoBehaviour
     {
         _globalEventsManager = globalEventsManager;
         _player = player;
-        _canvas.worldCamera = cameraFacade.Camera;
         _lobbyUIPanelFacade = upgradePanelController;
 
         (var width, var height) = GetCanvasSizeForCamera(cameraFacade.Camera, cameraFacade.LobbyOrthographicSize);
@@ -44,17 +42,7 @@ public class CheckpointPlatform : MonoBehaviour
 
     private void ResizeToCamera(float width, float height)
     {
-        //Vector3 bottomLeft = camera.ViewportToWorldPoint(new Vector3(0, 0, camera.nearClipPlane));
-        //Vector3 topRight = camera.ViewportToWorldPoint(new Vector3(1, 1, camera.nearClipPlane));
-
-        //float width = topRight.x - bottomLeft.x;
-        //float height = topRight.y - bottomLeft.y;
-
         _collider.size = new Vector2(width, height);
-
-        RectTransform canvasRect = _canvas.GetComponent<RectTransform>();
-        canvasRect.sizeDelta = new Vector2(width, height);
-        canvasRect.position = Vector3.zero;
 
         CreateBorder(width, height);
     }
@@ -65,17 +53,27 @@ public class CheckpointPlatform : MonoBehaviour
         var halfWidth = width * 0.5f;
         var halfHeight = height * 0.5f;
 
+        var bottomBorder = gameObject.AddComponent<BoxCollider2D>();
         var rightBorder = gameObject.AddComponent<BoxCollider2D>();
         var leftBorder = gameObject.AddComponent<BoxCollider2D>();
         var topBorder = gameObject.AddComponent<BoxCollider2D>();
 
-        rightBorder.offset = new(halfWidth + BORDER_POSITION_OFFSET, 0f);
-        leftBorder.offset = new(-(halfWidth + BORDER_POSITION_OFFSET), 0f);
-        topBorder.offset = new(0f, halfHeight + BORDER_POSITION_OFFSET);
+        bottomBorder.offset = new Vector2(0f, -(halfHeight + BORDER_POSITION_OFFSET));
+        rightBorder.offset = new Vector2(halfWidth + BORDER_POSITION_OFFSET, 0f);
+        leftBorder.offset = new Vector2(-(halfWidth + BORDER_POSITION_OFFSET), 0f);
+        topBorder.offset = new Vector2(0f, halfHeight + BORDER_POSITION_OFFSET);
 
-        rightBorder.size = new(borderThickness, height);
-        leftBorder.size = new(borderThickness, height);
-        topBorder.size = new(width, borderThickness);
+        bottomBorder.size = new Vector2(width, borderThickness);
+        rightBorder.size = new Vector2(borderThickness, height);
+        leftBorder.size = new Vector2(borderThickness, height);
+        topBorder.size = new Vector2(width, borderThickness);
+
+        BottomBorderSetting(bottomBorder);
+    }
+
+    private void BottomBorderSetting(Collider2D bottomBorder)
+    {
+        bottomBorder.excludeLayers = _bottomBorderExcludeLayers;
     }
 
     public void Initialize(Initializer initializer)
@@ -106,6 +104,11 @@ public class CheckpointPlatform : MonoBehaviour
         _lobbyUIPanelFacade.OpenWarpEngineController();
     }
 
+    public void OpenSetting()
+    {
+        _lobbyUIPanelFacade.OpenSettingPanel();
+    }
+
     public readonly struct Initializer
     {
         public readonly float PlatformHeight;
@@ -115,6 +118,4 @@ public class CheckpointPlatform : MonoBehaviour
             PlatformHeight = platformHeight;
         }
     }
-
 }
-

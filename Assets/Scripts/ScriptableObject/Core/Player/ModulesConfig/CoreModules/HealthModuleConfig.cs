@@ -14,14 +14,12 @@ namespace ScriptableObject.ModulesConfig
         protected UpdateCharacteristicsInfo<EnumCharacteristics, int>[] Characteristics => _characteristics;
 
         public int MaximumHealth => GetCharacteristicForLevel(_characteristics,
-            EnumCharacteristics.MaxHealth,
-            GetLevel(EnumCharacteristics.MaxHealth)
-        );
+                                                              EnumCharacteristics.MaxHealth,
+                                                              GetLevel(EnumCharacteristics.MaxHealth));
 
         public int RepairKitNumberForRepair => GetCharacteristicForLevel(_characteristics,
-            EnumCharacteristics.RepairKitNumberForRepair,
-            GetLevel(EnumCharacteristics.RepairKitNumberForRepair)
-        );
+                                                                         EnumCharacteristics.RepairKitNumberForRepair,
+                                                                         GetLevel(EnumCharacteristics.RepairKitNumberForRepair));
 
         public override bool ActivityCheck() => true;
 
@@ -34,7 +32,6 @@ namespace ScriptableObject.ModulesConfig
                 SavedData = _characteristics.Select(c => new DefaultModuleSaveData
                 {
                     CurrentLevel = c.CurrentLevel,
-                    LevelCost = c.LevelCost?.Clone() as int[]
                 }).ToArray()
             };
 
@@ -83,11 +80,8 @@ namespace ScriptableObject.ModulesConfig
                 {
                     UpdateType = _characteristics[i].UpdateType,
                     CurrentLevel = savedCharacteristic.CurrentLevel,
-                    LevelCost = savedCharacteristic.LevelCost
-                        ?.Clone() as int[],
-                    CharacteristicsPerLevel =
-                        _characteristics[i].CharacteristicsPerLevel
-                            ?.Clone() as int[]
+                    LevelCost = _characteristics[i].LevelCost,
+                    CharacteristicsPerLevel = _characteristics[i].CharacteristicsPerLevel
                 };
             }
         }

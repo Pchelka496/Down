@@ -19,8 +19,8 @@ MonoBehaviour:
       m_SubObjectGUID: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-    Speed: 1
-    MotionPattern: 5
+    Speed: 0.04
+    MotionPattern: 0
     MotionCharacteristic:
       x: 0.5
       y: 2

@@ -30,7 +30,7 @@ public class AirBrakeModule : BaseModule
     Tween _currentTween;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
     private void Construct(AirBrakeModuleConfig config, PlayerController player, Controls controls, AirTrailController airTrailController)
     {
         _rb = player.Rb;
@@ -53,6 +53,7 @@ public class AirBrakeModule : BaseModule
         _controls.Player.AirBreake.performed += _airTrailController.SwitchAirBrake;
 
         _airTrailController.SetAirBrakeStatus(false);
+        gameObject.SetActive(true);
     }
 
     public override void DisableModule()
@@ -61,6 +62,7 @@ public class AirBrakeModule : BaseModule
         _controls.Player.AirBreake.performed -= _airTrailController.SwitchAirBrake;
 
         _airTrailController.SetAirBrakeStatus(false);
+        gameObject.SetActive(false);
     }
 
     public void UpdateCharacteristics() => UpdateCharacteristics(GameplaySceneInstaller.DiContainer.Resolve<AirBrakeModuleConfig>());

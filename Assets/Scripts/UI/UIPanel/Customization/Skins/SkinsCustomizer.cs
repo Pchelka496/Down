@@ -16,7 +16,8 @@ namespace UI.UIPanel.Customization.Skins
         [SerializeField] TextContainer _freeSkinButtonText;
         [SerializeField] TextContainer _buyForMoneyButtonText;
 
-        [Header("UI References")] [SerializeField]
+        [Header("UI References")]
+        [SerializeField]
         ScrollRect _scrollRect;
 
         [SerializeField] SelectedItemBackground _selectedItemBackground;
@@ -24,35 +25,41 @@ namespace UI.UIPanel.Customization.Skins
         [SerializeField] SkinsCustomizerButton _unlockedButton;
         [SerializeField] SkinsCustomizerButton _applyButton;
 
-        [Header("Layout Settings")] [SerializeField]
+        [Header("Layout Settings")]
+        [SerializeField]
         float _itemSpacing = 10f;
 
         [SerializeField] Vector2 _itemPadding = new(20f, 20f);
         [SerializeField] float _itemSize = 200f;
         [SerializeField] float _selectedItemBackgroundSize = 220f;
-        IHaveSkin _haveSkin;
+
         PlayerSkinData _selectedSkinData;
-        EnumLanguage _language;
+        IHaveSkin _haveSkin;
+        ILanguageContainer _languageContainer;
+
         readonly LinkedList<AsyncOperationHandle<GameObject>> _allUISkinIconLoadHandle = new();
         readonly LinkedList<UISkinIcon> _allUISkinIcons = new();
 
         [Inject]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����",
-            Justification = "<��������>")]
-        private void Construct(EnumLanguage language)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+        private void Construct(ILanguageContainer languageContainer)
         {
-            _language = language;
+            _languageContainer = languageContainer;
         }
 
         private void Start()
         {
             _selectedItemBackground.Initialize(_selectedItemBackgroundSize);
-            _applyButton.TextMeshPro.text = _applySkinButtonText.GetText(_language);
 
             _unlockedButton.Button.onClick.AddListener(OnUnlockButtonClick);
             _applyButton.Button.onClick.AddListener(OnApplyButtonClick);
 
             SetSelectedSkinData();
+        }
+
+        private void OnEnable()
+        {
+            _applyButton.TextMeshPro.text = _applySkinButtonText.GetText(_languageContainer.Language);
         }
 
         public void Initialize(IHaveSkin skin, IHaveAllPlayerSkins allPlayerSkins)
@@ -164,18 +171,21 @@ namespace UI.UIPanel.Customization.Skins
             switch (skinData.UnlockMethod)
             {
                 case PlayerSkinData.EnumUnlockMethod.Free:
-                {
-                    _unlockedButton.TextMeshPro.text = _freeSkinButtonText.GetText(_language);
-                    break;
-                }
+                    {
+                        _unlockedButton.TextMeshPro.text = _freeSkinButtonText.GetText(_languageContainer.Language);
+                        break;
+                    }
 
                 case PlayerSkinData.EnumUnlockMethod.BuyForMoney:
-                {
-                    _unlockedButton.TextMeshPro.text = _buyForMoneyButtonText.GetText(_language);
-                    break;
-                }
+                    {
+                        _unlockedButton.TextMeshPro.text = _buyForMoneyButtonText.GetText(_languageContainer.Language);
+                        break;
+                    }
                 default:
-                    throw new System.ArgumentOutOfRangeException();
+                    {
+                        Debug.LogError($"Unknown enum UnlockMethod - {skinData.UnlockMethod}. {GetType()}");
+                        break;
+                    }
             }
         }
 

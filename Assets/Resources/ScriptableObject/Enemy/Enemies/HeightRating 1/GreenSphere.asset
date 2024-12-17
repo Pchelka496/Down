@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6c8b258903b47e44962938d3c08952d, type: 3}
+  m_Name: GreenSphere
+  m_EditorClassIdentifier: 
+  _enemy:
+    EnemyAddress:
+      m_AssetGUID: 68e2bf7372f893d4ba5653e3fc7d6bc6
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    Speed: 0.2
+    MotionPattern: 4
+    MotionCharacteristic:
+      x: 0.6
+      y: 1.8
+    IsolateDistance: {x: 0, y: 0}
+    RequiredAmount: 0
+    RelativeAmount: 0.1

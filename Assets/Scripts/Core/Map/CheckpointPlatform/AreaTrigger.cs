@@ -13,6 +13,7 @@ public class AreaTrigger : MonoBehaviour
     PlayerController _player;
 
     [Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
     private void Construct(PlayerController player)
     {
         _player = player;

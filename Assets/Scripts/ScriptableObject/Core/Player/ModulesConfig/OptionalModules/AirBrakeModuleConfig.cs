@@ -11,14 +11,12 @@ namespace ScriptableObject.ModulesConfig.SupportModules
         protected UpdateCharacteristicsInfo<EnumCharacteristics, float>[] Characteristics => _characteristics;
 
         public float AirMaxBrakeDrag => GetCharacteristicForLevel(_characteristics,
-            EnumCharacteristics.AirBrakeDrag,
-            GetLevel(EnumCharacteristics.AirBrakeDrag)
-        );
+                                                                  EnumCharacteristics.AirBrakeDrag,
+                                                                  GetLevel(EnumCharacteristics.AirBrakeDrag));
 
         public float AirBrakeReleaseRate => GetCharacteristicForLevel(_characteristics,
-            EnumCharacteristics.AirBrakeReleaseRate,
-            GetLevel(EnumCharacteristics.AirBrakeReleaseRate)
-        );
+                                                                      EnumCharacteristics.AirBrakeReleaseRate,
+                                                                      GetLevel(EnumCharacteristics.AirBrakeReleaseRate));
 
         public override bool ActivityCheck() => GetLevel(EnumCharacteristics.AirBrakeDrag) > 0;
 
@@ -31,7 +29,6 @@ namespace ScriptableObject.ModulesConfig.SupportModules
                 SavedData = _characteristics.Select(c => new DefaultModuleSaveData
                 {
                     CurrentLevel = c.CurrentLevel,
-                    LevelCost = c.LevelCost?.Clone() as int[]
                 }).ToArray()
             };
 
@@ -80,11 +77,8 @@ namespace ScriptableObject.ModulesConfig.SupportModules
                 {
                     UpdateType = _characteristics[i].UpdateType,
                     CurrentLevel = savedCharacteristic.CurrentLevel,
-                    LevelCost = savedCharacteristic.LevelCost
-                        ?.Clone() as int[],
-                    CharacteristicsPerLevel =
-                        _characteristics[i].CharacteristicsPerLevel
-                            ?.Clone() as float[]
+                    LevelCost = _characteristics[i].LevelCost,
+                    CharacteristicsPerLevel = _characteristics[i].CharacteristicsPerLevel
                 };
             }
         }

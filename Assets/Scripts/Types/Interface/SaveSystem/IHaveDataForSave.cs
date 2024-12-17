@@ -7,5 +7,4 @@ public interface IHaveDataForSave
     public void LoadSaveData(SaveData saveData);
 
     public Action SubscribeWithUnsubscribe(Action<IHaveDataForSave> saveAction);
-
 }

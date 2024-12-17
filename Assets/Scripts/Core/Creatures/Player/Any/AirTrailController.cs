@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using System.Threading;
+using Additional;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -21,13 +22,15 @@ namespace Creatures.Player.Any
         [SerializeField] float _minAlpha = 0.2f;
         [SerializeField] float _maxAlpha = 1f;
 
-        [Header("AirBrakeEnabled")] [SerializeField]
+        [Header("AirBrakeEnabled")]
+        [SerializeField]
         Vector3 _defaultScale = Vector3.one;
 
         [SerializeField] float _minDefaultModeVelocityThreshold = -40f;
         [SerializeField] float _maxDefaultModeVelocityThreshold = -20f;
 
-        [Header("AirBrakeEnabled")] [SerializeField]
+        [Header("AirBrakeEnabled")]
+        [SerializeField]
         Vector3 _airBrakeScale = Vector3.one;
 
         [SerializeField] float _minAirBrakeModeVelocityThreshold = -40f;
@@ -41,6 +44,7 @@ namespace Creatures.Player.Any
         CancellationTokenSource _cts;
 
         [Inject]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
         private void Construct(PlayerController player)
         {
             _rb = player.Rb;
@@ -51,19 +55,18 @@ namespace Creatures.Player.Any
 
         private void OnEnable()
         {
-            StartAdjustingTrailAsync().Forget();
+            ClearToken();
+            _cts = new();
+            StartAdjustingTrailAsync(_cts.Token).Forget();
         }
 
         private void OnDisable()
         {
-            _cts?.Cancel();
+            ClearToken();
         }
 
-        private async UniTaskVoid StartAdjustingTrailAsync()
+        private async UniTaskVoid StartAdjustingTrailAsync(CancellationToken token)
         {
-            _cts = new CancellationTokenSource();
-            var token = _cts.Token;
-
             while (!token.IsCancellationRequested)
             {
                 if (_rb.velocity.y > _minVelocityThreshold)
@@ -133,6 +136,13 @@ namespace Creatures.Player.Any
             transform.localScale = _defaultScale;
             _minVelocityThreshold = _minDefaultModeVelocityThreshold;
             _maxVelocityThreshold = _maxDefaultModeVelocityThreshold;
+        }
+
+        private void ClearToken() => ClearTokenSupport.ClearToken(ref _cts);
+
+        private void OnDestroy()
+        {
+            ClearToken();
         }
     }
 }

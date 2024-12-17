@@ -15,26 +15,6 @@ MonoBehaviour:
   m_GroupName: ScriptableObject
   m_GUID: 967cab8868e5cde4187400d9492eebeb
   m_SerializeEntries:
-  - m_GUID: 1f1c4210a90dd424e9c6f98d7e140d5c
-    m_Address: ScriptableObject/Map/CheckpointPlatform/DisplayControllerConfig/ChineseConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 28534757c4948f44c8738920937cd4ad
-    m_Address: ScriptableObject/Map/CheckpointPlatform/DisplayControllerConfig/UkrainianConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: abc50a4caf60d1c4bb0688c0cf1443b2
-    m_Address: ScriptableObject/Map/CheckpointPlatform/DisplayControllerConfig/RussianConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d3296990c7dda4342b57d869b3389d61
-    m_Address: ScriptableObject/Map/CheckpointPlatform/DisplayControllerConfig/EnglishConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: efd9cd7daf5ff4e4197c4b33a164b93c
     m_Address: ScriptableObject/ModulesConfig/PlayerModuleLoaderConfig
     m_ReadOnly: 0

@@ -20,13 +20,33 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3e5b1bd696c7b3544894fe65ef1cddae
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Multiples/VEnemy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 42229b6273fddd444a67803328d5c208
-    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/SpinningEnemy.prefab
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/PlatformEnemy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 59a5f40167cb8a94d95388e7911e0810
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Multiples/XEnemy.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 68e2bf7372f893d4ba5653e3fc7d6bc6
     m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/GreenEnemy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7002c83fc8ffc9944be2790d838f18df
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Multiples/BoxEnemy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76584de3eccf50d43850d0112593635c
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Multiples/TowerEnemy.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -40,8 +60,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df1f5a10e3b73824183132ed4b7fdc79
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Multiples/2PlatformEnemy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eec90588c283d094ca704b5999e2a22d
-    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/PlatformEnemy.prefab
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/Solo/SpiningEnemy.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

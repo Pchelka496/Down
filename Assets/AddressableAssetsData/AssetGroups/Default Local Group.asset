@@ -35,6 +35,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2cebe33c444b61c4d9b9701ba94ac333
+    m_Address: Assets/Resources_moved/Prefab/UI/SettingPanel/SettingPanel.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 37a3de5ac2491624896551f2d5cf8695
     m_Address: Assets/Resources_moved/Prefab/PlayerSkins/Sputnik1.prefab
     m_ReadOnly: 0
@@ -45,6 +50,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4559295b6db56b9449bd26919220a624
+    m_Address: PhisicsMaterial/BaseEnemy
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4a00f62b4a48da64d9082b6902c66b55
     m_Address: Assets/Resources_moved/Prefab/Creatures/Meteorite.prefab
     m_ReadOnly: 0
@@ -52,6 +62,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 716694b7aacca8b44abadaa116016316
     m_Address: Assets/Resources_moved/Prefab/UI/WarpEngineController/WarpEngineController.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7bc7ca6fc9271e54eb287a1e661ed3d6
+    m_Address: Preparation/PickUpItem/CoinstBag
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -67,6 +82,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9fedf1cb12087614f89f72f42aebc265
     m_Address: Assets/Resources_moved/Prefab/Reward/CoinsBag.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a12503724d519c4409257fdc5aaf2827
+    m_Address: Assets/Resources_moved/Prefab/UI/HUD/PlayerModuleIndicator/EmergencyBrakeModuleIndicator/EmergencyBrakeModuleIcon.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -107,6 +127,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e3e2bfedc0ee61c4eaee7bbb0399668e
     m_Address: Prefab/Effects/ImpactEffect
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee394ab0ddc16a44bbad2e944ce36ec1
+    m_Address: Preparation/Enemy/BearingAndWoodenBoard
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

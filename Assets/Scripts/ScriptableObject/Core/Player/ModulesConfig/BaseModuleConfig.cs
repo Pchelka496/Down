@@ -199,8 +199,7 @@ namespace ScriptableObject.ModulesConfig
         }
 
         [Serializable]
-        public class UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>
-            where TEnumCharacteristics : struct, Enum
+        public class UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics> where TEnumCharacteristics : struct, Enum
         {
             [FormerlySerializedAs("updateType")]
             [SerializeField]
@@ -247,7 +246,6 @@ namespace ScriptableObject.ModulesConfig
         public record DefaultModuleSaveData
         {
             [field: SerializeField] public int CurrentLevel { get; set; }
-            [field: SerializeField] public int[] LevelCost { get; set; }
         }
     }
 }

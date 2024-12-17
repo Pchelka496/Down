@@ -36,11 +36,33 @@ public class WarpEngineModuleConfig : BaseModuleConfig
 
     public override void LoadSaveData(SaveData saveData)
     {
+        if (saveData == null)
+        {
+            Debug.LogError($"saveData is null. {GetType()}");
+            return;
+        }
+        if (saveData.WarpEngineSaveData == null)
+        {
+            Debug.Log($"saveData.WarpEngineSaveData is null. {GetType()}");
+            return;
+        }
+
         CurrentNumberOfChargingLevels = saveData.WarpEngineSaveData.CurrentNumberOfChargingLevels;
     }
 
     public override void SaveToSaveData(SaveData saveData)
     {
+        if (saveData == null)
+        {
+            Debug.LogError($"saveData is null. {GetType()}");
+            return;
+        }
+        if (saveData.WarpEngineSaveData == null)
+        {
+            Debug.Log($"saveData.WarpEngineSaveData is null. {GetType()}");
+            return;
+        }
+
         saveData.WarpEngineSaveData.CurrentNumberOfChargingLevels = _currentNumberOfChargingLevels;
     }
 

@@ -14,11 +14,10 @@ namespace Creatures.Player.PlayerModule.CoreModules.EngineModule
         EngineModuleVisualPart _visualPart;
         BoosterIndicator _indicator;
 
-        public void Initialize(
-            Rigidbody2D rb,
-            Transform engine,
-            EngineModuleVisualPart visualPart,
-            BoosterIndicator indicator)
+        public void Initialize(Rigidbody2D rb,
+                               Transform engine,
+                               EngineModuleVisualPart visualPart,
+                               BoosterIndicator indicator)
         {
             _rb = rb;
             _engine = engine;

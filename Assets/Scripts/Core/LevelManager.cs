@@ -21,7 +21,7 @@ namespace Core
         MapController _mapController;
         BackgroundController _backgroundController;
         PickUpItemManager _rewardManager;
-        ScreenFader _screenFader;
+
         event System.Action DisposeEvents;
 
         [Inject]
@@ -31,14 +31,12 @@ namespace Core
             MapController mapController,
             EnemyManager enemyManager,
             BackgroundController backgroundController,
-            PickUpItemManager rewardManager,
-            ScreenFader screenFader)
+            PickUpItemManager rewardManager)
         {
             _mapController = mapController;
             _enemyManager = enemyManager;
             _backgroundController = backgroundController;
             _rewardManager = rewardManager;
-            _screenFader = screenFader;
 
             LoadConfig().Forget();
 
@@ -71,7 +69,6 @@ namespace Core
 
         private void FirstSettings()
         {
-            _screenFader.FadeToClear().Forget();
             _targetFrameRate = _config.TargetFrameRate;
 
             Application.targetFrameRate = _targetFrameRate;

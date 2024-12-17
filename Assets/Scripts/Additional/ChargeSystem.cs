@@ -84,6 +84,6 @@ public class ChargeSystem : IDisposable
     public void Dispose()
     {
         ClearToken();
+        OnChargeChanged = null;
     }
-
 }

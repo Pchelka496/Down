@@ -11,6 +11,7 @@ using ScriptableObject.PickUpItem;
 using System.Linq;
 using UI;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Zenject;
 
 namespace Core.Installers
@@ -22,11 +23,12 @@ namespace Core.Installers
         [SerializeField] AirTrailController _airTrailController;
         [SerializeField] Camera _mainCamera;
         [SerializeField] LobbyUIPanelFacade _upgradePanelController;
-        [SerializeField] EnumLanguage _language;
 
         [SerializeField] OriginalPlayerModuleConfigs _originalPlayerModulesConfig;
         [SerializeField] PlayerResourcedKeeperConfig _playerResourcedKeeperConfig;
         [SerializeField] CustomizerConfig _customizerConfig;
+        [SerializeField] SettingConfig _settingConfig;
+        [SerializeField] AssetReference _surfaceController;
 
         [SerializeField] PostProcessingController.Initializer _postProcessingControllerInitializer;
 
@@ -37,7 +39,10 @@ namespace Core.Installers
         [SerializeField] RepairKitIndicator _repairKitIndicator;
         [SerializeField] HealthIndicator _healthIndicator;
         [SerializeField] BoosterIndicator _boosterIndicator;
+        [SerializeField] EmergencyBrakeModuleIndicator _emergencyBrakeModuleIndicator;
         [SerializeField] PlayerResourcedIndicator _playerResourcedIndicator;
+        [SerializeField] HUDController _hudController;
+        [SerializeField] MainMenu _mainMenu;
 
         Customizer _customizer;
         LevelManager _levelManager;
@@ -48,7 +53,7 @@ namespace Core.Installers
         PickUpItemManager _pickUpItemManager;
         AudioSourcePool _audioSourcePool;
         EffectController _effectController;
-        CharacterPositionMeter _characterPositionMeter;
+        PlayerPositionMeter _characterPositionMeter;
         PlayerResourcedKeeper _playerResourcedKeeper;
         SaveSystemController _saveSystemController;
         GlobalEventsManager _gameEventsManager;
@@ -75,7 +80,6 @@ namespace Core.Installers
             Container.Bind<EffectController>().FromInstance(_effectController).AsSingle().NonLazy();
             Container.Bind<AirTrailController>().FromInstance(_airTrailController).AsSingle().NonLazy();
             Container.Bind<Camera>().FromInstance(_mainCamera).AsSingle().NonLazy();
-            Container.Bind<EnumLanguage>().FromInstance(_language).AsSingle().NonLazy();
             Container.Bind<ScreenFader>().FromInstance(_screenFader).AsSingle().NonLazy();
             Container.Bind<RepairKitIndicator>().FromInstance(_repairKitIndicator).AsSingle().NonLazy();
             Container.Bind<HealthIndicator>().FromInstance(_healthIndicator).AsSingle().NonLazy();
@@ -86,9 +90,14 @@ namespace Core.Installers
             Container.Bind<OptionalPlayerModuleLoader>().FromInstance(_optionalPlayerModuleLoader).AsSingle().NonLazy();
             Container.Bind<CustomizerConfig>().FromInstance(_customizerConfig).AsSingle().NonLazy();
             Container.Bind<Customizer>().FromInstance(_customizer).AsSingle().NonLazy();
-            Container.Bind<CharacterPositionMeter>().FromInstance(_characterPositionMeter).AsSingle().NonLazy();
+            Container.Bind<PlayerPositionMeter>().FromInstance(_characterPositionMeter).AsSingle().NonLazy();
             Container.Bind<PlayerResourcedKeeper>().FromInstance(_playerResourcedKeeper).AsSingle().NonLazy();
             Container.Bind<GlobalEventsManager>().FromInstance(_gameEventsManager).AsSingle().NonLazy();
+            Container.Bind<EmergencyBrakeModuleIndicator>().FromInstance(_emergencyBrakeModuleIndicator).AsSingle().NonLazy();
+            Container.Bind<ILanguageContainer>().FromInstance(_settingConfig).AsSingle().NonLazy();
+            Container.Bind<HUDController>().FromInstance(_hudController).AsSingle().NonLazy();
+            Container.Bind<MainMenu>().FromInstance(_mainMenu).AsSingle().NonLazy();
+            Container.Bind<SettingConfig>().FromInstance(_settingConfig).AsSingle().NonLazy();
 
             BindPlayerModuleConfigs();
         }
@@ -144,7 +153,7 @@ namespace Core.Installers
             var dependenciesObject = new GameObject("Dependencies");
 
             _optionalPlayerModuleLoader = new();
-            _mapController = new();
+            _mapController = new(_surfaceController);
             _backgroundController = new();
             _enemyManager = new(AttachToGameObject(dependenciesObject, "++Enemies++").transform);
             _levelManager = new();
@@ -167,13 +176,13 @@ namespace Core.Installers
 
             return new IHaveDataForSave[]
             {
-            _playerResourcedKeeperConfig,
-             _customizerConfig
+             _playerResourcedKeeperConfig,
+             _customizerConfig,
+             _settingConfig
             }
             .Concat(playerModules)
             .ToArray();
         }
-
 
         private GameObject AttachToGameObject(GameObject parent, string gameObjectName)
         {

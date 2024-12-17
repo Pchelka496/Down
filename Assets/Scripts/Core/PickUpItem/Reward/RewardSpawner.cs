@@ -118,7 +118,7 @@ public class RewardSpawner : System.IDisposable
 
     private void CheckAndRelocateRewards()
     {
-        var playerPosition = new Vector2(CharacterPositionMeter.XPosition, CharacterPositionMeter.YPosition);
+        var playerPosition = new Vector2(PlayerPositionMeter.XPosition, PlayerPositionMeter.YPosition);
         var rewardPresets = _config.GetRewardPresets();
 
         var centralRewardPosition = DistanceCheckRewardPosition;

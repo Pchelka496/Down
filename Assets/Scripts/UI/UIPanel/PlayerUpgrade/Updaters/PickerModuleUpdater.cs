@@ -20,13 +20,13 @@ public class PickerModuleUpdater : MonoBehaviour
 
     PickerModuleConfig _moduleConfig;
     PlayerUpgradePanel _playerUpgradePanel;
-    EnumLanguage _language;
+    ILanguageContainer _languageContainer;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(EnumLanguage language)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(ILanguageContainer languageContainer)
     {
-        _language = language;
+        _languageContainer = languageContainer;
     }
 
     public void Initialize(PickerModuleConfig moduleConfig, PlayerUpgradePanel playerUpgradePanel)
@@ -152,7 +152,7 @@ public class PickerModuleUpdater : MonoBehaviour
         _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
                                                                      _firstRadiusData,
                                                                      _secondRadiusData,
-                                                                     _pickUpRadiusDescription.GetText(_language)
+                                                                     _pickUpRadiusDescription.GetText(_languageContainer.Language)
                                                                      );
     }
 
@@ -168,8 +168,7 @@ public class PickerModuleUpdater : MonoBehaviour
 
     private void DetailedInformationPickUpMultiplierDescriptionDescription(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _pickUpMultiplierDescription.GetText(_language));
-
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _pickUpMultiplierDescription.GetText(_languageContainer.Language));
     }
-
 }

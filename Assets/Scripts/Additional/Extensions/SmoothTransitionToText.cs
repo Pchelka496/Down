@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using DG.Tweening.Core.Easing;
 using System.Text;
 using System.Threading;
 using TMPro;
@@ -15,12 +14,11 @@ public static class SmoothTransitionToText
     /// <param name=“token”>Cancellation token for process control.</param>
     /// <param name=“textUpdateDelay”>Delay between text changes.</param>
     /// <param name=“suffix”>Transition string added at the end of the text (e.g., “%”).</param>
-    public static async UniTaskVoid SmoothUpdateText(
-    this TextMeshProUGUI textMeshPro,
-    string targetText,
-    CancellationToken token,
-    float textUpdateDelay,
-    string suffix = null)
+    public static async UniTaskVoid SmoothUpdateText(this TextMeshProUGUI textMeshPro,
+                                                     string targetText,
+                                                     CancellationToken token,
+                                                     float textUpdateDelay,
+                                                     string suffix = null)
     {
         if (textMeshPro == null)
         {
@@ -84,14 +82,12 @@ public static class SmoothTransitionToText
     /// <param name="textUpdateDelay">Delay (in seconds) between each value update during the transition.</param>
     /// <param name="suffix">Optional string added at the end of the number (e.g., "%", " coins").</param>
     /// <param name="onValueUpdate">Action that will be called each time the value is updated during the transition. This can be used to trigger additional logic.</param>
-    public static async UniTaskVoid SmoothUpdateText(
-        this TextMeshProUGUI textMeshPro,
-        int targetValue,
-        CancellationToken token,
-        float textUpdateDelay,
-        string suffix = null,
-        System.Action<int> onValueUpdate = null
-        )
+    public static async UniTask SmoothUpdateText(this TextMeshProUGUI textMeshPro,
+                                                 int targetValue,
+                                                 CancellationToken token,
+                                                 float textUpdateDelay,
+                                                 string suffix = null,
+                                                 System.Action<int> onValueUpdate = null)
     {
         if (textMeshPro == null)
         {
@@ -142,15 +138,13 @@ public static class SmoothTransitionToText
     /// <param name="curve">Animation curve that defines the easing (smoothness) of the transition (e.g., linear, ease-in, ease-out).</param>
     /// <param name="suffix">Optional string added at the end of the number (e.g., "%", " coins").</param>
     /// <param name="onValueUpdate">Action that will be called each time the value is updated during the transition. This can be used to trigger additional logic during the animation.</param>
-    public static async UniTaskVoid SmoothUpdateTextWithDuration(
-        this TextMeshProUGUI textMeshPro,
-        int targetValue,
-        CancellationToken token,
-        float totalDuration,
-        AnimationCurve curve = null,
-        string suffix = null,
-        System.Action<int> onValueUpdate = null
-        )
+    public static async UniTask SmoothUpdateTextWithDuration(this TextMeshProUGUI textMeshPro,
+                                                             int targetValue,
+                                                             CancellationToken token,
+                                                             float totalDuration,
+                                                             AnimationCurve curve = null,
+                                                             string suffix = null,
+                                                             System.Action<int> onValueUpdate = null)
     {
         if (textMeshPro == null)
         {
@@ -174,16 +168,16 @@ public static class SmoothTransitionToText
             currentValue = 0;
         }
 
-        float elapsedTime = 0f;
-        int startValue = currentValue;
-        int deltaValue = targetValue - startValue;
+        var elapsedTime = 0f;
+        var startValue = currentValue;
+        var deltaValue = targetValue - startValue;
 
         while (!token.IsCancellationRequested && elapsedTime < totalDuration)
         {
             elapsedTime += Time.deltaTime;
 
-            float t = Mathf.Clamp01(elapsedTime / totalDuration);
-            float curveT = curve.Evaluate(t);
+            var t = Mathf.Clamp01(elapsedTime / totalDuration);
+            var curveT = curve.Evaluate(t);
 
             int updatedValue = Mathf.RoundToInt(Mathf.Lerp(startValue, targetValue, curveT));
 

@@ -18,7 +18,7 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
-  _enemyCount: 100
+  _enemyCount: 200
   _challengeCount: 1
   _enemyRegions:
   - {fileID: 11400000, guid: 069c3f731a5906242aa6b1abe68e2bce, type: 2}

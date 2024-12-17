@@ -41,7 +41,6 @@ namespace ScriptableObject.ModulesConfig.SupportModules
                 SavedData = _characteristics.Select(c => new DefaultModuleSaveData
                 {
                     CurrentLevel = c.CurrentLevel,
-                    LevelCost = c.LevelCost?.Clone() as int[]
                 }).ToArray()
             };
 
@@ -90,11 +89,8 @@ namespace ScriptableObject.ModulesConfig.SupportModules
                 {
                     UpdateType = _characteristics[i].UpdateType,
                     CurrentLevel = savedCharacteristic.CurrentLevel,
-                    LevelCost = savedCharacteristic.LevelCost
-                        ?.Clone() as int[],
-                    CharacteristicsPerLevel =
-                        _characteristics[i].CharacteristicsPerLevel
-                            ?.Clone() as float[]
+                    LevelCost = _characteristics[i].LevelCost,
+                    CharacteristicsPerLevel = _characteristics[i].CharacteristicsPerLevel
                 };
             }
         }

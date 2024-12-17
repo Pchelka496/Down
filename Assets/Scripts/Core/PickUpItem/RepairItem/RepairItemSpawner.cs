@@ -108,7 +108,7 @@ public class RepairItemSpawner : System.IDisposable
 
         while (true)
         {
-            if (Mathf.Abs(CharacterPositionMeter.YPosition - _lowestRepairItemHeight) > MIN_PLAYER_DISTANCE)
+            if (Mathf.Abs(PlayerPositionMeter.YPosition - _lowestRepairItemHeight) > MIN_PLAYER_DISTANCE)
             {
                 RelocateRepairItem();
             }
@@ -119,8 +119,8 @@ public class RepairItemSpawner : System.IDisposable
 
     private void RelocateRepairItem()
     {
-        var playerXPosition = CharacterPositionMeter.XPosition;
-        var playerYPosition = CharacterPositionMeter.YPosition;
+        var playerXPosition = PlayerPositionMeter.XPosition;
+        var playerYPosition = PlayerPositionMeter.YPosition;
 
         _lowestRepairItemHeight = float.MaxValue;
 

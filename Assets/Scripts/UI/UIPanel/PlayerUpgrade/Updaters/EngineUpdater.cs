@@ -25,13 +25,13 @@ public class EngineUpdater : MonoBehaviour
 
     EngineModuleConfig _moduleConfig;
     PlayerUpgradePanel _playerUpgradePanel;
-    EnumLanguage _language;
+    ILanguageContainer _languageContainer;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(EnumLanguage language)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(ILanguageContainer languageContainer)
     {
-        _language = language;
+        _languageContainer = languageContainer;
     }
 
     public void Initialize(EngineModuleConfig moduleConfig, PlayerUpgradePanel playerUpgradePanel)
@@ -169,37 +169,43 @@ public class EngineUpdater : MonoBehaviour
 
     private void DetailedInformationEngineMaxForce(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _engineMaxForceDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _engineMaxForceDescription.GetText(_languageContainer.Language));
         EngineTest();
     }
 
     private void DetailedInformationEngineApplyForceRate(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _applyForceRateDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _applyForceRateDescription.GetText(_languageContainer.Language));
         EngineTest();
     }
 
     private void DetailedInformationEngineBoostPower(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _boostPowerDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _boostPowerDescription.GetText(_languageContainer.Language));
         EngineTest();
     }
 
     private void DetailedInformationEngineInterpolateForceValue(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _engineInterpolateForceValueDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _engineInterpolateForceValueDescription.GetText(_languageContainer.Language));
         EngineTest();
     }
 
     private void DetailedInformationBoosterChargeCount(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _boosterChargeCountDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _boosterChargeCountDescription.GetText(_languageContainer.Language));
         EngineTest();
     }
 
     private void DetailedInformationBoosterChargeCooldown(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _boosterChargeCooldownDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _boosterChargeCooldownDescription.GetText(_languageContainer.Language));
         EngineTest();
     }
 

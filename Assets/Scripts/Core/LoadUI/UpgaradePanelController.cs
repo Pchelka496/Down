@@ -9,11 +9,13 @@ public class LobbyUIPanelFacade : MonoBehaviour
     const string CUSTOMIZATION_PANEL_ID = "CustomizationPanel";
     const string WARP_ENGINE_CONTROLLER_ID = "WarpEngineController";
     const string EXCHANGER_PANEL_ID = "ExchangePanel";
+    const string SETTING_PANEL_ID = "SettingPanel";
 
     [SerializeField] AssetReference _upgradePanelPrefabReference;
     [SerializeField] AssetReference _customizationPanelPrefabReference;
     [SerializeField] AssetReference _warpEngineController;
     [SerializeField] AssetReference _exchangerPanel;
+    [SerializeField] AssetReference _settingPanel;
 
     UIPanelManager _panelManager;
     event System.Action DisposeEvents;
@@ -36,6 +38,7 @@ public class LobbyUIPanelFacade : MonoBehaviour
     public void OpenCustomizationPanel() => _panelManager.OpenPanelAsync(CUSTOMIZATION_PANEL_ID, _customizationPanelPrefabReference).Forget();
     public void OpenWarpEngineController() => _panelManager.OpenPanelAsync(WARP_ENGINE_CONTROLLER_ID, _warpEngineController).Forget();
     public void OpenExchangePanel() => _panelManager.OpenPanelAsync(EXCHANGER_PANEL_ID, _exchangerPanel).Forget();
+    public void OpenSettingPanel() => _panelManager.OpenPanelAsync(SETTING_PANEL_ID, _settingPanel).Forget();
 
     private void ClearPanels()
     {

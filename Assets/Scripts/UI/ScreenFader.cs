@@ -42,6 +42,11 @@ namespace UI
             _revealMask.gameObject.SetActive(true);
         }
 
+        private void Start()
+        {
+            FadeToClear().Forget();
+        }
+
         private void WarpStart() => _currentState = EnumState.Warp;
         private void RoundStart() => _currentState = EnumState.Gameplay;
         private void RoundEnd() => _currentState = EnumState.Lobby;
@@ -96,7 +101,7 @@ namespace UI
             }
         }
 
-        public async UniTask FadeToClear()
+        private async UniTask FadeToClear()
         {
             _canvasGroup.blocksRaycasts = true;
             _revealMask.gameObject.SetActive(true);

@@ -2,7 +2,6 @@ using Creatures.Player;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
-using Zenject;
 using static RadiusDisplay;
 
 public class UpgradePanelVisualController : MonoBehaviour
@@ -21,7 +20,18 @@ public class UpgradePanelVisualController : MonoBehaviour
     UpgradeInfo _triggeringUpgradeInfo;
     ViewMode _currentViewMode;
 
+    MainMenu _mainMenu;
+    HUDController _hudController;
+
     public ViewMode CurrentViewMode => _currentViewMode;
+
+    [Zenject.Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(MainMenu mainMenu, HUDController hudController)
+    {
+        _mainMenu = mainMenu;
+        _hudController = hudController;
+    }
 
     private void Start()
     {
@@ -48,8 +58,7 @@ public class UpgradePanelVisualController : MonoBehaviour
     public void ViewDetailedInformation(UpgradeInfo upgradeInfo,
                                         RadiusDisplayData currentRadius,
                                         RadiusDisplayData targetRadius,
-                                        string detailedInformation
-                                        )
+                                        string detailedInformation)
     {
         ViewDetailedInformation(upgradeInfo);
         UpdateDetailedInformation(detailedInformation);
@@ -123,6 +132,9 @@ public class UpgradePanelVisualController : MonoBehaviour
         {
             case ViewMode.Basic:
                 {
+                    _mainMenu.Show();
+                    _hudController.Show();
+
                     foreach (var upgradeInfo in _allUpgradeInfo)
                     {
                         upgradeInfo.gameObject.SetActive(true);
@@ -137,6 +149,9 @@ public class UpgradePanelVisualController : MonoBehaviour
                 }
             case ViewMode.Detailed:
                 {
+                    _mainMenu.Hide();
+                    _hudController.Hide();
+
                     foreach (var upgradeInfo in _allUpgradeInfo)
                     {
                         if (_triggeringUpgradeInfo == upgradeInfo)
@@ -160,6 +175,12 @@ public class UpgradePanelVisualController : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        _mainMenu.Show();
+        _hudController.Show();
+    }
+
     public enum ViewMode
     {
         Basic,
@@ -175,6 +196,5 @@ public class UpgradePanelVisualController : MonoBehaviour
         Debug.Log($"{_allUpgradeInfo.Length} UpgradeInfo objects found and assigned.");
     }
 #endif
-
 }
 

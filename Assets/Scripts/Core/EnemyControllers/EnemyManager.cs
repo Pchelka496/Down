@@ -5,10 +5,8 @@ using Core.Installers;
 using Cysharp.Threading.Tasks;
 using ScriptableObject.Enemy;
 using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
 using Zenject;
-using Object = UnityEngine.Object;
 
 namespace Core.Enemy
 {
@@ -136,13 +134,13 @@ namespace Core.Enemy
                 var currentRegion = enemyRegions.Pop();
 
                 await UniTask.WaitUntil(
-                    () => CharacterPositionMeter.YPosition <= currentRegion.StartHeight, cancellationToken: token);
+                    () => PlayerPositionMeter.YPosition <= currentRegion.StartHeight, cancellationToken: token);
 
                 if (enemyRegions.Count > 0)
                 {
                     var nextRegion = enemyRegions.Peek();
 
-                    if (CharacterPositionMeter.YPosition < nextRegion.StartHeight)
+                    if (PlayerPositionMeter.YPosition < nextRegion.StartHeight)
                     {
                         continue;
                     }
@@ -178,11 +176,10 @@ namespace Core.Enemy
             ResetAllEnemyPosition();
         }
 
-        private void EnemySettings(
-            int index,
-            EnemyCore enemyCore,
-            EnemyVisualPart visualPart,
-            EnemyConfig.Enemy enemyCharacteristics)
+        private void EnemySettings(int index,
+                                   EnemyCore enemyCore,
+                                   EnemyVisualPart visualPart,
+                                   EnemyConfig.Enemy enemyCharacteristics)
         {
             if (visualPart != null)
             {
@@ -190,11 +187,6 @@ namespace Core.Enemy
             }
 
             enemyCore.Initialize(visualPart);
-
-            if (visualPart != null)
-            {
-                visualPart.Initialize(enemyCore);
-            }
 
             _enemyController.UpdateEnemyValues(
                 index: index,

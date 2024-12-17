@@ -33,10 +33,6 @@ public class TextContainer
                 + string.Join(", ", duplicates.Select(lang => lang.ToString()))
                 + ". Please ensure each language appears only once in the list.");
         }
-        else
-        {
-            Debug.Log("No duplicate EnumLanguage values found.");
-        }
     }
 #endif
 

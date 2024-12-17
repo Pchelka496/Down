@@ -1,36 +1,64 @@
+using Additional;
+using System.Threading;
 using TMPro;
 using UnityEngine;
-using Zenject;
+using static Unity.VisualScripting.Icons;
 
 public class LanguageTextUpdater : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI _textMeshPro; 
-    [SerializeField] TextContainer _textContainer; 
+    [SerializeField] TextMeshProUGUI _textMeshPro;
+    [SerializeField] TextContainer _textContainer;
 
-    EnumLanguage _currentLanguage; 
+    CancellationTokenSource _updateTextCts;
+    ILanguageContainer _languageContainer;
 
-    [Inject]
-    public void Construct(EnumLanguage language)
+    [Zenject.Inject]
+    public void Construct(ILanguageContainer languageContainer)
     {
-        _currentLanguage = language; 
+        _languageContainer = languageContainer;
+        _languageContainer.SubscribeToChangeLanguageEvent(UpdateText);
     }
 
     private void Start()
     {
-        UpdateText();
+        _textMeshPro.text = _textContainer.GetText(_languageContainer.Language);
     }
 
-    private void UpdateText()
+    private void UpdateText(EnumLanguage language)
     {
-        string newText = _textContainer.GetText(_currentLanguage);
+        var newText = _textContainer.GetText(language);
 
         if (_textMeshPro != null)
         {
-            _textMeshPro.text = newText;
+            if (isActiveAndEnabled)
+            {
+                ClearToken();
+                _updateTextCts = new();
+
+                const float TEXT_UPDATE_DALEY = 0.02f;
+                _textMeshPro.SmoothUpdateText(newText, _updateTextCts.Token, TEXT_UPDATE_DALEY).Forget();
+            }
+            else
+            {
+                _textMeshPro.text = newText;
+            }
         }
         else
         {
             Debug.LogError("TextMeshProUGUI is not assigned.");
         }
+    }
+
+    private void ClearToken() => ClearTokenSupport.ClearToken(ref _updateTextCts);
+
+    private void OnDestroy()
+    {
+        _languageContainer.UnsubscribeFromChangeLanguageEvent(UpdateText);
+        ClearToken();
+    }
+
+    private void Reset()
+    {
+        _textMeshPro = gameObject.GetComponent<TextMeshProUGUI>();
     }
 }

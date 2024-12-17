@@ -179,7 +179,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1818910729921310087}
-  - component: {fileID: 2274521950446688424}
   - component: {fileID: 4126815716782450200}
   m_Layer: 5
   m_Name: UpgradeEngine
@@ -213,14 +212,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -1612.9951}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &2274521950446688424
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1201907693369897920}
-  m_CullTransparentMesh: 1
 --- !u!114 &4126815716782450200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,28 +231,95 @@ MonoBehaviour:
   _boosterChargeCount: {fileID: 8999615837827316034}
   _boosterChargeCooldown: {fileID: 2610742951567792127}
   _engineMaxForceDescription:
-    _defaultText: "\u041C\u0430\u043A\u0441\u0438\u043C\u0430\u043B\u044C\u043D\u0430\u044F
-      \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u044C \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F"
-    _texts: []
+    _defaultText: Increases the engine's maximum power, allowing the vessel to reach
+      a higher top speed
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
+        \u043C\u0430\u043A\u0441\u0438\u043C\u0430\u043B\u044C\u043D\u0443\u044E
+        \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u044C \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F,
+        \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u044F \u0430\u043F\u043F\u0430\u0440\u0430\u0442\u0443
+        \u0440\u0430\u0437\u0432\u0438\u0432\u0430\u0442\u044C \u0431\u043E\u043B\u0435\u0435
+        \u0432\u044B\u0441\u043E\u043A\u0443\u044E \u043C\u0430\u043A\u0441\u0438\u043C\u0430\u043B\u044C\u043D\u0443\u044E
+        \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u044C"
+    - _language: 1
+      _text: Increases the engine's maximum power, allowing the vessel to reach a
+        higher top speed
+    - _language: 3
+      _text: "\u63D0\u5347\u5F15\u64CE\u7684\u6700\u5927\u529F\u7387. \u4F7F\u88C5\u7F6E\u80FD\u591F\u8FBE\u5230\u66F4\u9AD8\u7684\u6700\u9AD8\u901F\u5EA6"
   _applyForceRateDescription:
-    _defaultText: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u0432\u044B\u0431\u0440\u043E\u0441\u0430
-      \u044D\u043D\u0435\u0440\u0433\u0438\u0438 \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F"
-    _texts: []
+    _defaultText: Increases the engine's operating frequency, reducing the time between
+      thrust pulses
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
+        \u0447\u0430\u0441\u0442\u043E\u0442\u0443 \u0440\u0430\u0431\u043E\u0442\u044B
+        \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F, \u0441\u043E\u043A\u0440\u0430\u0449\u0430\u044F
+        \u0432\u0440\u0435\u043C\u044F \u043C\u0435\u0436\u0434\u0443 \u0438\u043C\u043F\u0443\u043B\u044C\u0441\u0430\u043C\u0438"
+    - _language: 1
+      _text: Increases the engine's operating frequency, reducing the time between
+        thrust pulses
+    - _language: 3
+      _text: "\u63D0\u9AD8\u5F15\u64CE\u7684\u5DE5\u4F5C\u9891\u7387. \u51CF\u5C11\u63A8\u529B\u8109\u51B2\u4E4B\u95F4\u7684\u65F6\u95F4\u95F4\u9694"
   _boostPowerDescription:
-    _defaultText: "\u0421\u0438\u043B\u0430 \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F"
-    _texts: []
+    _defaultText: Increases the engine's acceleration rate, allowing the vessel to
+      accelerate faster
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
+        \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u0440\u0430\u0437\u0433\u043E\u043D\u0430
+        \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F, \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u044F
+        \u0430\u043F\u043F\u0430\u0440\u0430\u0442\u0443 \u0431\u044B\u0441\u0442\u0440\u0435\u0435
+        \u0440\u0430\u0437\u0433\u043E\u043D\u044F\u0442\u044C\u0441\u044F"
+    - _language: 1
+      _text: Increases the engine's acceleration rate, allowing the vessel to accelerate
+        faster
+    - _language: 3
+      _text: "\u63D0\u9AD8\u5F15\u64CE\u7684\u52A0\u901F\u901F\u5EA6. \u4F7F\u88C5\u7F6E\u80FD\u591F\u66F4\u5FEB\u5730\u52A0\u901F"
   _engineInterpolateForceValueDescription:
-    _defaultText: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u0440\u0430\u0437\u0433\u043E\u043D\u0430
-      \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F"
-    _texts: []
+    _defaultText: Boosts the thruster's power, providing greater acceleration when
+      activated
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
+        \u0442\u044F\u0433\u0443 \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F,
+        \u043E\u0431\u0435\u0441\u043F\u0435\u0447\u0438\u0432\u0430\u044F \u0431\u043E\u043B\u044C\u0448\u0435\u0435
+        \u0443\u0441\u043A\u043E\u0440\u0435\u043D\u0438\u0435 \u043F\u0440\u0438
+        \u0435\u0433\u043E \u0430\u043A\u0442\u0438\u0432\u0430\u0446\u0438\u0438"
+    - _language: 1
+      _text: Boosts the thruster's power, providing greater acceleration when activated
+    - _language: 3
+      _text: "\u589E\u52A0\u52A9\u63A8\u5668\u7684\u63A8\u529B. \u5728\u6FC0\u6D3B\u65F6\u63D0\u4F9B\u66F4\u5927\u7684\u52A0\u901F\u5EA6"
   _boosterChargeCountDescription:
-    _defaultText: "\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0437\u0430\u0440\u044F\u0434\u043E\u0432
-      \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F"
-    _texts: []
+    _defaultText: Increases the number of available thruster charges, enabling more
+      frequent use for maneuvers
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
+        \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u044B\u0445
+        \u0437\u0430\u0440\u044F\u0434\u043E\u0432 \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F,
+        \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u044F \u0447\u0430\u0449\u0435
+        \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C
+        \u0435\u0433\u043E \u0434\u043B\u044F \u043C\u0430\u043D\u0451\u0432\u0440\u043E\u0432"
+    - _language: 1
+      _text: Increases the number of available thruster charges, enabling more frequent
+        use for maneuvers
+    - _language: 3
+      _text: "\u589E\u52A0\u52A9\u63A8\u5668\u7684\u53EF\u7528\u6B21\u6570. \u4F7F\u5176\u80FD\u591F\u66F4\u9891\u7E41\u5730\u7528\u4E8E\u64CD\u4F5C"
   _boosterChargeCooldownDescription:
-    _defaultText: "\u041F\u0435\u0440\u0435\u0437\u0430\u0440\u044F\u0434\u043A\u0430
-      \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F"
-    _texts: []
+    _defaultText: Reduces the recharge time of a thruster charge, enabling quicker
+      reuse
+    _texts:
+    - _language: 0
+      _text: "\u0421\u043E\u043A\u0440\u0430\u0449\u0430\u0435\u0442 \u0432\u0440\u0435\u043C\u044F
+        \u043F\u0435\u0440\u0435\u0437\u0430\u0440\u044F\u0434\u043A\u0438 \u0437\u0430\u0440\u044F\u0434\u0430
+        \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F, \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u044F
+        \u0431\u044B\u0441\u0442\u0440\u0435\u0435 \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C
+        \u0435\u0433\u043E \u0441\u043D\u043E\u0432\u0430"
+    - _language: 1
+      _text: Reduces the recharge time of a thruster charge, enabling quicker reuse
+    - _language: 3
+      _text: "\u7F29\u77ED\u52A9\u63A8\u5668\u5145\u80FD\u7684\u65F6\u95F4. \u4F7F\u5176\u80FD\u591F\u66F4\u5FEB\u5730\u518D\u6B21\u4F7F\u7528"
 --- !u!1 &1500626880936254474
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,7 +329,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5155194797267663381}
-  - component: {fileID: 4731256918220038890}
   - component: {fileID: 3286892713691542795}
   m_Layer: 5
   m_Name: HealthModule
@@ -301,14 +358,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -5805.495}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &4731256918220038890
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1500626880936254474}
-  m_CullTransparentMesh: 1
 --- !u!114 &3286892713691542795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,14 +373,38 @@ MonoBehaviour:
   _maxHealth: {fileID: 8782190647006627336}
   _repairKitNumberForRepair: {fileID: 4385064712302906574}
   _maxHealthDescription:
-    _defaultText: "\u041C\u0430\u043A\u0441\u0438\u043C\u0430\u043B\u044C\u043D\u0430\u044F
-      \u043F\u0440\u043E\u0447\u043D\u043E\u0441\u0442\u044C \u0432\u043D\u0435\u0448\u043D\u0435\u0439
-      \u043E\u0431\u0448\u0438\u0432\u043A\u0438"
-    _texts: []
+    _defaultText: Increases the maximum durability of the vessel's hull, allowing
+      it to withstand more damage and remain operational longer
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
+        \u043C\u0430\u043A\u0441\u0438\u043C\u0430\u043B\u044C\u043D\u0443\u044E
+        \u043F\u0440\u043E\u0447\u043D\u043E\u0441\u0442\u044C \u043E\u0431\u0448\u0438\u0432\u043A\u0438
+        \u0430\u043F\u043F\u0430\u0440\u0430\u0442\u0430, \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u044F
+        \u0432\u044B\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u0442\u044C \u0431\u043E\u043B\u044C\u0448\u0435
+        \u043F\u043E\u0432\u0440\u0435\u0436\u0434\u0435\u043D\u0438\u0439 \u0438
+        \u0434\u043E\u043B\u044C\u0448\u0435 \u043E\u0441\u0442\u0430\u0432\u0430\u0442\u044C\u0441\u044F
+        \u0432 \u0441\u0442\u0440\u043E\u044E"
+    - _language: 1
+      _text: Increases the maximum durability of the vessel's hull, allowing it to
+        withstand more damage and remain operational longer
+    - _language: 3
+      _text: "\u63D0\u5347\u88C5\u7F6E\u5916\u58F3\u7684\u6700\u5927\u8010\u4E45\u5EA6.
+        \u4F7F\u5176\u80FD\u591F\u627F\u53D7\u66F4\u591A\u7684\u4F24\u5BB3\u5E76\u66F4\u957F\u65F6\u95F4\u4FDD\u6301\u8FD0\u884C"
   _repairKitNumberForRepairDescription:
-    _defaultText: "\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0437\u0430\u043F\u0447\u0430\u0441\u0442\u0435\u0439
-      \u0442\u0440\u0435\u0431\u0443\u0435\u043C\u044B\u0445 \u0434\u043B\u044F \u0440\u0435\u043C\u043E\u043D\u0442\u0430"
-    _texts: []
+    _defaultText: Reduces the number of repair parts required to fully restore the
+      hull's durability
+    _texts:
+    - _language: 0
+      _text: "\u0423\u043C\u0435\u043D\u044C\u0448\u0430\u0435\u0442 \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E
+        \u0437\u0430\u043F\u0447\u0430\u0441\u0442\u0435\u0439, \u043D\u0435\u043E\u0431\u0445\u043E\u0434\u0438\u043C\u044B\u0445
+        \u0434\u043B\u044F \u043F\u043E\u043B\u043D\u043E\u0433\u043E \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u044F
+        \u043F\u0440\u043E\u0447\u043D\u043E\u0441\u0442\u0438 \u043E\u0431\u0448\u0438\u0432\u043A\u0438"
+    - _language: 1
+      _text: Reduces the number of repair parts required to fully restore the hull's
+        durability
+    - _language: 3
+      _text: "\u51CF\u5C11\u5B8C\u5168\u4FEE\u590D\u5916\u58F3\u8010\u4E45\u5EA6\u6240\u9700\u7684\u7EF4\u4FEE\u90E8\u4EF6\u6570\u91CF"
 --- !u!1 &1911483313020345063
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,7 +524,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3536865845633121907}
-  - component: {fileID: 121457071012907876}
   - component: {fileID: 6509054855797902050}
   - component: {fileID: 1320134531376269912}
   - component: {fileID: 4270216074368689084}
@@ -488,14 +560,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &121457071012907876
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141738882138271582}
-  m_CullTransparentMesh: 1
 --- !u!114 &6509054855797902050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -597,7 +661,6 @@ MonoBehaviour:
   - {fileID: 3353366385961557803}
   - {fileID: 5337403866524692487}
   - {fileID: 4065006752004904682}
-  - {fileID: 812881520049026812}
   - {fileID: 6053283021073307619}
 --- !u!1 &2872670169841862613
 GameObject:
@@ -608,7 +671,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6060899756096241454}
-  - component: {fileID: 2051526448377870234}
   - component: {fileID: 6777687627525210892}
   m_Layer: 5
   m_Name: RotationModule
@@ -637,14 +699,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -4877.995}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &2051526448377870234
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2872670169841862613}
-  m_CullTransparentMesh: 1
 --- !u!114 &6777687627525210892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -659,8 +713,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rotationSpeed: {fileID: 2019207037950301782}
   _rotationSpeedDescription:
-    _defaultText: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u043F\u043E\u0432\u043E\u0440\u043E\u0442\u0430 "
-    _texts: []
+    _defaultText: Increases turning speed, enabling the vessel to change direction
+      more quickly
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
+        \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u043F\u043E\u0432\u043E\u0440\u043E\u0442\u0430,
+        \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u044F \u0430\u043F\u043F\u0430\u0440\u0430\u0442\u0443
+        \u0431\u044B\u0441\u0442\u0440\u0435\u0435 \u043C\u0435\u043D\u044F\u0442\u044C
+        \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0434\u0432\u0438\u0436\u0435\u043D\u0438\u044F"
+    - _language: 1
+      _text: Increases turning speed, enabling the vessel to change direction more
+        quickly
+    - _language: 3
+      _text: "\u63D0\u5347\u8F6C\u5411\u901F\u5EA6. \u4F7F\u88C5\u7F6E\u80FD\u591F\u66F4\u5FEB\u5730\u6539\u53D8\u884C\u9A76\u65B9\u5411"
 --- !u!1 &3704164496152276837
 GameObject:
   m_ObjectHideFlags: 0
@@ -794,6 +860,81 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &4191289331857086566
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2257568087140562969}
+  - component: {fileID: 4259596909243086143}
+  - component: {fileID: 3013009848299977965}
+  m_Layer: 0
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2257568087140562969
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4191289331857086566}
+  m_LocalRotation: {x: 0, y: 0, z: 0.38268343, w: 0.92387956}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6381342089697009006}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -45, y: 244}
+  m_SizeDelta: {x: 900, y: 600}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4259596909243086143
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4191289331857086566}
+  m_CullTransparentMesh: 1
+--- !u!114 &3013009848299977965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4191289331857086566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 0
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &4557086065232130102
 GameObject:
   m_ObjectHideFlags: 0
@@ -1287,7 +1428,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6381342089697009006}
-  - component: {fileID: 3386005183383239749}
   m_Layer: 0
   m_Name: TopPanel
   m_TagString: Untagged
@@ -1307,22 +1447,15 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2257568087140562969}
   - {fileID: 2326711621833597070}
   m_Father: {fileID: 3536865845633121907}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 2.0670166}
-  m_SizeDelta: {x: 0, y: 352.8999}
+  m_AnchoredPosition: {x: 0, y: -87.192}
+  m_SizeDelta: {x: 0, y: 174.38}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &3386005183383239749
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6850361305230871281}
-  m_CullTransparentMesh: 1
 --- !u!1 &7059972821543926901
 GameObject:
   m_ObjectHideFlags: 0
@@ -1518,7 +1651,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 879582716217962222}
-  - component: {fileID: 7480423446860350160}
   - component: {fileID: 4626205097460217485}
   m_Layer: 5
   m_Name: UpgradeAirBrake
@@ -1548,14 +1680,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -8275.995}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &7480423446860350160
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7155751248859377933}
-  m_CullTransparentMesh: 1
 --- !u!114 &4626205097460217485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1571,13 +1695,40 @@ MonoBehaviour:
   _airBrakeDrag: {fileID: 5947601768338825075}
   _airBrakeReleaseRate: {fileID: 3353366385961557803}
   _airBrakeDragDescription:
-    _defaultText: "\u0421\u0438\u043B\u0430 \u0432\u043E\u0437\u0434\u0443\u0448\u043D\u043E\u0433\u043E
-      \u0442\u043E\u0440\u043E\u043C\u043E\u0437\u0430"
-    _texts: []
+    _defaultText: Increases the braking force of the airbrake, allowing the vessel
+      to decelerate more quickly upon activation
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
+        \u0441\u0438\u043B\u0443 \u0432\u043E\u0437\u0434\u0443\u0448\u043D\u043E\u0433\u043E
+        \u0442\u043E\u0440\u043C\u043E\u0437\u0430, \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u044F
+        \u0430\u043F\u043F\u0430\u0440\u0430\u0442\u0443 \u0431\u044B\u0441\u0442\u0440\u0435\u0435
+        \u0441\u043D\u0438\u0436\u0430\u0442\u044C \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u044C
+        \u043F\u0440\u0438 \u0430\u043A\u0442\u0438\u0432\u0430\u0446\u0438\u0438"
+    - _language: 1
+      _text: Increases the braking force of the airbrake, allowing the vessel to
+        decelerate more quickly upon activationIncreases the braking force of the
+        airbrake, allowing the vessel to decelerate more quickly upon activation
+    - _language: 3
+      _text: "\u63D0\u9AD8\u7A7A\u6C14\u5236\u52A8\u5668\u7684\u5236\u52A8\u529B.
+        \u4F7F\u88C5\u7F6E\u5728\u6FC0\u6D3B\u65F6\u80FD\u591F\u66F4\u5FEB\u51CF\u901F"
   _airBrakeReleaseRateDescription:
-    _defaultText: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u0440\u0430\u0441\u043A\u0440\u044B\u0442\u0438\u044F
-      \u0432\u043E\u0437\u0434\u0443\u0448\u043D\u043E\u0433\u043E \u0442\u043E\u0440\u043C\u043E\u0437\u0430"
-    _texts: []
+    _defaultText: Speeds up the deployment of the airbrake, reducing the delay between
+      activation and the start of braking
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0441\u043A\u043E\u0440\u044F\u0435\u0442 \u043F\u0440\u043E\u0446\u0435\u0441\u0441
+        \u0440\u0430\u0441\u043A\u0440\u044B\u0442\u0438\u044F \u0432\u043E\u0437\u0434\u0443\u0448\u043D\u043E\u0433\u043E
+        \u0442\u043E\u0440\u043C\u043E\u0437\u0430, \u0443\u043C\u0435\u043D\u044C\u0448\u0430\u044F
+        \u0437\u0430\u0434\u0435\u0440\u0436\u043A\u0443 \u043C\u0435\u0436\u0434\u0443
+        \u0430\u043A\u0442\u0438\u0432\u0430\u0446\u0438\u0435\u0439 \u0438 \u043D\u0430\u0447\u0430\u043B\u043E\u043C
+        \u0442\u043E\u0440\u043C\u043E\u0436\u0435\u043D\u0438\u044F"
+    - _language: 1
+      _text: Speeds up the deployment of the airbrake, reducing the delay between
+        activation and the start of braking
+    - _language: 3
+      _text: "\u52A0\u5FEB\u7A7A\u6C14\u5236\u52A8\u5668\u7684\u5C55\u5F00\u901F\u5EA6.
+        \u51CF\u5C11\u4ECE\u6FC0\u6D3B\u5230\u5F00\u59CB\u5236\u52A8\u4E4B\u95F4\u7684\u5EF6\u8FDF"
 --- !u!1 &7426936190171623220
 GameObject:
   m_ObjectHideFlags: 0
@@ -1685,7 +1836,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1828273225090355696}
-  - component: {fileID: 7450875342454559906}
   - component: {fileID: 7780972053331039485}
   m_Layer: 5
   m_Name: EmergencyBrake
@@ -1708,7 +1858,6 @@ RectTransform:
   m_Children:
   - {fileID: 4616926223123844665}
   - {fileID: 3632460288733391060}
-  - {fileID: 92101785828444354}
   - {fileID: 6773780731098425821}
   m_Father: {fileID: 1395083612508288798}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1717,14 +1866,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -9516.495}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &7450875342454559906
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7897607781061746397}
-  m_CullTransparentMesh: 1
 --- !u!114 &7780972053331039485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1739,26 +1880,73 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chargeQuantity: {fileID: 5337403866524692487}
   _chargeCooldown: {fileID: 4065006752004904682}
-  _stopRate: {fileID: 812881520049026812}
   _sensingDistance: {fileID: 6053283021073307619}
   _chargeQuantityDescription:
-    _defaultText: "\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0437\u0430\u0440\u044F\u0434\u043E\u0432
-      \u0441\u0438\u0441\u0442\u0435\u043C\u044B \u044D\u043A\u0441\u0442\u0440\u0435\u043D\u043E\u0439
-      \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438"
-    _texts: []
+    _defaultText: Increases the number of charges for the Emergency Brake System,
+      enabling more frequent use to prevent collisions
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
+        \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u044B\u0445
+        \u0437\u0430\u0440\u044F\u0434\u043E\u0432 \u0441\u0438\u0441\u0442\u0435\u043C\u044B
+        \u044D\u043A\u0441\u0442\u0440\u0435\u043D\u043D\u043E\u0439 \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438,
+        \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u044F \u0447\u0430\u0449\u0435
+        \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C
+        \u0435\u0451 \u0434\u043B\u044F \u043F\u0440\u0435\u0434\u043E\u0442\u0432\u0440\u0430\u0449\u0435\u043D\u0438\u044F
+        \u0441\u0442\u043E\u043B\u043A\u043D\u043E\u0432\u0435\u043D\u0438\u0439"
+    - _language: 1
+      _text: Increases the number of charges for the Emergency Brake System, enabling
+        more frequent use to prevent collisions
+    - _language: 3
+      _text: "\u589E\u52A0\u7D27\u6025\u5239\u8F66\u7CFB\u7EDF\u7684\u53EF\u7528\u5145\u80FD\u6B21\u6570.
+        \u4ECE\u800C\u53EF\u4EE5\u66F4\u9891\u7E41\u5730\u4F7F\u7528\u4EE5\u907F\u514D\u78B0\u649E"
   _chargeCooldownDescription:
-    _defaultText: "\u041F\u0435\u0440\u0435\u0437\u0430\u0440\u044F\u0434\u043A\u0430
-      \u043E\u0434\u043D\u043E\u0433\u043E \u0437\u0430\u0440\u044F\u0434\u0430 \u0441\u0438\u0441\u0442\u0435\u043C\u044B
-      \u044D\u043A\u0441\u0442\u0440\u0435\u043D\u043E\u0439 \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438"
-    _texts: []
-  _stopRateDescription:
-    _defaultText: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438"
-    _texts: []
+    _defaultText: Reduces the recharge time for the Emergency Brake System charges,
+      allowing faster recovery for subsequent uses
+    _texts:
+    - _language: 0
+      _text: "\u0421\u043E\u043A\u0440\u0430\u0449\u0430\u0435\u0442 \u0432\u0440\u0435\u043C\u044F
+        \u043F\u0435\u0440\u0435\u0437\u0430\u0440\u044F\u0434\u043A\u0438 \u0437\u0430\u0440\u044F\u0434\u043E\u0432
+        \u0441\u0438\u0441\u0442\u0435\u043C\u044B \u044D\u043A\u0441\u0442\u0440\u0435\u043D\u043D\u043E\u0439
+        \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438, \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u044F
+        \u0431\u044B\u0441\u0442\u0440\u0435\u0435 \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C
+        \u0438\u0445 \u0434\u043B\u044F \u0441\u043B\u0435\u0434\u0443\u044E\u0449\u0435\u0433\u043E
+        \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u0438\u044F"
+    - _language: 1
+      _text: Reduces the recharge time for the Emergency Brake System charges, allowing
+        faster recovery for subsequent uses
+    - _language: 3
+      _text: "\u51CF\u5C11\u7D27\u6025\u5239\u8F66\u7CFB\u7EDF\u5145\u80FD\u7684\u5145\u80FD\u65F6\u95F4.
+        \u4F7F\u5176\u80FD\u591F\u66F4\u5FEB\u6062\u590D\u4EE5\u4F9B\u540E\u7EED\u4F7F\u7528"
   _sensingDistanceDescription:
-    _defaultText: "\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F \u0430\u043A\u0442\u0438\u0432\u0430\u0446\u0438\u0438
-      \u0441\u0438\u0441\u0442\u0435\u043C\u044B \u044D\u043A\u0441\u0442\u0440\u0435\u043D\u043E\u0439
-      \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438"
-    _texts: []
+    _defaultText: Increases the activation range of the Emergency Brake System. If
+      any object enters the designated area (visualized on the screen), the system
+      instantly triggers, bringing the vessel to a complete stop regardless of its
+      current speed
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
+        \u043E\u0431\u043B\u0430\u0441\u0442\u044C \u0430\u043A\u0442\u0438\u0432\u0430\u0446\u0438\u0438
+        \u0441\u0438\u0441\u0442\u0435\u043C\u044B \u044D\u043A\u0441\u0442\u0440\u0435\u043D\u043D\u043E\u0439
+        \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438. \u0415\u0441\u043B\u0438
+        \u043B\u044E\u0431\u043E\u0439 \u043E\u0431\u044A\u0435\u043A\u0442 \u043F\u043E\u043F\u0430\u0434\u0430\u0435\u0442
+        \u0432 \u0443\u043A\u0430\u0437\u0430\u043D\u043D\u0443\u044E \u043E\u0431\u043B\u0430\u0441\u0442\u044C
+        (\u043F\u043E\u043A\u0430\u0437\u0430\u043D\u0430 \u043D\u0430 \u044D\u043A\u0440\u0430\u043D\u0435),
+        \u0441\u0438\u0441\u0442\u0435\u043C\u0430 \u043C\u0433\u043D\u043E\u0432\u0435\u043D\u043D\u043E
+        \u0430\u043A\u0442\u0438\u0432\u0438\u0440\u0443\u0435\u0442\u0441\u044F,
+        \u043F\u043E\u043B\u043D\u043E\u0441\u0442\u044C\u044E \u043E\u0441\u0442\u0430\u043D\u0430\u0432\u043B\u0438\u0432\u0430\u044F
+        \u0430\u043F\u043F\u0430\u0440\u0430\u0442, \u043D\u0435\u0437\u0430\u0432\u0438\u0441\u0438\u043C\u043E
+        \u043E\u0442 \u0442\u0435\u043A\u0443\u0449\u0435\u0439 \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u0438"
+    - _language: 1
+      _text: Increases the activation range of the Emergency Brake System. If any
+        object enters the designated area (visualized on the screen), the system
+        instantly triggers, bringing the vessel to a complete stop regardless of
+        its current speed
+    - _language: 3
+      _text: "\u589E\u52A0\u7D27\u6025\u5239\u8F66\u7CFB\u7EDF\u7684\u6FC0\u6D3B\u8303\u56F4.
+        \u5982\u679C\u4EFB\u4F55\u7269\u4F53\u8FDB\u5165\u6307\u5B9A\u533A\u57DF
+        (\u5C4F\u5E55\u4E0A\u53EF\u89C1). \u7CFB\u7EDF\u5C06\u7ACB\u5373\u89E6\u53D1.
+        \u65E0\u8BBA\u5F53\u524D\u901F\u5EA6\u5982\u4F55. \u90FD\u80FD\u4F7F\u88C5\u7F6E\u5B8C\u5168\u505C\u6B62"
   _firstCircleColor: {r: 1, g: 0.9746906, b: 0.16509432, a: 1}
   _firstThicknessCircle: 21
   _secondCircleColor: {r: 0.6857491, g: 0.39101997, b: 0.9528302, a: 1}
@@ -1910,7 +2098,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3149527606724553023}
-  - component: {fileID: 1623467267760438593}
   - component: {fileID: 3500227095906392974}
   m_Layer: 5
   m_Name: PickerModule
@@ -1940,14 +2127,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -7012.995}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1623467267760438593
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8601876754987086427}
-  m_CullTransparentMesh: 1
 --- !u!114 &3500227095906392974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1963,13 +2142,37 @@ MonoBehaviour:
   _pickUpRadius: {fileID: 129075753448309560}
   _pickUpMultiplier: {fileID: 6827891413553107523}
   _pickUpRadiusDescription:
-    _defaultText: "\u0420\u0430\u0434\u0438\u0443\u0441 \u043F\u043E\u0434\u0431\u043E\u0440\u0430
-      \u043C\u043E\u043D\u0435\u0442"
-    _texts: []
+    _defaultText: Increases the pickup radius for items such as coins, rewards, and
+      other resources, making it easier to collect loot
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
+        \u0440\u0430\u0434\u0438\u0443\u0441 \u043F\u043E\u0434\u0431\u043E\u0440\u0430
+        \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u043E\u0432, \u0442\u0430\u043A\u0438\u0445
+        \u043A\u0430\u043A \u043C\u043E\u043D\u0435\u0442\u044B, \u043D\u0430\u0433\u0440\u0430\u0434\u044B
+        \u0438 \u0434\u0440\u0443\u0433\u0438\u0435 \u0440\u0435\u0441\u0443\u0440\u0441\u044B,
+        \u043E\u0431\u043B\u0435\u0433\u0447\u0430\u044F \u0441\u0431\u043E\u0440
+        \u0442\u0440\u043E\u0444\u0435\u0435\u0432"
+    - _language: 1
+      _text: Increases the pickup radius for items such as coins, rewards, and other
+        resources, making it easier to collect loot
+    - _language: 3
+      _text: "\u6269\u5927\u62FE\u53D6\u7269\u54C1\u7684\u534A\u5F84. \u4F8B\u5982\u91D1\u5E01.
+        \u5956\u52B1\u548C\u5176\u4ED6\u8D44\u6E90. \u66F4\u8F7B\u677E\u5730\u6536\u96C6\u6218\u5229\u54C1"
   _pickUpMultiplierDescription:
     _defaultText: "\u041C\u043D\u043E\u0436\u0438\u0442\u0435\u043B\u044C \u043F\u043E\u043B\u0443\u0447\u0435\u043D\u044B\u0445
       \u043C\u043E\u043D\u0435\u0442 "
-    _texts: []
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
+        \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u043F\u043E\u043B\u0443\u0447\u0430\u0435\u043C\u044B\u0445
+        \u043C\u043E\u043D\u0435\u0442 \u043F\u0440\u0438 \u0441\u0431\u043E\u0440\u0435,
+        \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u044F \u0431\u044B\u0441\u0442\u0440\u0435\u0435
+        \u043D\u0430\u043A\u0430\u043F\u043B\u0438\u0432\u0430\u0442\u044C \u0440\u0435\u0441\u0443\u0440\u0441\u044B"
+    - _language: 1
+      _text: Increases the amount of coins collected, enabling faster resource accumulation
+    - _language: 3
+      _text: "\u63D0\u5347\u62FE\u53D6\u91D1\u5E01\u7684\u6570\u91CF. \u52A0\u901F\u8D44\u6E90\u79EF\u7D2F"
   _firstRadiusData:
     Radius: 0
     Thickness: 27
@@ -2114,7 +2317,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 94, y: 87.382935}
-  m_SizeDelta: {x: 153.6, y: 135.61752}
+  m_SizeDelta: {x: 160, y: 135}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &618664760669630398
 CanvasRenderer:
@@ -2224,12 +2427,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u041F\u0435\u0440\u0435\u0437\u0430\u0440\u044F\u0434\u043A\u0430
-        \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F\n"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 67.25
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -2245,15 +2449,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.b
-      value: 0.3019608
+      value: 0.19215688
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.g
-      value: 0.90196085
+      value: 0.8941177
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.r
-      value: 0.9921569
+      value: 0.9725491
       objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -2358,8 +2562,22 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5939491819943979752}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+--- !u!114 &1131590707733750748 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 162774458696115460}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5055946411126364269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2610742951567792127 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
@@ -2398,6 +2616,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &5055946411126364269 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 162774458696115460}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5939491819943979752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5055946411126364269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 1131590707733750748}
+  _textContainer:
+    _defaultText: Boost Cooldown
+    _texts:
+    - _language: 0
+      _text: "\u0412\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u0435
+        \u0443\u0441\u043A\u043E\u0440\u0435\u043D\u0438\u044F"
+    - _language: 1
+      _text: Boost Cooldown
+    - _language: 3
+      _text: "\u52A0\u901F\u56DE\u5FA9"
 --- !u!1001 &644294667548126672
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2412,12 +2658,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u043E\u0442\u043A\u0440\u044B\u0442\u0438\u044F
-        \u0432\u043E\u0437\u0434\u0443\u0448\u043D\u043E\u0433\u043E \u0442\u043E\u0440\u043E\u043C\u0437\u0430"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 52.75
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -2427,6 +2674,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 2423716015212458148}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.19215688
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.8941177
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9725491
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -2538,8 +2801,22 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4180192262774364362}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+--- !u!114 &362121779716467464 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 644294667548126672}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5519408110527959225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2423716015212458148 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
@@ -2578,6 +2855,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &5519408110527959225 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 644294667548126672}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4180192262774364362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5519408110527959225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 362121779716467464}
+  _textContainer:
+    _defaultText: Brake Activation
+    _texts:
+    - _language: 0
+      _text: "\u0412\u0440\u0435\u043C\u044F \u0440\u0430\u0441\u043A\u0440\u044B\u0442\u0438\u044F"
+    - _language: 1
+      _text: Brake Activation
+    - _language: 3
+      _text: "\u5C55\u958B\u901F\u5EA6"
 --- !u!1001 &1919540041016770101
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2592,12 +2896,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0434\u0435\u0442\u0430\u043B\u0435\u0439
-        \u043D\u0443\u0436\u043D\u044B\u0445 \u0434\u043B\u044F \u0440\u0435\u043C\u043E\u043D\u0442\u0430"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 52.75
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -2607,6 +2912,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 3742958817839342401}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.19215688
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.8941177
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9725491
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: DowngradeAirBrakeReleaseRateLevel
@@ -2710,8 +3031,22 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1629556518391581081}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+--- !u!114 &1681511987768309997 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 1919540041016770101}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6830708873339257692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3278834967925771765 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3973107769387070400, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
@@ -2750,6 +3085,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8c2b8c65e7bac34b9f6935a48356c02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6830708873339257692 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 1919540041016770101}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1629556518391581081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6830708873339257692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 1681511987768309997}
+  _textContainer:
+    _defaultText: Required Repairs
+    _texts:
+    - _language: 0
+      _text: "\u0420\u0435\u043C\u043E\u043D\u0442\u043D\u044B\u0435 \u043D\u0430\u0431\u043E\u0440\u044B"
+    - _language: 1
+      _text: Required Repairs
+    - _language: 3
+      _text: "\u7DAD\u4FEE\u5957\u4EF6"
 --- !u!1001 &2166438655886500881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2764,12 +3126,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u041F\u0435\u0440\u0435\u0437\u0430\u0440\u044F\u0434\u043A\u0430
-        \u0437\u0430\u0440\u044F\u0434\u0430"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 83.45
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -2779,6 +3142,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 3981892575509461349}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.19215688
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.8941177
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9725491
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: DowngradeAirBrakeReleaseRateLevel
@@ -2882,8 +3261,22 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2620035266186743753}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+--- !u!114 &1434045992780882633 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 2166438655886500881}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6519139141933177208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2968976123962267601 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3973107769387070400, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
@@ -2922,6 +3315,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8c2b8c65e7bac34b9f6935a48356c02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6519139141933177208 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 2166438655886500881}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2620035266186743753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6519139141933177208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 1434045992780882633}
+  _textContainer:
+    _defaultText: System Cooldown
+    _texts:
+    - _language: 0
+      _text: "\u041F\u0435\u0440\u0435\u0437\u0430\u0440\u044F\u0434\u043A\u0430
+        \u0441\u0438\u0441\u0442\u0435\u043C\u044B"
+    - _language: 1
+      _text: System Cooldown
+    - _language: 3
+      _text: "\u6062\u5FA9\u6642\u9593"
 --- !u!1001 &2860880700473356739
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2936,12 +3357,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u0420\u0430\u0434\u0438\u0443\u0441 \u043F\u043E\u0434\u0431\u043E\u0440\u0430
-        \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u043E\u0432"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 61.2
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -2951,6 +3373,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 1072377463595052215}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.19215688
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.8941177
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9725491
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: DowngradeAirBrakeDragLevel
@@ -3054,7 +3492,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5739474542430310924}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
 --- !u!114 &129075753448309560 stripped
 MonoBehaviour:
@@ -3094,177 +3535,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &3260215870933910535
-PrefabInstance:
+--- !u!114 &3046015097600276251 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 2860880700473356739}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7195623204670639274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &7195623204670639274 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 2860880700473356739}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5739474542430310924
+MonoBehaviour:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1828273225090355696}
-    m_Modifications:
-    - target: {fileID: 942703834022197058, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_Name
-      value: StopRate
-      objectReference: {fileID: 0}
-    - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_text
-      value: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438"
-      objectReference: {fileID: 0}
-    - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_fontSize
-      value: 80.65
-      objectReference: {fileID: 0}
-    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: _upgradeButton
-      value: 
-      objectReference: {fileID: 1881886138595178439}
-    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: _downgradeButton
-      value: 
-      objectReference: {fileID: 318813594081876339}
-    - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: DowngradeAirBrakeReleaseRateLevel
-      objectReference: {fileID: 0}
-    - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: AirBrakeUpdater, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -1149
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3973107769387070400, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: UpgradeAirBrakeReleaseRateLevel
-      objectReference: {fileID: 0}
-    - target: {fileID: 3973107769387070400, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: AirBrakeUpdater, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 7142433540880416751, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.000061035156
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
---- !u!224 &92101785828444354 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-  m_PrefabInstance: {fileID: 3260215870933910535}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &318813594081876339 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-  m_PrefabInstance: {fileID: 3260215870933910535}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 7195623204670639274}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &812881520049026812 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-  m_PrefabInstance: {fileID: 3260215870933910535}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8c2b8c65e7bac34b9f6935a48356c02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1881886138595178439 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3973107769387070400, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
-  m_PrefabInstance: {fileID: 3260215870933910535}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 3046015097600276251}
+  _textContainer:
+    _defaultText: Pickup Radius
+    _texts:
+    - _language: 0
+      _text: "\u0420\u0430\u0434\u0438\u0443\u0441 \u043F\u043E\u0434\u0431\u043E\u0440\u0430"
+    - _language: 1
+      _text: Pickup Radius
+    - _language: 3
+      _text: "\u62FE\u53D6\u534A\u5F91"
 --- !u!1001 &3487638061266951029
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3279,12 +3587,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u0443\u0441\u043A\u043E\u0440\u0435\u043D\u0438\u044F
-        \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 53.35
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -3300,15 +3609,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.b
-      value: 0.3019608
+      value: 0.19215688
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.g
-      value: 0.90196085
+      value: 0.8941177
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.r
-      value: 0.9921569
+      value: 0.9725491
       objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -3413,7 +3722,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8355124486782865633}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
 --- !u!114 &524040581469169845 stripped
 MonoBehaviour:
@@ -3453,6 +3765,44 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
   m_PrefabInstance: {fileID: 3487638061266951029}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4436301920276979117 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 3487638061266951029}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8362774039906575900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &8362774039906575900 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 3487638061266951029}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8355124486782865633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8362774039906575900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 4436301920276979117}
+  _textContainer:
+    _defaultText: 
+    _texts:
+    - _language: 0
+      _text: "\u0423\u0441\u043A\u043E\u0440\u0435\u043D\u0438\u0435 \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F"
+    - _language: 1
+      _text: Engine Ramp-Up
+    - _language: 3
+      _text: "\u63A8\u9032\u52A0\u901F"
 --- !u!1001 &4214481371854546093
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3467,11 +3817,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u043F\u043E\u0432\u043E\u0440\u043E\u0442\u0430"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 84.95
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -3481,6 +3833,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 1382290846588582361}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.19215688
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.8941177
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9725491
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: DowngradeAirBrakeDragLevel
@@ -3584,7 +3952,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4523894635783408238}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
 --- !u!114 &963638435657881453 stripped
 MonoBehaviour:
@@ -3624,6 +3995,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8c2b8c65e7bac34b9f6935a48356c02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4002192893059588725 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 4214481371854546093}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9085104612820359620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &9085104612820359620 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 4214481371854546093}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4523894635783408238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9085104612820359620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 4002192893059588725}
+  _textContainer:
+    _defaultText: Turn Speed
+    _texts:
+    - _language: 0
+      _text: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u043F\u043E\u0432\u043E\u0440\u043E\u0442\u0430"
+    - _language: 1
+      _text: Turn Speed
+    - _language: 3
+      _text: "\u8F49\u5411\u901F\u5EA6"
 --- !u!1001 &4710295212315651181
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3637,8 +4046,14 @@ PrefabInstance:
       value: EngineForce
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: m_text
+      value: '
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 79.6
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -3654,15 +4069,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.b
-      value: 0.3019608
+      value: 0.19215688
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.g
-      value: 0.90196085
+      value: 0.8941177
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.r
-      value: 0.9921569
+      value: 0.9725491
       objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -3767,8 +4182,49 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4782900784159970901}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+--- !u!1 &375569475753447684 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 4710295212315651181}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4782900784159970901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375569475753447684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 5523710895861066421}
+  _textContainer:
+    _defaultText: Engine Max Power
+    _texts:
+    - _language: 0
+      _text: "\u041C\u043E\u0449\u043D\u043E\u0441\u0442\u044C \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F"
+    - _language: 3
+      _text: "\u5F15\u64CE\u6700\u5927\u52D5\u529B"
+    - _language: 1
+      _text: Engine Max Power
+--- !u!114 &5523710895861066421 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 4710295212315651181}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375569475753447684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7432952497474838166 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
@@ -3821,11 +4277,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u041C\u043E\u0449\u044C\u043D\u043E\u0441\u0442\u044C \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 70.15
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -3841,15 +4299,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.b
-      value: 0.3019608
+      value: 0.19215688
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.g
-      value: 0.90196085
+      value: 0.8941177
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.r
-      value: 0.9921569
+      value: 0.9725491
       objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -3954,8 +4412,49 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7293632280008138616}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+--- !u!1 &1142964438645629399 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 5455194923302116542}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7293632280008138616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142964438645629399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 5062824023472413286}
+  _textContainer:
+    _defaultText: Boost Power
+    _texts:
+    - _language: 0
+      _text: "\u041C\u043E\u0449\u043D\u043E\u0441\u0442\u044C \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F"
+    - _language: 1
+      _text: Boost Power
+    - _language: 3
+      _text: "\u52A0\u901F\u5668\u52D5\u529B"
+--- !u!114 &5062824023472413286 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 5455194923302116542}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142964438645629399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7126529320690139594 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
@@ -4008,12 +4507,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u0427\u0430\u0441\u0442\u043E\u0442\u0430 \u0440\u0430\u0431\u043E\u0442\u044B
-        \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 63.65
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -4029,15 +4529,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.b
-      value: 0.3019608
+      value: 0.19215688
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.g
-      value: 0.90196085
+      value: 0.8941177
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.r
-      value: 0.9921569
+      value: 0.9725491
       objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -4142,8 +4642,50 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7446183781890972059}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+--- !u!1 &765672567296160265 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 5676833357191532384}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7446183781890972059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765672567296160265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 4845403283741837752}
+  _textContainer:
+    _defaultText: Engine Speed
+    _texts:
+    - _language: 0
+      _text: "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u0440\u0430\u0431\u043E\u0442\u044B
+        \u0434\u0432\u0438\u0433\u0430\u0442\u0435\u043B\u044F"
+    - _language: 1
+      _text: Engine Speed
+    - _language: 3
+      _text: "\u5F15\u64CE\u901F\u5EA6"
+--- !u!114 &4845403283741837752 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 5676833357191532384}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765672567296160265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7111609072521954213 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
@@ -4196,12 +4738,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0437\u0430\u0440\u044F\u0434\u043E\u0432
-        \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 52.75
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -4217,15 +4760,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.b
-      value: 0.3019608
+      value: 0.19215688
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.g
-      value: 0.90196085
+      value: 0.8941177
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _levelProgressDisplay._filledColor.r
-      value: 0.9921569
+      value: 0.9725491
       objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -4330,8 +4873,49 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8590838488423175656}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+--- !u!1 &2230515969337964240 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 6529230500546350009}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8590838488423175656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230515969337964240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 6298849009502702945}
+  _textContainer:
+    _defaultText: Boost Charges
+    _texts:
+    - _language: 0
+      _text: "\u0417\u0430\u0440\u044F\u0434\u044B \u0443\u0441\u043A\u043E\u0440\u0438\u0442\u0435\u043B\u044F"
+    - _language: 1
+      _text: Boost Charges
+    - _language: 3
+      _text: "\u52A0\u901F\u5132\u91CF"
+--- !u!114 &6298849009502702945 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 6529230500546350009}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230515969337964240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7908088928326858873 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3973107769387070400, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
@@ -4384,12 +4968,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u041C\u0430\u043A\u0441\u0438\u043C\u0430\u043B\u044C\u043D\u043E\u0435
-        \u0437\u0434\u043E\u0440\u043E\u0432\u044C\u0435"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 67.4
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -4399,6 +4984,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 8560168565419157895}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.19215688
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.8941177
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9725491
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: DowngradeAirBrakeDragLevel
@@ -4502,8 +5103,49 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6905808991983957525}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+--- !u!1 &2013662388196346266 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 6888794103560910067}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6905808991983957525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013662388196346266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 5940130243728732715}
+  _textContainer:
+    _defaultText: Armor Strength
+    _texts:
+    - _language: 0
+      _text: "\u041F\u0440\u043E\u0447\u043D\u043E\u0441\u0442\u044C \u043E\u0431\u0448\u0438\u0432\u043A\u0438"
+    - _language: 1
+      _text: Armor Strength
+    - _language: 3
+      _text: "\u5916\u6BBC\u5F37\u5EA6"
+--- !u!114 &5940130243728732715 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 6888794103560910067}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013662388196346266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7546548404477003571 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3973107769387070400, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
@@ -4556,11 +5198,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0437\u0430\u0440\u044F\u0434\u043E\u0432"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 81.45
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -4570,6 +5214,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 4988031945650773896}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.19215688
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.8941177
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9725491
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: DowngradeAirBrakeDragLevel
@@ -4673,8 +5333,39 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6933865040108121085}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+--- !u!1 &2883192241362616213 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 7812398355209454332}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6933865040108121085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2883192241362616213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 7033861380878353444}
+  _textContainer:
+    _defaultText: Emergency stop system reserve
+    _texts:
+    - _language: 0
+      _text: "\u0417\u0430\u043F\u0430\u0441 \u0441\u0438\u0441\u0442\u0435\u043C\u044B
+        \u044D\u043A\u0441\u0442\u0440\u0435\u043D\u043D\u043E\u0439 \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043A\u0438"
+    - _language: 1
+      _text: Emergency stop system reserve
+    - _language: 3
+      _text: "\u7DCA\u6025\u5B58\u91CF"
 --- !u!224 &4616926223123844665 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
@@ -4713,6 +5404,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7033861380878353444 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 7812398355209454332}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2883192241362616213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8248596387606914328
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4727,11 +5429,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F \u0430\u043A\u0442\u0438\u0432\u0430\u0446\u0438\u0438\n"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 76.3
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -4741,6 +5445,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 6569305997807646828}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.19215688
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.8941177
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9725491
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: DowngradeAirBrakeReleaseRateLevel
@@ -4815,7 +5535,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1677
+      value: -1162
       objectReference: {fileID: 0}
     - target: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4844,8 +5564,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1539473392665361447}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+--- !u!1 &3895886695751407729 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 8248596387606914328}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1539473392665361447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3895886695751407729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 9191455374709728192}
+  _textContainer:
+    _defaultText: Activation Distance
+    _texts:
+    - _language: 0
+      _text: "\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F \u0430\u043A\u0442\u0438\u0432\u0430\u0446\u0438\u0438"
+    - _language: 1
+      _text: Activation Distance
+    - _language: 3
+      _text: "\u555F\u52D5\u8DDD\u96E2"
 --- !u!114 &4997789153325766360 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3973107769387070400, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
@@ -4884,6 +5634,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3204780736890571973, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
   m_PrefabInstance: {fileID: 8248596387606914328}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9191455374709728192 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 8248596387606914328}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3895886695751407729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8427169675636977032
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4898,12 +5659,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u0421\u0438\u043B\u0430 \u0432\u043E\u0437\u0434\u0443\u0448\u043D\u043E\u0433\u043E
-        \u0442\u043E\u0440\u043E\u043C\u0437\u0430"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 63.05
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -4913,6 +5675,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 6746788487908995324}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.19215688
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.8941177
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9725491
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -5024,8 +5802,39 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2321749126504975695}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+--- !u!1 &3502477604630728929 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 8427169675636977032}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2321749126504975695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3502477604630728929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 8720428389724711760}
+  _textContainer:
+    _defaultText: Air Brake Efficiency
+    _texts:
+    - _language: 0
+      _text: "\u042D\u0444\u0444\u0435\u043A\u0442\u0438\u0432\u043D\u043E\u0441\u0442\u044C
+        \u0442\u043E\u0440\u043C\u043E\u0436\u0435\u043D\u0438\u044F"
+    - _language: 1
+      _text: Air Brake Efficiency
+    - _language: 3
+      _text: "\u7A7A\u6C23\u5236\u52D5\u6548\u7387"
 --- !u!114 &4886408192052960840 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3973107769387070400, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
@@ -5064,6 +5873,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8720428389724711760 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 8427169675636977032}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3502477604630728929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8698976942732271800
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5078,11 +5898,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_text
-      value: "\u041C\u043D\u043E\u0436\u0438\u0442\u0435\u043B\u044C \u0437\u043E\u043B\u043E\u0442\u0430"
+      value: '
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_fontSize
-      value: 88.55
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: _upgradeButton
@@ -5092,6 +5914,22 @@ PrefabInstance:
       propertyPath: _downgradeButton
       value: 
       objectReference: {fileID: 5902744912445930956}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._material
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.b
+      value: 0.19215688
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.g
+      value: 0.8941177
+      objectReference: {fileID: 0}
+    - target: {fileID: 2772372802955326203, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      propertyPath: _levelProgressDisplay._filledColor.r
+      value: 0.9725491
+      objectReference: {fileID: 0}
     - target: {fileID: 2977506393127099764, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: DowngradeAirBrakeReleaseRateLevel
@@ -5195,8 +6033,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 874101705008756779}
   m_SourcePrefab: {fileID: 100100000, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+--- !u!1 &4382257010466446801 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4929223846207143273, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 8698976942732271800}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &874101705008756779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4382257010466446801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54d0eac4a708f2946affc36edc46f877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 8452838899231893088}
+  _textContainer:
+    _defaultText: Money Multiplier
+    _texts:
+    - _language: 0
+      _text: "\u041C\u043D\u043E\u0436\u0438\u0442\u0435\u043B\u044C \u0434\u043E\u0445\u043E\u0434\u0430"
+    - _language: 1
+      _text: Money Multiplier
+    - _language: 3
+      _text: "\u91D1\u9322\u500D\u6578"
 --- !u!114 &5736364402017817464 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3973107769387070400, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
@@ -5233,5 +6101,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8c2b8c65e7bac34b9f6935a48356c02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8452838899231893088 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1006129285570545368, guid: 1ab178795cc5dd64d88f7eeef44cbcb4, type: 3}
+  m_PrefabInstance: {fileID: 8698976942732271800}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4382257010466446801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

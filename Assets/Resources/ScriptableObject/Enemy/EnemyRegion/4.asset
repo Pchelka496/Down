@@ -12,5 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34f81e226340c5a498cd20bf05ae6be0, type: 3}
   m_Name: 4
   m_EditorClassIdentifier: 
-  _enemies: []
+  _enemies:
+  - {fileID: 11400000, guid: 8a1819ddd2aafa4458f3096cd9f13ab8, type: 2}
+  - {fileID: 11400000, guid: 8eecda4fc46359240ac204306088cc49, type: 2}
+  - {fileID: 11400000, guid: 269ac4640cc23d949a7d7d5b19c33756, type: 2}
+  - {fileID: 11400000, guid: 612c84e1c658b0e45bac928697b2c777, type: 2}
+  - {fileID: 11400000, guid: c5c4c9f5739efc445ad745f536741d19, type: 2}
+  - {fileID: 11400000, guid: 8e092163800db8848907ba643b9f22f2, type: 2}
+  - {fileID: 11400000, guid: 32be0320c49a851418759e403d52c23f, type: 2}
+  - {fileID: 11400000, guid: 3c7aba7cf78dbf045bb97cb8fa853e17, type: 2}
+  - {fileID: 11400000, guid: 540a8e879db133f47bf08d8460c0c0e5, type: 2}
+  - {fileID: 11400000, guid: e18b1a61c2b852c46ab028f20d62db70, type: 2}
+  - {fileID: 11400000, guid: b62d90554d9c06143a6832592f6d2782, type: 2}
+  - {fileID: 11400000, guid: 8f71f8b901eb3384895c9f609434d95e, type: 2}
+  - {fileID: 11400000, guid: c5a67972c90eaf84091acb997064f6b4, type: 2}
+  - {fileID: 11400000, guid: acb81de00cd94eb48a759c2f886edfcd, type: 2}
   _startHeight: 40000

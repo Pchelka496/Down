@@ -75,13 +75,13 @@ namespace Creatures.Player
         [Inject]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
         private void Construct(HealthModuleConfig config,
-            EffectController effectController,
-            CameraFacade camerasController,
-            AudioSourcePool audioSourcePool,
-            RepairKitIndicator repairKitIndicator,
-            HealthIndicator healthIndicator,
-            PlayerController player,
-            GlobalEventsManager globalEventsManager)
+                               EffectController effectController,
+                               CameraFacade camerasController,
+                               AudioSourcePool audioSourcePool,
+                               RepairKitIndicator repairKitIndicator,
+                               HealthIndicator healthIndicator,
+                               PlayerController player,
+                               GlobalEventsManager globalEventsManager)
         {
             _globalEventsManager = globalEventsManager;
             _effectController = effectController;

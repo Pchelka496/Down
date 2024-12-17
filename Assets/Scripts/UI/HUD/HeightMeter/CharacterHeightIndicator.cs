@@ -4,7 +4,6 @@ using System.Threading;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class CharacterHeightIndicator : MonoBehaviour
 {
@@ -14,7 +13,7 @@ public class CharacterHeightIndicator : MonoBehaviour
     [SerializeField] float[] _drumTargetYPosition = new float[11];
     [SerializeField] RectTransform[] _drumTransform;
     [SerializeField] float _spareDrumNonVisiblePosition;
-    [FormerlySerializedAs("value")][SerializeField] int _value;
+    int _value;
 
     int _drumCount;
     NativeArray<float> _targetYPositions;
@@ -87,7 +86,7 @@ public class CharacterHeightIndicator : MonoBehaviour
                                                ref _targetDigits
                                                )
         {
-            Value = (int)CharacterPositionMeter.YPosition
+            Value = (int)PlayerPositionMeter.YPosition
         };
 
         _counterHandle = counter.Schedule();
@@ -95,7 +94,7 @@ public class CharacterHeightIndicator : MonoBehaviour
 
         while (true)
         {
-            counter.Value = (int)CharacterPositionMeter.YPosition;
+            counter.Value = (int)PlayerPositionMeter.YPosition;
 
             _counterHandle = counter.Schedule();
             _counterHandle.Complete();

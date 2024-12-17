@@ -9,13 +9,11 @@ public class EmergencyBrakeUpdater : MonoBehaviour
     [Header("UpgradeInfo")]
     [SerializeField] UpgradeInfo _chargeQuantity;
     [SerializeField] UpgradeInfo _chargeCooldown;
-    [SerializeField] UpgradeInfo _stopRate;
     [SerializeField] UpgradeInfo _sensingDistance;
 
     [Header("Description text")]
     [SerializeField] TextContainer _chargeQuantityDescription;
     [SerializeField] TextContainer _chargeCooldownDescription;
-    [SerializeField] TextContainer _stopRateDescription;
     [SerializeField] TextContainer _sensingDistanceDescription;
 
     [Header("Visualize sensing distance")]
@@ -27,13 +25,13 @@ public class EmergencyBrakeUpdater : MonoBehaviour
 
     EmergencyBrakeModuleConfig _moduleConfig;
     PlayerUpgradePanel _playerUpgradePanel;
-    EnumLanguage _language;
+    ILanguageContainer _languageContainer;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(EnumLanguage language)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(ILanguageContainer languageContainer)
     {
-        _language = language;
+        _languageContainer = languageContainer;
     }
 
     public void Initialize(EmergencyBrakeModuleConfig moduleConfig, PlayerUpgradePanel playerUpgradePanel)
@@ -45,25 +43,22 @@ public class EmergencyBrakeUpdater : MonoBehaviour
                               EmergencyBrakeModuleConfig.EnumCharacteristics.MaxCharges,
                               UpgradeChargeQuantity,
                               DowngradeChargeQuantity,
-                              DetailedInformationChargeQuantityDescription);
+                              DetailedInformationChargeQuantityDescription
+                              );
 
         InitializeUpgradeInfo(_chargeCooldown,
                               EmergencyBrakeModuleConfig.EnumCharacteristics.ChargeCooldown,
                               UpgradeChargeCooldown,
                               DowngradeChargeCooldown,
-                              DetailedInformationChargeCooldownDescription);
-
-        InitializeUpgradeInfo(_stopRate,
-                              EmergencyBrakeModuleConfig.EnumCharacteristics.StopRate,
-                              UpgradeStopRate,
-                              DowngradeStopRate,
-                              DetailedInformationStopRateDescription);
+                              DetailedInformationChargeCooldownDescription
+                              );
 
         InitializeUpgradeInfo(_sensingDistance,
                               EmergencyBrakeModuleConfig.EnumCharacteristics.SensingDistance,
                               UpgradeSensingDistance,
                               DowngradeSensingDistance,
-                              DetailedInformationSensingDistanceDescription);
+                              DetailedInformationSensingDistanceDescription
+                              );
     }
 
     private void InitializeUpgradeInfo(UpgradeInfo upgradeInfo,
@@ -74,13 +69,13 @@ public class EmergencyBrakeUpdater : MonoBehaviour
                                        )
     {
         upgradeInfo.Initialize(_moduleConfig.GetLevel(characteristics),
-                                   _moduleConfig.GetMaxLevel(characteristics),
-                                   GetCost(characteristics,
-                                   _moduleConfig.GetLevel(characteristics) + 1),
-                                   upgradeAction,
-                                   downgradeAction,
-                                   detailedInformationAction
-                                   );
+                               _moduleConfig.GetMaxLevel(characteristics),
+                               GetCost(characteristics,
+                               _moduleConfig.GetLevel(characteristics) + 1),
+                               upgradeAction,
+                               downgradeAction,
+                               detailedInformationAction
+                               );
     }
 
     private string GetCost(EmergencyBrakeModuleConfig.EnumCharacteristics characteristics, int level)
@@ -109,11 +104,6 @@ public class EmergencyBrakeUpdater : MonoBehaviour
     public void UpgradeChargeCooldown()
     {
         UpgradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics.ChargeCooldown, _chargeCooldown);
-    }
-
-    public void UpgradeStopRate()
-    {
-        UpgradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics.StopRate, _stopRate);
     }
 
     public void UpgradeSensingDistance()
@@ -185,11 +175,6 @@ public class EmergencyBrakeUpdater : MonoBehaviour
         DowngradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics.ChargeCooldown, _chargeCooldown);
     }
 
-    public void DowngradeStopRate()
-    {
-        DowngradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics.StopRate, _stopRate);
-    }
-
     public void DowngradeSensingDistance()
     {
         DowngradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics.SensingDistance, _sensingDistance);
@@ -218,17 +203,14 @@ public class EmergencyBrakeUpdater : MonoBehaviour
     //_________________________________ Detailed Information Button _________________________________
     private void DetailedInformationChargeCooldownDescription(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _chargeCooldownDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _chargeCooldownDescription.GetText(_languageContainer.Language));
     }
 
     private void DetailedInformationChargeQuantityDescription(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _chargeQuantityDescription.GetText(_language));
-    }
-
-    private void DetailedInformationStopRateDescription(UpgradeInfo upgradeInfo)
-    {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _stopRateDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _chargeQuantityDescription.GetText(_languageContainer.Language));
     }
 
     private void DetailedInformationSensingDistanceDescription(UpgradeInfo upgradeInfo)
@@ -238,7 +220,9 @@ public class EmergencyBrakeUpdater : MonoBehaviour
 
     private void SensingDistanceVisualize(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, GetFirstCircleData(), GetSecondCircleData(), _sensingDistanceDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     GetFirstCircleData(),
+                                                                     GetSecondCircleData(),
+                                                                     _sensingDistanceDescription.GetText(_languageContainer.Language));
     }
-
 }

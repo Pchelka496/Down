@@ -16,24 +16,20 @@ namespace ScriptableObject.ModulesConfig.SupportModules
         protected UpdateCharacteristicsInfo<EnumCharacteristics, float>[] Characteristics => _characteristics;
 
         public int MaxCharges => (int)GetCharacteristicForLevel(_characteristics,
-            EnumCharacteristics.MaxCharges,
-            GetLevel(EnumCharacteristics.MaxCharges)
-        );
+                                                                EnumCharacteristics.MaxCharges,
+                                                                GetLevel(EnumCharacteristics.MaxCharges));
 
         public float ChargeCooldown => GetCharacteristicForLevel(_characteristics,
-            EnumCharacteristics.ChargeCooldown,
-            GetLevel(EnumCharacteristics.ChargeCooldown)
-        );
+                                                                 EnumCharacteristics.ChargeCooldown,
+                                                                 GetLevel(EnumCharacteristics.ChargeCooldown));
 
         public float StopRate => GetCharacteristicForLevel(_characteristics,
-            EnumCharacteristics.StopRate,
-            GetLevel(EnumCharacteristics.StopRate)
-        );
+                                                           EnumCharacteristics.StopRate,
+                                                           GetLevel(EnumCharacteristics.StopRate));
 
         public float SensingDistance => GetCharacteristicForLevel(_characteristics,
-            EnumCharacteristics.SensingDistance,
-            GetLevel(EnumCharacteristics.SensingDistance)
-        );
+                                                                  EnumCharacteristics.SensingDistance,
+                                                                  GetLevel(EnumCharacteristics.SensingDistance));
 
         public override bool ActivityCheck() => true;
 
@@ -46,7 +42,6 @@ namespace ScriptableObject.ModulesConfig.SupportModules
                 SavedData = _characteristics.Select(c => new DefaultModuleSaveData
                 {
                     CurrentLevel = c.CurrentLevel,
-                    LevelCost = c.LevelCost?.Clone() as int[]
                 }).ToArray()
             };
 
@@ -95,11 +90,8 @@ namespace ScriptableObject.ModulesConfig.SupportModules
                 {
                     UpdateType = _characteristics[i].UpdateType,
                     CurrentLevel = savedCharacteristic.CurrentLevel,
-                    LevelCost = savedCharacteristic.LevelCost
-                        ?.Clone() as int[],
-                    CharacteristicsPerLevel =
-                        _characteristics[i].CharacteristicsPerLevel
-                            ?.Clone() as float[]
+                    LevelCost = _characteristics[i].LevelCost,
+                    CharacteristicsPerLevel = _characteristics[i].CharacteristicsPerLevel
                 };
             }
         }

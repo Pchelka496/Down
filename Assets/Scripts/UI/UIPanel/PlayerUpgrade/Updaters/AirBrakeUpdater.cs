@@ -15,13 +15,14 @@ public class AirBrakeUpdater : MonoBehaviour
 
     AirBrakeModuleConfig _moduleConfig;
     PlayerUpgradePanel _playerUpgradePanel;
-    EnumLanguage _language;
+
+    ILanguageContainer _languageContainer;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(EnumLanguage language)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(ILanguageContainer languageContainer)
     {
-        _language = language;
+        _languageContainer = languageContainer;
     }
 
     public void Initialize(AirBrakeModuleConfig moduleConfig, PlayerUpgradePanel playerUpgradePanel)
@@ -48,17 +49,16 @@ public class AirBrakeUpdater : MonoBehaviour
                                        AirBrakeModuleConfig.EnumCharacteristics characteristics,
                                        System.Action upgradeAction,
                                        System.Action downgradeAction,
-                                       System.Action<UpgradeInfo> detailedInformationAction
-                                       )
+                                       System.Action<UpgradeInfo> detailedInformationAction)
     {
         upgradeInfo.Initialize(_moduleConfig.GetLevel(characteristics),
-                                   _moduleConfig.GetMaxLevel(characteristics),
-                                   GetCost(characteristics,
-                                   _moduleConfig.GetLevel(characteristics) + 1),
-                                   upgradeAction,
-                                   downgradeAction,
-                                   detailedInformationAction
-                                   );
+                               _moduleConfig.GetMaxLevel(characteristics),
+                               GetCost(characteristics,
+                               _moduleConfig.GetLevel(characteristics) + 1),
+                               upgradeAction,
+                               downgradeAction,
+                               detailedInformationAction
+                               );
     }
 
     private string GetCost(AirBrakeModuleConfig.EnumCharacteristics characteristics, int level)
@@ -144,13 +144,17 @@ public class AirBrakeUpdater : MonoBehaviour
     //_________________________________ Detailed Information Button _________________________________
     private void DetailedInformationAirBrakeDrag(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _airBrakeDragDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _airBrakeDragDescription.GetText(_languageContainer.Language));
+
         _playerUpgradePanel.VisualController.TestModule<AirBrakeModule>();
     }
 
     private void DetailedInformationAirBrakeReleaseRateDescription(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _airBrakeReleaseRateDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _airBrakeReleaseRateDescription.GetText(_languageContainer.Language));
+
         _playerUpgradePanel.VisualController.TestModule<AirBrakeModule>();
     }
 

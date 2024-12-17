@@ -115,7 +115,7 @@ public class WarpEngineController : MonoBehaviour, IUIPanel
         var minHeight = _moduleConfig.MinHeight;
         var maxHeight = _moduleConfig.MaxHeight;
 
-        float normalizedHeight = (targetHeight - minHeight) / (maxHeight - minHeight);
+        var normalizedHeight = (targetHeight - minHeight) / (maxHeight - minHeight);
 
         return Mathf.Lerp(minDuration, maxDuration, normalizedHeight);
     }

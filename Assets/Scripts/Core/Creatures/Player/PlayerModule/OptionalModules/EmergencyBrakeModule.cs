@@ -1,26 +1,33 @@
 using Core.Installers;
 using Creatures.Player;
+using Cysharp.Threading.Tasks;
 using ScriptableObject.ModulesConfig.SupportModules;
+using System.Threading;
 using UnityEngine;
 using Zenject;
 
 public class EmergencyBrakeModule : BaseModule
 {
     const float Z_ROTATION_OFFSET = 90f;
-    public const float COLLIDER_RADIUS = 0.8f;
+    const float COOLDOWN = 1f;
+    public const float COLLIDER_RADIUS = PlayerController.PLAYER_RADIUS + 0.1f;
+
     [SerializeField] Collider2D _collider;
     [SerializeField] ParticleSystem _particleSystem;
 
     float _stopRate;
+    bool _cooldownStatus = true;
 
     Rigidbody2D _rb;
     ChargeSystem _chargeSystem;
+    EmergencyBrakeModuleIndicator _emergencyBrakeModuleIndicator;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(EmergencyBrakeModuleConfig config, PlayerController player)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(EmergencyBrakeModuleConfig config, PlayerController player, EmergencyBrakeModuleIndicator emergencyBrakeModuleIndicator)
     {
         _rb = player.Rb;
+        _emergencyBrakeModuleIndicator = emergencyBrakeModuleIndicator;
 
         SnapToPlayer(player.transform);
         player.MultiTargetRotationFollower.RegisterRotationObject(transform, Z_ROTATION_OFFSET);
@@ -37,6 +44,9 @@ public class EmergencyBrakeModule : BaseModule
         _chargeSystem = new();
         _chargeSystem.Initialize(moduleConfig.MaxCharges, moduleConfig.ChargeCooldown);
 
+        _emergencyBrakeModuleIndicator.UpdateMaxChargeAmount(moduleConfig.MaxCharges).Forget();
+        _chargeSystem.SubscribeToChargeChange(_emergencyBrakeModuleIndicator.UpdateCurrentChargeAmount);
+
         var main = _particleSystem.main;
 
         main.duration = _stopRate;
@@ -47,6 +57,7 @@ public class EmergencyBrakeModule : BaseModule
     public override void EnableModule()
     {
         _collider.enabled = true;
+        _cooldownStatus = true;
     }
 
     public override void DisableModule()
@@ -58,7 +69,18 @@ public class EmergencyBrakeModule : BaseModule
     {
         if (collision.isTrigger || !_chargeSystem.HasCharge) return;
 
-        ActivateEmergencyBrake();
+        if (_cooldownStatus)
+        {
+            ActivateEmergencyBrake();
+            _cooldownStatus = false;
+            Reload().Forget();
+        }
+    }
+
+    private async UniTaskVoid Reload()
+    {
+        await UniTask.Delay(System.TimeSpan.FromSeconds(COOLDOWN));
+        _cooldownStatus = true;
     }
 
     private void ActivateEmergencyBrake()
@@ -73,7 +95,6 @@ public class EmergencyBrakeModule : BaseModule
     private void OnDestroy()
     {
         _chargeSystem.Dispose();
+        _chargeSystem.UnsubscribeFromChargeChange(_emergencyBrakeModuleIndicator.UpdateCurrentChargeAmount);
     }
-
 }
-

@@ -13,13 +13,13 @@ public class RotationModuleUpdater : MonoBehaviour
 
     RotationModuleConfig _moduleConfig;
     PlayerUpgradePanel _playerUpgradePanel;
-    EnumLanguage _language;
+    ILanguageContainer _languageContainer;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(EnumLanguage language)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(ILanguageContainer languageContainer)
     {
-        _language = language;
+        _languageContainer = languageContainer;
     }
 
     public void Initialize(RotationModuleConfig moduleConfig, PlayerUpgradePanel playerUpgradePanel)
@@ -39,8 +39,7 @@ public class RotationModuleUpdater : MonoBehaviour
                                       RotationModuleConfig.EnumCharacteristics characteristics,
                                       System.Action upgradeAction,
                                       System.Action downgradeAction,
-                                      System.Action<UpgradeInfo> detailedInformationAction
-                                      )
+                                      System.Action<UpgradeInfo> detailedInformationAction)
     {
         upgradeInfo.Initialize(_moduleConfig.GetLevel(characteristics),
                                _moduleConfig.GetMaxLevel(characteristics),
@@ -117,7 +116,9 @@ public class RotationModuleUpdater : MonoBehaviour
     //_________________________________ Detailed Information Button _________________________________
     private void DetailedInformationEngineMaxForce(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _rotationSpeedDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _rotationSpeedDescription.GetText(_languageContainer.Language));
+
         _playerUpgradePanel.VisualController.TestModule<RotationModule>();
     }
 

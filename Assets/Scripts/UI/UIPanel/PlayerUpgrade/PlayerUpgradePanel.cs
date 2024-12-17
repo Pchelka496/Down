@@ -1,6 +1,5 @@
 using Creatures.Player;
 using UnityEngine;
-using Zenject;
 using static Core.Installers.GameplaySceneInstaller;
 
 namespace UI.UIPanel.PlayerUpgrade
@@ -31,14 +30,12 @@ namespace UI.UIPanel.PlayerUpgrade
         public PlayerController Player => _player;
         public Vector2 PlayerViewUpgradePosition => _playerViewUpgradePosition.position;
 
-        [Inject]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����",
-            Justification = "<��������>")]
+        [Zenject.Inject]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:",Justification = "<>")]
         private void Construct(PlayerResourcedKeeper rewardKeeper,
                                OriginalPlayerModuleConfigs configs,
                                AudioSourcePool audioSourcePool,
-                               PlayerController player
-            )
+                               PlayerController player)
         {
             _unsuccessfulSoundPlayer.Initialize(audioSourcePool);
             _successfulSoundPlayer.Initialize(audioSourcePool);

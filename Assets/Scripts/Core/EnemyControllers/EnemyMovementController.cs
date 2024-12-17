@@ -129,8 +129,8 @@ namespace Core.Enemy
 
             var batchSize = 1;
 
-            initialPlacementJob.PlayerYPosition = CharacterPositionMeter.YPosition;
-            initialPlacementJob.PlayerXPosition = CharacterPositionMeter.XPosition;
+            initialPlacementJob.PlayerYPosition = PlayerPositionMeter.YPosition;
+            initialPlacementJob.PlayerXPosition = PlayerPositionMeter.XPosition;
 
             _enemyInitialPlacement = initialPlacementJob.Schedule(_enemyCount, batchSize, _enemyMoverHandler);
 
@@ -140,8 +140,8 @@ namespace Core.Enemy
             {
                 _enemyInitialPlacement.Complete();
 
-                initialPlacementJob.PlayerYPosition = CharacterPositionMeter.YPosition;
-                initialPlacementJob.PlayerXPosition = CharacterPositionMeter.XPosition;
+                initialPlacementJob.PlayerYPosition = PlayerPositionMeter.YPosition;
+                initialPlacementJob.PlayerXPosition = PlayerPositionMeter.XPosition;
 
                 _enemyInitialPlacement = initialPlacementJob.Schedule(_enemyCount, batchSize, _enemyMoverHandler);
 

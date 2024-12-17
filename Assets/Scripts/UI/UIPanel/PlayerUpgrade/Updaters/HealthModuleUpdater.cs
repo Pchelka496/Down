@@ -16,13 +16,13 @@ public class HealthModuleUpdater : MonoBehaviour
 
     HealthModuleConfig _moduleConfig;
     PlayerUpgradePanel _playerUpgradePanel;
-    EnumLanguage _language;
+    ILanguageContainer _languageContainer;
 
     [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(EnumLanguage language)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
+    private void Construct(ILanguageContainer languageContainer)
     {
-        _language = language;
+        _languageContainer = languageContainer;
     }
 
     public void Initialize(HealthModuleConfig moduleConfig, PlayerUpgradePanel playerUpgradePanel)
@@ -140,13 +140,17 @@ public class HealthModuleUpdater : MonoBehaviour
     //_________________________________ Detailed Information Button _________________________________
     private void DetailedInformationMaxHealthDescription(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _maxHealthDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _maxHealthDescription.GetText(_languageContainer.Language));
+
         _playerUpgradePanel.VisualController.TestModule<HealthModule>();
     }
 
     private void DetailedInformationRepairKitNumberForRepairDescription(UpgradeInfo upgradeInfo)
     {
-        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo, _repairKitNumberForRepairDescription.GetText(_language));
+        _playerUpgradePanel.VisualController.ViewDetailedInformation(upgradeInfo,
+                                                                     _repairKitNumberForRepairDescription.GetText(_languageContainer.Language));
+
         _playerUpgradePanel.VisualController.TestModule<HealthModule>();
     }
 

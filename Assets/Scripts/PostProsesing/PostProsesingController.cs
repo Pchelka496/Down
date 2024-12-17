@@ -19,6 +19,7 @@ public class PostProcessingController : System.IDisposable
     readonly VolumeProfileData _playerTakeImpact;
 
     EnumState _currentState;
+    EnumState _currentMainState;
 
     CancellationTokenSource _changeStateCts;
     event System.Action DisposeEvents;
@@ -48,7 +49,13 @@ public class PostProcessingController : System.IDisposable
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
-        DisposeEvents += () => player?.HealthModule?.UnsubscribeFromOnPlayerTakeImpact(PlayerTakeImpact);
+        DisposeEvents += () =>
+        {
+            if (player != null & player.HealthModule != null)
+            {
+                player.HealthModule.UnsubscribeFromOnPlayerTakeImpact(PlayerTakeImpact);
+            }
+        };
     }
 
     private void WarpStart() => SetState(EnumState.Warp);
@@ -58,7 +65,6 @@ public class PostProcessingController : System.IDisposable
 
     private async void SetState(EnumState newState)
     {
-        var oldState = _currentState;
         _currentState = newState;
 
         var increeseDuration = 1f;
@@ -71,6 +77,7 @@ public class PostProcessingController : System.IDisposable
         {
             case EnumState.Lobby:
                 {
+                    _currentMainState = EnumState.Lobby;
                     _globalVolume.sharedProfile = _lobbyMode.VolumeProfile;
 
                     increeseDuration = _lobbyMode.TransitionToDuration;
@@ -80,6 +87,7 @@ public class PostProcessingController : System.IDisposable
                 }
             case EnumState.Gameplay:
                 {
+                    _currentMainState = EnumState.Gameplay;
                     _globalVolume.sharedProfile = _gameplayMode.VolumeProfile;
 
                     increeseDuration = _gameplayMode.TransitionToDuration;
@@ -89,6 +97,7 @@ public class PostProcessingController : System.IDisposable
                 }
             case EnumState.Warp:
                 {
+                    _currentMainState = EnumState.Warp;
                     _globalVolume.sharedProfile = _warpMode.VolumeProfile;
 
                     increeseDuration = _warpMode.TransitionToDuration;
@@ -103,7 +112,7 @@ public class PostProcessingController : System.IDisposable
                     increeseDuration = _playerTakeImpact.TransitionToDuration;
                     decreaseDuration = _playerTakeImpact.TransitionFromDuration;
 
-                    SetDelayedState(_config.TakeImpactVolumeDuration, oldState, _changeStateCts.Token).Forget();
+                    SetDelayedState(_config.TakeImpactVolumeDuration, _currentMainState, _changeStateCts.Token).Forget();
 
                     break;
                 }

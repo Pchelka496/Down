@@ -63,7 +63,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""name"": ""One Modifier"",
                     ""id"": ""82095e26-7f80-4c24-8d66-637ec77dd2c3"",
                     ""path"": ""OneModifier"",
-                    ""interactions"": ""MultiTap(tapDelay=0.5)"",
+                    ""interactions"": ""MultiTap(tapDelay=0.2)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""AirBreake"",

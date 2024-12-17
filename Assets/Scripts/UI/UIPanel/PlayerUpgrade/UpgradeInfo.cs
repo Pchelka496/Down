@@ -3,7 +3,6 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 public class UpgradeInfo : MonoBehaviour
 {
@@ -16,24 +15,15 @@ public class UpgradeInfo : MonoBehaviour
 
     [SerializeField] RectTransform _rectTransform;
     CancellationTokenSource _updateTextCts;
-    EnumLanguage _language;
 
     public RectTransform RectTransform => _rectTransform;
-
-    [Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:������� �������������� �������� �����", Justification = "<��������>")]
-    private void Construct(EnumLanguage language)
-    {
-        _language = language;
-    }
 
     public async void Initialize(int currentLevel,
                                  int maxLevel,
                                  string currentLevelConst,
                                  System.Action upgradeAction,
                                  System.Action downgradeAction,
-                                 System.Action<UpgradeInfo> detailedInformationAction
-        )
+                                 System.Action<UpgradeInfo> detailedInformationAction)
     {
         await _levelProgressDisplay.Initialize(maxLevel);
 
@@ -80,5 +70,4 @@ public class UpgradeInfo : MonoBehaviour
     {
         _rectTransform = gameObject.GetComponent<RectTransform>();
     }
-
 }

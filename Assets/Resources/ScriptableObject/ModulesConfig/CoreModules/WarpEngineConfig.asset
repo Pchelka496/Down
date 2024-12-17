@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: WarpEngineConfig
   m_EditorClassIdentifier: 
   _resetThePriceAfterPurchase: 0
+  _minMoveDuration: 5
+  _maxMoveDuration: 10
   _minHeight: 90000
-  _maxHeight: 5000
-  _maxNumberOfChargingLevels: 1000
+  _maxHeight: 10000
+  _maxNumberOfChargingLevels: 100
