@@ -3,19 +3,30 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public class GlobalEventsManager
+public class GlobalEventsManager : IRoundResultTracker
 {
     readonly ITransitionAnimator _transitionAnimator;
     readonly Dictionary<int, TransitionTask> _transitionTasks = new();
     int _nextTaskId = 0;
 
+    RoundResult _roundResult;
+
     event Action RoundStarted;
     event Action RoundEnded;
     event Action WarpStarted;
+    event Action<RoundResult> OnRoundResultChanged;
 
     bool _useWarpEngineFlag;
 
     public bool IsTransitioning { get; private set; }
+    public RoundResult RoundResult
+    {
+        set
+        {
+            _roundResult = value;
+            OnRoundResultChanged?.Invoke(_roundResult);
+        }
+    }
 
     public GlobalEventsManager(ITransitionAnimator transitionAnimator)
     {
@@ -76,6 +87,16 @@ public class GlobalEventsManager
     public void PlayerDied()
     {
         _useWarpEngineFlag = false;
+        RoundResult = RoundResult.Defeat;
+
+        OnRoundEnd();
+        PerformTransitionAsync().Forget();
+    }
+
+    public void PlayerReachedSurface()
+    {
+        _useWarpEngineFlag = false;
+        RoundResult = RoundResult.Victory;
 
         OnRoundEnd();
         PerformTransitionAsync().Forget();
@@ -129,6 +150,10 @@ public class GlobalEventsManager
         _transitionTasks.Remove(taskId);
     }
 
+    RoundResult IRoundResultTracker.GetRoundResult() => _roundResult;
+    void IRoundResultTracker.SubscribeToRoundResultChanged(Action<RoundResult> callback) => OnRoundResultChanged += callback;
+    void IRoundResultTracker.UnsubscribeFromRoundResultChanged(Action<RoundResult> callback) => OnRoundResultChanged -= callback;
+
     private readonly struct TransitionTask
     {
         public readonly Func<UniTask> Task;
@@ -141,4 +166,3 @@ public class GlobalEventsManager
         }
     }
 }
-

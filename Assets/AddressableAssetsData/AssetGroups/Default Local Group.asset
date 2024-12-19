@@ -20,8 +20,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 106404a5578d3ad489de4e8ed9d14181
+    m_Address: Assets/Resources_moved/Prefab/Map/Surface/SurafeceController.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 13ebf32003448b24d8341586feba2aa8
     m_Address: Prefab/Reward/Reward
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 16e380d816c1c8d4e9083429f7ad9666
+    m_Address: Assets/Resources_moved/Prefab/Map/Surface/SurfacePrefab.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

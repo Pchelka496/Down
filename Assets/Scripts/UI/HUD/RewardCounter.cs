@@ -3,15 +3,17 @@ using TMPro;
 using UnityEngine;
 using Zenject;
 
-public class RewardCounter : MonoBehaviour
+public class RewardCounter : MonoBehaviour, ICollectedMoneyTracker
 {
     [SerializeField] SoundPlayerIncreasePitch _soundPlayer;
     [SerializeField] TextMeshProUGUI _text;
+
     PlayerResourcedKeeper _rewardKeeper;
 
     float _pickUpRewardMultiplier = 1f;
     int _points;
     event System.Action DisposeEvents;
+    event System.Action<int> OnMoneyChanged;
 
     public float PickUpRewardMultiplier { set => _pickUpRewardMultiplier = value; }
 
@@ -39,14 +41,17 @@ public class RewardCounter : MonoBehaviour
 
     private void WarpStart() => gameObject.SetActive(true);
 
-    private void RoundStart() => gameObject.SetActive(true);
+    private void RoundStart()
+    {
+        ResetPoints();
+        gameObject.SetActive(true);
+    }
 
     private void RoundEnd()
     {
         gameObject.SetActive(false);
 
         _rewardKeeper.IncreaseMoney(_points);
-        ResetPoints();
     }
 
     private void ResetPoints()
@@ -62,6 +67,8 @@ public class RewardCounter : MonoBehaviour
         _soundPlayer.PlaySound();
 
         UpdateText();
+
+        OnMoneyChanged?.Invoke(_points);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -70,10 +77,13 @@ public class RewardCounter : MonoBehaviour
         _text.text = _points.ToString();
     }
 
+    int ICollectedMoneyTracker.GetCollectedMoney() => _points;
+    void ICollectedMoneyTracker.SubscribeToMoneyChanged(System.Action<int> callback) => OnMoneyChanged += callback;
+    void ICollectedMoneyTracker.UnsubscribeFromMoneyChanged(System.Action<int> callback) => OnMoneyChanged -= callback;
+
     private void OnDestroy()
     {
         _soundPlayer.Dispose();
         DisposeEvents?.Invoke();
     }
 }
-

@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Creatures.Player
 {
-    public class HealthModule : BaseModule
+    public class HealthModule : BaseModule, IPlayerCollisionTracker
     {
         [SerializeField] float _cameraShakeTime = 0.4f;
         [SerializeField] SoundPlayerRandomPitch _soundPlayer;
@@ -17,6 +17,8 @@ namespace Creatures.Player
 
         [SerializeField] int _repairKitNumberForRepair;
         [SerializeField] int _currentRepairKit;
+
+        int _collisionQuantity;
         bool _workFlag = true;
         Vector2 _previousVelocity;
 
@@ -30,6 +32,7 @@ namespace Creatures.Player
 
         event System.Action OnPlayerTakeImpact;
         event System.Action DisposeEvents;
+        event System.Action<int> OnPlayerCollision;
 
         private int MaxHealth
         {
@@ -98,7 +101,11 @@ namespace Creatures.Player
             UpdateCharacteristics(config);
         }
 
-        private void RoundStart() => UpdateCharacteristics();
+        private void RoundStart()
+        {
+            _collisionQuantity = 0;
+            UpdateCharacteristics();
+        }
 
         private void UpdateCharacteristics() =>
             UpdateCharacteristics(GameplaySceneInstaller.DiContainer.Resolve<HealthModuleConfig>());
@@ -134,6 +141,13 @@ namespace Creatures.Player
             if (collision.gameObject.layer == EnemyManager.ENEMY_LAYER_INDEX)
             {
                 ApplyDamage(collision.contacts[0].point);
+
+                if (_collisionQuantity != int.MaxValue)
+                {
+                    _collisionQuantity++;
+                }
+
+                OnPlayerCollision(_collisionQuantity);
             }
         }
 
@@ -168,8 +182,12 @@ namespace Creatures.Player
             CurrentHealth = _maxHealth;
         }
 
-        public void SubscribeToOnPlayerTakeImpact(System.Action action) => OnPlayerTakeImpact += action;
-        public void UnsubscribeFromOnPlayerTakeImpact(System.Action action) => OnPlayerTakeImpact -= action;
+        public void SubscribeToOnPlayerTakeImpact(System.Action callback) => OnPlayerTakeImpact += callback;
+        public void UnsubscribeFromOnPlayerTakeImpact(System.Action callback) => OnPlayerTakeImpact -= callback;
+
+        int IPlayerCollisionTracker.GetCollisionCount() => _collisionQuantity;
+        void IPlayerCollisionTracker.SubscribeToCollisionChanged(System.Action<int> callback) => OnPlayerCollision += callback;
+        void IPlayerCollisionTracker.UnsubscribeFromCollisionChanged(System.Action<int> callback) => OnPlayerCollision -= callback;
 
         private void OnDestroy()
         {

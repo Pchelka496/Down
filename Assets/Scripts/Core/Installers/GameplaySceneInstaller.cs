@@ -3,6 +3,7 @@ using Core.SaveSystem;
 using Creatures.Player;
 using Creatures.Player.Any;
 using Customization;
+using Cysharp.Threading.Tasks;
 using ScriptableObject;
 using ScriptableObject.ModulesConfig;
 using ScriptableObject.ModulesConfig.FlightModule;
@@ -10,6 +11,7 @@ using ScriptableObject.ModulesConfig.SupportModules;
 using ScriptableObject.PickUpItem;
 using System.Linq;
 using UI;
+using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;
@@ -58,6 +60,7 @@ namespace Core.Installers
         SaveSystemController _saveSystemController;
         GlobalEventsManager _gameEventsManager;
         PostProcessingController _postProcessingController;
+        GameAnalytics _gameAnalytics;
 
         public static DiContainer DiContainer { get; private set; }
 
@@ -98,6 +101,9 @@ namespace Core.Installers
             Container.Bind<HUDController>().FromInstance(_hudController).AsSingle().NonLazy();
             Container.Bind<MainMenu>().FromInstance(_mainMenu).AsSingle().NonLazy();
             Container.Bind<SettingConfig>().FromInstance(_settingConfig).AsSingle().NonLazy();
+            Container.Bind<GameAnalytics>().FromInstance(_gameAnalytics).AsSingle().NonLazy();
+
+            Container.Bind<IAnalyticsManager>().FromInstance(new UnityAnalyticsManager()).AsSingle();
 
             BindPlayerModuleConfigs();
         }
@@ -166,6 +172,10 @@ namespace Core.Installers
             _saveSystemController = new(GetAllDataForSave());
             _gameEventsManager = new(_screenFader);
             _postProcessingController = new(_postProcessingControllerInitializer);
+
+            _gameAnalytics = new(moneyTracker: _rewardCounter,
+                                 collisionTracker: _playerController.HealthModule,
+                                 resultTracker: _gameEventsManager);
         }
 
         private IHaveDataForSave[] GetAllDataForSave()
@@ -208,6 +218,7 @@ namespace Core.Installers
             Container.Inject(_saveSystemController);
             Container.Inject(_gameEventsManager);
             Container.Inject(_postProcessingController);
+            Container.Inject(_gameAnalytics);
         }
 
         private void OnDestroy()
@@ -222,6 +233,7 @@ namespace Core.Installers
             _saveSystemController.Dispose();
             _pickUpItemManager.Dispose();
             _postProcessingController.Dispose();
+            _gameAnalytics.Dispose();
         }
 
         [System.Serializable]

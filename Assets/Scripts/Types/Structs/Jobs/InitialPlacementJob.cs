@@ -16,7 +16,7 @@ namespace Types.Structs.Jobs
         const float WEAK_UPDATE_POSITION_Y_DISTANCE = 20f;
 
         const float MAX_X_STATIC_ENEMY_DISTANCE_TO_PLAYER = 30f;
-        const float MAX_X_MOVABLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 60f;
+        const float MAX_X_MOVABLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 120f;
         const float MIN_X_MOVABLE_ENEMY_TRAVEL_DISTANCE_TO_PLAYER = 30f;
 
         const float MAX_Y_TRAVEL_DISTANCE_TO_PLAYER = 300f;

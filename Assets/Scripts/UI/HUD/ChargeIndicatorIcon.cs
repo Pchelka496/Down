@@ -9,14 +9,14 @@ public class BoosterIcon : MonoBehaviour
 
     public void Activate()
     {
-        if (!_animator.enabled) return;
+        if (!_animator.enabled || !gameObject.activeInHierarchy) return;
 
         _animator.Play("Enable");
     }
 
     public void Deactivate()
     {
-        if (!_animator.enabled) return;
+        if (!_animator.enabled || !gameObject.activeInHierarchy) return;
 
         _animator.Play("Disable");
     }

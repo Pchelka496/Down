@@ -81,7 +81,7 @@ public class MapController : System.IDisposable
     private async UniTask CreateSurfaceCreator()
     {
         var loadData = await AddressableLouderHelper.LoadAssetAsync<GameObject>(_surfaceController);
-        MonoBehaviour.Instantiate(loadData.LoadAsset);
+        GameplaySceneInstaller.DiContainer.InstantiatePrefab(loadData.LoadAsset);
     }
 
     private void ClearToken() => ClearTokenSupport.ClearToken(ref _surfaceCheckCts);

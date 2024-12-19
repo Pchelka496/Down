@@ -164,7 +164,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 1fc0967359a642d4db2528ebe767917b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -186,8 +186,8 @@ LineRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 0
   m_Positions:
-  - {x: -60.9, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 248.43251, y: 554.5215, z: 10}
+  - {x: 288.4485, y: 431.1389, z: 10}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -263,7 +263,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 25737291}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -274,7 +274,7 @@ RectTransform:
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0}
 --- !u!1 &28845614
 GameObject:
   m_ObjectHideFlags: 0
@@ -658,6 +658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ControlPath: <Keyboard>/space
+  _camera: {fileID: 1984348353}
   _lineRenderer: {fileID: 25737292}
 --- !u!114 &133092939
 MonoBehaviour:
@@ -4873,7 +4874,7 @@ MonoBehaviour:
   _customizerConfig: {fileID: 11400000, guid: c0fed8188dff0f9498e708b3eca52cbd, type: 2}
   _settingConfig: {fileID: 11400000, guid: 5867cfd7043e812428c10790dcbc2f6c, type: 2}
   _surfaceController:
-    m_AssetGUID: 
+    m_AssetGUID: 106404a5578d3ad489de4e8ed9d14181
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 
@@ -6741,7 +6742,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 205736857564108398, guid: 0a25f2363cf74df41bcb66633ee16365, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 63.399994
+      value: 63.400024
       objectReference: {fileID: 0}
     - target: {fileID: 205736857564108398, guid: 0a25f2363cf74df41bcb66633ee16365, type: 3}
       propertyPath: m_AnchoredPosition.y

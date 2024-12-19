@@ -2,7 +2,6 @@ using Additional;
 using System.Threading;
 using TMPro;
 using UnityEngine;
-using static Unity.VisualScripting.Icons;
 
 public class LanguageTextUpdater : MonoBehaviour
 {
