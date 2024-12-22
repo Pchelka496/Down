@@ -26,10 +26,10 @@ public class HealthIndicator : MonoBehaviour
     private void Construct(GlobalEventsManager globalEventsManager)
     {
         globalEventsManager.SubscribeToRoundStarted(RoundStart);
-        globalEventsManager.SubscribeToWarpStarted(WarpStart);
+        globalEventsManager.SubscribeToFastTravelStarted(FastTravelStart);
         globalEventsManager.SubscribeToRoundEnded(RoundEnd);
 
-        DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromFastTravelStarted(FastTravelStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
     }
@@ -39,7 +39,7 @@ public class HealthIndicator : MonoBehaviour
         RoundEnd();
     }
 
-    private void WarpStart()
+    private void FastTravelStart()
     {
         RoundStart();
     }

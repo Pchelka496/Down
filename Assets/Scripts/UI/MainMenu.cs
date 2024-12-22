@@ -10,16 +10,16 @@ public class MainMenu : MonoBehaviour
     {
         globalEventsManager.SubscribeToRoundStarted(RoundStart);
         globalEventsManager.SubscribeToRoundEnded(RoundEnd);
-        globalEventsManager.SubscribeToWarpStarted(WarpStart);
+        globalEventsManager.SubscribeToFastTravelStarted(FastTravelStart);
 
-        DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromFastTravelStarted(FastTravelStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
     }
 
     private void RoundStart() => Hide();
     private void RoundEnd() => Show();
-    private void WarpStart() => Hide();
+    private void FastTravelStart() => Hide();
 
     public void Show() => gameObject.SetActive(true);
     public void Hide() => gameObject.SetActive(false);

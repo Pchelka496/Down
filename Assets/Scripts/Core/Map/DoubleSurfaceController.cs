@@ -36,14 +36,14 @@ public class DoubleSurfaceController : MonoBehaviour
 
         globalEventsManager.SubscribeToRoundStarted(RoundStart);
         globalEventsManager.SubscribeToRoundEnded(RoundEnd);
-        globalEventsManager.SubscribeToWarpStarted(WarpStart);
+        globalEventsManager.SubscribeToFastTravelStarted(FastTravelStart);
 
-        DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromFastTravelStarted(FastTravelStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
     }
 
-    private void WarpStart() => Destroy(this);
+    private void FastTravelStart() => Destroy(this);
     private void RoundStart() => Destroy(this);
     private void RoundEnd() => Destroy(this);
 

@@ -25,9 +25,9 @@ namespace UI
         {
             globalEventsManager.SubscribeToRoundStarted(RoundStart);
             globalEventsManager.SubscribeToRoundEnded(RoundEnd);
-            globalEventsManager.SubscribeToWarpStarted(WarpStart);
+            globalEventsManager.SubscribeToFastTravelStarted(FastTravelStart);
 
-            DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromFastTravelStarted(FastTravelStart);
             DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
             DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
         }
@@ -47,7 +47,7 @@ namespace UI
             FadeToClear().Forget();
         }
 
-        private void WarpStart() => _currentState = EnumState.Warp;
+        private void FastTravelStart() => _currentState = EnumState.FastTravel;
         private void RoundStart() => _currentState = EnumState.Gameplay;
         private void RoundEnd() => _currentState = EnumState.Lobby;
 
@@ -64,7 +64,7 @@ namespace UI
                     {
                         break;
                     }
-                case EnumState.Warp:
+                case EnumState.FastTravel:
                     {
                         break;
                     }
@@ -89,7 +89,7 @@ namespace UI
                     {
                         break;
                     }
-                case EnumState.Warp:
+                case EnumState.FastTravel:
                     {
                         break;
                     }
@@ -147,7 +147,7 @@ namespace UI
         {
             Lobby,
             Gameplay,
-            Warp
+            FastTravel
         }
     }
 }

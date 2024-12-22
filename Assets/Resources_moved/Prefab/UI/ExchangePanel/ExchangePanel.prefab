@@ -370,7 +370,7 @@ MonoBehaviour:
   - {fileID: 7808353630730703662}
   - {fileID: 2318881078172851527}
   - {fileID: 7581429941596252810}
-  _adRewardDiamonds: 100
+  _adRewardDiamonds: 1000
   _diamondsToMoneyRate: 100
   _diamondsToEnergyRate: 0.5
   _moneyToDiamondsRate: 0.005

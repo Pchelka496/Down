@@ -43,10 +43,10 @@ public class PostProcessingController : System.IDisposable
     {
         globalEventsManager.SubscribeToRoundStarted(RoundStart);
         globalEventsManager.SubscribeToRoundEnded(RoundEnd);
-        globalEventsManager.SubscribeToWarpStarted(WarpStart);
+        globalEventsManager.SubscribeToFastTravelStarted(FastTravelStart);
         player.HealthModule.SubscribeToOnPlayerTakeImpact(PlayerTakeImpact);
 
-        DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromFastTravelStarted(FastTravelStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
         DisposeEvents += () =>
@@ -58,7 +58,7 @@ public class PostProcessingController : System.IDisposable
         };
     }
 
-    private void WarpStart() => SetState(EnumState.Warp);
+    private void FastTravelStart() => SetState(EnumState.Warp);
     private void RoundStart() => SetState(EnumState.Gameplay);
     private void RoundEnd() => SetState(EnumState.Lobby);
     private void PlayerTakeImpact() => SetState(EnumState.PlayerTakeImpact);

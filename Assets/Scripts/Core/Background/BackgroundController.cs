@@ -36,9 +36,9 @@ public class BackgroundController : IDisposable
 
         globalEventsManager.SubscribeToRoundStarted(RoundStart);
         globalEventsManager.SubscribeToRoundEnded(RoundEnd);
-        globalEventsManager.SubscribeToWarpStarted(WarpStart);
+        globalEventsManager.SubscribeToFastTravelStarted(FastTravelStart);
 
-        DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromFastTravelStarted(FastTravelStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
     }
@@ -52,7 +52,7 @@ public class BackgroundController : IDisposable
         SetState(EnumState.Lobby);
     }
 
-    private void WarpStart() => SetState(EnumState.Warp);
+    private void FastTravelStart() => SetState(EnumState.FastTravel);
     private void RoundStart() => SetState(EnumState.Gameplay);
     private void RoundEnd() => SetState(EnumState.Lobby);
 
@@ -70,7 +70,7 @@ public class BackgroundController : IDisposable
                     _backgroundUpdaterCheckInterval = TimeSpan.FromSeconds(GAMEPLAY_MODE_CHECK_INTERVAL);
                     break;
                 }
-            case EnumState.Warp:
+            case EnumState.FastTravel:
                 {
                     _backgroundUpdaterCheckInterval = TimeSpan.FromSeconds(WARP_MODE_CHECK_INTERVAL);
                     break;
@@ -131,6 +131,6 @@ public class BackgroundController : IDisposable
     {
         Lobby,
         Gameplay,
-        Warp,
+        FastTravel,
     }
 }

@@ -2,14 +2,7 @@ using UnityEngine;
 
 public class SettingPanel : MonoBehaviour, IUIPanel
 {
-    SettingConfig _settingConfig;
-
-    [Zenject.Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
-    private void Construct(SettingConfig settingConfig)
-    {
-        _settingConfig = settingConfig;
-    }
+    //LanguageChangeModule _languageChangeModule;
 
     public void Close()
     {
@@ -19,15 +12,5 @@ public class SettingPanel : MonoBehaviour, IUIPanel
     public void Open()
     {
         gameObject.SetActive(true);
-    }
-
-    public void SetRussianLanguage() => ChangeLanguage(EnumLanguage.Russian);
-    public void SetEnglishLanguage() => ChangeLanguage(EnumLanguage.English);
-    public void SetUkrainianLanguage() => ChangeLanguage(EnumLanguage.Ukrainian);
-    public void SetChineseLanguage() => ChangeLanguage(EnumLanguage.Chinese);
-
-    private void ChangeLanguage(EnumLanguage language)
-    {
-        _settingConfig.ChangeSelectedLanguage(language);
     }
 }

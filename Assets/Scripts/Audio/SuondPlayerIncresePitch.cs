@@ -1,3 +1,4 @@
+using Additional;
 using Cysharp.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -12,13 +13,15 @@ public class SoundPlayerIncreasePitch : System.IDisposable
     [SerializeField] AudioClip _audioClip;
 
     [SerializeField][Range(0.1f, 10f)] float _resetTime = 3f;
-    [SerializeField] int _maxCoinsForMaxPitch = 5;
+    [SerializeField] int _playingForMaxPitch = 5;
 
     AudioSourcePool _audioSourcePool;
     int _coinsCollectedInARow = 0;
     float _currentPitch = 0;
 
     CancellationTokenSource _resetPitchCts;
+
+    event System.Action OnPitchReset;
 
     public void Initialize(AudioSourcePool audioSourcePool)
     {
@@ -38,7 +41,7 @@ public class SoundPlayerIncreasePitch : System.IDisposable
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void UpdatePitch()
     {
-        var pitchProgress = Mathf.Clamp01((float)_coinsCollectedInARow / _maxCoinsForMaxPitch);
+        var pitchProgress = Mathf.Clamp01((float)_coinsCollectedInARow / _playingForMaxPitch);
         _currentPitch = Mathf.Lerp(_minPitch, _maxPitch, pitchProgress);
     }
 
@@ -49,24 +52,17 @@ public class SoundPlayerIncreasePitch : System.IDisposable
 
         await UniTask.WaitForSeconds(_resetTime, cancellationToken: _resetPitchCts.Token);
         _coinsCollectedInARow = 0;
+
+        OnPitchReset?.Invoke();
     }
 
-    private void ClearToken(ref CancellationTokenSource cts)
-    {
-        if (cts == null) return;
+    public void SubscribeToOnPitchReset(System.Action callback) => OnPitchReset += callback;
+    public void UnsubscribeToOnPitchReset(System.Action callback) => OnPitchReset -= callback;
 
-        if (!cts.IsCancellationRequested)
-        {
-            cts.Cancel();
-        }
-
-        cts.Dispose();
-        cts = null;
-    }
+    private void ClearToken(ref CancellationTokenSource cts) => ClearTokenSupport.ClearToken(ref cts);
 
     public void Dispose()
     {
         ClearToken(ref _resetPitchCts);
     }
-
 }

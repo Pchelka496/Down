@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 
 [System.Serializable]
@@ -15,22 +16,41 @@ public class SoundPlayerRandomPitch
         _audioSourcePool = audioSourcePool;
     }
 
-    public void PlayNextSound(float? volume = null)
+    public AudioClip PlayNextSound(float? volume = null)
+    {
+        if (_sounds.Length == 0) return default;
+
+        (var sound, var pitch) = GetSoundAndPitch();
+
+        _audioSourcePool.PlaySound(sound, volume ?? _volume, pitch);
+
+        return sound;
+    }
+
+    public void PlayNextSound(CancellationToken token, float? volume = null)
     {
         if (_sounds.Length == 0) return;
 
-        AudioClip sound = _sounds[_currentSoundIndex];
+        (var sound, var pitch) = GetSoundAndPitch();
+
+        _audioSourcePool.PlaySound(sound, token, volume ?? _volume, pitch);
+    }
+
+    private (AudioClip sound, float pitch) GetSoundAndPitch()
+    {
+        var sound = _sounds[_currentSoundIndex];
         _currentSoundIndex = (_currentSoundIndex + 1) % _sounds.Length;
 
-        float pitch = Random.Range(_minPitch, _maxPitch);
-        _audioSourcePool.PlaySound(sound, volume ?? _volume, pitch);
+        var pitch = Random.Range(_minPitch, _maxPitch);
+
+        return (sound, pitch);
     }
 
     public void PlaySound(int index)
     {
         if (index > _sounds.Length - 1) return;
 
-        AudioClip sound = _sounds[index];
+        var sound = _sounds[index];
 
         var pitch = Random.Range(_minPitch, _maxPitch);
 

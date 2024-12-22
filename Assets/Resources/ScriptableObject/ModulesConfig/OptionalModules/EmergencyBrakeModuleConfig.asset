@@ -12,39 +12,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73783ff4ba7cb16459dde8da9ca68775, type: 3}
   m_Name: EmergencyBrakeModuleConfig
   m_EditorClassIdentifier: 
-  _resetThePriceAfterPurchase: 0
+  _resetThePriceAfterPurchase: 1
   _characteristics:
-  - updateType: 0
-    currentLevel: 0
-    characteristicsPerLevel:
+  - _updateType: 0
+    _currentLevel: 0
+    _characteristicsPerLevel:
     - 0
     - 1
     - 2
     - 3
-    levelCost: 01000000020000000300000004000000
-  - updateType: 1
-    currentLevel: 0
-    characteristicsPerLevel:
+    _levelCost: 00000000c800000058020000e8030000
+  - _updateType: 1
+    _currentLevel: 0
+    _characteristicsPerLevel:
+    - 45
     - 40
     - 35
     - 30
     - 25
     - 20
-    - 15
-    levelCost: 010000000100000002000000030000000400000005000000
-  - updateType: 2
-    currentLevel: 0
-    characteristicsPerLevel:
+    _levelCost: 0000000064000000dc00000090010000bc020000e8030000
+  - _updateType: 2
+    _currentLevel: 0
+    _characteristicsPerLevel:
     - 0.4
     - 0.33
     - 0.27
     - 0.23
     - 0.19
     - 0.15
-    levelCost: 000000000100000002000000030000000400000005000000
-  - updateType: 3
-    currentLevel: 0
-    characteristicsPerLevel:
+    _levelCost: 0000000064000000c80000002c01000090010000f4010000
+  - _updateType: 3
+    _currentLevel: 0
+    _characteristicsPerLevel:
     - -0.4
     - -0.4
     - -0.6
@@ -56,4 +56,4 @@ MonoBehaviour:
     - -1.8
     - -2
     - -2.2
-    levelCost: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a000000
+    _levelCost: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

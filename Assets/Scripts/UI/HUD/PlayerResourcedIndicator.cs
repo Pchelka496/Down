@@ -22,18 +22,18 @@ public class PlayerResourcedIndicator : MonoBehaviour
     {
         globalEventsManager.SubscribeToRoundStarted(RoundStart);
         globalEventsManager.SubscribeToRoundEnded(RoundEnd);
-        globalEventsManager.SubscribeToWarpStarted(WarpStart);
+        globalEventsManager.SubscribeToFastTravelStarted(FastTravelStart);
 
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
-        DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromFastTravelStarted(FastTravelStart);
     }
 
     private void Start() => RoundEnd();
 
     private void RoundStart() => gameObject.SetActive(false);
     private void RoundEnd() => gameObject.SetActive(true);
-    private void WarpStart() => gameObject.SetActive(false);
+    private void FastTravelStart() => gameObject.SetActive(false);
 
     public void UpdateMoneyText(int moneyValue) => UpdateText(_money, moneyValue);
     public void UpdateDiamondText(int diamondValue) => UpdateText(_diamond, diamondValue);

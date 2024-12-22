@@ -31,6 +31,7 @@ namespace Types.record
                 _skinOpenStatusChanged?.Invoke(_skinId, _isUnlocked);
             }
         }
+
         public EnumUnlockMethod UnlockMethod => _unlockMethod;
         public int Cost => _cost;
         public string SkinId => _skinId;
@@ -40,29 +41,41 @@ namespace Types.record
             switch (_unlockMethod)
             {
                 case EnumUnlockMethod.Free:
-                {
-                    return () =>
                     {
-                        IsUnlocked = true;
-                        return true;
-                    };
-                }
+                        return () =>
+                        {
+                            IsUnlocked = true;
+                            return true;
+                        };
+                    }
                 case EnumUnlockMethod.BuyForMoney:
-                {
-                    return () =>
                     {
-                        var rewardKeeper = GameplaySceneInstaller.DiContainer.Resolve<PlayerResourcedKeeper>();
+                        return () =>
+                        {
+                            var rewardKeeper = GameplaySceneInstaller.DiContainer.Resolve<PlayerResourcedKeeper>();
 
-                        var unlockStatus = rewardKeeper.TryDecreaseMoney(_cost);
-                        IsUnlocked = unlockStatus;
+                            var unlockStatus = rewardKeeper.TryDecreaseMoney(_cost);
+                            IsUnlocked = unlockStatus;
 
-                        return unlockStatus;
-                    };
-                }
+                            return unlockStatus;
+                        };
+                    }
+                case EnumUnlockMethod.BuyForDiamonds:
+                    {
+                        return () =>
+                        {
+                            var rewardKeeper = GameplaySceneInstaller.DiContainer.Resolve<PlayerResourcedKeeper>();
+
+                            var unlockStatus = rewardKeeper.TryDecreaseDiamonds(_cost);
+                            IsUnlocked = unlockStatus;
+
+                            return unlockStatus;
+                        };
+                    }
                 default:
-                {
-                    return () => false;
-                }
+                    {
+                        return () => false;
+                    }
             }
         }
 
@@ -71,7 +84,8 @@ namespace Types.record
         public enum EnumUnlockMethod
         {
             Free,
-            BuyForMoney
+            BuyForMoney,
+            BuyForDiamonds
         }
 
     }

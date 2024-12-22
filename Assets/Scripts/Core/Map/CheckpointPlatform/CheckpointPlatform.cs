@@ -101,7 +101,7 @@ public class CheckpointPlatform : MonoBehaviour
 
     public void OpenWarpEngineControllerPanel()
     {
-        _lobbyUIPanelFacade.OpenWarpEngineController();
+        _lobbyUIPanelFacade.OpenFastTravelModuleController();
     }
 
     public void OpenSetting()

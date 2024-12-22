@@ -38,11 +38,11 @@ public class CameraFacade : MonoBehaviour
 
         globalEventsManager.SubscribeToRoundStarted(RoundStart);
         globalEventsManager.SubscribeToRoundEnded(RoundEnd);
-        globalEventsManager.SubscribeToWarpStarted(WarpStart);
+        globalEventsManager.SubscribeToFastTravelStarted(FastTravelStart);
 
         _isTransitioning = () => globalEventsManager != null && globalEventsManager.IsTransitioning;
 
-        DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromFastTravelStarted(FastTravelStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
     }
@@ -59,7 +59,7 @@ public class CameraFacade : MonoBehaviour
         EnterLobbyMode().Forget();
     }
 
-    private void WarpStart() => SetState(CameraState.Warp).Forget();
+    private void FastTravelStart() => SetState(CameraState.FastTravel).Forget();
     private void RoundStart() => SetState(CameraState.Gameplay).Forget();
     private void RoundEnd() => SetState(CameraState.Lobby).Forget();
 
@@ -81,7 +81,7 @@ public class CameraFacade : MonoBehaviour
                     await EnterGameplayMode();
                     break;
                 }
-            case CameraState.Warp:
+            case CameraState.FastTravel:
                 {
                     await EnterWarpMode();
                     break;
@@ -183,6 +183,6 @@ public class CameraFacade : MonoBehaviour
     {
         Lobby,
         Gameplay,
-        Warp
+        FastTravel
     }
 }

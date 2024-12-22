@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08793ab525be27e44be84e9e5440d93d, type: 3}
   m_Name: EngineModulePowerConfig
   m_EditorClassIdentifier: 
-  _resetThePriceAfterPurchase: 0
+  _resetThePriceAfterPurchase: 1
   _characteristics:
   - _updateType: 0
-    _currentLevel: 10
+    _currentLevel: 0
     _characteristicsPerLevel:
     - 100
     - 110
@@ -30,18 +30,18 @@ MonoBehaviour:
     - 200
     - 210
     - 220
-    _levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000b0000000b000000
+    _levelCost: 000000001e000000320000005000000078000000b4000000040100002c0100009001000008020000bc02000052030000e8030000
   - _updateType: 1
-    _currentLevel: 4
+    _currentLevel: 0
     _characteristicsPerLevel:
     - 0.03
     - 0.027
     - 0.025
     - 0.023
     - 0.02
-    _levelCost: 0100000002000000030000000400000005000000
+    _levelCost: 000000003c0000007800000090010000bc020000
   - _updateType: 2
-    _currentLevel: 9
+    _currentLevel: 0
     _characteristicsPerLevel:
     - 6000
     - 7000
@@ -53,9 +53,9 @@ MonoBehaviour:
     - 13000
     - 14000
     - 15000
-    _levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a000000
+    _levelCost: 00000000640000002c01000090010000f401000058020000bc0200002003000084030000e8030000
   - _updateType: 3
-    _currentLevel: 9
+    _currentLevel: 0
     _characteristicsPerLevel:
     - 2
     - 1.8
@@ -67,9 +67,9 @@ MonoBehaviour:
     - 0.6
     - 0.4
     - 0.3
-    _levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a000000
+    _levelCost: 0000000014000000280000003c0000005a000000780000008c000000a0000000c80000002c010000
   - _updateType: 4
-    _currentLevel: 9
+    _currentLevel: 0
     _characteristicsPerLevel:
     - 0.15
     - 0.18
@@ -81,17 +81,17 @@ MonoBehaviour:
     - 0.4
     - 0.44
     - 0.5
-    _levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a000000
+    _levelCost: 000000005000000078000000a0000000c8000000f000000018010000400100006801000090010000
   - _updateType: 5
-    _currentLevel: 3
+    _currentLevel: 0
     _characteristicsPerLevel:
     - 0
     - 1
     - 2
     - 3
-    _levelCost: 01000000020000000300000004000000
+    _levelCost: 0000000064000000f4010000e8030000
   - _updateType: 6
-    _currentLevel: 6
+    _currentLevel: 0
     _characteristicsPerLevel:
     - 10
     - 9
@@ -100,4 +100,4 @@ MonoBehaviour:
     - 6
     - 5
     - 4
-    _levelCost: 01000000020000000300000004000000050000000600000007000000
+    _levelCost: 0a000000640000002c01000090010000f401000058020000bc020000

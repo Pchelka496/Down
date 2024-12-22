@@ -67,7 +67,7 @@ namespace Types.record
         [field: SerializeField] public HealthModuleConfig.HealthModuleSaveData HealthModuleSaveData { get; set; }
         [field: SerializeField] public EmergencyBrakeModuleConfig.EmergencyBrakeModuleSaveData EmergencyBrakeModuleSaveData { get; set; }
         [field: SerializeField] public RotationModuleConfig.RotationModuleSaveData RotationModuleSaveData { get; set; }
-        [field: SerializeField] public WarpEngineModuleConfig.WarpEngineSaveData WarpEngineSaveData { get; set; }
+        [field: SerializeField] public FastTravelModuleConfig.WarpEngineSaveData WarpEngineSaveData { get; set; }
 
         [field: SerializeField] public SettingConfig.SettingData SettingConfigData { get; set; }
     }

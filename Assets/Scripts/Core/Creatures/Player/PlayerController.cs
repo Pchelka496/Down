@@ -23,8 +23,9 @@ namespace Creatures.Player
         [SerializeField] RotationModule _rotationModule;
         [SerializeField] EngineModule _engineModule;
         [SerializeField] PickerModule _pickerModule;
-        [SerializeField] WarpEngineModule _warpEngineModule;
+        [SerializeField] FastTravelModule _fastTravelModule;
         [SerializeField] PlayerVisualPart _playerVisualPart;
+        [SerializeField] TrailRenderer _trailRenderer;
 
         EnumState _currentState;
         readonly List<BaseModule> _modules = new(3);
@@ -38,7 +39,7 @@ namespace Creatures.Player
         public RotationModule RotationModule => _rotationModule;
         public EngineModule EngineModule => _engineModule;
         public PickerModule PickerModule => _pickerModule;
-        public WarpEngineModule WarpEngineModule => _warpEngineModule;
+        public FastTravelModule FastTravelModule => _fastTravelModule;
 
         public MultiTargetRotationFollower MultiTargetRotationFollower => _follower;
 
@@ -52,10 +53,10 @@ namespace Creatures.Player
 
             globalEventsManager.SubscribeToRoundStarted(RoundStart);
             globalEventsManager.SubscribeToRoundEnded(RoundEnd);
-            globalEventsManager.SubscribeToWarpStarted(WarpStart);
+            globalEventsManager.SubscribeToFastTravelStarted(FastTravelStart);
             var taskId = globalEventsManager.AddTransitionTask(ResetPositionAndVelocity, false);
 
-            DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+            DisposeEvents += () => globalEventsManager?.UnsubscribeFromFastTravelStarted(FastTravelStart);
             DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
             DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
             DisposeEvents += () => globalEventsManager?.RemoveTransitionTask(taskId);
@@ -71,10 +72,10 @@ namespace Creatures.Player
             RegisterModule(_rotationModule);
             RegisterModule(_engineModule);
             RegisterModule(_pickerModule);
-            RegisterModule(_warpEngineModule);
+            RegisterModule(_fastTravelModule);
         }
 
-        private void WarpStart() => SetState(EnumState.Warp);
+        private void FastTravelStart() => SetState(EnumState.FastTravel);
         private void RoundStart() => SetState(EnumState.Gameplay);
         private void RoundEnd() => SetState(EnumState.Lobby);
 
@@ -157,9 +158,9 @@ namespace Creatures.Player
                         EnterGameplayMode();
                         break;
                     }
-                case EnumState.Warp:
+                case EnumState.FastTravel:
                     {
-                        EnterWarpMode();
+                        EnterFastTravelMode();
                         break;
                     }
                 case EnumState.OpenUIPanel:
@@ -182,13 +183,20 @@ namespace Creatures.Player
 
             foreach (var module in _modules)
             {
-                if (!module.IsActiveOnLobbyMode)
+                try
                 {
-                    module.DisableModule();
+                    if (!module.IsActiveOnLobbyMode)
+                    {
+                        module.DisableModule();
+                    }
+                    else
+                    {
+                        module.EnableModule();
+                    }
                 }
-                else
+                catch (System.Exception ex)
                 {
-                    module.EnableModule();
+                    Debug.LogError($"Error while toggling module in Lobby Mode: {ex.Message}");
                 }
             }
         }
@@ -213,31 +221,57 @@ namespace Creatures.Player
         {
             _rb.gravityScale = 1f;
             _rb.constraints = RigidbodyConstraints2D.None;
+            _trailRenderer.enabled = true;
 
             foreach (var module in _modules)
             {
-                module.EnableModule();
+                try
+                {
+                    module.EnableModule();
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError($"Error while enabling module in Gameplay Mode: {ex.Message}");
+                }
             }
         }
 
-        private void EnterWarpMode()
+        private void EnterFastTravelMode()
         {
             _rb.gravityScale = 0f;
             _rb.constraints = RigidbodyConstraints2D.None;
+            _trailRenderer.enabled = false;
 
             foreach (var module in _modules)
             {
-                module.DisableModule();
+                if (module as FastTravelModule) continue;
+
+                try
+                {
+                    module.DisableModule();
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError($"Error while disabling module in Fast Travel Mode: {ex.Message}");
+                }
             }
         }
 
         private void EnterOpenUIPanelMode()
         {
             _rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            _trailRenderer.enabled = true;
 
             foreach (var module in _modules)
             {
-                module.DisableModule();
+                try
+                {
+                    module.DisableModule();
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError($"Error while disabling module in Open UI Panel Mode: {ex.Message}");
+                }
             }
         }
 
@@ -251,7 +285,7 @@ namespace Creatures.Player
         {
             Lobby,
             Gameplay,
-            Warp,
+            FastTravel,
             OpenUIPanel
         }
     }

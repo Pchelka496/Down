@@ -9,7 +9,7 @@ public class EmergencyBrakeModuleIndicator : BaseChargeIndicator
         base.Construct(globalEventsManager);
     }
 
-    protected override void WarpStart()
+    protected override void FastTravelStart()
     {
         ChangeState(EnumStandardGameState.Warp);
         ActiveSetting(MaxCharges);

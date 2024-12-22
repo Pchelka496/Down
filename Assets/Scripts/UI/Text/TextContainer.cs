@@ -4,7 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public class TextContainer
 {
-    [SerializeField] string _defaultText;
+    [SerializeField, TextArea(3, 10)] string _defaultText;
     [SerializeField] TextForLanguage[] _texts;
 
     public string GetText(EnumLanguage language)
@@ -40,7 +40,7 @@ public class TextContainer
     private record TextForLanguage
     {
         [SerializeField] EnumLanguage _language;
-        [SerializeField] string _text;
+        [SerializeField, TextArea(5, 15)] string _text;
 
         public EnumLanguage Language => _language;
         public string Text => _text;

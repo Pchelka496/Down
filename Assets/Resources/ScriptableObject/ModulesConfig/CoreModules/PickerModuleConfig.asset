@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6cc3c14de28c3f48bc6e8082b4b64bf, type: 3}
   m_Name: PickerModuleConfig
   m_EditorClassIdentifier: 
-  _resetThePriceAfterPurchase: 0
+  _resetThePriceAfterPurchase: 1
   _characteristics:
   - _updateType: 0
     _currentLevel: 0
@@ -30,7 +30,7 @@ MonoBehaviour:
     - 4.4
     - 4.7
     - 5
-    _levelCost: 01000000020000000300000004000000040000000400000004000000040000000400000004000000040000000400000004000000
+    _levelCost: 00000000140000003c00000064000000c80000005e01000090010000a4010000b8010000cc010000e00100000802000058020000
   - _updateType: 1
     _currentLevel: 0
     _characteristicsPerLevel:
@@ -38,4 +38,4 @@ MonoBehaviour:
     - 2
     - 3
     - 4
-    _levelCost: 01000000010000000200000003000000
+    _levelCost: 01000000c800000020030000d0070000

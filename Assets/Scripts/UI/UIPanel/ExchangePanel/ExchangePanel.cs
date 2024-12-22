@@ -19,13 +19,17 @@ public class ExchangePanel : MonoBehaviour, IUIPanel
     [SerializeField] SoundPlayerRandomPitch _successSoundPlayer;
     [SerializeField] SoundPlayerRandomPitch _unsuccessfulSoundPlayer;
 
+    IAdManager _adManager;
+
     PlayerResourcedKeeper _playerResourcedKeeper;
     CancellationTokenSource _cts;
 
     [Zenject.Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
-    private void Construct(PlayerResourcedKeeper resourcedKeeper, AudioSourcePool audioSourcePool)
+    private void Construct(PlayerResourcedKeeper resourcedKeeper, AudioSourcePool audioSourcePool, IAdManager adManager)
     {
+        _adManager = adManager;
+
         _playerResourcedKeeper = resourcedKeeper;
         _successSoundPlayer.Initialize(audioSourcePool);
         _unsuccessfulSoundPlayer.Initialize(audioSourcePool);
@@ -33,6 +37,8 @@ public class ExchangePanel : MonoBehaviour, IUIPanel
 
     public void Open()
     {
+        _adManager.LoadRewardedAd(null, null);
+
         transform.SetAsLastSibling();
         gameObject.SetActive(true);
     }
@@ -74,13 +80,20 @@ public class ExchangePanel : MonoBehaviour, IUIPanel
 
     public void WatchAdForDiamonds()
     {
-        OnAdWatchedSuccessfully();
+        _adManager.ShowRewardedAd(OnShowComplete: OnAdWatchedSuccessfully,
+                                  OnShowFailure: OnAdFailedToShow
+                                  );
     }
 
     private void OnAdWatchedSuccessfully()
     {
         _playerResourcedKeeper.IncreaseDiamonds(_adRewardDiamonds);
         _successSoundPlayer.PlayNextSound();
+    }
+
+    private void OnAdFailedToShow()
+    {
+        _adManager.LoadRewardedAd(null, null);
     }
 
     private void ClearToken() => ClearTokenSupport.ClearToken(ref _cts);

@@ -25,10 +25,10 @@ public class BaseChargeIndicator : MonoBehaviour
     protected virtual void Construct(GlobalEventsManager globalEventsManager)
     {
         globalEventsManager.SubscribeToRoundStarted(RoundStart);
-        globalEventsManager.SubscribeToWarpStarted(WarpStart);
+        globalEventsManager.SubscribeToFastTravelStarted(FastTravelStart);
         globalEventsManager.SubscribeToRoundEnded(RoundEnd);
 
-        DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromFastTravelStarted(FastTravelStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
     }
@@ -39,7 +39,7 @@ public class BaseChargeIndicator : MonoBehaviour
     }
 
     protected virtual void RoundStart() => ActiveSetting(_maxCharges);
-    protected virtual void WarpStart() => ActiveSetting(_maxCharges);
+    protected virtual void FastTravelStart() => ActiveSetting(_maxCharges);
     protected virtual void RoundEnd() => gameObject.SetActive(false);
 
     protected virtual bool ActiveSetting(int maxCharges)

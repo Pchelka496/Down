@@ -1,17 +1,65 @@
 using System;
 using Types.record;
 using UnityEngine;
-using UnityEngine.AdaptivePerformance;
 
 [CreateAssetMenu(fileName = "SettingConfig", menuName = "Scriptable Objects/SettingConfig")]
-public class SettingConfig : UnityEngine.ScriptableObject, IHaveDataForSave, ILanguageContainer
+public class SettingConfig : UnityEngine.ScriptableObject, IHaveDataForSave, ILanguageContainer, IAudioSettingContainer
 {
     [SerializeField] EnumLanguage _selectedLanguage;
+    [SerializeField] bool _soundEnabledFlag;
+    [SerializeField][Range(0f, 1f)] float _maxVolume = 0.7f;
+    [SerializeField][Range(0f, 1f)] float _musicVolume = 0.5f;
 
-    public Action<IHaveDataForSave> _saveAction;
-    event Action<EnumLanguage> OnLanguageChanged;
+    Action<IHaveDataForSave> _saveAction;
+    event Action<EnumLanguage> OnLanguageChanged;// ILanguageContainer
+    event Action<bool> OnSoundEnabledChanged;
+    event Action<float> OnMaxVolumeChanged;
+    event Action<float> OnMusicVolumeChanged;
 
     EnumLanguage ILanguageContainer.Language => _selectedLanguage;
+
+    bool IAudioSettingContainer.SoundEnabledFlag => _soundEnabledFlag;
+    float IAudioSettingContainer.MusicVolume => UnityEngine.Mathf.Clamp(_musicVolume, 0f, _maxVolume);
+    float IAudioSettingContainer.MaxVolume => _maxVolume;
+
+    public bool SoundEnabledFlag
+    {
+        get => _soundEnabledFlag;
+        set
+        {
+            if (value == _soundEnabledFlag) return;
+
+            _soundEnabledFlag = value;
+            OnSoundEnabledChanged?.Invoke(value);
+        }
+    }
+
+    public float MusicVolume
+    {
+        get
+        {
+            return UnityEngine.Mathf.Clamp(_musicVolume, 0f, _maxVolume);
+        }
+        set
+        {
+            if (UnityEngine.Mathf.Abs(value - _musicVolume) < 0.001f) return;
+
+            _musicVolume = value;
+            OnMusicVolumeChanged?.Invoke(MusicVolume);
+        }
+    }
+
+    public float MaxVolume
+    {
+        get => _maxVolume;
+        set
+        {
+            if (UnityEngine.Mathf.Abs(value - _maxVolume) < 0.001f) return;
+
+            _maxVolume = value;
+            OnMaxVolumeChanged?.Invoke(value);
+        }
+    }
 
     void IHaveDataForSave.LoadSaveData(SaveData saveData)
     {
@@ -86,9 +134,17 @@ public class SettingConfig : UnityEngine.ScriptableObject, IHaveDataForSave, ILa
         }
     }
 
-    void ILanguageContainer.SubscribeToChangeLanguageEvent(Action<EnumLanguage> action) => OnLanguageChanged += action;
+    void ILanguageContainer.SubscribeToChangeLanguageEvent(Action<EnumLanguage> callback) => OnLanguageChanged += callback;
+    void ILanguageContainer.UnsubscribeFromChangeLanguageEvent(Action<EnumLanguage> callback) => OnLanguageChanged -= callback;
 
-    void ILanguageContainer.UnsubscribeFromChangeLanguageEvent(Action<EnumLanguage> action) => OnLanguageChanged -= action;
+    void IAudioSettingContainer.SubscribeToChangeSoundEnableEvent(Action<bool> callback) => OnSoundEnabledChanged += callback;
+    void IAudioSettingContainer.UnsubscribeFromChangeSoundEnableEvent(Action<bool> callback) => OnSoundEnabledChanged -= callback;
+
+    void IAudioSettingContainer.SubscribeToChangeMaxVolumeEvent(Action<float> callback) => OnMaxVolumeChanged += callback;
+    void IAudioSettingContainer.UnsubscribeFromChangeMaxVolumeEvent(Action<float> callback) => OnMaxVolumeChanged -= callback;
+
+    void IAudioSettingContainer.SubscribeToChangeMusicVolumeEvent(Action<float> callback) => OnMusicVolumeChanged += callback;
+    void IAudioSettingContainer.UnsubscribeFromChangeMusicVolumeEvent(Action<float> callback) => OnMusicVolumeChanged -= callback;
 
     [System.Serializable]
     public record SettingData

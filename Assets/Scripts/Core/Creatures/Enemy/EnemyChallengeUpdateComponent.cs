@@ -25,6 +25,7 @@ public class EnemyChallengeUpdateComponent : MonoBehaviour
 #endif
 
     [Inject]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
     private void Construct(EnemyManager enemyManager)
     {
         _enemyManager = enemyManager;

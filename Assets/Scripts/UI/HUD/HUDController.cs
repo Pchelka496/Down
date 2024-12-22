@@ -10,16 +10,16 @@ public class HUDController : MonoBehaviour
     {
         globalEventsManager.SubscribeToRoundStarted(RoundStart);
         globalEventsManager.SubscribeToRoundEnded(RoundEnd);
-        globalEventsManager.SubscribeToWarpStarted(WarpStart);
+        globalEventsManager.SubscribeToFastTravelStarted(FastTravelStart);
 
-        DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
+        DisposeEvents += () => globalEventsManager?.UnsubscribeFromFastTravelStarted(FastTravelStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
         DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
     }
 
     private void RoundStart() => Show();
     private void RoundEnd() => Show();
-    private void WarpStart() => Show();
+    private void FastTravelStart() => Show();
 
     public void Show() => gameObject.SetActive(true);
     public void Hide() => gameObject.SetActive(false);

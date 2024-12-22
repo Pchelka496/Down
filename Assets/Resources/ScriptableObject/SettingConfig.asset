@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d30e1befc20313f49b06c42777d0f3ce, type: 3}
   m_Name: SettingConfig
   m_EditorClassIdentifier: 
-  _selectedLanguage: 3
+  _selectedLanguage: 0
+  _soundEnabledFlag: 1
+  _maxVolume: 0.5
+  _musicVolume: 0.3

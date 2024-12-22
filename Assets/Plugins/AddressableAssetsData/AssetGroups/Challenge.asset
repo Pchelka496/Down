@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Challenge
+  m_EditorClassIdentifier: 
+  m_GroupName: Challenge
+  m_GUID: b3c3dcee908f59e439498b07c400d01f
+  m_SerializeEntries:
+  - m_GUID: 13ab06e7e555a474187627cbf3ad6084
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/Challenge
+      6.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2bf7c7e595b8d7f4e81353fe13b6e143
+    m_Address: /EnemyParts/ChallengePrefab/Challenge 1.prefabParts/ChallengePrefab/Challenge
+      1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f22bdcdb4a5b004094e846d0a40b7e0
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/Challenge
+      4.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7200125546a1ea64082faea8030b205a
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/Challenge
+      7.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 79155b230ce3779449cf3c3c5273e9b5
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/Challenge
+      8.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a556b5d9537e1b640b130ee3e46e0610
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/Challenge
+      5.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af37bcefcc2ad324bbe819075480d013
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/Challenge
+      3.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b624b91058762034fb465fb051f51b76
+    m_Address: Assets/Resources_moved/Prefab/Creatures/EnemyParts/ChallengePrefab/Challenge
+      2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: e5f7e05cf874f8d4cb4029f4ef8d0723, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b64ba44d35c0d8b4a881e711ac19cdda, type: 2}
+    - {fileID: 11400000, guid: 9eebd66edf73b4d459ea827e7e4a5461, type: 2}

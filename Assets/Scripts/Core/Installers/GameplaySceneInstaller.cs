@@ -3,7 +3,6 @@ using Core.SaveSystem;
 using Creatures.Player;
 using Creatures.Player.Any;
 using Customization;
-using Cysharp.Threading.Tasks;
 using ScriptableObject;
 using ScriptableObject.ModulesConfig;
 using ScriptableObject.ModulesConfig.FlightModule;
@@ -11,7 +10,6 @@ using ScriptableObject.ModulesConfig.SupportModules;
 using ScriptableObject.PickUpItem;
 using System.Linq;
 using UI;
-using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;
@@ -33,6 +31,7 @@ namespace Core.Installers
         [SerializeField] AssetReference _surfaceController;
 
         [SerializeField] PostProcessingController.Initializer _postProcessingControllerInitializer;
+        [SerializeField] MusicManager.Initializer _audioManagerInitializer;
 
         [Header("UI")]
         [SerializeField] RewardCounter _rewardCounter;
@@ -61,6 +60,7 @@ namespace Core.Installers
         GlobalEventsManager _gameEventsManager;
         PostProcessingController _postProcessingController;
         GameAnalytics _gameAnalytics;
+        MusicManager _audioManager;
 
         public static DiContainer DiContainer { get; private set; }
 
@@ -70,8 +70,8 @@ namespace Core.Installers
             InitializeDependencies();
 
             Container.Bind<Controls>().FromNew().AsSingle().NonLazy();
-
             Container.Bind<PlayerController>().FromInstance(_playerController).AsSingle().NonLazy();
+
             Container.Bind<MapController>().FromInstance(_mapController).AsSingle().NonLazy();
             Container.Bind<BackgroundController>().FromInstance(_backgroundController).AsSingle().NonLazy();
             Container.Bind<EnemyManager>().FromInstance(_enemyManager).AsSingle().NonLazy();
@@ -97,13 +97,15 @@ namespace Core.Installers
             Container.Bind<PlayerResourcedKeeper>().FromInstance(_playerResourcedKeeper).AsSingle().NonLazy();
             Container.Bind<GlobalEventsManager>().FromInstance(_gameEventsManager).AsSingle().NonLazy();
             Container.Bind<EmergencyBrakeModuleIndicator>().FromInstance(_emergencyBrakeModuleIndicator).AsSingle().NonLazy();
-            Container.Bind<ILanguageContainer>().FromInstance(_settingConfig).AsSingle().NonLazy();
             Container.Bind<HUDController>().FromInstance(_hudController).AsSingle().NonLazy();
             Container.Bind<MainMenu>().FromInstance(_mainMenu).AsSingle().NonLazy();
             Container.Bind<SettingConfig>().FromInstance(_settingConfig).AsSingle().NonLazy();
             Container.Bind<GameAnalytics>().FromInstance(_gameAnalytics).AsSingle().NonLazy();
 
-            Container.Bind<IAnalyticsManager>().FromInstance(new UnityAnalyticsManager()).AsSingle();
+            Container.Bind<IAdManager>().FromInstance(new UnityAdManager()).AsTransient().Lazy();
+            Container.Bind<IAnalyticsManager>().FromInstance(new UnityAnalyticsManager()).AsSingle().NonLazy();
+            Container.Bind<ILanguageContainer>().FromInstance(_settingConfig).AsSingle().NonLazy();
+            Container.Bind<IAudioSettingContainer>().FromInstance(_settingConfig).AsSingle().NonLazy();
 
             BindPlayerModuleConfigs();
         }
@@ -149,7 +151,7 @@ namespace Core.Installers
                 .FromInstance(_originalPlayerModulesConfig.AirBrakeModuleConfig)
                 .AsSingle().NonLazy();
 
-            Container.Bind<WarpEngineModuleConfig>()
+            Container.Bind<FastTravelModuleConfig>()
                .FromInstance(_originalPlayerModulesConfig.WarpEngineModuleConfig)
                .AsSingle().NonLazy();
         }
@@ -176,6 +178,7 @@ namespace Core.Installers
             _gameAnalytics = new(moneyTracker: _rewardCounter,
                                  collisionTracker: _playerController.HealthModule,
                                  resultTracker: _gameEventsManager);
+            _audioManager = new(_audioManagerInitializer);
         }
 
         private IHaveDataForSave[] GetAllDataForSave()
@@ -219,21 +222,24 @@ namespace Core.Installers
             Container.Inject(_gameEventsManager);
             Container.Inject(_postProcessingController);
             Container.Inject(_gameAnalytics);
+            Container.Inject(_audioManager);
         }
 
         private void OnDestroy()
         {
-            _levelManager.Dispose();
-            _customizer.Dispose();
-            _optionalPlayerModuleLoader.Dispose();
-            _mapController.Dispose();
-            _backgroundController.Dispose();
-            _enemyManager.Dispose();
-            _playerResourcedKeeper.Dispose();
-            _saveSystemController.Dispose();
-            _pickUpItemManager.Dispose();
-            _postProcessingController.Dispose();
-            _gameAnalytics.Dispose();
+            _levelManager?.Dispose();
+            _customizer?.Dispose();
+            _optionalPlayerModuleLoader?.Dispose();
+            _mapController?.Dispose();
+            _backgroundController?.Dispose();
+            _enemyManager?.Dispose();
+            _playerResourcedKeeper?.Dispose();
+            _saveSystemController?.Dispose();
+            _pickUpItemManager?.Dispose();
+            _postProcessingController?.Dispose();
+            _gameAnalytics?.Dispose();
+            _audioManager?.Dispose();
+            _audioSourcePool?.Dispose();
         }
 
         [System.Serializable]
@@ -245,7 +251,7 @@ namespace Core.Installers
             [field: SerializeField] public HealthModuleConfig HealthModuleConfig { get; private set; }
             [field: SerializeField] public EmergencyBrakeModuleConfig EmergencyBrakeModuleConfig { get; private set; }
             [field: SerializeField] public AirBrakeModuleConfig AirBrakeModuleConfig { get; private set; }
-            [field: SerializeField] public WarpEngineModuleConfig WarpEngineModuleConfig { get; private set; }
+            [field: SerializeField] public FastTravelModuleConfig WarpEngineModuleConfig { get; private set; }
 
             public BaseModuleConfig[] GetAllConfigsAsBase()
             {

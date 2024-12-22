@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c74f5166341a6de48b8c7fcade754e0e, type: 3}
   m_Name: AirBrakeConfig
   m_EditorClassIdentifier: 
-  _resetThePriceAfterPurchase: 0
+  _resetThePriceAfterPurchase: 1
   _characteristics:
   - _updateType: 0
-    _currentLevel: 10
+    _currentLevel: 0
     _characteristicsPerLevel:
     - 5
     - 6
@@ -28,9 +28,9 @@ MonoBehaviour:
     - 13
     - 14
     - 15
-    _levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b000000
+    _levelCost: 000000001e000000460000005000000078000000c80000009001000058020000d00200002a03000084030000
   - _updateType: 1
-    _currentLevel: 10
+    _currentLevel: 0
     _characteristicsPerLevel:
     - 2
     - 1.8
@@ -43,4 +43,4 @@ MonoBehaviour:
     - 0.6
     - 0.5
     - 0.4
-    _levelCost: 0100000002000000030000000400000005000000060000000700000008000000090000000a0000000b000000
+    _levelCost: 00000000140000003c00000078000000c80000004001000090010000e001000058020000d002000020030000

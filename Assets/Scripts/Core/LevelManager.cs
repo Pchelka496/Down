@@ -40,14 +40,7 @@ namespace Core
 
             LoadConfig().Forget();
 
-            globalEventsManager.SubscribeToRoundStarted(RoundStart);
-            globalEventsManager.SubscribeToRoundEnded(RoundEnd);
-            globalEventsManager.SubscribeToWarpStarted(WarpStart);
             var taskId = globalEventsManager.AddTransitionTask(CleaningAndPlayerTransition, false);
-
-            DisposeEvents += () => globalEventsManager?.UnsubscribeFromWarpStarted(WarpStart);
-            DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundStarted(RoundStart);
-            DisposeEvents += () => globalEventsManager?.UnsubscribeFromRoundEnded(RoundEnd);
             DisposeEvents += () => globalEventsManager?.RemoveTransitionTask(taskId);
         }
 
@@ -82,27 +75,12 @@ namespace Core
             _rewardManager.Initialize(_config.RewardManagerConfig);
         }
 
-        private void RoundStart()
-        {
-
-        }
-
-        private void RoundEnd()
-        {
-
-        }
-
         private UniTask CleaningAndPlayerTransition()
         {
             System.GC.Collect();
             System.GC.WaitForPendingFinalizers();
 
             return UniTask.CompletedTask;
-        }
-
-        private void WarpStart()
-        {
-
         }
 
         public void Dispose()

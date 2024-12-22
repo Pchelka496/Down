@@ -13,7 +13,7 @@ public class GlobalEventsManager : IRoundResultTracker
 
     event Action RoundStarted;
     event Action RoundEnded;
-    event Action WarpStarted;
+    event Action FastTravelStarted;
     event Action<RoundResult> OnRoundResultChanged;
 
     bool _useWarpEngineFlag;
@@ -102,7 +102,7 @@ public class GlobalEventsManager : IRoundResultTracker
         PerformTransitionAsync().Forget();
     }
 
-    private void OnWarpStart() => SafeInvoke(WarpStarted, nameof(WarpStarted));
+    private void OnWarpStart() => SafeInvoke(FastTravelStarted, nameof(FastTravelStarted));
     private void OnRoundStart() => SafeInvoke(RoundStarted, nameof(RoundStarted));
     private void OnRoundEnd() => SafeInvoke(RoundEnded, nameof(RoundEnded));
 
@@ -129,8 +129,8 @@ public class GlobalEventsManager : IRoundResultTracker
     public void SubscribeToRoundEnded(Action action) => RoundEnded += action;
     public void UnsubscribeFromRoundEnded(Action action) => RoundEnded -= action;
 
-    public void SubscribeToWarpStarted(Action action) => WarpStarted += action;
-    public void UnsubscribeFromWarpStarted(Action action) => WarpStarted -= action;
+    public void SubscribeToFastTravelStarted(Action action) => FastTravelStarted += action;
+    public void UnsubscribeFromFastTravelStarted(Action action) => FastTravelStarted -= action;
 
     public int AddTransitionTask(Func<UniTask> task, bool runOnThreadPool = false)
     {
