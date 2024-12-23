@@ -40,7 +40,7 @@ public class EnemyCore : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == EnemyManager.ENEMY_LAYER_INDEX)
+        if (collision.gameObject.layer == EnemySystemCoordinator.ENEMY_LAYER_INDEX)
         {
             var attachedRigidbody = collision?.attachedRigidbody;
 

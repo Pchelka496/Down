@@ -12,6 +12,9 @@ namespace Creatures.Player
     [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(HealthModule))]
     public class PlayerController : MonoBehaviour
     {
+        public const float PLAYER_START_Y_POSITION = 99989.1f;
+        public const float PLAYER_START_X_POSITION = 0;
+
         public const float DEFAULT_DRAG = 0.2f;
         public const float PLAYER_RADIUS = 0.7f;
 
@@ -207,7 +210,7 @@ namespace Creatures.Player
             {
                 case EnumState.Lobby:
                     {
-                        transform.position = new Vector2(LevelManager.PLAYER_START_X_POSITION, LevelManager.PLAYER_START_Y_POSITION);
+                        transform.position = new Vector2(PlayerController.PLAYER_START_X_POSITION, PlayerController.PLAYER_START_Y_POSITION);
                         _rb.velocity = Vector2.zero;
 
                         break;

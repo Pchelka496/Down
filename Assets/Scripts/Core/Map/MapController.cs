@@ -1,6 +1,7 @@
 using Additional;
 using Core;
 using Core.Installers;
+using Creatures.Player;
 using Cysharp.Threading.Tasks;
 using ScriptableObject.Map;
 using System.Threading;
@@ -24,7 +25,7 @@ public class MapController : System.IDisposable
 
     event System.Action DisposeEvents;
 
-    public float FullMapHeight => LevelManager.PLAYER_START_Y_POSITION;
+    public float FullMapHeight => PlayerController.PLAYER_START_Y_POSITION;
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
@@ -43,7 +44,7 @@ public class MapController : System.IDisposable
     {
         _checkpointPlatformController.Initialize(config);
 
-        _checkpointPlatformController.CreatePlatforms(LevelManager.PLAYER_START_Y_POSITION).Forget();
+        _checkpointPlatformController.CreatePlatforms(PlayerController.PLAYER_START_Y_POSITION).Forget();
     }
 
     private void RoundStart()
@@ -59,7 +60,7 @@ public class MapController : System.IDisposable
     private void RoundEnd()
     {
         ClearToken();
-        _checkpointPlatformController.CreatePlatforms(LevelManager.PLAYER_START_Y_POSITION).Forget();
+        _checkpointPlatformController.CreatePlatforms(PlayerController.PLAYER_START_Y_POSITION).Forget();
     }
 
     private async UniTaskVoid SurfaceCheckingLoop(CancellationToken token)

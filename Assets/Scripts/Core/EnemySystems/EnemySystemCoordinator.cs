@@ -1,35 +1,36 @@
 using System.Runtime.CompilerServices;
-using System.Threading;
-using Additional;
 using Core.Installers;
+using Creatures.Player;
 using Cysharp.Threading.Tasks;
 using ScriptableObject.Enemy;
-using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
 
 namespace Core.Enemy
 {
-    public class EnemyManager : System.IDisposable
+    public class EnemySystemCoordinator : System.IDisposable
     {
         public const int ENEMY_LAYER_INDEX = 8;
-        public const float ENEMY_SPAWN_X_POSITION = LevelManager.PLAYER_START_X_POSITION + 99000f;
-        public const float ENEMY_SPAWN_Y_POSITION = LevelManager.PLAYER_START_Y_POSITION + 1000f;
-        private const float DELAY_BEFORE_START_CHALLENGE_SPAWNING = 3f;
-        private const float DELAY_BEFORE_CHALLENGE_RESPAWN = 2f;
+        public const float ENEMY_SPAWN_X_POSITION = PlayerController.PLAYER_START_X_POSITION + 99000f;
+        public const float ENEMY_SPAWN_Y_POSITION = PlayerController.PLAYER_START_Y_POSITION + 1000f;
+
+        const float DELAY_BEFORE_START_CHALLENGE_SPAWNING = 3f;
+        const float DELAY_BEFORE_CHALLENGE_RESPAWN = 2f;
 
         readonly Transform _enemyParent;
+
         EnemyManagerConfig _config;
+        EnemyRegionUpdater _enemyRegionUpdater;
         EnemyCoreFactory _enemyCoreFactory;
         EnemyVisualPartController _enemyVisualPartFactory;
         EnemyVisualPartController _challengeVisualPartFactory;
-        EnemyMovementController _enemyController;
+        EnemyMovementController _enemyMovementController;
+
         EnemyCore[] _enemyCore;
 
-        CancellationTokenSource _enemyRegionUpdaterCts;
         event System.Action DisposeEvents;
 
-        public EnemyManager(Transform enemyParent)
+        public EnemySystemCoordinator(Transform enemyParent)
         {
             _enemyParent = enemyParent;
         }
@@ -61,24 +62,25 @@ namespace Core.Enemy
             _enemyVisualPartFactory = diContainer.Instantiate<EnemyVisualPartController>();
             _enemyVisualPartFactory.Initialize(_config.EnemyCount);
 
-            _enemyController = diContainer.Instantiate<EnemyMovementController>();
+            _enemyRegionUpdater = diContainer.Instantiate<EnemyRegionUpdater>();
+            _enemyRegionUpdater.Initialize(_config, OnEnemyRegionUpdated);
+
+            _enemyMovementController = diContainer.Instantiate<EnemyMovementController>();
 
             var enemyControllerRoundStart = await _enemyCoreFactory.CreateEnemies();
 
-            _enemyController.Initialize(_config.AllEnemyCount,
+            _enemyMovementController.Initialize(
+                _config.AllEnemyCount,
                 enemyControllerRoundStart.Transforms,
                 enemyControllerRoundStart.Speeds,
                 enemyControllerRoundStart.EnumMotionPatterns,
                 enemyControllerRoundStart.MotionCharacteristic,
-                enemyControllerRoundStart.IsolationDistance);
+                enemyControllerRoundStart.IsolationDistance
+                );
         }
 
         private void RoundStart()
         {
-            ClearToken(ref _enemyRegionUpdaterCts);
-            _enemyRegionUpdaterCts = new CancellationTokenSource();
-
-            EnemyRegionUpdater(_enemyRegionUpdaterCts.Token).Forget();
             CreateChallenge().Forget();
         }
 
@@ -94,17 +96,15 @@ namespace Core.Enemy
                 var indexInManager = _config.AllEnemyCount - 1 - i;
 
                 EnemySettings(indexInManager,
-                    _enemyCore[indexInManager],
-                    enemyInfo.EnemyVisualPart,
-                    enemyInfo.Enemy
-                );
+                              _enemyCore[indexInManager],
+                              enemyInfo.EnemyVisualPart,
+                              enemyInfo.Enemy
+                              );
             }
         }
 
         private void RoundEnd()
         {
-            _enemyRegionUpdaterCts?.Cancel();
-
             ReleaseLoadedResources();
         }
 
@@ -122,33 +122,10 @@ namespace Core.Enemy
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void ResetEnemyPosition(int index)
         {
-            _enemyCore[index].transform.position = new Vector2(ENEMY_SPAWN_X_POSITION, ENEMY_SPAWN_Y_POSITION);
+            _enemyCore[index].transform.position = new(ENEMY_SPAWN_X_POSITION, ENEMY_SPAWN_Y_POSITION);
         }
 
-        private async UniTask EnemyRegionUpdater(CancellationToken token)
-        {
-            var enemyRegions = _config.EnemyRegions;
-
-            while (enemyRegions.Count > 0 && !token.IsCancellationRequested)
-            {
-                var currentRegion = enemyRegions.Pop();
-
-                await UniTask.WaitUntil(
-                    () => PlayerPositionMeter.YPosition <= currentRegion.StartHeight, cancellationToken: token);
-
-                if (enemyRegions.Count > 0)
-                {
-                    var nextRegion = enemyRegions.Peek();
-
-                    if (PlayerPositionMeter.YPosition < nextRegion.StartHeight)
-                    {
-                        continue;
-                    }
-                }
-
-                UpdateEnemyRegion(currentRegion).Forget();
-            }
-        }
+        private void OnEnemyRegionUpdated(EnemyRegionConfig enemyRegion) => UpdateEnemyRegion(enemyRegion).Forget();
 
         private async UniTaskVoid UpdateEnemyRegion(EnemyRegionConfig enemyRegion)
         {
@@ -170,7 +147,7 @@ namespace Core.Enemy
                     enemyCore: _enemyCore[i],
                     visualPart: enemyVisualParts[i],
                     enemyCharacteristics: enemyCharacteristics
-                );
+                    );
             }
 
             ResetAllEnemyPosition();
@@ -188,21 +165,23 @@ namespace Core.Enemy
 
             enemyCore.Initialize(visualPart);
 
-            _enemyController.UpdateEnemyValues(
-                index: index,
-                speed: enemyCharacteristics.Speed,
-                motionPattern: enemyCharacteristics.MotionPattern,
-                motionCharacteristic: enemyCharacteristics.MotionCharacteristic,
-                spawnIsolateDistance: enemyCharacteristics.IsolateDistance);
+            _enemyMovementController.UpdateEnemyValues(
+                index,
+                enemyCharacteristics.Speed,
+                enemyCharacteristics.MotionPattern,
+                enemyCharacteristics.MotionCharacteristic,
+                enemyCharacteristics.IsolateDistance
+                );
         }
 
         public async UniTaskVoid UpdateChallenge(EnemyVisualPart visualPart)
         {
             var indexInManager = visualPart.IndexInManager;
 
-            var enemyInfo =
-                await _challengeVisualPartFactory.UpdateVisualPart(visualPart.IndexInFactory,
-                    DELAY_BEFORE_CHALLENGE_RESPAWN);
+            var enemyInfo = await _challengeVisualPartFactory.UpdateVisualPart(
+                index: visualPart.IndexInFactory,
+                spawnDelay: DELAY_BEFORE_CHALLENGE_RESPAWN
+                );
 
             ResetEnemyPosition(indexInManager);
 
@@ -210,7 +189,8 @@ namespace Core.Enemy
                 indexInManager,
                 _enemyCore[indexInManager],
                 enemyInfo.EnemyVisualPart,
-                enemyInfo.Enemy);
+                enemyInfo.Enemy
+                );
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -220,37 +200,12 @@ namespace Core.Enemy
             _challengeVisualPartFactory.ReleaseAllLoadedResources().Forget();
         }
 
-        private void ClearToken(ref CancellationTokenSource cts) => ClearTokenSupport.ClearToken(ref cts);
-
         public void Dispose()
         {
-            _enemyController.Dispose();
+            _enemyMovementController.Dispose();
 
-            ClearToken(ref _enemyRegionUpdaterCts);
             ReleaseLoadedResources();
             DisposeEvents?.Invoke();
-        }
-
-        public readonly struct EnemyControllerRoundStart
-        {
-            public readonly Transform[] Transforms;
-            public readonly float[] Speeds;
-            public readonly EnumMotionPattern[] EnumMotionPatterns;
-            public readonly float2[] MotionCharacteristic;
-            public readonly Vector2[] IsolationDistance;
-
-            public EnemyControllerRoundStart(
-                Transform[] transforms, float[] speeds,
-                EnumMotionPattern[] enumMotionPatterns,
-                float2[] motionCharacteristic,
-                Vector2[] isolationDistance) : this()
-            {
-                Transforms = transforms;
-                Speeds = speeds;
-                EnumMotionPatterns = enumMotionPatterns;
-                MotionCharacteristic = motionCharacteristic;
-                IsolationDistance = isolationDistance;
-            }
         }
     }
 }

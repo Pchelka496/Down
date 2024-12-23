@@ -18,22 +18,25 @@ namespace Core.Installers
 {
     public class GameplaySceneInstaller : MonoInstaller
     {
+        [Header("Core Components")]
         [SerializeField] PlayerController _playerController;
         [SerializeField] CameraFacade _camerasController;
         [SerializeField] AirTrailController _airTrailController;
         [SerializeField] Camera _mainCamera;
         [SerializeField] LobbyUIPanelFacade _upgradePanelController;
 
+        [Header("Configuration")]
         [SerializeField] OriginalPlayerModuleConfigs _originalPlayerModulesConfig;
         [SerializeField] PlayerResourcedKeeperConfig _playerResourcedKeeperConfig;
         [SerializeField] CustomizerConfig _customizerConfig;
         [SerializeField] SettingConfig _settingConfig;
         [SerializeField] AssetReference _surfaceController;
 
+        [Header("Audio & Visuals")]
         [SerializeField] PostProcessingController.Initializer _postProcessingControllerInitializer;
         [SerializeField] MusicManager.Initializer _audioManagerInitializer;
 
-        [Header("UI")]
+        [Header("UI Components")]
         [SerializeField] RewardCounter _rewardCounter;
         [SerializeField] ScreenFader _screenFader;
         [SerializeField] ScreenTouchController _screenTouchController;
@@ -46,21 +49,22 @@ namespace Core.Installers
         [SerializeField] MainMenu _mainMenu;
 
         Customizer _customizer;
-        LevelManager _levelManager;
+        GameBootstrapper _gameBootstrapper;
         OptionalPlayerModuleLoader _optionalPlayerModuleLoader;
         MapController _mapController;
         BackgroundController _backgroundController;
-        EnemyManager _enemyManager;
+        EnemySystemCoordinator _enemyManager;
         PickUpItemManager _pickUpItemManager;
         AudioSourcePool _audioSourcePool;
         EffectController _effectController;
         PlayerPositionMeter _characterPositionMeter;
         PlayerResourcedKeeper _playerResourcedKeeper;
         SaveSystemController _saveSystemController;
-        GlobalEventsManager _gameEventsManager;
+        GlobalEventsManager _globalEventsManager;
         PostProcessingController _postProcessingController;
         GameAnalytics _gameAnalytics;
         MusicManager _audioManager;
+        PerformanceManager _performanceManager;
 
         public static DiContainer DiContainer { get; private set; }
 
@@ -69,45 +73,13 @@ namespace Core.Installers
             InitializeOrCleanInstaller();
             InitializeDependencies();
 
-            Container.Bind<Controls>().FromNew().AsSingle().NonLazy();
-            Container.Bind<PlayerController>().FromInstance(_playerController).AsSingle().NonLazy();
-
-            Container.Bind<MapController>().FromInstance(_mapController).AsSingle().NonLazy();
-            Container.Bind<BackgroundController>().FromInstance(_backgroundController).AsSingle().NonLazy();
-            Container.Bind<EnemyManager>().FromInstance(_enemyManager).AsSingle().NonLazy();
-            Container.Bind<PickUpItemManager>().FromInstance(_pickUpItemManager).AsSingle().NonLazy();
-            Container.Bind<CameraFacade>().FromInstance(_camerasController).AsSingle().NonLazy();
-            Container.Bind<RewardCounter>().FromInstance(_rewardCounter).AsSingle().NonLazy();
-            Container.Bind<LobbyUIPanelFacade>().FromInstance(_upgradePanelController).AsSingle().NonLazy();
-            Container.Bind<AudioSourcePool>().FromInstance(_audioSourcePool).AsSingle().NonLazy();
-            Container.Bind<EffectController>().FromInstance(_effectController).AsSingle().NonLazy();
-            Container.Bind<AirTrailController>().FromInstance(_airTrailController).AsSingle().NonLazy();
-            Container.Bind<Camera>().FromInstance(_mainCamera).AsSingle().NonLazy();
-            Container.Bind<ScreenFader>().FromInstance(_screenFader).AsSingle().NonLazy();
-            Container.Bind<RepairKitIndicator>().FromInstance(_repairKitIndicator).AsSingle().NonLazy();
-            Container.Bind<HealthIndicator>().FromInstance(_healthIndicator).AsSingle().NonLazy();
-            Container.Bind<BoosterIndicator>().FromInstance(_boosterIndicator).AsSingle().NonLazy();
-            Container.Bind<ScreenTouchController>().FromInstance(_screenTouchController).AsSingle().NonLazy();
-            Container.Bind<LevelManager>().FromInstance(_levelManager).AsSingle().NonLazy();
-            Container.Bind<OriginalPlayerModuleConfigs>().FromInstance(_originalPlayerModulesConfig).AsSingle().NonLazy();
-            Container.Bind<OptionalPlayerModuleLoader>().FromInstance(_optionalPlayerModuleLoader).AsSingle().NonLazy();
-            Container.Bind<CustomizerConfig>().FromInstance(_customizerConfig).AsSingle().NonLazy();
-            Container.Bind<Customizer>().FromInstance(_customizer).AsSingle().NonLazy();
-            Container.Bind<PlayerPositionMeter>().FromInstance(_characterPositionMeter).AsSingle().NonLazy();
-            Container.Bind<PlayerResourcedKeeper>().FromInstance(_playerResourcedKeeper).AsSingle().NonLazy();
-            Container.Bind<GlobalEventsManager>().FromInstance(_gameEventsManager).AsSingle().NonLazy();
-            Container.Bind<EmergencyBrakeModuleIndicator>().FromInstance(_emergencyBrakeModuleIndicator).AsSingle().NonLazy();
-            Container.Bind<HUDController>().FromInstance(_hudController).AsSingle().NonLazy();
-            Container.Bind<MainMenu>().FromInstance(_mainMenu).AsSingle().NonLazy();
-            Container.Bind<SettingConfig>().FromInstance(_settingConfig).AsSingle().NonLazy();
-            Container.Bind<GameAnalytics>().FromInstance(_gameAnalytics).AsSingle().NonLazy();
-
-            Container.Bind<IAdManager>().FromInstance(new UnityAdManager()).AsTransient().Lazy();
-            Container.Bind<IAnalyticsManager>().FromInstance(new UnityAnalyticsManager()).AsSingle().NonLazy();
-            Container.Bind<ILanguageContainer>().FromInstance(_settingConfig).AsSingle().NonLazy();
-            Container.Bind<IAudioSettingContainer>().FromInstance(_settingConfig).AsSingle().NonLazy();
-
+            BindCoreComponents();
+            BindUIComponents();
+            BindConfiguration();
+            BindAudioAndVisuals();
+            BindAnalytics();
             BindPlayerModuleConfigs();
+            BindInterfaces();
         }
 
         private void InitializeOrCleanInstaller()
@@ -118,67 +90,113 @@ namespace Core.Installers
             }
             else
             {
-                if (gameObject.TryGetComponent<GameplaySceneInstaller>(out var thisComponent))
+                if (gameObject.TryGetComponent(out GameplaySceneInstaller existingInstaller))
                 {
-                    Destroy(thisComponent);
+                    Destroy(existingInstaller);
                 }
             }
         }
 
+        private void BindCoreComponents()
+        {
+            Container.Bind<Controls>().FromNew().AsSingle().NonLazy();
+            Container.Bind<PlayerController>().FromInstance(_playerController).AsSingle().NonLazy();
+            Container.Bind<MapController>().FromInstance(_mapController).AsSingle().NonLazy();
+            Container.Bind<BackgroundController>().FromInstance(_backgroundController).AsSingle().NonLazy();
+            Container.Bind<EnemySystemCoordinator>().FromInstance(_enemyManager).AsSingle().NonLazy();
+            Container.Bind<PickUpItemManager>().FromInstance(_pickUpItemManager).AsSingle().NonLazy();
+            Container.Bind<CameraFacade>().FromInstance(_camerasController).AsSingle().NonLazy();
+            Container.Bind<AirTrailController>().FromInstance(_airTrailController).AsSingle().NonLazy();
+            Container.Bind<Camera>().FromInstance(_mainCamera).AsSingle().NonLazy();
+            Container.Bind<GlobalEventsManager>().FromInstance(_globalEventsManager).AsSingle().NonLazy();
+            Container.Bind<PerformanceManager>().FromInstance(_performanceManager).AsSingle().NonLazy();
+            Container.Bind<PlayerResourcedKeeper>().FromInstance(_playerResourcedKeeper).AsSingle().NonLazy();
+            Container.Bind<SaveSystemController>().FromInstance(_saveSystemController).AsSingle().NonLazy();
+            Container.Bind<PlayerPositionMeter>().FromInstance(_characterPositionMeter).AsSingle().NonLazy();
+            Container.Bind<OptionalPlayerModuleLoader>().FromInstance(_optionalPlayerModuleLoader).AsSingle().NonLazy();
+            Container.Bind<Customizer>().FromInstance(_customizer).AsSingle().NonLazy();
+        }
+
+        private void BindUIComponents()
+        {
+            Container.Bind<RewardCounter>().FromInstance(_rewardCounter).AsSingle().NonLazy();
+            Container.Bind<LobbyUIPanelFacade>().FromInstance(_upgradePanelController).AsSingle().NonLazy();
+            Container.Bind<ScreenFader>().FromInstance(_screenFader).AsSingle().NonLazy();
+            Container.Bind<RepairKitIndicator>().FromInstance(_repairKitIndicator).AsSingle().NonLazy();
+            Container.Bind<HealthIndicator>().FromInstance(_healthIndicator).AsSingle().NonLazy();
+            Container.Bind<BoosterIndicator>().FromInstance(_boosterIndicator).AsSingle().NonLazy();
+            Container.Bind<ScreenTouchController>().FromInstance(_screenTouchController).AsSingle().NonLazy();
+            Container.Bind<EmergencyBrakeModuleIndicator>().FromInstance(_emergencyBrakeModuleIndicator).AsSingle().NonLazy();
+            Container.Bind<PlayerResourcedIndicator>().FromInstance(_playerResourcedIndicator).AsSingle().NonLazy();
+            Container.Bind<HUDController>().FromInstance(_hudController).AsSingle().NonLazy();
+            Container.Bind<MainMenu>().FromInstance(_mainMenu).AsSingle().NonLazy();
+        }
+
+        private void BindConfiguration()
+        {
+            Container.Bind<CustomizerConfig>().FromInstance(_customizerConfig).AsSingle().NonLazy();
+            Container.Bind<OriginalPlayerModuleConfigs>().FromInstance(_originalPlayerModulesConfig).AsSingle().NonLazy();
+            Container.Bind<PlayerResourcedKeeperConfig>().FromInstance(_playerResourcedKeeperConfig).AsSingle().NonLazy();
+            Container.Bind<SettingConfig>().FromInstance(_settingConfig).AsSingle().NonLazy();
+        }
+
+        private void BindAudioAndVisuals()
+        {
+            Container.Bind<AudioSourcePool>().FromInstance(_audioSourcePool).AsSingle().NonLazy();
+            Container.Bind<EffectController>().FromInstance(_effectController).AsSingle().NonLazy();
+            Container.Bind<PostProcessingController>().FromInstance(_postProcessingController).AsSingle().NonLazy();
+            Container.Bind<MusicManager>().FromInstance(_audioManager).AsSingle().NonLazy();
+        }
+
+        private void BindAnalytics()
+        {
+            Container.Bind<GameAnalytics>().FromInstance(_gameAnalytics).AsSingle().NonLazy();
+        }
+
         private void BindPlayerModuleConfigs()
         {
-            Container.Bind<EngineModuleConfig>()
-                .FromInstance(_originalPlayerModulesConfig.EngineModuleConfig)
-                .AsSingle().NonLazy();
+            Container.Bind<EngineModuleConfig>().FromInstance(_originalPlayerModulesConfig.EngineModuleConfig).AsSingle().NonLazy();
+            Container.Bind<PickerModuleConfig>().FromInstance(_originalPlayerModulesConfig.PickerModuleConfig).AsSingle().NonLazy();
+            Container.Bind<RotationModuleConfig>().FromInstance(_originalPlayerModulesConfig.StabilizationModuleConfig).AsSingle().NonLazy();
+            Container.Bind<HealthModuleConfig>().FromInstance(_originalPlayerModulesConfig.HealthModuleConfig).AsSingle().NonLazy();
+            Container.Bind<EmergencyBrakeModuleConfig>().FromInstance(_originalPlayerModulesConfig.EmergencyBrakeModuleConfig).AsSingle().NonLazy();
+            Container.Bind<AirBrakeModuleConfig>().FromInstance(_originalPlayerModulesConfig.AirBrakeModuleConfig).AsSingle().NonLazy();
+            Container.Bind<FastTravelModuleConfig>().FromInstance(_originalPlayerModulesConfig.WarpEngineModuleConfig).AsSingle().NonLazy();
+        }
 
-            Container.Bind<PickerModuleConfig>()
-                .FromInstance(_originalPlayerModulesConfig.PickerModuleConfig)
-                .AsSingle().NonLazy();
-
-            Container.Bind<RotationModuleConfig>()
-                .FromInstance(_originalPlayerModulesConfig.StabilizationModuleConfig)
-                .AsSingle().NonLazy();
-
-            Container.Bind<HealthModuleConfig>()
-                .FromInstance(_originalPlayerModulesConfig.HealthModuleConfig)
-                .AsSingle().NonLazy();
-
-            Container.Bind<EmergencyBrakeModuleConfig>()
-                .FromInstance(_originalPlayerModulesConfig.EmergencyBrakeModuleConfig)
-                .AsSingle().NonLazy();
-
-            Container.Bind<AirBrakeModuleConfig>()
-                .FromInstance(_originalPlayerModulesConfig.AirBrakeModuleConfig)
-                .AsSingle().NonLazy();
-
-            Container.Bind<FastTravelModuleConfig>()
-               .FromInstance(_originalPlayerModulesConfig.WarpEngineModuleConfig)
-               .AsSingle().NonLazy();
+        private void BindInterfaces()
+        {
+            Container.Bind<IAdManager>().To<UnityAdManager>().AsTransient().Lazy();
+            Container.Bind<IAnalyticsManager>().To<UnityAnalyticsManager>().AsSingle().NonLazy();
+            Container.Bind<IAudioSettingContainer>().FromInstance(_settingConfig).AsSingle().NonLazy();
+            Container.Bind<ILanguageContainer>().FromInstance(_settingConfig).AsSingle().NonLazy();
         }
 
         private void InitializeDependencies()
         {
-            var dependenciesObject = new GameObject("Dependencies");
+            var dependenciesObject = new GameObject("++Dependencies++");
 
+            _customizer = new();
+            _gameBootstrapper = new();
             _optionalPlayerModuleLoader = new();
             _mapController = new(_surfaceController);
             _backgroundController = new();
             _enemyManager = new(AttachToGameObject(dependenciesObject, "++Enemies++").transform);
-            _levelManager = new();
             _pickUpItemManager = new(AttachToGameObject(dependenciesObject, "++PickUpItems++").transform);
             _audioSourcePool = new(AttachToGameObject(dependenciesObject, "++Audio++").transform);
             _effectController = new(AttachToGameObject(dependenciesObject, "++Effects++").transform);
-            _customizer = new();
             _characterPositionMeter = new();
             _playerResourcedKeeper = new(_playerResourcedKeeperConfig, _playerResourcedIndicator);
             _saveSystemController = new(GetAllDataForSave());
-            _gameEventsManager = new(_screenFader);
+            _globalEventsManager = new(_screenFader);
             _postProcessingController = new(_postProcessingControllerInitializer);
-
-            _gameAnalytics = new(moneyTracker: _rewardCounter,
-                                 collisionTracker: _playerController.HealthModule,
-                                 resultTracker: _gameEventsManager);
+            _gameAnalytics = new(
+                moneyTracker: _rewardCounter,
+                collisionTracker: _playerController.HealthModule,
+                resultTracker: _globalEventsManager
+            );
             _audioManager = new(_audioManagerInitializer);
+            _performanceManager = new();
         }
 
         private IHaveDataForSave[] GetAllDataForSave()
@@ -207,7 +225,7 @@ namespace Core.Installers
 
         private void Awake()
         {
-            Container.Inject(_levelManager);
+            Container.Inject(_gameBootstrapper);
             Container.Inject(_optionalPlayerModuleLoader);
             Container.Inject(_mapController);
             Container.Inject(_backgroundController);
@@ -219,15 +237,16 @@ namespace Core.Installers
             Container.Inject(_customizer);
             Container.Inject(_playerResourcedKeeper);
             Container.Inject(_saveSystemController);
-            Container.Inject(_gameEventsManager);
+            Container.Inject(_globalEventsManager);
             Container.Inject(_postProcessingController);
             Container.Inject(_gameAnalytics);
             Container.Inject(_audioManager);
+            Container.Inject(_performanceManager);
         }
 
         private void OnDestroy()
         {
-            _levelManager?.Dispose();
+            _gameBootstrapper?.Dispose();
             _customizer?.Dispose();
             _optionalPlayerModuleLoader?.Dispose();
             _mapController?.Dispose();
@@ -240,6 +259,7 @@ namespace Core.Installers
             _gameAnalytics?.Dispose();
             _audioManager?.Dispose();
             _audioSourcePool?.Dispose();
+            _performanceManager?.Dispose();
         }
 
         [System.Serializable]

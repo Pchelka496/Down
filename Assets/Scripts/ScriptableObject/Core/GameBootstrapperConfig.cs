@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace ScriptableObject
 {
-    [CreateAssetMenu(fileName = "LevelManagerConfig", menuName = "Scriptable Objects/LevelManagerConfig")]
-    public class LevelManagerConfig : UnityEngine.ScriptableObject
+    [CreateAssetMenu(fileName = "GameBootstrapperConfig", menuName = "Scriptable Objects/GameBootstrapperConfig")]
+    public class GameBootstrapperConfig : UnityEngine.ScriptableObject
     {
         [SerializeField] int _targetFrameRate = 90;
         [SerializeField] EnemyManagerConfig _enemyManagerConfig;

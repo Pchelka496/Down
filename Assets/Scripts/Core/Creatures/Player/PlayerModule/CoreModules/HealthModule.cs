@@ -138,7 +138,7 @@ namespace Creatures.Player
         {
             if (!_workFlag) return;
 
-            if (collision.gameObject.layer == EnemyManager.ENEMY_LAYER_INDEX)
+            if (collision.gameObject.layer == EnemySystemCoordinator.ENEMY_LAYER_INDEX)
             {
                 ApplyDamage(collision.contacts[0].point);
 

@@ -49,7 +49,7 @@ public class CameraFacade : MonoBehaviour
 
     private void Awake()
     {
-        _cameraDefaultTrackingTarget.position = new(LevelManager.PLAYER_START_X_POSITION, LevelManager.PLAYER_START_Y_POSITION);
+        _cameraDefaultTrackingTarget.position = new(PlayerController.PLAYER_START_X_POSITION, PlayerController.PLAYER_START_Y_POSITION);
 
         _lensController.Initialize(_cinemachineCamera, _player.Rb);
         _positionComposerController.Initialize(_player.Rb);

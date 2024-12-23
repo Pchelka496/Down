@@ -225,5 +225,28 @@ namespace Core.Enemy
 
             DisposeEvents?.Invoke();
         }
+
+        public readonly struct Initializer
+        {
+            public readonly Transform[] Transforms;
+            public readonly float[] Speeds;
+            public readonly EnumMotionPattern[] EnumMotionPatterns;
+            public readonly float2[] MotionCharacteristic;
+            public readonly Vector2[] IsolationDistance;
+
+            public Initializer(
+                Transform[] transforms,
+                float[] speeds,
+                EnumMotionPattern[] enumMotionPatterns,
+                float2[] motionCharacteristic,
+                Vector2[] isolationDistance) : this()
+            {
+                Transforms = transforms;
+                Speeds = speeds;
+                EnumMotionPatterns = enumMotionPatterns;
+                MotionCharacteristic = motionCharacteristic;
+                IsolationDistance = isolationDistance;
+            }
+        }
     }
 }

@@ -20,7 +20,7 @@ public class EnemyCoreFactory
         _enemyParent = enemyParent;
     }
 
-    public async UniTask<EnemyManager.EnemyControllerRoundStart> CreateEnemies()
+    public async UniTask<EnemyMovementController.Initializer> CreateEnemies()
     {
         var enemyCorePrefab = await LoadEnemyCorePrefabs(_managerConfig.EnemyCorePrefab);
         var enemyCount = _managerConfig.AllEnemyCount;
@@ -35,14 +35,15 @@ public class EnemyCoreFactory
         var installer = GameplaySceneInstaller.DiContainer;
         var enemyGameObjectPrefab = enemyCorePrefab.gameObject;
 
-        var spawnPosition = new Vector2(EnemyManager.ENEMY_SPAWN_X_POSITION, EnemyManager.ENEMY_SPAWN_Y_POSITION);
+        var spawnPosition = new Vector2(EnemySystemCoordinator.ENEMY_SPAWN_X_POSITION, EnemySystemCoordinator.ENEMY_SPAWN_Y_POSITION);
 
         for (var i = 0; i < enemyCount; i++)
         {
             var enemyCore = installer.InstantiatePrefabForComponent<EnemyCore>(enemyGameObjectPrefab,
                                                                                spawnPosition,
                                                                                Quaternion.identity,
-                                                                                _enemyParent);
+                                                                               _enemyParent
+                                                                               );
 
             if (enemyCore == null)
             {
@@ -54,7 +55,7 @@ public class EnemyCoreFactory
             _enemyCore[i] = enemyCore;
         }
 
-        return new EnemyManager.EnemyControllerRoundStart(enemyTransforms, enemySpeeds, motionPatterns, motionCharacteristic, isolationDistance);
+        return new(enemyTransforms, enemySpeeds, motionPatterns, motionCharacteristic, isolationDistance);
     }
 
     private async UniTask<EnemyCore> LoadEnemyCorePrefabs(AssetReference enemyCoreReference)

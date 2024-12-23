@@ -45,6 +45,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 296f3f26973ca0b4c9a244c6e0c43a33
+    m_Address: Assets/Resources_moved/ScriptableObject/GameBootstrapper/GameBootstrapperConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2cebe33c444b61c4d9b9701ba94ac333
     m_Address: Assets/Resources_moved/Prefab/UI/SettingPanel/SettingPanel.prefab
     m_ReadOnly: 0

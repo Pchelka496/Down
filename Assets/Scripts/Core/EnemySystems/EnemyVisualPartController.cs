@@ -25,7 +25,7 @@ public class EnemyVisualPartController
     {
         _enemyCount = enemyCount;
         _allEnemyVisualParts = new EnemyVisualPart[enemyCount];
-        _spawnPosition = new(EnemyManager.ENEMY_SPAWN_X_POSITION, EnemyManager.ENEMY_SPAWN_Y_POSITION);
+        _spawnPosition = new(EnemySystemCoordinator.ENEMY_SPAWN_X_POSITION, EnemySystemCoordinator.ENEMY_SPAWN_Y_POSITION);
 
         _allVisualPartsLoadedHandles = new AsyncOperationHandle<GameObject>[enemyCount];
     }

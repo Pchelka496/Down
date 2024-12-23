@@ -2,7 +2,7 @@ using ScriptableObject;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(LevelManagerConfig))]
+[CustomEditor(typeof(GameBootstrapperConfig))]
 public class LevelManagerConfigEditor : Editor
 {
    

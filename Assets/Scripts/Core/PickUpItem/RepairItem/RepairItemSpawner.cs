@@ -1,6 +1,6 @@
 using Additional;
-using Core;
 using Core.Installers;
+using Creatures.Player;
 using Cysharp.Threading.Tasks;
 using ScriptableObject.PickUpItem;
 using System.Threading;
@@ -9,8 +9,8 @@ using UnityEngine.AddressableAssets;
 
 public class RepairItemSpawner : System.IDisposable
 {
-    const float REPAIR_ITEM_X_SPAWN_POSITION = LevelManager.PLAYER_START_X_POSITION;
-    const float REPAIR_ITEM_Y_SPAWN_POSITION = LevelManager.PLAYER_START_Y_POSITION + 1000f;
+    const float REPAIR_ITEM_X_SPAWN_POSITION = PlayerController.PLAYER_START_X_POSITION;
+    const float REPAIR_ITEM_Y_SPAWN_POSITION = PlayerController.PLAYER_START_Y_POSITION + 1000f;
 
     const float X_MIN_BOUND = -50f;
     const float X_MAX_BOUND = 50f;
@@ -29,7 +29,7 @@ public class RepairItemSpawner : System.IDisposable
     event System.Action DisposeEvents;
 
     [Zenject.Inject]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Удалите неиспользуемые закрытые члены", Justification = "<Ожидание>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
     private void Construct(GlobalEventsManager globalEventsManager)
     {
         globalEventsManager.SubscribeToRoundStarted(RoundStart);
@@ -89,7 +89,7 @@ public class RepairItemSpawner : System.IDisposable
         }
         else
         {
-            Debug.LogError("Reward prefab == null");
+            Debug.LogError("RepairItem prefab == null");
         }
 
         await UniTask.CompletedTask;

@@ -11,8 +11,9 @@ public class EnemyChallengeUpdateComponent : MonoBehaviour
     const float UPDATE_CHALLENGE_DELAY = 3f;
     [SerializeField] EnemyVisualPart _visualPart;
     [SerializeField] bool[] _visibilityStatuses;
+
     bool _isSeen;
-    EnemyManager _enemyManager;
+    EnemySystemCoordinator _enemyManager;
 
     CancellationTokenSource _cancellationTokenSource;
 
@@ -26,9 +27,9 @@ public class EnemyChallengeUpdateComponent : MonoBehaviour
 
     [Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
-    private void Construct(EnemyManager enemyManager)
+    private void Construct(EnemySystemCoordinator enemyCoordinator)
     {
-        _enemyManager = enemyManager;
+        _enemyManager = enemyCoordinator;
     }
 
     private async UniTaskVoid DelayChallengeUpdate(CancellationToken cancellationToken)

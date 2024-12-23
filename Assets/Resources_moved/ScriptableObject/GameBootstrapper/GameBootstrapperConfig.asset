@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0986607646e08fc4496e6a54b9f5fd1f, type: 3}
-  m_Name: LevelManagerConfig
+  m_Script: {fileID: 11500000, guid: 9619c92bcd42cda44aa6ff329c853d67, type: 3}
+  m_Name: GameBootstrapperConfig
   m_EditorClassIdentifier: 
+  _targetFrameRate: 90
   _enemyManagerConfig: {fileID: 11400000, guid: 1c4b8d5fb7c36e34aa73047ae8c45e52, type: 2}
   _mapControllerConfig: {fileID: 11400000, guid: 69c079b5360608043b395dd6666131ef, type: 2}
   _backgroundControllerConfig: {fileID: 11400000, guid: ab4c7439801651b419279e97cbd79e71, type: 2}
