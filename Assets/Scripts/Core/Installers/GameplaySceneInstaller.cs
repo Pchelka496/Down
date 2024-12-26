@@ -161,12 +161,12 @@ namespace Core.Installers
             Container.Bind<HealthModuleConfig>().FromInstance(_originalPlayerModulesConfig.HealthModuleConfig).AsSingle().NonLazy();
             Container.Bind<EmergencyBrakeModuleConfig>().FromInstance(_originalPlayerModulesConfig.EmergencyBrakeModuleConfig).AsSingle().NonLazy();
             Container.Bind<AirBrakeModuleConfig>().FromInstance(_originalPlayerModulesConfig.AirBrakeModuleConfig).AsSingle().NonLazy();
-            Container.Bind<FastTravelModuleConfig>().FromInstance(_originalPlayerModulesConfig.WarpEngineModuleConfig).AsSingle().NonLazy();
+            Container.Bind<FastTravelModuleConfig>().FromInstance(_originalPlayerModulesConfig.FastTravelModuleConfig).AsSingle().NonLazy();
         }
 
         private void BindInterfaces()
         {
-            Container.Bind<IAdManager>().To<UnityAdManager>().AsTransient().Lazy();
+            Container.Bind<IAdManager>().To<AdModManager>().AsTransient().Lazy();
             Container.Bind<IAnalyticsManager>().To<UnityAnalyticsManager>().AsSingle().NonLazy();
             Container.Bind<IAudioSettingContainer>().FromInstance(_settingConfig).AsSingle().NonLazy();
             Container.Bind<ILanguageContainer>().FromInstance(_settingConfig).AsSingle().NonLazy();
@@ -271,7 +271,7 @@ namespace Core.Installers
             [field: SerializeField] public HealthModuleConfig HealthModuleConfig { get; private set; }
             [field: SerializeField] public EmergencyBrakeModuleConfig EmergencyBrakeModuleConfig { get; private set; }
             [field: SerializeField] public AirBrakeModuleConfig AirBrakeModuleConfig { get; private set; }
-            [field: SerializeField] public FastTravelModuleConfig WarpEngineModuleConfig { get; private set; }
+            [field: SerializeField] public FastTravelModuleConfig FastTravelModuleConfig { get; private set; }
 
             public BaseModuleConfig[] GetAllConfigsAsBase()
             {
@@ -283,7 +283,7 @@ namespace Core.Installers
                     EmergencyBrakeModuleConfig,
                     AirBrakeModuleConfig,
                     PickerModuleConfig,
-                    WarpEngineModuleConfig
+                    FastTravelModuleConfig
                 };
             }
         }

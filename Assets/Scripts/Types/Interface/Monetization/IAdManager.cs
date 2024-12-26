@@ -8,4 +8,8 @@ public interface IAdManager
     public void ShowInterstitialAd();
     public void ShowBannerAd();
     public void HideBannerAd();
+
+    public void DisposeRewardedAd();
+    public void DisposeInterstitialAd();
+    public void DisposeBannerAd();
 }

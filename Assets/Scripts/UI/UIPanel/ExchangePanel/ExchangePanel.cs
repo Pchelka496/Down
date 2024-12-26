@@ -45,6 +45,8 @@ public class ExchangePanel : MonoBehaviour, IUIPanel
 
     public void Close()
     {
+        _adManager.DisposeRewardedAd();
+
         gameObject.SetActive(false);
         ClearToken();
     }

@@ -8,9 +8,9 @@ public class UnityAdManager : IAdManager
     const string REWARDED_AD_UNIT_ID = "Rewarded_Android";
     const string INTERSTITIAL_AD_UNIT_ID = "Interstitial_Android";
 
-    readonly AdsInitializer _adsInitializer = new();
-    readonly BannerAdExample _bannerAdExample;
-    readonly RewardedAdsExample _rewardedAdsExample;
+    readonly UnityAdsInitializer _adsInitializer = new();
+    readonly UnityBannerAdExample _bannerAdExample;
+    readonly UnityRewardedAdsExample _rewardedAdsExample;
     readonly InterstitialAdExample _interstitialAdExample;
 
     readonly SynchronizationContext _mainThreadContext;
@@ -18,6 +18,7 @@ public class UnityAdManager : IAdManager
     public UnityAdManager()
     {
         _mainThreadContext = SynchronizationContext.Current;
+
         if (_mainThreadContext == null)
         {
             Debug.LogWarning("SynchronizationContext is null. Ensure this is initialized on the main thread.");
@@ -62,5 +63,20 @@ public class UnityAdManager : IAdManager
         }
 
         _mainThreadContext.Post(_ => action(), null);
+    }
+
+    void IAdManager.DisposeRewardedAd()
+    {
+        Debug.Log("The function is not supported in UnityAd");
+    }
+
+    void IAdManager.DisposeInterstitialAd()
+    {
+        Debug.Log("The function is not supported in UnityAd");
+    }
+
+    void IAdManager.DisposeBannerAd()
+    {
+        Debug.Log("The function is not supported in UnityAd");
     }
 }
