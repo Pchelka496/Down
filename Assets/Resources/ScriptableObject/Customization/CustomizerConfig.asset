@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CustomizerConfig
   m_EditorClassIdentifier: 
   _currentPlayerSprite:
-    m_AssetGUID: 19f0c5eab7bd84f40a75cfe775284b4b
+    m_AssetGUID: 37a3de5ac2491624896551f2d5cf8695
     m_SubObjectName: 
     m_SubObjectGUID: 
     m_SubObjectType: 
