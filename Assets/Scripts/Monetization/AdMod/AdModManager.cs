@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AdModManager : IAdManager
 {
-    AdModRewardedAdExample _rewardedAdExample;
+    readonly AdModRewardedAdExample _rewardedAdExample;
 
     public AdModManager()
     {

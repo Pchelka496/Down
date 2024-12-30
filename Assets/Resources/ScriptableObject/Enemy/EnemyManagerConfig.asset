@@ -33,13 +33,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6365606e2a4702447a324230a9cdb7c6, type: 2}
   - {fileID: 11400000, guid: 3ce71e7583a777e43ae7d3a38aea1934, type: 2}
   _challengePrefabs:
+  - {fileID: 11400000, guid: 41816ab14881793469ff268512b79540, type: 2}
+  - {fileID: 11400000, guid: 724691d268259814da84c3f903495226, type: 2}
+  - {fileID: 11400000, guid: 9daa7a351074914459fed9a295bc95e4, type: 2}
+  - {fileID: 11400000, guid: ac487c09b769793448e7b6d4af05f0a7, type: 2}
+  - {fileID: 11400000, guid: 895bd3ca8c4cc3147a983bfc387d9bb0, type: 2}
+  - {fileID: 11400000, guid: 70c03ed954831b545a28a2084bb8d996, type: 2}
+  - {fileID: 11400000, guid: f8f249bd82c16c44194c2e7f73e9be81, type: 2}
+  - {fileID: 11400000, guid: 7c055f79b0d4c1646844b26d5a562376, type: 2}
   - {fileID: 11400000, guid: c10a3e7dcb101604f9189d075ed4c7bb, type: 2}
   - {fileID: 11400000, guid: 9369faa058e2a7944b7032642dd11551, type: 2}
-  - {fileID: 11400000, guid: 9daa7a351074914459fed9a295bc95e4, type: 2}
-  - {fileID: 11400000, guid: 41816ab14881793469ff268512b79540, type: 2}
-  - {fileID: 11400000, guid: ac487c09b769793448e7b6d4af05f0a7, type: 2}
-  - {fileID: 11400000, guid: 7c055f79b0d4c1646844b26d5a562376, type: 2}
-  - {fileID: 11400000, guid: f8f249bd82c16c44194c2e7f73e9be81, type: 2}
-  - {fileID: 11400000, guid: 724691d268259814da84c3f903495226, type: 2}
-  - {fileID: 11400000, guid: 70c03ed954831b545a28a2084bb8d996, type: 2}
-  - {fileID: 11400000, guid: 895bd3ca8c4cc3147a983bfc387d9bb0, type: 2}

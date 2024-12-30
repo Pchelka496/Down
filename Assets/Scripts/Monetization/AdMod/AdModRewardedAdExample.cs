@@ -16,10 +16,7 @@ public class AdModRewardedAdExample
 
     public void LoadRewardedAd(Action OnAdsLoaded, Action OnFailedToLoad)
     {
-        if (_rewardedAd != null)
-        {
-            _rewardedAd.Destroy();
-        }
+        _rewardedAd?.Destroy();
 
         _onAdLoaded = OnAdsLoaded;
         _onAdFailedToLoad = OnFailedToLoad;

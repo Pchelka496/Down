@@ -129,16 +129,17 @@ public class EngineUpdater : MonoBehaviour
         var currentLevel = _moduleConfig.GetLevel(characteristics);
         var nextLevel = currentLevel + 1;
 
-        if (!_playerUpgradePanel.UpgradeLevelCheck(_moduleConfig.GetLevelCost(characteristics, nextLevel),
-                                                  currentLevel,
-                                                  _moduleConfig.GetMaxLevel(characteristics)
-                                                  ))
+        if (!_playerUpgradePanel.UpgradeLevelCheck(
+            _moduleConfig.GetLevelCost(characteristics, nextLevel),
+            currentLevel,
+            _moduleConfig.GetMaxLevel(characteristics)
+            ))
         {
             return;
         }
 
-        upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _moduleConfig.SetLevel(characteristics, nextLevel);
+        upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _playerUpgradePanel.Player.EngineModule.UpdateCharacteristics(_moduleConfig);
     }
 
@@ -214,5 +215,4 @@ public class EngineUpdater : MonoBehaviour
         _playerUpgradePanel.VisualController.TestModule<EngineModule>();
         _playerUpgradePanel.VisualController.TestModule<RotationModule>();
     }
-
 }

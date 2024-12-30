@@ -14,6 +14,7 @@ public class UpgradeInfo : MonoBehaviour
     [SerializeField] Button _detailedInformation;
 
     [SerializeField] RectTransform _rectTransform;
+
     CancellationTokenSource _updateTextCts;
 
     public RectTransform RectTransform => _rectTransform;
@@ -35,7 +36,7 @@ public class UpgradeInfo : MonoBehaviour
         {
             _downgradeButton.onClick.AddListener(() => downgradeAction?.Invoke());
         }
-        if (_detailedInformation)
+        if (_detailedInformation != null)
         {
             _detailedInformation.onClick.AddListener(() => detailedInformationAction?.Invoke(this));
         }

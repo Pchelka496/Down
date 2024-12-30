@@ -89,6 +89,7 @@ public class ExchangePanel : MonoBehaviour, IUIPanel
 
     private void OnAdWatchedSuccessfully()
     {
+        _adManager.LoadRewardedAd(null, null);
         _playerResourcedKeeper.IncreaseDiamonds(_adRewardDiamonds);
         _successSoundPlayer.PlayNextSound();
     }

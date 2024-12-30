@@ -27,9 +27,19 @@ namespace ScriptableObject.Enemy
             }
         }
 
-        public EnemyConfig.Enemy[] ChallengeEnemies => _challengePrefabs
-            .Select(config => config.GetEnemy)
-            .ToArray();
+        public EnemyConfig.Enemy[] ChallengeEnemies
+        {
+            get
+            {
+                Unity.Mathematics.Random random = new((uint)System.Environment.TickCount);
+
+                _challengePrefabs = _challengePrefabs.OrderBy(_ => random.NextInt())
+                                                     .ToArray();
+
+                return _challengePrefabs.Select(config => config.GetEnemy)
+                                        .ToArray();
+            }
+        }
 
         public EnemyRegionConfig GetEnemyRegion(float height)
         {

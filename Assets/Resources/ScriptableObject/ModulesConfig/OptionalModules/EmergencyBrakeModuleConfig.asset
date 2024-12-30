@@ -21,7 +21,7 @@ MonoBehaviour:
     - 1
     - 2
     - 3
-    _levelCost: 00000000c800000058020000e8030000
+    _levelCost: c800000058020000e8030000e8030000
   - _updateType: 1
     _currentLevel: 0
     _characteristicsPerLevel:
@@ -31,7 +31,7 @@ MonoBehaviour:
     - 30
     - 25
     - 20
-    _levelCost: 0000000064000000dc00000090010000bc020000e8030000
+    _levelCost: 64000000dc00000090010000bc020000e8030000e8030000
   - _updateType: 2
     _currentLevel: 0
     _characteristicsPerLevel:
@@ -41,7 +41,7 @@ MonoBehaviour:
     - 0.23
     - 0.19
     - 0.15
-    _levelCost: 0000000064000000c80000002c01000090010000f4010000
+    _levelCost: 64000000c80000002c01000090010000f4010000f4010000
   - _updateType: 3
     _currentLevel: 0
     _characteristicsPerLevel:
@@ -56,4 +56,4 @@ MonoBehaviour:
     - -1.8
     - -2
     - -2.2
-    _levelCost: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    _levelCost: 0100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
