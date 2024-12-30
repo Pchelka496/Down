@@ -78,7 +78,7 @@ namespace ScriptableObject.ModulesConfig
             UpdateCharacteristicsInfo<TEnumCharacteristics, TCharacteristics>[] allCharacteristicsInfo,
             TEnumCharacteristics enumValue,
             int newLevel
-        ) where TEnumCharacteristics : struct, Enum
+            ) where TEnumCharacteristics : struct, Enum
         {
             foreach (var info in allCharacteristicsInfo)
             {
@@ -94,14 +94,18 @@ namespace ScriptableObject.ModulesConfig
                         newLevel = Mathf.Clamp(newLevel, 0, maxLevel);
                     }
 
-                    info.CurrentLevel = newLevel;
-
                     if (_resetThePriceAfterPurchase)
                     {
-                        SetLevelCostToZero(allCharacteristicsInfo, enumValue, newLevel);
+                        if (LevelCheck(allCharacteristicsInfo, enumValue, newLevel - 1))
+                        {
+                            SetLevelCostToZero(allCharacteristicsInfo, enumValue, newLevel - 1);
+                        }
                     }
 
+                    info.CurrentLevel = newLevel;
+
                     _saveAction?.Invoke(this);
+
                     return;
                 }
             }

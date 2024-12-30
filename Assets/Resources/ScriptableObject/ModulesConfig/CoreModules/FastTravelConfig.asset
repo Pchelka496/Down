@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd1ea3e57cc26f343acc3c0360cb5408, type: 3}
   m_Name: FastTravelConfig
   m_EditorClassIdentifier: 
-  _resetThePriceAfterPurchase: 0
+  _resetThePriceAfterPurchase: 1
   _minMoveDuration: 3
   _maxMoveDuration: 6
   _minHeight: 90000

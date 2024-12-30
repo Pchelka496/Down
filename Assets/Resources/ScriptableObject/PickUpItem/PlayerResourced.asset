@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b624904c5dfa21645af4ace267821fc2, type: 3}
   m_Name: PlayerResourced
   m_EditorClassIdentifier: 
-  _money: 15669
-  _diamond: 1055
-  _energy: 15
+  _money: 0
+  _diamond: 0
+  _energy: 0

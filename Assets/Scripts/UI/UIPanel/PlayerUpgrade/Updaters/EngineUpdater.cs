@@ -92,7 +92,7 @@ public class EngineUpdater : MonoBehaviour
         upgradeInfo.Initialize(_moduleConfig.GetLevel(characteristics),
                                _moduleConfig.GetMaxLevel(characteristics),
                                GetCost(characteristics,
-                               _moduleConfig.GetLevel(characteristics) + 1),
+                               _moduleConfig.GetLevel(characteristics)),
                                upgradeAction,
                                downgradeAction,
                                detailedInformationAction
@@ -161,8 +161,8 @@ public class EngineUpdater : MonoBehaviour
             return;
         }
 
-        upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _moduleConfig.SetLevel(characteristics, nextLevel);
+        upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _playerUpgradePanel.Player.EngineModule.UpdateCharacteristics(_moduleConfig);
     }
 

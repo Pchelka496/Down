@@ -54,7 +54,7 @@ public class AirBrakeUpdater : MonoBehaviour
         upgradeInfo.Initialize(_moduleConfig.GetLevel(characteristics),
                                _moduleConfig.GetMaxLevel(characteristics),
                                GetCost(characteristics,
-                               _moduleConfig.GetLevel(characteristics) + 1),
+                               _moduleConfig.GetLevel(characteristics)),
                                upgradeAction,
                                downgradeAction,
                                detailedInformationAction
