@@ -1695,8 +1695,12 @@ MonoBehaviour:
   _airBrakeDrag: {fileID: 5947601768338825075}
   _airBrakeReleaseRate: {fileID: 3353366385961557803}
   _airBrakeDragDescription:
-    _defaultText: Increases the braking force of the airbrake, allowing the vessel
-      to decelerate more quickly upon activation
+    _defaultText: 'Increases the braking force of the airbrake, allowing the vessel
+      to decelerate more quickly upon activationIncreases the braking force of the
+      airbrake, allowing the vessel to decelerate more quickly upon activation.
+
+      (To
+      activate the air brake, double-tap the screen)'
     _texts:
     - _language: 0
       _text: "\u0423\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442
@@ -1704,14 +1708,21 @@ MonoBehaviour:
         \u0442\u043E\u0440\u043C\u043E\u0437\u0430, \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u044F
         \u0430\u043F\u043F\u0430\u0440\u0430\u0442\u0443 \u0431\u044B\u0441\u0442\u0440\u0435\u0435
         \u0441\u043D\u0438\u0436\u0430\u0442\u044C \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u044C
-        \u043F\u0440\u0438 \u0430\u043A\u0442\u0438\u0432\u0430\u0446\u0438\u0438"
+        \u043F\u0440\u0438 \u0430\u043A\u0442\u0438\u0432\u0430\u0446\u0438\u0438\n(\u0414\u043B\u044F
+        \u0430\u043A\u0442\u0438\u0432\u0430\u0446\u0438\u0438 \u0432\u043E\u0437\u0434\u0443\u0448\u043D\u043E\u0433\u043E
+        \u0442\u043E\u0440\u043C\u043E\u0437\u0430 \u043D\u0430\u0434\u043E \u0434\u0432\u0430\u0436\u0434\u044B
+        \u043D\u0430\u0436\u0430\u0442\u044C \u043D\u0430 \u044D\u043A\u0440\u0430\u043D)."
     - _language: 1
-      _text: Increases the braking force of the airbrake, allowing the vessel to
+      _text: 'Increases the braking force of the airbrake, allowing the vessel to
         decelerate more quickly upon activationIncreases the braking force of the
         airbrake, allowing the vessel to decelerate more quickly upon activation
+
+        (To
+        activate the air brake, double-tap the screen).'
     - _language: 3
       _text: "\u63D0\u9AD8\u7A7A\u6C14\u5236\u52A8\u5668\u7684\u5236\u52A8\u529B.
-        \u4F7F\u88C5\u7F6E\u5728\u6FC0\u6D3B\u65F6\u80FD\u591F\u66F4\u5FEB\u51CF\u901F"
+        \n\u4F7F\u88C5\u7F6E\u5728\u6FC0\u6D3B\u65F6\u80FD\u591F\u66F4\u5FEB\u51CF\u901F\n(\u8981\u6FC0\u6D3B\u7A7A\u6C14\u5239\u8F66,
+        \u8BF7\u53CC\u51FB\u5C4F\u5E55)."
   _airBrakeReleaseRateDescription:
     _defaultText: Speeds up the deployment of the airbrake, reducing the delay between
       activation and the start of braking

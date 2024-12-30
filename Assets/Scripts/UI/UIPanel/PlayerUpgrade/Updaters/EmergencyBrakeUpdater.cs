@@ -145,15 +145,15 @@ public class EmergencyBrakeUpdater : MonoBehaviour
     public void UpgradeLevel(EmergencyBrakeModuleConfig.EnumCharacteristics characteristics, UpgradeInfo upgradeInfo)
     {
         var currentLevel = _moduleConfig.GetLevel(characteristics);
-        var nextLevel = currentLevel + 1;
 
-        if (!_playerUpgradePanel.UpgradeLevelCheck(_moduleConfig.GetLevelCost(characteristics, nextLevel),
+        if (!_playerUpgradePanel.UpgradeLevelCheck(_moduleConfig.GetLevelCost(characteristics, currentLevel),
                                                   currentLevel,
                                                   _moduleConfig.GetMaxLevel(characteristics)
                                                   ))
         {
             return;
         }
+        var nextLevel = currentLevel + 1;
 
         upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
         _moduleConfig.SetLevel(characteristics, nextLevel);

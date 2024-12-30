@@ -127,16 +127,16 @@ public class EngineUpdater : MonoBehaviour
     private void UpgradeLevel(EngineModuleConfig.EnumCharacteristics characteristics, UpgradeInfo upgradeInfo)
     {
         var currentLevel = _moduleConfig.GetLevel(characteristics);
-        var nextLevel = currentLevel + 1;
 
         if (!_playerUpgradePanel.UpgradeLevelCheck(
-            _moduleConfig.GetLevelCost(characteristics, nextLevel),
+            _moduleConfig.GetLevelCost(characteristics, currentLevel),
             currentLevel,
             _moduleConfig.GetMaxLevel(characteristics)
             ))
         {
             return;
         }
+        var nextLevel = currentLevel + 1;
 
         _moduleConfig.SetLevel(characteristics, nextLevel);
         upgradeInfo.UpdateCurrentLevel(nextLevel, GetCost(characteristics, nextLevel));
