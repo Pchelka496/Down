@@ -45,13 +45,22 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Back"",
+                    ""type"": ""Button"",
+                    ""id"": ""9b683a38-19ca-4d8c-8174-0a5628be20dd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""c82ff680-1d17-4e25-afe1-47684b005805"",
-                    ""path"": ""<Keyboard>/anyKey"",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -91,6 +100,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""AirBreake"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""733716dc-71d1-4d10-90a6-05f162c8e752"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -678,6 +698,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_TouchScreen = m_Player.FindAction("TouchScreen", throwIfNotFound: true);
         m_Player_AirBreake = m_Player.FindAction("AirBreake", throwIfNotFound: true);
+        m_Player_Back = m_Player.FindAction("Back", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -759,12 +780,14 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_TouchScreen;
     private readonly InputAction m_Player_AirBreake;
+    private readonly InputAction m_Player_Back;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
         public PlayerActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @TouchScreen => m_Wrapper.m_Player_TouchScreen;
         public InputAction @AirBreake => m_Wrapper.m_Player_AirBreake;
+        public InputAction @Back => m_Wrapper.m_Player_Back;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -780,6 +803,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @AirBreake.started += instance.OnAirBreake;
             @AirBreake.performed += instance.OnAirBreake;
             @AirBreake.canceled += instance.OnAirBreake;
+            @Back.started += instance.OnBack;
+            @Back.performed += instance.OnBack;
+            @Back.canceled += instance.OnBack;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -790,6 +816,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @AirBreake.started -= instance.OnAirBreake;
             @AirBreake.performed -= instance.OnAirBreake;
             @AirBreake.canceled -= instance.OnAirBreake;
+            @Back.started -= instance.OnBack;
+            @Back.performed -= instance.OnBack;
+            @Back.canceled -= instance.OnBack;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -974,6 +1003,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     {
         void OnTouchScreen(InputAction.CallbackContext context);
         void OnAirBreake(InputAction.CallbackContext context);
+        void OnBack(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

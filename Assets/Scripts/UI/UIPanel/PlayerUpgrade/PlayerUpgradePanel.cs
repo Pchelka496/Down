@@ -53,27 +53,6 @@ namespace UI.UIPanel.PlayerUpgrade
             _airBrakeUpdater.Initialize(_configs.AirBrakeModuleConfig, this);
             _stabilizationModuleUpdater.Initialize(_configs.StabilizationModuleConfig, this);
             _emergencyBrakeUpdater.Initialize(_configs.EmergencyBrakeModuleConfig, this);
-            AdjustPanelElementForSafeArea(_baseRectTransform);
-        }
-
-        private void AdjustPanelElementForSafeArea(RectTransform rectTransform)
-        {
-            var safeArea = Screen.safeArea;
-
-            var safeAreaMin = new Vector2(safeArea.xMin / Screen.width, safeArea.yMin / Screen.height);
-            var safeAreaMax = new Vector2(safeArea.xMax / Screen.width, safeArea.yMax / Screen.height);
-
-            rectTransform.anchorMin = new(rectTransform.anchorMin.x, safeAreaMin.y);
-            rectTransform.anchorMax = new(rectTransform.anchorMax.x, safeAreaMax.y);
-
-            var offsetMin = rectTransform.offsetMin;
-            var offsetMax = rectTransform.offsetMax;
-
-            offsetMin.y = Mathf.Max(offsetMin.y, 0);
-            offsetMax.y = Mathf.Min(offsetMax.y, 0);
-
-            rectTransform.offsetMin = offsetMin;
-            rectTransform.offsetMax = offsetMax;
         }
 
         void IUIPanel.Open()

@@ -1,43 +1,46 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Nenn.InspectorEnhancements.Runtime.Attributes;
 
 public class TutorialPanel : MonoBehaviour, IUIPanel
 {
     [Header("Slides Settings")]
-    [SerializeField] GameObject[] slides;
-    [SerializeField] Button nextButton;
-    [SerializeField] Button previousButton;
-    [SerializeField] CanvasGroup canvasGroup;
+    [HideLabel][Required][SerializeField] GameObject[] _slides;
+    [Required][SerializeField] Button _nextButton;
+    [Required][SerializeField] Button _previousButton;
+    [Required][SerializeField] CanvasGroup _slidesCanvasGroup;
+    [Required][SerializeField] CanvasGroup _globalCanvasGroup;
 
     [Header("Animation Settings")]
-    [SerializeField] float buttonAnimationDuration = 0.3f;
-    [SerializeField] float _transitionDuration = 0.5f;
+    [SerializeField] float _buttonAnimationDuration = 0.3f;
+    [SerializeField] float _enableFadeDuration = 1f;
+    [SerializeField] float _slideTransitionDuration = 0.5f;
 
     int _currentSlideIndex = 0;
 
     private void Awake()
     {
-        if (slides == null || slides.Length == 0)
+        if (_slides == null || _slides.Length == 0)
         {
             Debug.LogError("Slides are not assigned or empty.");
             return;
         }
 
-        if (canvasGroup == null)
+        if (_nextButton != null)
         {
-            Debug.LogError("CanvasGroup is not assigned.");
-            return;
+            _nextButton.onClick.AddListener(ShowNextSlide);
         }
 
-        if (nextButton != null)
-            nextButton.onClick.AddListener(ShowNextSlide);
-
-        if (previousButton != null)
-            previousButton.onClick.AddListener(ShowPreviousSlide);
+        if (_previousButton != null)
+        {
+            _previousButton.onClick.AddListener(ShowPreviousSlide);
+        }
 
         InitializeSlides();
         UpdateSlidesVisibility();
+
+        _globalCanvasGroup.alpha = 0f;
     }
 
     void IUIPanel.Open()
@@ -45,11 +48,14 @@ public class TutorialPanel : MonoBehaviour, IUIPanel
         gameObject.SetActive(true);
 
         var canvas = GetComponentInParent<Canvas>();
+
         if (canvas != null)
         {
             transform.SetParent(canvas.transform);
             transform.SetAsLastSibling();
         }
+
+        _globalCanvasGroup.DOFade(1f, _enableFadeDuration);
     }
 
     public void Close()
@@ -59,7 +65,7 @@ public class TutorialPanel : MonoBehaviour, IUIPanel
 
     private void ShowNextSlide()
     {
-        if (_currentSlideIndex < slides.Length - 1)
+        if (_currentSlideIndex < _slides.Length - 1)
         {
             TransitionSlide(_currentSlideIndex, _currentSlideIndex + 1);
             _currentSlideIndex++;
@@ -79,19 +85,19 @@ public class TutorialPanel : MonoBehaviour, IUIPanel
 
     private void TransitionSlide(int fromIndex, int toIndex)
     {
-        canvasGroup.DOFade(0f, _transitionDuration).OnComplete(() =>
+        _slidesCanvasGroup.DOFade(0f, _slideTransitionDuration).OnComplete(() =>
         {
-            slides[fromIndex].SetActive(false);
-            slides[toIndex].SetActive(true);
-            canvasGroup.DOFade(1f, _transitionDuration);
+            _slides[fromIndex].SetActive(false);
+            _slides[toIndex].SetActive(true);
+            _slidesCanvasGroup.DOFade(1f, _slideTransitionDuration);
         });
     }
 
     private void UpdateSlidesVisibility()
     {
-        AnimateButtonState(previousButton, _currentSlideIndex > 0);
+        AnimateButtonState(_previousButton, _currentSlideIndex > 0);
 
-        AnimateButtonState(nextButton, _currentSlideIndex < slides.Length - 1);
+        AnimateButtonState(_nextButton, _currentSlideIndex < _slides.Length - 1);
     }
 
     private void AnimateButtonState(Button button, bool enable)
@@ -103,15 +109,16 @@ public class TutorialPanel : MonoBehaviour, IUIPanel
         if (enable)
         {
             button.gameObject.SetActive(true);
-            buttonTransform.DOScale(1.1f, buttonAnimationDuration / 2)
-                .OnComplete(() => buttonTransform.DOScale(1f, buttonAnimationDuration / 2));
+            buttonTransform.DOScale(1.1f, _buttonAnimationDuration / 2)
+                           .OnComplete(() => buttonTransform.DOScale(1f, _buttonAnimationDuration / 2));
         }
         else
         {
-            buttonTransform.DOScale(1.1f, buttonAnimationDuration / 2)
+            buttonTransform.DOScale(1.1f, _buttonAnimationDuration / 2)
                 .OnComplete(() =>
                 {
-                    buttonTransform.DOScale(0f, buttonAnimationDuration / 2).OnComplete(() =>
+                    buttonTransform.DOScale(0f, _buttonAnimationDuration / 2)
+                    .OnComplete(() =>
                     {
                         button.gameObject.SetActive(false);
                     });
@@ -121,11 +128,11 @@ public class TutorialPanel : MonoBehaviour, IUIPanel
 
     private void InitializeSlides()
     {
-        for (int i = 0; i < slides.Length; i++)
+        for (int i = 0; i < _slides.Length; i++)
         {
-            slides[i].SetActive(i == _currentSlideIndex);
+            _slides[i].SetActive(i == _currentSlideIndex);
         }
 
-        canvasGroup.alpha = 1f;
+        _slidesCanvasGroup.alpha = 1f;
     }
 }

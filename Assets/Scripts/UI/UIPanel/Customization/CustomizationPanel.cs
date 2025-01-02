@@ -44,7 +44,7 @@ public class CustomizationPanel : MonoBehaviour, IUIPanel
 
     public void OpenSkinsCustomizer() => ChangeState(EnumCustomizationPanelState.SkinCustomization);
 
-    public void BackButton()
+    public void OnBackButtonClick()
     {
         switch (_currentState)
         {

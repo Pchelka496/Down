@@ -1084,7 +1084,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7372444221042612669
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2265,6 +2265,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6396812669706215982}
   - component: {fileID: 6695385392192806447}
+  - component: {fileID: 5249252422693455342}
   m_Layer: 5
   m_Name: TutorialPanel
   m_TagString: Untagged
@@ -2307,16 +2308,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c6180669f2c7b34daf9cfdaba5aabeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slides:
+  _slides:
   - {fileID: 5308632443574119517}
   - {fileID: 7466660735383624189}
   - {fileID: 1223326606017992324}
   - {fileID: 2260746754783574373}
-  nextButton: {fileID: 2808783458962209129}
-  previousButton: {fileID: 1202877066224278043}
-  canvasGroup: {fileID: 2515758138299020080}
-  buttonAnimationDuration: 0.3
+  _nextButton: {fileID: 2808783458962209129}
+  _previousButton: {fileID: 1202877066224278043}
+  _slidesCanvasGroup: {fileID: 2515758138299020080}
+  _globalCanvasGroup: {fileID: 5249252422693455342}
+  _buttonAnimationDuration: 0.3
   _transitionDuration: 0.5
+--- !u!225 &5249252422693455342
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8476377413592389792}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8909537639329422384
 GameObject:
   m_ObjectHideFlags: 0

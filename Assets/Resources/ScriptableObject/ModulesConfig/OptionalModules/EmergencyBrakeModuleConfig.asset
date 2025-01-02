@@ -43,7 +43,7 @@ MonoBehaviour:
     - 0.15
     _levelCost: 64000000c80000002c01000090010000f4010000f4010000
   - _updateType: 3
-    _currentLevel: 0
+    _currentLevel: 5
     _characteristicsPerLevel:
     - -0.4
     - -0.4

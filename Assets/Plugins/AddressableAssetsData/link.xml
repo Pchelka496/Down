@@ -3,6 +3,7 @@
     <type fullname="AirBrakeModule" preserve="all" />
     <type fullname="AirBrakeUpdater" preserve="all" />
     <type fullname="AudioChangeModule" preserve="all" />
+    <type fullname="BackActionHandler" preserve="all" />
     <type fullname="BoosterIcon" preserve="all" />
     <type fullname="CartoonMaskUI" preserve="all" />
     <type fullname="CheckpointPlatform" preserve="all" />
@@ -43,6 +44,7 @@
     <type fullname="ScriptableObject.PickUpItem.RewardControllerConfig" preserve="all" />
     <type fullname="SettingPanel" preserve="all" />
     <type fullname="TextDisplay" preserve="all" />
+    <type fullname="TutorialOpenButtonExpansion" preserve="all" />
     <type fullname="TutorialPanel" preserve="all" />
     <type fullname="UI.UIPanel.Customization.Skins.SelectedItemBackground" preserve="all" />
     <type fullname="UI.UIPanel.Customization.Skins.SkinsCustomizer" preserve="all" />
@@ -112,6 +114,7 @@
     <type fullname="UnityEngine.Events.ArgumentCache" preserve="nothing" serialized="true" />
     <type fullname="UnityEngine.Events.PersistentCallGroup" preserve="nothing" serialized="true" />
     <type fullname="UnityEngine.Events.PersistentListenerMode" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.Events.UnityEvent" preserve="nothing" serialized="true" />
   </assembly>
   <assembly fullname="UnityEngine.GridModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="UnityEngine.Grid" preserve="all" />
