@@ -8,6 +8,15 @@
         "com.unity.ugui": "1.0.0"
       }
     },
+    "com.coffee.ui-effect": {
+      "version": "https://github.com/mob-sakai/UIEffect.git?path=Packages/src",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "hash": "9799069633cbee0f7b610deffb486987e523bd2f"
+    },
     "com.cysharp.unitask": {
       "version": "file:Y:/Projects/KnightTournament/Assets/Plugins/UniTask",
       "depth": 0,

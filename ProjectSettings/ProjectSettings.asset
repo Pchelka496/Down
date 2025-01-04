@@ -140,10 +140,14 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 0.24
+  bundleVersion: 0.25
   preloadedAssets:
   - {fileID: 11400000, guid: 95fa06717ce01534986b473b393cc7df, type: 2}
   - {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  - {fileID: 11400000, guid: b03d874806612d14aa8421505f611f9e, type: 2}
+  - {fileID: 6334249865916533798, guid: 85d50790fed3f234ebb01cc2c7b02a76, type: 2}
+  - {fileID: 11400000, guid: ebc7c248198eaaa499166cfd89bd6fda, type: 2}
+  - {fileID: 11400000, guid: 5dace4bc81efe6343969b8a8195757bd, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -168,12 +172,12 @@ PlayerSettings:
     Android: com.PrimordialDragonSect.Down
     Standalone: com.DefaultCompany.2D-URP
   buildNumber:
-    Standalone: 0
+    Standalone: 6
     VisionOS: 0
     iPhone: 0
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
-  AndroidBundleVersionCode: 6
+  AndroidBundleVersionCode: 7
   AndroidMinSdkVersion: 23
   AndroidTargetSdkVersion: 34
   AndroidPreferredInstallLocation: 1
