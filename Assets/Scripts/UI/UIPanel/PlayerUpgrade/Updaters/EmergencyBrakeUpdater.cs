@@ -1,6 +1,5 @@
 using ScriptableObject.ModulesConfig.SupportModules;
 using UI.UIPanel.PlayerUpgrade;
-using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
 

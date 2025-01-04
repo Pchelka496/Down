@@ -5796,6 +5796,7 @@ GameObject:
   m_Component:
   - component: {fileID: 260862635}
   - component: {fileID: 260862634}
+  - component: {fileID: 260862636}
   m_Layer: 5
   m_Name: LobbyUIElements
   m_TagString: Untagged
@@ -5870,6 +5871,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &260862636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260862633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &293905714
 GameObject:
   m_ObjectHideFlags: 0
@@ -6879,7 +6895,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0.263, y: 1}
-  m_AnchoredPosition: {x: 0.09753418, y: -66.5}
+  m_AnchoredPosition: {x: 0.09765625, y: -66.5}
   m_SizeDelta: {x: 0.20000076, y: 133.09998}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &505922307
