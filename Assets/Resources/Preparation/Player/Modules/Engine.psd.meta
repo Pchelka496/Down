@@ -150,7 +150,7 @@ ScriptedImporter:
     textureCompression: 2
     compressionQuality: 50
     forceMaximumCompressionQuality_BC6H_BC7: 0
-    crunchedCompression: 0
+    crunchedCompression: 1
     allowsAlphaSplitting: 0
     androidETC2FallbackOverride: 0
   - name: Standalone
@@ -233,7 +233,7 @@ ScriptedImporter:
   rigPSDLayers: []
   sharedRigPSDLayers: []
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638665796298151478
+  platformSettingsDirtyTick: 638718994371461774
   spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 
