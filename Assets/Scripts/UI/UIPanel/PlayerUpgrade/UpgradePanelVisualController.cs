@@ -21,16 +21,14 @@ public class UpgradePanelVisualController : MonoBehaviour
     ViewMode _currentViewMode;
 
     MainMenu _mainMenu;
-    HUDController _hudController;
 
     public ViewMode CurrentViewMode => _currentViewMode;
 
     [Zenject.Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]
-    private void Construct(MainMenu mainMenu, HUDController hudController)
+    private void Construct(MainMenu mainMenu)
     {
         _mainMenu = mainMenu;
-        _hudController = hudController;
     }
 
     private void Start()
@@ -133,7 +131,6 @@ public class UpgradePanelVisualController : MonoBehaviour
             case ViewMode.Basic:
                 {
                     _mainMenu.Show();
-                    _hudController.Show();
 
                     foreach (var upgradeInfo in _allUpgradeInfo)
                     {
@@ -150,7 +147,6 @@ public class UpgradePanelVisualController : MonoBehaviour
             case ViewMode.Detailed:
                 {
                     _mainMenu.Hide();
-                    _hudController.Hide();
 
                     foreach (var upgradeInfo in _allUpgradeInfo)
                     {
@@ -178,7 +174,6 @@ public class UpgradePanelVisualController : MonoBehaviour
     private void OnDestroy()
     {
         _mainMenu.Show();
-        _hudController.Show();
     }
 
     public enum ViewMode
