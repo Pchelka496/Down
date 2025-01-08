@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3ce54c2107d5d948a6e045449039639, type: 3}
+  m_Name: UnityCustomizerConfig
+  m_EditorClassIdentifier: 
+  _currentPlayerSprite:
+    m_AssetGUID: 37a3de5ac2491624896551f2d5cf8695
+    m_SubObjectName: 
+    m_SubObjectGUID: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  _currentControllerGradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 0.72333145, b: 0.4235294, a: 1}
+    key1: {r: 1, g: 0.1857836, b: 0, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: 0
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  _playerSkinData:
+  - _skinObjectPrefab:
+      m_AssetGUID: 37a3de5ac2491624896551f2d5cf8695
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _skinSprite:
+      m_AssetGUID: d017444e96f1fcc408d3f0347ca0197e
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 1
+    _isUnlocked: 1
+    _unlockMethod: 0
+    _cost: 0
+    _skinId: 0
+  - _skinObjectPrefab:
+      m_AssetGUID: 19f0c5eab7bd84f40a75cfe775284b4b
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _skinSprite:
+      m_AssetGUID: 1efa718894d9c3f4bab3cbebe10467b5
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _isUnlocked: 0
+    _unlockMethod: 1
+    _cost: 10000
+    _skinId: 1
+  - _skinObjectPrefab:
+      m_AssetGUID: b2a252a1c64ab5845af7d7382227112a
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _skinSprite:
+      m_AssetGUID: 72286c20639decc4b8c506a5a0eb297f
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _isUnlocked: 0
+    _unlockMethod: 0
+    _cost: 0
+    _skinId: 2
+  - _skinObjectPrefab:
+      m_AssetGUID: b57ad4747bb1e6f479da1b13a26c1d7f
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _skinSprite:
+      m_AssetGUID: 99bbb6e151cf56f4fbe2494de11845e5
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _isUnlocked: 0
+    _unlockMethod: 2
+    _cost: 1000
+    _skinId: 3
+  - _skinObjectPrefab:
+      m_AssetGUID: 8ec498c3357a0994b94724729aec7fb5
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _skinSprite:
+      m_AssetGUID: 55f79801ba491a5488130f269f1d2d94
+      m_SubObjectName: 
+      m_SubObjectGUID: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    _isUnlocked: 0
+    _unlockMethod: 1
+    _cost: 1000
+    _skinId: 4

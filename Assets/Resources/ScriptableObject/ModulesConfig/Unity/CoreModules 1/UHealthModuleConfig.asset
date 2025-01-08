@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 237d2dd695893384d89b59455b6ec30c, type: 3}
+  m_Name: UHealthModuleConfig
+  m_EditorClassIdentifier: 
+  _resetThePriceAfterPurchase: 1
+  _characteristics:
+  - _updateType: 0
+    _currentLevel: 0
+    _characteristicsPerLevel: 190000001e00000023000000280000002d00000032000000370000003c00000041000000460000004b00000050000000550000005a0000005f00000064000000
+    _levelCost: 0a00000014000000320000005a000000a0000000dc0000002c01000086010000cc01000058020000bc0200002003000084030000e8030000dc050000dc050000
+  - _updateType: 1
+    _currentLevel: 0
+    _characteristicsPerLevel: 03000000030000000200000001000000
+    _levelCost: 64000000bc020000dc050000dc050000
