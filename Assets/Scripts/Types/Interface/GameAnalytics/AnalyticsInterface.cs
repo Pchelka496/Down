@@ -14,12 +14,12 @@ public interface IPlayerCollisionTracker
 
 public interface IRoundResultTracker
 {
-    public RoundResult GetRoundResult();
-    public void SubscribeToRoundResultChanged(System.Action<RoundResult> callback);
-    public void UnsubscribeFromRoundResultChanged(System.Action<RoundResult> callback);
+    public EnumRoundResult GetRoundResult();
+    public void SubscribeToRoundResultChanged(System.Action<EnumRoundResult> callback);
+    public void UnsubscribeFromRoundResultChanged(System.Action<EnumRoundResult> callback);
 }
 
-public enum RoundResult
+public enum EnumRoundResult
 {
     Unfinished,
     Victory,

@@ -170,6 +170,7 @@ namespace Core.Installers
             Container.Bind<IAnalyticsManager>().To<UnityAnalyticsManager>().AsSingle().NonLazy();
             Container.Bind<IAudioSettingContainer>().FromInstance(_settingConfig).AsSingle().NonLazy();
             Container.Bind<ILanguageContainer>().FromInstance(_settingConfig).AsSingle().NonLazy();
+            Container.Bind<IRoundResultTracker>().FromInstance(_globalEventsManager).AsSingle().NonLazy();
         }
 
         private void InitializeDependencies()

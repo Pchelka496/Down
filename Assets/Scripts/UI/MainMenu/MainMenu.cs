@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class MainMenu : MonoBehaviour
@@ -18,7 +19,15 @@ public class MainMenu : MonoBehaviour
     }
 
     private void RoundStart() => Hide();
-    private void RoundEnd() => Show();
+    private void RoundEnd() => ShowDelayed(1f).Forget();
+
+    private async UniTask ShowDelayed(float delay)
+    {
+        await UniTask.WaitForSeconds(delay);
+
+        Show();
+    }
+
     private void FastTravelStart() => Hide();
 
     public void Show() => gameObject.SetActive(true);

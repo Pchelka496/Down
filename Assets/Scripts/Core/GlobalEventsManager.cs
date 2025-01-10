@@ -9,17 +9,17 @@ public class GlobalEventsManager : IRoundResultTracker
     readonly Dictionary<int, TransitionTask> _transitionTasks = new();
     int _nextTaskId = 0;
 
-    RoundResult _roundResult;
+    EnumRoundResult _roundResult;
 
     event Action RoundStarted;
     event Action RoundEnded;
     event Action FastTravelStarted;
-    event Action<RoundResult> OnRoundResultChanged;
+    event Action<EnumRoundResult> OnRoundResultChanged;
 
     bool _useWarpEngineFlag;
 
     public bool IsTransitioning { get; private set; }
-    public RoundResult RoundResult
+    public EnumRoundResult RoundResult
     {
         set
         {
@@ -87,7 +87,7 @@ public class GlobalEventsManager : IRoundResultTracker
     public void PlayerDied()
     {
         _useWarpEngineFlag = false;
-        RoundResult = RoundResult.Defeat;
+        RoundResult = EnumRoundResult.Defeat;
 
         OnRoundEnd();
         PerformTransitionAsync().Forget();
@@ -96,7 +96,7 @@ public class GlobalEventsManager : IRoundResultTracker
     public void PlayerReachedSurface()
     {
         _useWarpEngineFlag = false;
-        RoundResult = RoundResult.Victory;
+        RoundResult = EnumRoundResult.Victory;
 
         OnRoundEnd();
         PerformTransitionAsync().Forget();
@@ -150,9 +150,9 @@ public class GlobalEventsManager : IRoundResultTracker
         _transitionTasks.Remove(taskId);
     }
 
-    RoundResult IRoundResultTracker.GetRoundResult() => _roundResult;
-    void IRoundResultTracker.SubscribeToRoundResultChanged(Action<RoundResult> callback) => OnRoundResultChanged += callback;
-    void IRoundResultTracker.UnsubscribeFromRoundResultChanged(Action<RoundResult> callback) => OnRoundResultChanged -= callback;
+    EnumRoundResult IRoundResultTracker.GetRoundResult() => _roundResult;
+    void IRoundResultTracker.SubscribeToRoundResultChanged(Action<EnumRoundResult> callback) => OnRoundResultChanged += callback;
+    void IRoundResultTracker.UnsubscribeFromRoundResultChanged(Action<EnumRoundResult> callback) => OnRoundResultChanged -= callback;
 
     private readonly struct TransitionTask
     {

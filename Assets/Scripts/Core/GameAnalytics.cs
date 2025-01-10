@@ -10,7 +10,7 @@ public class GameAnalytics : IDisposable
 
     int _moneyCollected;
     int _collisionCount;
-    RoundResult _roundResult;
+    EnumRoundResult _roundResult;
     float _roundStartTime;
     float _roundEndTime;
     float? _playerStartHeight;
@@ -72,8 +72,9 @@ public class GameAnalytics : IDisposable
     {
         _moneyCollected = 0;
         _collisionCount = 0;
-        _roundResult = RoundResult.Unfinished;
+        _roundResult = EnumRoundResult.Unfinished;
         _roundStartTime = UnityEngine.Time.time;
+        UnityEngine.Debug.Log(UnityEngine.Time.time);
 
         _playerStartHeight = PlayerPositionMeter.YPosition;
         _playerEndHeight = null;
@@ -81,6 +82,7 @@ public class GameAnalytics : IDisposable
 
     public void RoundEnd()
     {
+        UnityEngine.Debug.Log(UnityEngine.Time.time);
         _roundEndTime = UnityEngine.Time.time;
         _playerEndHeight = PlayerPositionMeter.YPosition;
 
@@ -101,7 +103,7 @@ public class GameAnalytics : IDisposable
         UpdateAnalytics();
     }
 
-    private void OnRoundResultChanged(RoundResult result)
+    private void OnRoundResultChanged(EnumRoundResult result)
     {
         _roundResult = result;
         UpdateAnalytics();
@@ -131,6 +133,9 @@ public class GameAnalytics : IDisposable
 
         OnAnalyticsUpdated?.Invoke(analyticsData);
     }
+
+    public void SubscribeToOnAnalyticsUpdated(Action<AnalyticsData> callback) => OnAnalyticsUpdated += callback;
+    public void UnsubscribeFromOnAnalyticsUpdated(Action<AnalyticsData> callback) => OnAnalyticsUpdated -= callback;
 
     public void Dispose()
     {

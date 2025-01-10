@@ -191,6 +191,3 @@ public static class SmoothTransitionToText
         onValueUpdate?.Invoke(targetValue);
     }
 }
-
-
-
