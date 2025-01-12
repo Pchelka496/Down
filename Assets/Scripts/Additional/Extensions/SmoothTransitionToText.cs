@@ -9,11 +9,6 @@ public static class SmoothTransitionToText
     /// <summary>
     /// Smoothly updates the TextMeshProUGUI text to the target text by adding or removing characters one by one.
     /// </summary>
-    /// <param name=“textMeshPro”>TextMeshProUGUI object to update.</param>
-    /// <param name=“targetText”>Target text.</param>
-    /// <param name=“token”>Cancellation token for process control.</param>
-    /// <param name=“textUpdateDelay”>Delay between text changes.</param>
-    /// <param name=“suffix”>Transition string added at the end of the text (e.g., “%”).</param>
     public static async UniTaskVoid SmoothUpdateText(this TextMeshProUGUI textMeshPro,
                                                      string targetText,
                                                      CancellationToken token,
@@ -65,23 +60,17 @@ public static class SmoothTransitionToText
                 }
             }
 
-            textMeshPro.text = currentText + suffix;
+            textMeshPro.text = currentText.ToString() + suffix;
 
             await UniTask.Delay(delaySpan, cancellationToken: token);
         }
 
-        textMeshPro.text = targetTextWithoutSuffix + suffix;
+        textMeshPro.text = targetTextWithoutSuffix.ToString() + suffix;
     }
 
     /// <summary>
     /// Smoothly updates the TextMeshProUGUI text value to the target number, incrementing or decrementing by 1 at each step.
     /// </summary>
-    /// <param name="textMeshPro">TextMeshProUGUI object to update.</param>
-    /// <param name="targetValue">The target numeric value that should be displayed.</param>
-    /// <param name="token">Cancellation token to control the update process and cancel it if needed.</param>
-    /// <param name="textUpdateDelay">Delay (in seconds) between each value update during the transition.</param>
-    /// <param name="suffix">Optional string added at the end of the number (e.g., "%", " coins").</param>
-    /// <param name="onValueUpdate">Action that will be called each time the value is updated during the transition. This can be used to trigger additional logic.</param>
     public static async UniTask SmoothUpdateText(this TextMeshProUGUI textMeshPro,
                                                  int targetValue,
                                                  CancellationToken token,
@@ -98,7 +87,6 @@ public static class SmoothTransitionToText
         suffix ??= string.Empty;
 
         string currentText = textMeshPro.text;
-
         if (!string.IsNullOrEmpty(suffix))
         {
             currentText = currentText.Replace(suffix, string.Empty);
@@ -110,6 +98,7 @@ public static class SmoothTransitionToText
         }
 
         var delaySpan = System.TimeSpan.FromSeconds(textUpdateDelay);
+        var builder = new StringBuilder();
 
         while (!token.IsCancellationRequested)
         {
@@ -118,26 +107,23 @@ public static class SmoothTransitionToText
 
             currentValue += currentValue < targetValue ? 1 : -1;
 
-            textMeshPro.text = currentValue + suffix;
-            onValueUpdate?.Invoke(currentValue);
+            builder.Clear();
+            builder.Append(currentValue).Append(suffix);
+            textMeshPro.text = builder.ToString();
 
+            onValueUpdate?.Invoke(currentValue);
             await UniTask.Delay(delaySpan, cancellationToken: token);
         }
 
-        textMeshPro.text = targetValue + suffix;
+        builder.Clear();
+        builder.Append(targetValue).Append(suffix);
+        textMeshPro.text = builder.ToString();
         onValueUpdate?.Invoke(targetValue);
     }
 
     /// <summary>
     /// Smoothly updates the TextMeshProUGUI text value to the target number using a smooth animation curve to interpolate the values.
     /// </summary>
-    /// <param name="textMeshPro">TextMeshProUGUI object to update.</param>
-    /// <param name="targetValue">The target numeric value that should be displayed at the end of the transition.</param>
-    /// <param name="token">Cancellation token to control the update process and cancel it if needed.</param>
-    /// <param name="totalDuration">Total time (in seconds) for the update to transition from the current value to the target value.</param>
-    /// <param name="curve">Animation curve that defines the easing (smoothness) of the transition (e.g., linear, ease-in, ease-out).</param>
-    /// <param name="suffix">Optional string added at the end of the number (e.g., "%", " coins").</param>
-    /// <param name="onValueUpdate">Action that will be called each time the value is updated during the transition. This can be used to trigger additional logic during the animation.</param>
     public static async UniTask SmoothUpdateTextWithDuration(this TextMeshProUGUI textMeshPro,
                                                              int targetValue,
                                                              CancellationToken token,
@@ -153,11 +139,9 @@ public static class SmoothTransitionToText
         }
 
         curve ??= AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-
         suffix ??= string.Empty;
 
         string currentText = textMeshPro.text;
-
         if (!string.IsNullOrEmpty(suffix))
         {
             currentText = currentText.Replace(suffix, string.Empty);
@@ -171,6 +155,7 @@ public static class SmoothTransitionToText
         var elapsedTime = 0f;
         var startValue = currentValue;
         var deltaValue = targetValue - startValue;
+        var builder = new StringBuilder();
 
         while (!token.IsCancellationRequested && elapsedTime < totalDuration)
         {
@@ -181,13 +166,17 @@ public static class SmoothTransitionToText
 
             int updatedValue = Mathf.RoundToInt(Mathf.Lerp(startValue, targetValue, curveT));
 
-            textMeshPro.text = updatedValue + suffix;
-            onValueUpdate?.Invoke(updatedValue);
+            builder.Clear();
+            builder.Append(updatedValue).Append(suffix);
+            textMeshPro.text = builder.ToString();
 
+            onValueUpdate?.Invoke(updatedValue);
             await UniTask.Yield();
         }
 
-        textMeshPro.text = targetValue + suffix;
+        builder.Clear();
+        builder.Append(targetValue).Append(suffix);
+        textMeshPro.text = builder.ToString();
         onValueUpdate?.Invoke(targetValue);
     }
 }
