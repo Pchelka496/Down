@@ -10,6 +10,7 @@ public class PlayerLaserPusher : MonoBehaviour
 {
     [HideLabel][Required][SerializeField] LineRenderer _lineRenderer;
     [SerializeField] float _laserWidth = 1f;
+    [SerializeField][Required] ParticleSystem _damageEffect;
     [Header("Laser damage setting")]
     [SerializeField] int _damage = 1;
     [SerializeField] float _damageCooldown = 1f;
@@ -216,6 +217,8 @@ public class PlayerLaserPusher : MonoBehaviour
             if (IsPlayerUnderLaser())
             {
                 _healthModule.ApplyDamage(_damage);
+                _damageEffect.Play();
+
                 await UniTask.Delay(damageCooldown, cancellationToken: token);
             }
 

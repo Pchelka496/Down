@@ -81,7 +81,6 @@ public class GameAnalytics : IDisposable
 
     public void RoundEnd()
     {
-        UnityEngine.Debug.Log(UnityEngine.Time.time);
         _roundEndTime = UnityEngine.Time.time;
         _playerEndHeight = PlayerPositionMeter.YPosition;
 
