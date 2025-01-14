@@ -12,7 +12,7 @@ public class LensController : System.IDisposable
 
     [SerializeField] float _lobbyModeOrthographicSize = 10f;
     [SerializeField] float _gameplayMinOrthographicSize = 5f;
-    [SerializeField] float _gameplayMaxOrthographicSize = 10f;
+    [SerializeField] float _gameplayMaxOrthographicSize = 40f;
 
     [SerializeField] float _minVelocityThreshold = 10f;
     [SerializeField] float _maxVelocityThreshold = 40f;
@@ -29,6 +29,8 @@ public class LensController : System.IDisposable
     LensState _currentState;
 
     public float LobbyModeOrthographicSize => _lobbyModeOrthographicSize;
+
+    public float GameplayMaxOrthographicSize { get => _gameplayMaxOrthographicSize; }
 
     public void Initialize(CinemachineCamera camera, Rigidbody2D player)
     {

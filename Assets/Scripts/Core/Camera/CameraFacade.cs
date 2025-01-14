@@ -22,13 +22,13 @@ public class CameraFacade : MonoBehaviour
 
     bool _onChangeTargetAnimationEnding;
 
+    Func<bool> _isTransitioning = () => false;
+    event Action DisposeEvents;
+
     public Camera Camera => _camera;
     public float LobbyOrthographicSize => _lensController.LobbyModeOrthographicSize;
-    public bool OnChangeTargetAnimationEnding { get => _onChangeTargetAnimationEnding; }
-
-    Func<bool> _isTransitioning = () => false;
-
-    event Action DisposeEvents;
+    public float GameplayMaxOrthographicSize => _lensController.GameplayMaxOrthographicSize;
+    public bool OnChangeTargetAnimationEnding => _onChangeTargetAnimationEnding;
 
     [Zenject.Inject]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:", Justification = "<>")]

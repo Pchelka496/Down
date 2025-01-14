@@ -74,7 +74,6 @@ public class GameAnalytics : IDisposable
         _collisionCount = 0;
         _roundResult = EnumRoundResult.Unfinished;
         _roundStartTime = UnityEngine.Time.time;
-        UnityEngine.Debug.Log(UnityEngine.Time.time);
 
         _playerStartHeight = PlayerPositionMeter.YPosition;
         _playerEndHeight = null;

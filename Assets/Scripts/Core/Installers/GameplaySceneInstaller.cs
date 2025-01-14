@@ -24,6 +24,7 @@ namespace Core.Installers
         [SerializeField] AirTrailController _airTrailController;
         [SerializeField] Camera _mainCamera;
         [SerializeField] LobbyUIPanelFacade _upgradePanelController;
+        [SerializeField] PlayerStagnationDetector.Initializer _playerStagnationDetectorInitializer;
 
         [Header("Configuration")]
         [SerializeField] OriginalPlayerModuleConfigs _originalPlayerModulesConfig;
@@ -65,6 +66,7 @@ namespace Core.Installers
         GameAnalytics _gameAnalytics;
         MusicManager _audioManager;
         PerformanceManager _performanceManager;
+        PlayerStagnationDetector _playerStagnationDetector;
 
         public static DiContainer DiContainer { get; private set; }
 
@@ -115,6 +117,7 @@ namespace Core.Installers
             Container.Bind<PlayerPositionMeter>().FromInstance(_characterPositionMeter).AsSingle().NonLazy();
             Container.Bind<OptionalPlayerModuleLoader>().FromInstance(_optionalPlayerModuleLoader).AsSingle().NonLazy();
             Container.Bind<Customizer>().FromInstance(_customizer).AsSingle().NonLazy();
+            Container.Bind<PlayerStagnationDetector>().FromInstance(_playerStagnationDetector).AsSingle().NonLazy();
         }
 
         private void BindUIComponents()
@@ -198,6 +201,8 @@ namespace Core.Installers
             );
             _audioManager = new(_audioManagerInitializer);
             _performanceManager = new();
+            _playerStagnationDetector = new();
+            _playerStagnationDetector.Initialize(_playerStagnationDetectorInitializer);
         }
 
         private IHaveDataForSave[] GetAllDataForSave()
@@ -243,6 +248,7 @@ namespace Core.Installers
             Container.Inject(_gameAnalytics);
             Container.Inject(_audioManager);
             Container.Inject(_performanceManager);
+            Container.Inject(_playerStagnationDetector);
         }
 
         private void OnDestroy()

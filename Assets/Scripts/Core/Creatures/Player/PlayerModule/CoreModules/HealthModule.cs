@@ -161,9 +161,14 @@ namespace Creatures.Player
             _soundPlayer.PlayNextSound();
         }
 
+        public void ApplyDamage(int damage)
+        {
+            CurrentHealth = _currentHealth - damage;
+        }
+
         public void TestDealDamage(int damage)
         {
-            CurrentHealth = System.Math.Clamp(_currentHealth - damage, 1, _maxHealth);
+            CurrentHealth = Mathf.Clamp(_currentHealth - damage, 1, _maxHealth);
         }
 
         public void ApplyRepairKit()
