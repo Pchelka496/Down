@@ -18,7 +18,9 @@ Save System: Implemented using JSON for efficient and straightforward data manag
 Ads and Analytics: Integrated with AdMob for monetization and Unity Analytics for tracking player behavior.
 Customization: Players can customize their satellite with skins and modify the controller’s appearance by applying a personalized gradient.
 Update-Free Logic: The game avoids using coroutines and traditional Update loops wherever possible. Instead, asynchronous tasks handle most game logic, with only a single Update used for specific scenarios.
+
 Russian
+
 Описание игры
 Игра, где игрок управляет спутником, который должен опуститься с орбиты на поверхность, уклоняясь от препятствий в виде врагов, собирая монетки для прокачки и ремонтные наборы для восстановления здоровья.
 
