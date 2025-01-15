@@ -1,4 +1,5 @@
 English
+
 Game Description
 A game where the player controls a satellite descending from orbit to the surface. During this journey, the player must dodge obstacles in the form of enemies, collect coins for upgrades, and pick up repair kits to restore health.
 
