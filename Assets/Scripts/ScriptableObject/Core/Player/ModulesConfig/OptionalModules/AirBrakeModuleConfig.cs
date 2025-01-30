@@ -19,6 +19,7 @@ namespace ScriptableObject.ModulesConfig.SupportModules
                                                                       GetLevel(EnumCharacteristics.AirBrakeReleaseRate));
 
         public override bool ActivityCheck() => GetLevel(EnumCharacteristics.AirBrakeDrag) > 0;
+        
 
         public override System.Type GetModuleType() => typeof(AirBrakeModule);
 

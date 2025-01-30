@@ -120,7 +120,7 @@ namespace Creatures.Player.PlayerModule.CoreModules.EngineModule
             ClearToken(ref _defaultEngineCts);
             _defaultEngineCts = new();
 
-            DefaultEngineWork(_defaultEngineCts.Token).Forget();
+            StartDefaultEngineWork(_defaultEngineCts.Token).Forget();
 
             try
             {
@@ -150,7 +150,7 @@ namespace Creatures.Player.PlayerModule.CoreModules.EngineModule
             ClearToken(ref _defaultEngineCts);
         }
 
-        private async UniTask DefaultEngineWork(CancellationToken token)
+        private async UniTask StartDefaultEngineWork(CancellationToken token)
         {
             StopTween();
             ResetValues();
@@ -159,32 +159,45 @@ namespace Creatures.Player.PlayerModule.CoreModules.EngineModule
 
             var startTouch = _screenTouchController.TouchStartPosition;
 
-            while (!token.IsCancellationRequested)
+            try
             {
-                var currentTouch = _screenTouchController.TouchCurrentPosition;
-                var currentVectorLength = Vector2.Distance(startTouch, currentTouch);
+                while (true)
+                {
+                    await DefaultEngineWork(startTouch, token);
 
-                currentVectorLength = Mathf.Clamp(currentVectorLength, MIN_VECTOR_LENGTH_FOR_DEFAULT_ENGINE_WORK,
-                    _maxVectorLength);
-
-                var normalizedForce = Mathf.InverseLerp(MIN_VECTOR_LENGTH_FOR_DEFAULT_ENGINE_WORK, _maxVectorLength,
-                    currentVectorLength);
-
-                var force = _currentEngineForce * normalizedForce;
-
-                ApplyForce(_rb, _engine, force);
-                _visualPart.UpdateDefaultWork(_maxForce, force, _forceApplyRate);
-
-                _forceApplyRate = _forceApplyRate - _maxForceApplyRate > 0.01f
-                    ? Mathf.Lerp(_forceApplyRate, _maxForceApplyRate, _interpolateForceApplyRateValue)
-                    : _maxForceApplyRate;
-
-                // ReSharper disable once MethodSupportsCancellation
-                await UniTask.WaitForSeconds(_forceApplyRate);
+                    await UniTask.WaitForSeconds(_forceApplyRate, cancellationToken: token);
+                }
             }
+            finally
+            {
+                _needRotation = false;
+                ResetValues();
+            }
+        }
 
-            _needRotation = false;
-            ResetValues();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private async UniTask DefaultEngineWork(Vector2 startTouch, CancellationToken token)
+        {
+            var currentTouch = _screenTouchController.TouchCurrentPosition;
+            var currentVectorLength = Vector2.Distance(startTouch, currentTouch);
+
+            currentVectorLength = Mathf.Clamp(currentVectorLength, MIN_VECTOR_LENGTH_FOR_DEFAULT_ENGINE_WORK,
+                _maxVectorLength);
+
+            var normalizedForce = Mathf.InverseLerp(MIN_VECTOR_LENGTH_FOR_DEFAULT_ENGINE_WORK, _maxVectorLength,
+                currentVectorLength);
+
+            var force = _currentEngineForce * normalizedForce;
+
+            ApplyForce(_rb, _engine, force);
+            _visualPart.UpdateDefaultWork(_maxForce, force, _forceApplyRate);
+
+            _forceApplyRate = _forceApplyRate - _maxForceApplyRate > 0.01f
+                ? Mathf.Lerp(_forceApplyRate, _maxForceApplyRate, _interpolateForceApplyRateValue)
+                : _maxForceApplyRate;
+
+            // ReSharper disable once MethodSupportsCancellation
+            await UniTask.WaitForSeconds(_forceApplyRate, cancellationToken: token);
         }
 
         private void StartIncreaseForceTween()
